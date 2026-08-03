@@ -1,0 +1,4 @@
+interface:
+  display_name: "Adam's Development Habits"
+  short_description: "Enforce evidence-based habits for AI-assisted code changes."
+  default_prompt: "Use $adam-development-habits to implement this change with cleanup, safeguards, and verified evidence."
