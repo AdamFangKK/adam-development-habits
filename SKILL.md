@@ -1,6 +1,6 @@
 ---
 name: adam-development-habits
-description: Enforce Adam's risk-scaled development habits for AI-assisted feature work, bug fixes, refactors, integrations, and reviews. Use proactively whenever editing code to define project principles and acceptance criteria, identify the canonical implementation, remove stale paths, apply relevant resilience safeguards, and provide executed verification evidence before completion.
+description: Enforce Adam's risk-scaled development habits for AI-assisted feature work, bug fixes, refactors, integrations, reviews, and maintenance of this skill package. Use proactively whenever editing code or this skill's scripts, templates, references, or documentation to define project principles and acceptance criteria, identify the canonical implementation, remove stale paths, apply relevant resilience safeguards, and provide executed verification evidence before completion.
 ---
 
 # Adam's Development Habits
@@ -69,7 +69,7 @@ Use narrow searches to establish the ledger. Check imports, exports, registratio
 
 Use the conversational ledger by default. A repository opts into machine-enforced evidence only when it contains an `.adam/` directory or the user explicitly requests enforcement.
 
-For an opted-in repository, create one `.adam/evidence/<change-id>.json` artifact for every Level 1 or Level 2 change. Start from [assets/evidence-ledger.example.json](assets/evidence-ledger.example.json), then validate it with the project-local evidence script before completion. Keep the artifact in the same pull request as the code change.
+For an opted-in repository, create one unique `.adam/evidence/<change-id>.json` artifact for every Level 1 or Level 2 logical change. Start from [assets/evidence-ledger.example.json](assets/evidence-ledger.example.json), then validate it with the project-local evidence script before completion. Update an existing artifact only while continuing that same change in the same branch or pull request. Keep the artifact in the same pull request as the code change.
 
 The artifact records facts after verification; it does not replace tests or let a failed command become passing by declaration. For a Level 2 change, include rollback or compatibility strategy and an independent review outcome.
 
@@ -129,7 +129,7 @@ Delete confirmed leftovers. For a potentially dynamic reference, inspect its run
 
 First discover the repository's existing hooks, CI, linting, type checks, tests, and static-analysis tools. Use them; do not add a new dependency merely because it appears in a recommendation.
 
-When the user asks to make this policy mechanically enforceable, read [references/enforcement.md](references/enforcement.md). Select the smallest compatible toolchain, use [scripts/validate_evidence.py](scripts/validate_evidence.py) and [scripts/check_change_evidence.py](scripts/check_change_evidence.py) as the standard-library evidence gate, wire the same required checks into local hooks and CI, and never bypass or weaken a failing quality gate.
+When the user asks to make this policy mechanically enforceable, read [references/enforcement.md](references/enforcement.md). For a target repository, copy [scripts/validate_evidence.py](scripts/validate_evidence.py) and [scripts/check_change_evidence.py](scripts/check_change_evidence.py) into `.adam/scripts/`; the GitHub Actions template expects that layout. Use those copied scripts as the standard-library evidence gate, wire the same required checks into local hooks and CI, and never bypass or weaken a failing quality gate.
 
 ## Verification Protocol
 
@@ -140,6 +140,19 @@ When the user asks to make this policy mechanically enforceable, read [reference
 5. If an applicable check is unavailable, state why, what was run instead, and the residual risk. Do not call the task fully verified.
 
 When CI exists, use its required checks as the minimum bar and do not weaken or bypass them. Keep local verification and CI requirements aligned.
+
+## Self-Application and Package Maintenance
+
+This policy applies to its own package. Treat `SKILL.md`, its user-facing metadata, root validator scripts, tests, templates, references, README, and active CI workflow as one implementation surface. `SKILL.md` is the normative source; README summaries must not introduce a conflicting requirement.
+
+For every change to this package:
+
+1. Classify policy, schema, validator, template, workflow, or automation changes as at least Level 1; use Level 2 for changes to the public contract or the package's enforcement architecture.
+2. Keep one unique evidence artifact per logical change under `.adam/evidence/`; update it only while continuing the same change.
+3. Update every affected source, template, reference, README summary, test, and CI command in the same change. Delete replaced instructions, stale paths, obsolete examples, and duplicated enforcement logic.
+4. Keep the root `scripts/` files as this package's canonical implementation. Target repositories copy them into `.adam/scripts/`; do not maintain a second package-local implementation.
+5. Run the evidence-script tests after validator or gate changes, parse every JSON/YAML artifact changed, validate the Skill package, and verify the active workflow references real paths.
+6. Treat the Git default branch at its verified commit and passing required checks as the current state. Do not publish manually maintained version, date, or status claims that cannot be verified from Git or CI.
 
 ## Adam's Project Overrides
 

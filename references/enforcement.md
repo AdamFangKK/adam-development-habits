@@ -34,7 +34,7 @@ Enable this mode only when the repository owner wants CI-verifiable AI developme
 .github/workflows/adam-evidence-gate.yml
 ```
 
-Use `assets/evidence-ledger.example.json` as the artifact template and `assets/github-actions/adam-evidence-gate.yml` as the workflow template. Keep the scripts unmodified unless the repository has a documented reason to extend the schema.
+Use `assets/evidence-ledger.example.json` as the artifact template and `assets/github-actions/adam-evidence-gate.yml` as the workflow template. Keep the scripts unmodified unless the repository has a documented reason to extend the schema. Create one unique artifact for each logical change; update it only while continuing that same change in the same branch or pull request.
 
 The evidence gate validates artifacts changed in the pull request. With `--require-for-code-change`, it fails when source files or common behavior-defining configuration files change but no evidence artifact changes with them. This conservatively includes JSON, YAML, TOML, API contract files, dependency manifests, and CI configuration. Files under documentation, example, and fixture directories do not trigger it. The artifact filename must match its `change_id`, so use `.adam/evidence/<change-id>.json`. The gate cannot prove a claim made inside an artifact; tests, reviews, and CI still provide that evidence.
 

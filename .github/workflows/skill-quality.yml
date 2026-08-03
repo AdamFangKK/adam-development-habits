@@ -1,0 +1,45 @@
+name: Verify Adam Development Habits
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Determine comparison base
+        id: base
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+          else
+            base="${{ github.event.before }}"
+            if [ "$base" = "0000000000000000000000000000000000000000" ]; then
+              base="$(git rev-list --max-parents=0 HEAD)"
+            fi
+          fi
+          echo "value=$base" >> "$GITHUB_OUTPUT"
+      - name: Verify evidence for behavior changes
+        run: >-
+          python scripts/check_change_evidence.py
+          --base "${{ steps.base.outputs.value }}"
+          --require-for-code-change
+      - name: Validate stored evidence
+        run: python scripts/validate_evidence.py .adam/evidence/*.json
+      - name: Run evidence-script tests
+        run: python -m unittest discover -s tests -v
+      - name: Check patch formatting
+        run: git diff --check "${{ steps.base.outputs.value }}...HEAD"

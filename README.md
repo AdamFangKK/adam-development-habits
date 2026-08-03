@@ -2,6 +2,8 @@
 
 > 面向 AI 辅助开发的工程质量 Skill：要求每次改动都有唯一实现路径、清理证据、必要的稳定性保护和真实验证结果。
 
+`SKILL.md` 是唯一的规范来源；本文是中文使用说明和概览。规则、模板或脚本发生变化时，以 `SKILL.md` 和实际校验结果为准。
+
 `Adam's Development Habits` 是一个适用于 Codex 的开发习惯 Skill。它不绑定语言、框架或云平台，目标是解决 AI 持续迭代代码时最常见的工程问题：新代码不断增加，旧实现、旧配置、旧路由和旧测试却没有被清理，最终导致重复逻辑、耦合增长和错误上下文。
 
 ## 它解决什么问题
@@ -72,17 +74,11 @@ Verification: <已执行命令及实际结果>
 
 ### 风险分级
 
-| 等级 | 适用范围 | 额外要求 |
-|---|---|---|
-| Level 0 | 文档、格式或无行为变化的显而易见单行修复。 | 检查 diff 并运行相关的窄范围检查。 |
-| Level 1 | 普通功能、修复、重构、集成或配置行为改动。 | 验收条件、证据台账、相关测试和清理审计。 |
-| Level 2 | 公开 API、迁移、认证、金额、隐私、并发、跨服务流程、架构改动或大型重构。 | Level 1 加计划、回滚或兼容策略、失败路径测试和独立复查。 |
-
-不确定时必须选择较高等级，不能为了减少工作而降低改动等级。
+风险等级、升级条件和每级的完整证据要求以 [`SKILL.md` 的 Operating Model](./SKILL.md#operating-model) 为准：Level 0 用于无行为变化的小改动，Level 1 用于常规行为改动，Level 2 用于公开契约、迁移、安全、金额、并发和架构风险。不确定时必须选择较高等级。
 
 ### 机器可读证据模式
 
-默认情况下，证据台账保留在 AI 的任务记录和完成报告中，适合个人项目和轻量改动。需要硬约束时，仓库可显式启用 `.adam/` 目录；此时每个 Level 1 或 Level 2 改动都要新增或更新 `.adam/evidence/<change-id>.json`。
+默认情况下，证据台账保留在 AI 的任务记录和完成报告中，适合个人项目和轻量改动。需要硬约束时，仓库可显式启用 `.adam/` 目录；此时每个 Level 1 或 Level 2 逻辑改动都要新增唯一的 `.adam/evidence/<change-id>.json`。只有在同一分支或 PR 延续该改动时才能更新它。
 
 证据文件记录唯一实现路径、验收条件、旧路径处理、保障措施、验证命令、兼容或回滚策略和独立复查结果。随附的标准库脚本会验证字段完整性，并可在 CI 中要求“代码改动必须同时包含证据工件”。
 
@@ -142,15 +138,7 @@ Skill 不会对所有项目强行堆基础设施，而是根据行为类型选�
 
 ## 完成门槛
 
-Skill 明确禁止在缺少下列证据时声称任务完成：
-
-1. 已定位唯一有效实现及受影响调用方。
-2. 已删除所有被替换的路径，或说明保留旧路径的消费者、删除条件和测试。
-3. 已实现相关保障措施，或明确解释为什么不适用。
-4. 已执行验证命令并阅读结果。
-5. 已报告修改文件、删除内容、验证证据和剩余风险。
-
-对于 Git 仓库，至少应运行：
+完整完成门槛以 [`SKILL.md` 的 Non-Negotiable Completion Gate](./SKILL.md#non-negotiable-completion-gate) 为准。对于 Git 仓库，至少应运行：
 
 ```bash
 git diff --check
@@ -181,6 +169,21 @@ CI 应至少覆盖项目已有的格式化、静态检查、类型检查、测�
 
 仓库启用机器可读证据模式时，可使用 [证据示例](./assets/evidence-ledger.example.json)、[字段校验器](./scripts/validate_evidence.py)、[行为改动门禁](./scripts/check_change_evidence.py) 和 [GitHub Actions 模板](./assets/github-actions/adam-evidence-gate.yml)。门禁同时覆盖源码与常见运行时配置（JSON、YAML、TOML、依赖清单、CI、API 合约），避免只改配置就绕过验证；文档、示例和测试夹具目录不会触发。证据文件须命名为 `.adam/evidence/<change-id>.json`，并与内容中的 `change_id` 一致。
 
+## 自我维护与当前状态
+
+这个 Skill 自身已经启用 `.adam/` 证据模式，并运行仓库内的质量工作流。它也遵守同一套规则：修改策略、脚本、模板、参考资料或本 README 时，必须同步更新相关内容、删除旧路径并留下验证证据。
+
+不维护会过期的“最新日期”或手写版本号。发布状态以 GitHub 默认分支的最新提交和通过的工作流为准；本地可用以下命令核对：
+
+```bash
+git fetch origin main
+git status --short --branch
+git rev-parse HEAD
+git rev-parse origin/main
+```
+
+仓库内工作流会验证每个 PR 和对 `main` 的推送。若要阻止未通过验证的改动合并，还必须在 GitHub 的 `main` 分支保护中将 `Verify Adam Development Habits` 设为必需检查；这是平台设置，不能由仓库文件自行强制。
+
 ## 个性化你的规范
 
 编辑 [`SKILL.md`](./SKILL.md) 中的 `Adam's Project Overrides` 部分，可以加入个人或团队特有的、可验证的规则。例如：
@@ -203,6 +206,12 @@ adam-development-habits/
 ├── assets/
 │   ├── evidence-ledger.example.json
 │   └── github-actions/adam-evidence-gate.yml
+├── .adam/
+│   └── evidence/
+│       └── self-application-maintenance.json
+├── .github/
+│   └── workflows/
+│       └── skill-quality.yml
 ├── scripts/
 │   ├── check_change_evidence.py
 │   └── validate_evidence.py

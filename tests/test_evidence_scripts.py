@@ -69,6 +69,34 @@ class EvidenceScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertIn("behavioral changes require", result.stderr)
 
+    def test_infrastructure_configuration_requires_evidence_when_enabled(self) -> None:
+        directory = self._make_repository(include_evidence=False, source_name="infrastructure/main.tf")
+        result = self._run_gate(directory)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("behavioral changes require", result.stderr)
+
+    def test_extensionless_shebang_script_requires_evidence_when_enabled(self) -> None:
+        directory = self._make_repository(
+            include_evidence=False,
+            source_name="deploy",
+            source_initial="#!/usr/bin/env sh\necho before\n",
+            source_changed="#!/usr/bin/env sh\necho after\n",
+        )
+        result = self._run_gate(directory)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("behavioral changes require", result.stderr)
+
+    def test_deleted_extensionless_shebang_script_requires_evidence_when_enabled(self) -> None:
+        directory = self._make_repository(
+            include_evidence=False,
+            delete_source=True,
+            source_name="runner",
+            source_initial="#!/usr/bin/env sh\necho before\n",
+        )
+        result = self._run_gate(directory)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("behavioral changes require", result.stderr)
+
     def test_documentation_configuration_does_not_require_evidence(self) -> None:
         directory = self._make_repository(include_evidence=False, source_name="docs/example.yaml")
         result = self._run_gate(directory)
@@ -109,6 +137,12 @@ class EvidenceScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("valid changed evidence", result.stdout)
 
+    def test_absolute_evidence_directory_is_normalized(self) -> None:
+        directory = self._make_repository(include_evidence=True)
+        result = self._run_gate(directory, evidence_dir=directory / ".adam" / "evidence")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("valid changed evidence", result.stdout)
+
     def _make_repository(
         self,
         *,
@@ -118,6 +152,8 @@ class EvidenceScriptTests(unittest.TestCase):
         baseline_evidence: bool = False,
         evidence_name: str = "order-api-migration.json",
         remove_baseline_evidence: bool = False,
+        source_initial: str = "VALUE = 1\n",
+        source_changed: str = "VALUE = 2\n",
     ) -> Path:
         directory = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, directory, True)
@@ -126,7 +162,7 @@ class EvidenceScriptTests(unittest.TestCase):
         self._git(directory, "config", "user.email", "evidence-test@example.invalid")
         source = directory / source_name
         source.parent.mkdir(parents=True, exist_ok=True)
-        source.write_text("VALUE = 1\n", encoding="utf-8")
+        source.write_text(source_initial, encoding="utf-8")
         if baseline_evidence:
             evidence_dir = directory / ".adam" / "evidence"
             evidence_dir.mkdir(parents=True)
@@ -139,7 +175,7 @@ class EvidenceScriptTests(unittest.TestCase):
         if delete_source:
             source.unlink()
         else:
-            source.write_text("VALUE = 2\n", encoding="utf-8")
+            source.write_text(source_changed, encoding="utf-8")
         if remove_baseline_evidence:
             (directory / ".adam" / "evidence" / "obsolete.json").unlink()
         if include_evidence:
@@ -150,15 +186,23 @@ class EvidenceScriptTests(unittest.TestCase):
         self._git(directory, "commit", "-m", "code change")
         return directory
 
-    def _run_gate(self, directory: Path) -> subprocess.CompletedProcess[str]:
+    def _run_gate(
+        self,
+        directory: Path,
+        *,
+        evidence_dir: Path | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        command = [
+            sys.executable,
+            str(SCRIPTS / "check_change_evidence.py"),
+            "--base",
+            "HEAD~1",
+            "--require-for-code-change",
+        ]
+        if evidence_dir is not None:
+            command.extend(["--evidence-dir", str(evidence_dir)])
         return subprocess.run(
-            [
-                sys.executable,
-                str(SCRIPTS / "check_change_evidence.py"),
-                "--base",
-                "HEAD~1",
-                "--require-for-code-change",
-            ],
+            command,
             cwd=directory,
             capture_output=True,
             text=True,

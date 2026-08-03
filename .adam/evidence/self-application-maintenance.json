@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "change_id": "self-application-maintenance",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md: Self-Application and Package Maintenance",
+    "scripts/check_change_evidence.py: requires_evidence"
+  ],
+  "affected_callers": [
+    "README.md",
+    "references/enforcement.md",
+    ".github/workflows/skill-quality.yml",
+    "assets/github-actions/adam-evidence-gate.yml"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The Skill explicitly applies its risk, cleanup, evidence, and verification policy to this package.",
+      "verification": "rg -n 'Self-Application and Package Maintenance' SKILL.md"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The evidence gate requires evidence for source, infrastructure, and extensionless-script additions and deletions without blocking documentation fixtures.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The package has an active workflow that validates behavior-change evidence, stored evidence, tests, and patch formatting.",
+      "verification": "ruby -e \"require 'yaml'; YAML.load_file('.github/workflows/skill-quality.yml')\""
+    }
+  ],
+  "invariants": [
+    "SKILL.md remains the single normative policy source.",
+    "The root scripts directory remains the package's canonical validator implementation.",
+    "Target repositories use copied .adam/scripts validators because the reusable workflow template expects that layout."
+  ],
+  "replaced_paths": [
+    "README risk-level table duplicated from SKILL.md",
+    "README completion-gate list duplicated from SKILL.md",
+    "Generic evidence-artifact update wording that allowed unrelated changes to reuse old artifacts"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "self-enforced evidence mode",
+      "status": "applied",
+      "rationale": "This repository now stores a unique evidence artifact for the maintenance change."
+    },
+    {
+      "name": "active CI quality gate",
+      "status": "applied",
+      "rationale": "The repository workflow runs evidence validation, tests, and diff formatting checks on pull requests and main pushes."
+    },
+    {
+      "name": "deleted script detection",
+      "status": "applied",
+      "rationale": "The gate reads the base Git blob when an extensionless shebang script has been deleted."
+    }
+  ],
+  "verification": [
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "16 evidence-script tests passed."
+    },
+    {
+      "command": "python3 -m py_compile scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_evidence_scripts.py",
+      "status": "passed",
+      "result": "All Python sources compiled successfully."
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed."
+    },
+    {
+      "command": "ruby -e \"require 'yaml'; YAML.load_file('assets/github-actions/adam-evidence-gate.yml'); YAML.load_file('.github/workflows/skill-quality.yml')\"",
+      "status": "passed",
+      "result": "Both GitHub Actions workflow files parsed as YAML."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert this commit to remove the self-application policy, evidence artifact, and active workflow together; the reusable target-repository workflow template remains backward compatible.",
+  "independent_review": {
+    "reviewer": "independent code reviewer",
+    "outcome": "approved",
+    "notes": "Reviewed policy, documentation, CI, tests, and the deleted extensionless-script fix after remediation."
+  },
+  "remaining_risks": [
+    "GitHub branch protection must be configured separately to prevent direct main-branch pushes from bypassing required checks.",
+    "The evidence artifact records verification facts but cannot independently prove their truth without the underlying CI logs."
+  ]
+}
