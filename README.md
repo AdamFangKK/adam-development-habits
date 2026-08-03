@@ -26,6 +26,7 @@ AI 可以很快地完成局部需求，但在多轮修改后容易出现以下�
 | 风险分级 | 将改动分为轻量、常规和高风险三级，避免简单改动流程过重，也避免高风险改动证据不足。 |
 | 原则与验收条件 | 在复杂改动前明确项目约束、成功条件、失败条件和兼容性要求。 |
 | 改动证据台账 | 在编辑前说明实现入口、受影响调用方、行为不变量、兼容策略和验证计划。 |
+| 机器可读证据模式 | 仓库显式启用后，用 JSON 工件记录改动事实，并由本地脚本和 CI 校验。 |
 | 企业级横切检查 | 根据场景检查 `traceId`、结构化日志、超时、重试、幂等、限流、鉴权、审计和健康检查。 |
 | 清理审计 | 在完成前检查未使用文件、导入、导出、类型、路由、任务、队列、配置和 Feature Flag。 |
 | 验证门槛 | 要求实际运行相关的格式化、lint、类型检查、测试、构建和静态分析。 |
@@ -78,6 +79,14 @@ Verification: <已执行命令及实际结果>
 | Level 2 | 公开 API、迁移、认证、金额、隐私、并发、跨服务流程、架构改动或大型重构。 | Level 1 加计划、回滚或兼容策略、失败路径测试和独立复查。 |
 
 不确定时必须选择较高等级，不能为了减少工作而降低改动等级。
+
+### 机器可读证据模式
+
+默认情况下，证据台账保留在 AI 的任务记录和完成报告中，适合个人项目和轻量改动。需要硬约束时，仓库可显式启用 `.adam/` 目录；此时每个 Level 1 或 Level 2 改动都要新增或更新 `.adam/evidence/<change-id>.json`。
+
+证据文件记录唯一实现路径、验收条件、旧路径处理、保障措施、验证命令、兼容或回滚策略和独立复查结果。随附的标准库脚本会验证字段完整性，并可在 CI 中要求“代码改动必须同时包含证据工件”。
+
+这不是用 JSON 替代测试。JSON 只说明应该验证什么和已经运行了什么；测试、静态检查、审查和 CI 仍然负责证明结论。
 
 ## 安装
 
@@ -170,6 +179,8 @@ CI 应至少覆盖项目已有的格式化、静态检查、类型检查、测�
 
 当用户明确要求把规范变成自动化约束时，Skill 会读取 [执行适配参考](./references/enforcement.md)，先识别项目现有工具，再按需选择：JavaScript/TypeScript 的 `Knip`、多语言规则检查的 `Semgrep`、本地 Hook 的 `pre-commit`，或团队级质量门。它不会擅自安装任何依赖或接入外部服务。
 
+仓库启用机器可读证据模式时，可使用 [证据示例](./assets/evidence-ledger.example.json)、[字段校验器](./scripts/validate_evidence.py)、[行为改动门禁](./scripts/check_change_evidence.py) 和 [GitHub Actions 模板](./assets/github-actions/adam-evidence-gate.yml)。门禁同时覆盖源码与常见运行时配置（JSON、YAML、TOML、依赖清单、CI、API 合约），避免只改配置就绕过验证；文档、示例和测试夹具目录不会触发。证据文件须命名为 `.adam/evidence/<change-id>.json`，并与内容中的 `change_id` 一致。
+
 ## 个性化你的规范
 
 编辑 [`SKILL.md`](./SKILL.md) 中的 `Adam's Project Overrides` 部分，可以加入个人或团队特有的、可验证的规则。例如：
@@ -189,6 +200,12 @@ adam-development-habits/
 ├── SKILL.md             # Codex 实际执行的开发习惯规则
 ├── README.md            # 本说明文档
 ├── LICENSE              # MIT License
+├── assets/
+│   ├── evidence-ledger.example.json
+│   └── github-actions/adam-evidence-gate.yml
+├── scripts/
+│   ├── check_change_evidence.py
+│   └── validate_evidence.py
 ├── references/
 │   └── enforcement.md    # Hook、CI 与静态检查的选择和接入原则
 └── agents/

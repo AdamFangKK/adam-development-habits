@@ -23,6 +23,32 @@ Read this reference only when asked to add, configure, or review automated quali
 
 Do not install any candidate automatically. First identify the project's language, package manager, existing scripts, CI provider, and current quality checks. Obtain explicit approval before adding a new dependency or external service.
 
+## Structured Evidence Mode
+
+Enable this mode only when the repository owner wants CI-verifiable AI development evidence. Copy these resources from the skill package into the target repository:
+
+```text
+.adam/evidence/<change-id>.json
+.adam/scripts/validate_evidence.py
+.adam/scripts/check_change_evidence.py
+.github/workflows/adam-evidence-gate.yml
+```
+
+Use `assets/evidence-ledger.example.json` as the artifact template and `assets/github-actions/adam-evidence-gate.yml` as the workflow template. Keep the scripts unmodified unless the repository has a documented reason to extend the schema.
+
+The evidence gate validates artifacts changed in the pull request. With `--require-for-code-change`, it fails when source files or common behavior-defining configuration files change but no evidence artifact changes with them. This conservatively includes JSON, YAML, TOML, API contract files, dependency manifests, and CI configuration. Files under documentation, example, and fixture directories do not trigger it. The artifact filename must match its `change_id`, so use `.adam/evidence/<change-id>.json`. The gate cannot prove a claim made inside an artifact; tests, reviews, and CI still provide that evidence.
+
+## Technology Presets
+
+Treat a preset as a decision aid, not an installation command. First run the project's existing commands.
+
+| Stack | Baseline checks | Optional enforcement gap |
+|---|---|---|
+| JavaScript/TypeScript | formatter, lint, type check, unit tests, build | Use `Knip` for unused files, exports, and dependencies after reviewing dynamic loading. |
+| Python | formatter, lint, type check, tests | Add a narrowly configured static rule or unused-code tool only when the existing toolchain misses a repeated issue. |
+| Go | formatting, `go vet`, tests, existing static analysis | Prefer existing module and CI conventions before adding a linter bundle. |
+| JVM/.NET/Rust | formatter, compiler/type checks, tests, existing analyzers | Use the ecosystem's established analyzer rather than importing a generic linter suite by default. |
+
 ## CI Conformance Checklist
 
 For a repository that has the relevant capabilities, require these checks in CI:

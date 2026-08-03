@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "change_id": "order-api-migration",
+  "level": 2,
+  "canonical_owner": [
+    "src/orders/create_order.ts:createOrder"
+  ],
+  "affected_callers": [
+    "src/routes/orders.ts"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "createOrder is the only active order-write implementation.",
+      "verification": "pnpm test -- order"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The legacy endpoint remains a thin compatibility shim for 30 days.",
+      "verification": "pnpm test -- legacy-order-route"
+    }
+  ],
+  "invariants": [
+    "A retry must not create a second charge."
+  ],
+  "replaced_paths": [
+    "src/orders/legacy_create_order.ts"
+  ],
+  "retained_compatibility": [
+    {
+      "consumer": "Mobile clients before version 5.2",
+      "removal_condition": "Remove after the 30-day client migration window.",
+      "test": "pnpm test -- legacy-order-route"
+    }
+  ],
+  "safeguards": [
+    {
+      "name": "idempotency",
+      "status": "applied",
+      "rationale": "A unique key prevents duplicate charges during retries."
+    },
+    {
+      "name": "traceId propagation",
+      "status": "applied",
+      "rationale": "The API request crosses payment and inventory services."
+    }
+  ],
+  "verification": [
+    {
+      "command": "pnpm test -- order legacy-order-route",
+      "status": "passed",
+      "result": "Order creation, retry, and legacy compatibility tests passed."
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "passed",
+      "result": "No type errors."
+    }
+  ],
+  "rollback_or_compatibility": "Use the feature flag to route requests through the compatibility shim while investigating a regression.",
+  "independent_review": {
+    "reviewer": "independent reviewer",
+    "outcome": "approved",
+    "notes": "Confirmed only one order-write path remains and idempotency is tested."
+  },
+  "remaining_risks": [
+    "The compatibility endpoint must be removed after the migration window."
+  ]
+}

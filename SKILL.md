@@ -65,6 +65,14 @@ Verification: <commands run and actual results>
 
 Use narrow searches to establish the ledger. Check imports, exports, registrations, routes, configuration keys, message names, tests, and dynamic lookup conventions. Never infer that code is dead only because a direct reference search is empty.
 
+## Evidence Enforcement Mode
+
+Use the conversational ledger by default. A repository opts into machine-enforced evidence only when it contains an `.adam/` directory or the user explicitly requests enforcement.
+
+For an opted-in repository, create one `.adam/evidence/<change-id>.json` artifact for every Level 1 or Level 2 change. Start from [assets/evidence-ledger.example.json](assets/evidence-ledger.example.json), then validate it with the project-local evidence script before completion. Keep the artifact in the same pull request as the code change.
+
+The artifact records facts after verification; it does not replace tests or let a failed command become passing by declaration. For a Level 2 change, include rollback or compatibility strategy and an independent review outcome.
+
 ## One Active Implementation
 
 1. Locate the existing owner of the behavior before adding code.
@@ -121,7 +129,7 @@ Delete confirmed leftovers. For a potentially dynamic reference, inspect its run
 
 First discover the repository's existing hooks, CI, linting, type checks, tests, and static-analysis tools. Use them; do not add a new dependency merely because it appears in a recommendation.
 
-When the user asks to make this policy mechanically enforceable, read [references/enforcement.md](references/enforcement.md). Select the smallest compatible toolchain, wire the same required checks into local hooks and CI, and never bypass or weaken a failing quality gate.
+When the user asks to make this policy mechanically enforceable, read [references/enforcement.md](references/enforcement.md). Select the smallest compatible toolchain, use [scripts/validate_evidence.py](scripts/validate_evidence.py) and [scripts/check_change_evidence.py](scripts/check_change_evidence.py) as the standard-library evidence gate, wire the same required checks into local hooks and CI, and never bypass or weaken a failing quality gate.
 
 ## Verification Protocol
 
@@ -154,6 +162,7 @@ Removed or retained compatibility: ...
 Safeguards: ...
 Verified: <command> - <result>
 Independent review: <result or not required>
+Evidence artifact: <path or enforcement mode not enabled>
 Remaining risks: ...
 ```
 
