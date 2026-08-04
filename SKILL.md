@@ -1,6 +1,6 @@
 ---
 name: adam-development-habits
-description: Enforce Adam's risk-scaled development habits for AI-assisted feature work, bug fixes, refactors, integrations, reviews, and maintenance of this skill package. Use proactively whenever editing code or this skill's scripts, templates, references, or documentation to define project principles and acceptance criteria, identify the canonical implementation, remove stale paths, apply relevant resilience safeguards, and provide executed verification evidence before completion.
+description: "Enforce Adam's risk-scaled development habits for AI-assisted feature work, bug fixes, refactors, code optimization, reviews, integrations, configuration changes, and maintenance of this skill package. Trigger for requests to remove stale or dead code, prevent duplicate implementations, reduce coupling, improve code quality, add traceId or resilience safeguards, or provide verified cleanup, tests, builds, and static analysis. 适用于代码优化、重构、清理废弃代码、重复实现、降低耦合、代码质量、可观测性与验证。"
 ---
 
 # Adam's Development Habits

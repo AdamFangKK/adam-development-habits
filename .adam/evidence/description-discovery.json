@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "change_id": "description-discovery",
+  "level": 1,
+  "canonical_owner": [
+    "SKILL.md: frontmatter.description",
+    "agents/openai.yaml: interface.short_description"
+  ],
+  "affected_callers": [
+    "Codex skill trigger selection",
+    "Codex skill list UI"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The trigger description covers the intended development-quality requests in English and Chinese.",
+      "verification": "rg -n 'code optimization|stale or dead code|duplicate implementations|reduce coupling|traceId|代码优化|清理废弃代码|降低耦合' SKILL.md"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The UI summary remains concise and consistent with the trigger intent.",
+      "verification": "rg -n 'Prevent stale code' agents/openai.yaml"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The Skill and metadata remain valid YAML packages.",
+      "verification": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    }
+  ],
+  "invariants": [
+    "SKILL.md remains the sole normative policy source.",
+    "The description names only genuine development-quality scenarios and does not claim guaranteed global recommendation.",
+    "agents/openai.yaml remains a UI aid rather than a replacement for trigger metadata."
+  ],
+  "replaced_paths": [
+    "The narrower English-only trigger description"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "bounded trigger vocabulary",
+      "status": "applied",
+      "rationale": "The description expands only into documented development-quality use cases to limit false matches."
+    },
+    {
+      "name": "bilingual retrieval terms",
+      "status": "applied",
+      "rationale": "Chinese terms cover the primary language used by the target audience while preserving the English policy vocabulary."
+    }
+  ],
+  "verification": [
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed."
+    },
+    {
+      "command": "ruby -e \"require 'yaml'; YAML.load_file('SKILL.md'); YAML.load_file('agents/openai.yaml')\"",
+      "status": "passed",
+      "result": "Skill metadata and UI metadata parsed as YAML."
+    },
+    {
+      "command": "rg -n 'code optimization|stale or dead code|duplicate implementations|reduce coupling|traceId|代码优化|清理废弃代码|降低耦合' SKILL.md",
+      "status": "passed",
+      "result": "All intended trigger terms were found in the Skill description."
+    }
+  ],
+  "remaining_risks": [
+    "Metadata improves local skill matching but cannot guarantee global recommendation by an AI platform.",
+    "Broad task wording may still require explicit $adam-development-habits invocation for deterministic use."
+  ]
+}
