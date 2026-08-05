@@ -1,0 +1,39 @@
+{
+  "reviewer": "Codex native code-reviewer: external_benchmark_review",
+  "initial_outcome": "changes_requested",
+  "initial_findings": [
+    {
+      "severity": "high",
+      "issue": "The README did not distinguish the repair-agent fixture boundary from the post-repair verifier's permitted reference implementation access."
+    },
+    {
+      "severity": "medium",
+      "issue": "The hidden-check, fixture-integrity, and unchanged-test claims lacked committed hashes, diffs, input definitions, and a verifier report."
+    },
+    {
+      "severity": "low",
+      "issue": "New JSON and CLI boundaries produced basedpyright warnings."
+    }
+  ],
+  "remediation": [
+    "Separated repair_agent_boundary from verifier_boundary in the manifest and README.",
+    "Added the differential verifier, verifier report, source/test/config/candidate/reference hashes, candidate diffs, and committed-artifact hash checks.",
+    "Replaced dynamic Any propagation with explicit JSON and command-line parsing."
+  ],
+  "re_review": {
+    "outcome": "approved",
+    "verification": [
+      "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_benchmark.py -v -> 7 passed",
+      "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v -> 56 passed",
+      "basedpyright tests/test_external_quixbugs_benchmark.py examples/external-quixbugs-hidden-check.py -> 0 errors, 0 warnings",
+      "python3 -m json.tool on manifest, evaluation, and verifier report -> passed",
+      "SHA-256 values for the hidden verifier, diffs, and transcripts match their recorded references."
+    ],
+    "residual_risk": "The reviewer did not independently retrieve the upstream QuixBugs reference source, so the external-source and reference hashes are internally recorded evidence rather than independently re-derived upstream proof."
+  },
+  "final_recheck": {
+    "outcome": "approved",
+    "scope": "The machine-evidence validation was moved into the new type-clean external benchmark test file, and the evidence count was updated from 7 to 8.",
+    "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_benchmark.py -v -> 8 passed"
+  }
+}

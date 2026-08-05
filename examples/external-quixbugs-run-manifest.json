@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "kind": "protocol-isolated external repair benchmark",
+    "assurance": "Each repair agent was instructed to read only its sanitized fixture. Native subagents share a filesystem, so this is an instruction-based boundary rather than proof of filesystem isolation.",
+    "repair_agent_boundary": {
+      "allowed_fixture_paths": [
+        "conftest.py",
+        "python_programs/shortest_paths.py",
+        "python_testcases/test_shortest_paths.py"
+      ],
+      "excluded_from_fixture": [
+        "correct_python_programs/",
+        "upstream clone metadata",
+        "gold patch",
+        "scoring artifacts",
+        "external network access"
+      ]
+    },
+    "verifier_boundary": {
+      "timing": "after both repair agents completed",
+      "allowed_inputs": [
+        "the pinned upstream reference implementation",
+        "both candidate source files",
+        "public test and conftest hashes",
+        "examples/external-quixbugs-hidden-check.py"
+      ],
+      "purpose": "Validate candidate changes and hidden differential behavior; verifier access does not imply repair-agent access."
+    }
+  },
+  "source": {
+    "repository": "https://github.com/jkoppel/QuixBugs",
+    "revision": "4257f44b0ff1181dedaedee6a447e133219fcebf",
+    "benchmark": "QuixBugs Python shortest_paths",
+    "source_path": "python_programs/shortest_paths.py",
+    "public_test_path": "python_testcases/test_shortest_paths.py",
+    "test_configuration_path": "conftest.py"
+  },
+  "environment": {
+    "python": "3.9.6",
+    "pytest": "8.3.4",
+    "dependency_installation": "none"
+  },
+  "fixture_construction": {
+    "method": "git archive of the pinned revision containing only the allowed fixture paths",
+    "initial_issue": "The first minimal archive omitted conftest.py, causing pytest collection to fail because pytest.use_correct was undefined.",
+    "resolution": "The original conftest.py was added before either repair was evaluated; both fixtures then reproduced the same three public failures.",
+    "benchmark_source_modified": false
+  },
+  "runs": [
+    {
+      "id": "baseline",
+      "skill": "not supplied",
+      "allowed_change": "python_programs/shortest_paths.py only",
+      "prohibited_changes": [
+        "tests",
+        "conftest.py",
+        "dependencies"
+      ],
+      "output_path": "examples/external-quixbugs-baseline-output.md"
+    },
+    {
+      "id": "skill-guided",
+      "skill": "SKILL.md",
+      "required_process": [
+        "Level 1",
+        "Causal Lite",
+        "observed symptom",
+        "primary and alternative hypotheses",
+        "discriminating check",
+        "invariant",
+        "evidence ledger"
+      ],
+      "allowed_change": "python_programs/shortest_paths.py only",
+      "prohibited_changes": [
+        "tests",
+        "conftest.py",
+        "dependencies"
+      ],
+      "output_path": "examples/external-quixbugs-skill-output.md"
+    }
+  ],
+  "limitations": [
+    "QuixBugs explicitly contains small injected defects, so this case is a repair-discipline and regression check rather than a realistic distributed-systems causality benchmark.",
+    "The result compares two single runs from the same agent platform and cannot estimate a model-wide causal effect of the Skill.",
+    "The reference implementation has an undocumented precondition: a fully disconnected one-way edge can raise KeyError. Hidden checks therefore use only inputs that the reference implementation itself accepts.",
+    "Defects4J, Bugs.jar, BugsInPy, Codeflaws, and BugSwarm were investigated but were not scored because their required toolchains, artifacts, architecture, or dependencies were unavailable in this environment."
+  ]
+}

@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "change_id": "external-quixbugs-benchmark",
+  "level": 2,
+  "canonical_owner": [
+    "examples/external-quixbugs-run-manifest.json:protocol",
+    "examples/external-quixbugs-hidden-check.py:main",
+    "tests/test_external_quixbugs_benchmark.py:ExternalQuixBugsBenchmarkTests"
+  ],
+  "affected_callers": [
+    "README.md",
+    "examples/external-quixbugs-evaluation.json",
+    "examples/external-quixbugs-verifier-report.json",
+    "examples/external-quixbugs-review.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The external repair fixture records an immutable upstream repository and revision, keeps the repair-agent and verifier boundaries distinct, and never calls protocol isolation filesystem isolation.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_benchmark.py -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Both baseline and Skill-guided candidates pass the same public regression test and the same two valid hidden differential cases without modifying the public test or conftest.",
+      "verification": "examples/external-quixbugs-verifier-report.json"
+    },
+    {
+      "id": "AC-3",
+      "condition": "Candidate diffs, source/test/config/reference hashes, hidden-check source, verifier output, and the independent review remain hash-verifiable local artifacts.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/external-quixbugs-benchmark.json"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The published conclusion states that one small QuixBugs case does not demonstrate a repair-success, global-causality, or production-safety advantage.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_benchmark.py -v"
+    }
+  ],
+  "invariants": [
+    "Repair agents receive no correct implementation, gold patch, upstream Git metadata, scoring artifact, or external network access in their declared fixture boundary.",
+    "The verifier reads the pinned reference only after repair to compare candidate behavior and input-mutation behavior.",
+    "A result is not counted when the reference implementation cannot evaluate the hidden input itself.",
+    "The benchmark conclusion remains limited to a single intentionally small external defect."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "pinned external provenance",
+      "status": "applied",
+      "rationale": "The manifest records the GitHub repository and immutable QuixBugs revision; the verifier report records original, reference, candidate, test, and configuration SHA-256 values."
+    },
+    {
+      "name": "repair-verifier separation",
+      "status": "applied",
+      "rationale": "Repair fixtures exclude correct_python_programs and score artifacts, while a separate post-repair verifier boundary explicitly permits the reference implementation."
+    },
+    {
+      "name": "anti-overfit verification",
+      "status": "applied",
+      "rationale": "Independent public-test reruns, unchanged test/configuration hashes, candidate diffs, and two hidden differential cases prevent scoring a public-test-only or test-mutating patch as a pass."
+    },
+    {
+      "name": "evidence-limit disclosure",
+      "status": "applied",
+      "rationale": "README, manifest, evaluation, verifier report, and review all state the one-case, protocol-isolation, reference-precondition, and unavailable-toolchain limits."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The manifest owns declared actor boundaries, the hidden-check script owns deterministic differential verification, and the evidence artifact owns package-level claims."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The benchmark runner and tests use existing standard-library Python and pytest only; no package dependency, service, or framework was added."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "The verifier is deliberately concrete for the pinned QuixBugs case rather than a speculative generic benchmark framework; its committed replay inputs justify the narrow dedicated script."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "The package stores public benchmark metadata and synthetic graph fixtures, not mutable business or personal data."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "The hidden verifier fails explicitly for missing functions, input mutation, candidate/reference disagreement, or malformed CLI input, and excludes a reference-failing input from scoring."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "README gains an evidence-backed external-benchmark surface while preserving the existing Skill and evidence schema contracts."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "This deterministic local benchmark does not expose a latency, cost, throughput, or service SLO change."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The repair-agent boundary forbids external network access and gold artifacts; the published records contain no credentials or sensitive data."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "This change is one reviewable benchmark-evidence addition with an independent review, final diff inspection, and required local checks before an atomic commit."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "The Skill package change neither deploys a service nor changes a user-facing rollout path."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No schema, persistence representation, backfill, or retained application data changes."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No runtime configuration, secret, credential, or access policy is added or changed."
+    },
+    "dependency_supply_chain": {
+      "status": "applied",
+      "rationale": "The external source is pinned to a public revision and the package adds no runtime or build dependency; unavailable benchmark toolchains are reported rather than installed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README, manifest, evaluation, verifier report, diffs, transcripts, review, and this evidence artifact preserve setup, diagnosis, limitations, and replay commands."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The record fixes the upstream revision, Python and pytest versions, fixture construction, commands, hashes, hidden input script, and explicit prerequisites that blocked other benchmark families."
+    }
+  },
+  "supporting_artifacts": [
+    {
+      "id": "external-benchmark-manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/external-quixbugs-run-manifest.json",
+      "sha256": "932788c3ac76e9e207b06eca9502ee1654e3fafb17d2b43a0fa6dc0319939ee6",
+      "summary": "Pinned source, declared repair/verifier boundaries, prompts, fixture construction, environment, and limitations."
+    },
+    {
+      "id": "external-baseline-output",
+      "kind": "evaluation_transcript",
+      "path": "examples/external-quixbugs-baseline-output.md",
+      "sha256": "3ae901dd646811f9428303f00dac537d5e836ec3b29faa80d3963a3946b3c0ce",
+      "summary": "Fresh baseline repair output without the Skill."
+    },
+    {
+      "id": "external-skill-output",
+      "kind": "evaluation_transcript",
+      "path": "examples/external-quixbugs-skill-output.md",
+      "sha256": "34faeb5361f5a7e88eea4830137c0148ef4b937a0b607d15a61c4fa2b2a9ce60",
+      "summary": "Fresh Skill-guided repair output with a Causal Lite ledger."
+    },
+    {
+      "id": "external-verifier-report",
+      "kind": "test_output",
+      "path": "examples/external-quixbugs-verifier-report.json",
+      "sha256": "e6efb44577afff8029f110305010a6d14233fe9e307c049a16f2cabd2f9284d1",
+      "summary": "Candidate, source, reference, test, configuration, diff, and hidden-check provenance plus observed results."
+    },
+    {
+      "id": "external-evaluation",
+      "kind": "test_output",
+      "path": "examples/external-quixbugs-evaluation.json",
+      "sha256": "faec78eedfedb02d4aabd6f39a62e2f36f9aea2af0e7e5c8c12e7d98d41283ed",
+      "summary": "Outcome comparison, adversarial checks, unscored feasibility blockers, and explicit interpretation limits."
+    },
+    {
+      "id": "external-review",
+      "kind": "review_report",
+      "path": "examples/external-quixbugs-review.json",
+      "sha256": "7d23f25b4e21ae09ee131416e0fa7992136d1b38079d65f1a8257b42c46c305c",
+      "summary": "Independent review findings, remediation, re-review approval, and residual risk."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_benchmark.py -v",
+      "status": "passed",
+      "result": "8 external-benchmark evidence tests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 examples/external-quixbugs-hidden-check.py --candidate <candidate> --reference <pinned-reference> --label <label>",
+      "status": "passed",
+      "result": "Baseline and Skill-guided candidates each passed two valid differential cases without input mutation; exact outputs and hashes are in the verifier report."
+    },
+    {
+      "command": "basedpyright tests/test_external_quixbugs_benchmark.py examples/external-quixbugs-hidden-check.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -c 'import json; from pathlib import Path; [json.loads(path.read_text(encoding=\"utf-8\")) for path in (Path(\"examples/external-quixbugs-run-manifest.json\"), Path(\"examples/external-quixbugs-evaluation.json\"), Path(\"examples/external-quixbugs-verifier-report.json\"))]'",
+      "status": "passed",
+      "result": "All external benchmark JSON artifacts parsed successfully."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the external QuixBugs manifest, transcripts, diffs, hidden verifier, evaluator and review records, regression test, README paragraph, and this evidence artifact together. Existing Skill behavior and the earlier composite benchmark remain unaffected.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: external_benchmark_review",
+    "outcome": "approved",
+    "notes": "The initial review found overbroad gold-isolation wording, un-auditable hidden-check claims, and static-analysis warnings. The re-review approved the separated verifier boundary, committed hashes/diffs/hidden-check output, and zero-warning type check."
+  },
+  "remaining_risks": [
+    "The test covers one intentionally small QuixBugs defect and cannot estimate a general repair-success or global-causal-reasoning effect.",
+    "Native subagents do not provide filesystem-enforced isolation; the boundary is an explicit protocol only.",
+    "The pinned QuixBugs reference implementation has an undocumented input precondition, so hidden inputs are limited to reference-valid graphs.",
+    "The external source and reference hashes are recorded from the executed environment; the independent reviewer did not re-fetch them from GitHub.",
+    "BugsInPy, Defects4J, Bugs.jar, Codeflaws, and BugSwarm remain unscored in this environment because their required dependencies, artifacts, architecture, or toolchains were unavailable."
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "https://github.com/jkoppel/QuixBugs",
+    "revision": "4257f44b0ff1181dedaedee6a447e133219fcebf",
+    "original_source_sha256": "e99679a54634bc940a78c1f211e6126f5119a7654a089d1f56f264a1deaa0ce2",
+    "reference_source_sha256": "5adad4888cab319fadc4a8a8c62fddb570648bc4906452bbc1939070cd92b426",
+    "public_test_sha256": "8ee521556000dc6bcf4ae71c6db0f91c387f96e055557ec1accdde824928b4f8",
+    "conftest_sha256": "e8325790da8f5d06af1251e724838c7c8a18d90c31ddc9d24d9f3aa57ce8"
+  },
+  "repair_fixture_integrity": {
+    "baseline_candidate_source_sha256": "57575618e1d5622c77f53596b42d8b3cc86553e83edaa24fb5eed917d1717aa0",
+    "skill_guided_candidate_source_sha256": "bfb967b7551737317017c161dd082d4931427c44f8db6d6fade177162111d0b4",
+    "baseline_public_test_sha256": "8ee521556000dc6bcf4ae71c6db0f91c387f96e055557ec1accdde824928b4f8",
+    "skill_guided_public_test_sha256": "8ee521556000dc6bcf4ae71c6db0f91c387f96e055557ec1accdde824928b4f8",
+    "baseline_conftest_sha256": "e8325790da8f5d06af1251e724838c7c8a18d90c31ddc9d24d9f3aa57ce8",
+    "skill_guided_conftest_sha256": "e8325790da8f5d06af1251e724838c7c8a18d90c31ddc9d24d9f3aa57ce8"
+  },
+  "public_test_runs": [
+    {
+      "label": "baseline",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q python_testcases/test_shortest_paths.py",
+      "result": "3 passed in 0.01s"
+    },
+    {
+      "label": "skill-guided",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q python_testcases/test_shortest_paths.py",
+      "result": "3 passed in 0.01s"
+    }
+  ],
+  "hidden_differential_check": {
+    "script": "examples/external-quixbugs-hidden-check.py",
+    "script_sha256": "f3b5a452f7b54b914bc96f701c40468e9ff98506d625c9743e989d162e2ca525",
+    "command_template": "PYTHONDONTWRITEBYTECODE=1 python3 examples/external-quixbugs-hidden-check.py --candidate <candidate-source> --reference <pinned-reference-source> --label <label>",
+    "results": [
+      {
+        "candidate_label": "baseline",
+        "candidate_sha256": "57575618e1d5622c77f53596b42d8b3cc86553e83edaa24fb5eed917d1717aa0",
+        "case_count": 2,
+        "input_mapping_unchanged": true,
+        "reference_sha256": "5adad4888cab319fadc4a8a8c62fddb570648bc4906452bbc1939070cd92b426",
+        "result": "passed"
+      },
+      {
+        "candidate_label": "skill-guided",
+        "candidate_sha256": "bfb967b7551737317017c161dd082d4931427c44f8db6d6fade177162111d0b4",
+        "case_count": 2,
+        "input_mapping_unchanged": true,
+        "reference_sha256": "5adad4888cab319fadc4a8a8c62fddb570648bc4906452bbc1939070cd92b426",
+        "result": "passed"
+      }
+    ],
+    "rejected_input": {
+      "graph_shape": "a disconnected one-way edge whose source is neither the primary source nor a destination",
+      "result": "The pinned reference implementation raised KeyError, so this input was excluded from candidate scoring rather than treated as a candidate failure."
+    }
+  },
+  "committed_artifacts": [
+    {
+      "path": "examples/external-quixbugs-baseline.diff",
+      "sha256": "8e791bec66c117948f1c6e958be1ec0e347aa080c54fced9ade62a7e173ddbe9"
+    },
+    {
+      "path": "examples/external-quixbugs-skill.diff",
+      "sha256": "8cf7bd8dfc142a505fd537cba3d87e7a5ff12ed993ba42a6d25294f585b42621"
+    },
+    {
+      "path": "examples/external-quixbugs-baseline-output.md",
+      "sha256": "3ae901dd646811f9428303f00dac537d5e836ec3b29faa80d3963a3946b3c0ce"
+    },
+    {
+      "path": "examples/external-quixbugs-skill-output.md",
+      "sha256": "34faeb5361f5a7e88eea4830137c0148ef4b937a0b607d15a61c4fa2b2a9ce60"
+    }
+  ]
+}

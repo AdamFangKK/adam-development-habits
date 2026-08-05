@@ -159,6 +159,12 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py \
 
 当 Skill 本身的 Level 2 更新同时跨越三类以上治理边界时，包内自测还会执行复合陷阱前向测试：测试 Agent 被明确限制为只读取原始场景和 Skill，评分规则与危险变异测试独立保存，避免“看答案作答”。提示词、允许输入、Skill/评分器哈希和运行限制都会存证；没有外部沙箱时，这只能称为“协议隔离”，不能夸大为文件系统级隔离。
 
+### 外部缺陷基准验证
+
+包内还保留了一次真实 GitHub 基准的可审计运行：[QuixBugs `shortest_paths` 固定提交清单](./examples/external-quixbugs-run-manifest.json)、[基线输出](./examples/external-quixbugs-baseline-output.md)、[Skill 复测输出](./examples/external-quixbugs-skill-output.md) 和[独立验证结果](./examples/external-quixbugs-evaluation.json)。两组都把公开 `3` 个失败和两个有效隐藏输入修复为通过，因此这个单一样本**不能**宣称 Skill 提升了修复成功率；可观察到的差异是 Skill 组留下了可证伪假设、区分性检查、不变量、输入不变性检查和结论等级，并以更小的改动范围完成同一修复。
+
+修复 Agent 的夹具严格排除 `correct_python_programs`、上游 Git 元数据和评分工件；两个 Agent 结束后，独立验证器才读取固定参考实现来执行差分检查。原生子代理没有文件系统级隔离，所以这仍只称为协议隔离。`BugsInPy`、`Defects4J`、`Bugs.jar`、`Codeflaws` 与 `BugSwarm` 的本轮阻塞原因同样记录在结果中；没有把缺少工具链或依赖的情况伪装成“失败样本”。QuixBugs 的缺陷刻意较小，不能作为跨服务、迁移、发布或生产因果能力的证明。
+
 ### 机器可读证据模式
 
 默认情况下，证据台账保留在 AI 的任务记录和完成报告中，适合个人项目和轻量改动。需要硬约束时，仓库可显式启用 `.adam/` 目录；此时每个 Level 1 或 Level 2 逻辑改动都要新增唯一的 `.adam/evidence/<change-id>.json`。只有在同一分支或 PR 延续该改动时才能更新它。

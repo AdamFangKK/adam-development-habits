@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "manifest": "examples/external-quixbugs-run-manifest.json",
+  "verifier_report": "examples/external-quixbugs-verifier-report.json",
+  "source_revision": "4257f44b0ff1181dedaedee6a447e133219fcebf",
+  "pre_repair": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q python_testcases/test_shortest_paths.py",
+    "result": "3 failed in 0.02s",
+    "correct_control": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest --correct -q python_testcases/test_shortest_paths.py -> 3 passed in 0.01s"
+  },
+  "runs": {
+    "baseline": {
+      "public_test": "3 passed in 0.01s",
+      "hidden_differential_test": "2 passed against the reference implementation",
+      "test_and_configuration_unchanged": true,
+      "source_changes": [
+        "relaxation writes to weight_by_node[v]",
+        "initialization includes every edge endpoint"
+      ],
+      "result": "passed"
+    },
+    "skill_guided": {
+      "public_test": "3 passed in 0.01s",
+      "hidden_differential_test": "2 passed against the reference implementation",
+      "test_and_configuration_unchanged": true,
+      "source_changes": [
+        "relaxation writes to weight_by_node[v]"
+      ],
+      "result": "passed"
+    }
+  },
+  "comparison": {
+    "functional_repair_delta": 0,
+    "evidence_discipline_delta": "The guided run recorded an observed symptom, alternative hypothesis, discriminating intervention, invariant, non-mutation check, and explicit root-cause classification. The baseline run gave a correct concise explanation but did not record that full causal evidence chain.",
+    "conclusion": "Both runs repaired this small defect. This case does not show a repair-success advantage; it shows that the Skill made the causal and verification evidence more complete while preserving a smaller change scope."
+  },
+  "adversarial_checks": [
+    "The fixture omitted correct_python_programs and upstream Git metadata before agents ran.",
+    "Agents were allowed to change only python_programs/shortest_paths.py.",
+    "Independent verification reran public tests and checked that the public test and conftest hashes matched their pinned originals.",
+    "A hidden differential check compared two valid disconnected-component graphs against the reference implementation and asserted that candidate code did not mutate the input mapping.",
+    "An initial hidden graph with a disconnected one-way edge was rejected because the reference implementation raised KeyError; it was not scored against either candidate."
+  ],
+  "unscored_feasibility_findings": {
+    "BugsInPy_tqdm_1": "The immutable buggy source archive was fetched, but test collection required nose on Python 3.6.9; the current Python 3.9.6 environment had no such dependency.",
+    "Defects4J_and_Bugs_jar": "No defects4j, Maven, Ant, or Gradle toolchain was available; GitHub clone transport also timed out.",
+    "Codeflaws": "The repository contains only its harness; executable defects require the separate dataset archive.",
+    "BugSwarm": "Its full pipeline needs dataset artifacts and an x86-64 environment, while this host is arm64."
+  },
+  "limitations": [
+    "This is one external benchmark case, not a statistically meaningful sample.",
+    "Protocol isolation is weaker than sandbox-enforced filesystem isolation.",
+    "The QuixBugs defect is intentionally small and cannot establish cross-service, migration, deployment, or production causal-analysis capability.",
+    "No external benchmark source, correct implementation, test dependency, or production system was changed."
+  ]
+}
