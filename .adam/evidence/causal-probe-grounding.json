@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "change_id": "causal-probe-grounding",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Causal Execution Discipline",
+    "scripts/validate_evidence.py:validate_causal_evidence",
+    "scripts/score_causal_probe.py:score_candidate",
+    "tests/test_external_quixbugs_replay.py:ExternalQuixBugsReplayTests"
+  ],
+  "affected_callers": [
+    "README.md",
+    "tests/test_evidence_scripts.py",
+    "tests/test_skill_contract.py",
+    "tests/test_causal_probe_score.py",
+    "tests/test_causal_probe_forward.py",
+    "tests/test_external_quixbugs_benchmark.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "A root-cause conclusion requires a named owner, a controlled counterfactual with expected and observed outcomes, and at least one rejected or unresolved alternative hypothesis.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_evidence_scripts.py tests/test_skill_contract.py -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The multi-module causal fixture reproduces the timeout regression; its scorer rejects test tampering and an event-ID-only cross-tenant mitigation, while accepting the reference repair.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_causal_probe_score.py tests/test_causal_probe_forward.py -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The saved baseline and Skill-guided candidates both pass public and hidden behavior checks, and published results state that the observed difference is evidence completeness rather than repair-success gain.",
+      "verification": "examples/causal-probe-evaluation.json"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The pinned GitHub QuixBugs source, public tests, conftest and candidates replay locally; the formerly truncated conftest digest is rejected by byte-level validation.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_benchmark.py tests/test_external_quixbugs_replay.py -v"
+    }
+  ],
+  "invariants": [
+    "A downstream dashboard, display, test expectation, or alert suppression cannot be called a root-cause fix solely because it hides a symptom.",
+    "A hidden behavior test and a scope check both pass before a causal-probe repair is counted.",
+    "Unknown remote reconciliation does not authorize resend or acknowledgement in the causal fixture.",
+    "External source provenance claims use complete 64-character SHA-256 values and are replayable from committed public fixtures."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "causal owner and counterfactual gate",
+      "status": "applied",
+      "rationale": "The validator rejects a root-cause claim that omits the owner, controlled intervention, measured result, or competing hypothesis."
+    },
+    {
+      "name": "adversarial causal repair scorer",
+      "status": "applied",
+      "rationale": "The scorer separately exercises unknown reconciliation, definitive absence, tenant-scoped identity, unauthorized test changes, and the public behavior contract."
+    },
+    {
+      "name": "pinned external replay",
+      "status": "applied",
+      "rationale": "The QuixBugs replay holds source, tests, candidates, and hidden verifier hashes and reproduces both the original failures and candidate successes offline."
+    },
+    {
+      "name": "claim-bound publication",
+      "status": "applied",
+      "rationale": "README and evaluation artifacts state that one run with equal repair success cannot establish a general causal-reasoning or production-safety advantage."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The Skill defines the human-facing causal record, the validator enforces its machine-readable floor, and each dedicated scorer owns one deterministic fixture."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "All new scorer and replay code uses the standard library plus the repository's existing pytest-based benchmark fixture; no dependency was added."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "The causal-probe scorer is deliberately fixture-specific because its scope and hidden contracts are stable; a generic benchmark framework would add unsupported abstraction."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "Fixtures use synthetic event, tenant, recipient, and delivery identifiers only; no application business or personal data is stored."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "The fixture distinguishes accepted timeout, retryable pre-acceptance rejection, found, absent, and unknown reconciliation rather than collapsing them into retry success."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The stronger root-cause evidence requirements preserve optional causal blocks for existing artifacts while constraining newly authored root-cause claims."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "This local deterministic test package does not alter a latency, throughput, cost, or service SLO."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "Repair-agent prompts exclude external network and verifier/gold artifacts; the scorer rejects mutation outside the canonical owner and the artifacts contain no credentials."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The update is one logical, reviewable evidence-and-test change with full checks before its atomic Lore commit."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployable service, feature flag, or runtime rollout is changed."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No persistent production schema, backfill, or migration is introduced."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No runtime configuration, secret, access policy, or environment variable is added or changed."
+    },
+    "dependency_supply_chain": {
+      "status": "applied",
+      "rationale": "The external repository and immutable revision are recorded; unavailable benchmark toolchains remain reported limitations rather than new dependencies."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README, manifest, evaluator, verifier report, replay report, review, and this ledger retain the commands, boundaries, outcomes, and limitations."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "Committed fixtures, SHA-256 records, deterministic unittest commands, and replay reports reproduce the observed results without an external benchmark checkout."
+    }
+  },
+  "supporting_artifacts": [
+    {
+      "id": "causal-probe-manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/causal-probe-run-manifest.json",
+      "sha256": "cf0f1fde8f4c6862f9cf4d8e428996d5a0c56d4c9b100825cb9d977e4011c87b",
+      "summary": "Declared fixture, repair/verifier boundaries, prompts, candidate hashes, and protocol-isolation limits."
+    },
+    {
+      "id": "causal-probe-verifier",
+      "kind": "test_output",
+      "path": "examples/causal-probe-verifier-report.json",
+      "sha256": "2121acd19972ec15c44da1d95b3fe94f0657bfd206abb31570f08daa12f51cf6",
+      "summary": "Public and hidden results, canonical-owner scope checks, and rejected unsafe mutations for both candidates."
+    },
+    {
+      "id": "causal-probe-evaluation",
+      "kind": "test_output",
+      "path": "examples/causal-probe-evaluation.json",
+      "sha256": "2262d84a543a917a9a521cb2ad0840635ca406477f3d28dde5b6d40370e0dd11",
+      "summary": "Comparison that records equal behavioral repair success and the limited evidence-discipline difference."
+    },
+    {
+      "id": "external-quixbugs-replay",
+      "kind": "test_output",
+      "path": "examples/external-quixbugs-replay.json",
+      "sha256": "80b4066e7a6e3168e77b72fb46e0777792749e72fcd68f57a9947bd3aea3db30",
+      "summary": "Pinned-source replay, corrected conftest digest, public failure reproduction, and candidate public/hidden results."
+    },
+    {
+      "id": "causal-probe-review",
+      "kind": "review_report",
+      "path": "examples/causal-probe-review.json",
+      "sha256": "8e492405bbbf3e3ce9132583fce3b4c4aec3d7ac5f2304f38f2cd0684364f3ca",
+      "summary": "Independent review with no findings, approval, verification, and explicit LSP availability limitation."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "73 package tests passed before the final evidence-ledger addition; the final package-wide replay is required before commit."
+    },
+    {
+      "command": "PYTHONPATH=scripts PYTHONDONTWRITEBYTECODE=1 basedpyright scripts/score_causal_probe.py tests/test_causal_probe_score.py tests/test_causal_probe_forward.py tests/test_external_quixbugs_replay.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes after adding the local scorer interface and typed JSON boundaries."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_benchmark.py tests/test_external_quixbugs_replay.py -v",
+      "status": "passed",
+      "result": "12 external-benchmark and replay tests passed, including source/test/configuration/candidate hashes and hidden differential behavior."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 examples/causal-execution-experiment.py --report && PYTHONDONTWRITEBYTECODE=1 python3 examples/causal-notification-experiment.py --report",
+      "status": "passed",
+      "result": "Both tracked causal experiment reports regenerated byte-identically after their strengthened root-cause evidence fields were added."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the causal policy and validator updates, causal-probe fixture/scorer/candidates/manifests, QuixBugs replay snapshots and corrected digest, README text, tests, review record, and this ledger as one change. Existing optional causal evidence remains backward compatible.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: causal_probe_review",
+    "outcome": "approved",
+    "notes": "The reviewer found no blocking issues after inspecting the full current diff. LSP diagnostics were unavailable; direct basedpyright, tests, evidence validation, py_compile, diff, and narrow secret/debug scans supplied the available evidence."
+  },
+  "remaining_risks": [
+    "Both causal-probe agents repaired the same deterministic fixture, so no repair-success advantage or general model effect is established.",
+    "Native subagent boundaries are protocol instructions, not filesystem-enforced isolation.",
+    "The replayed QuixBugs source is a small injected defect and cannot prove production queue, provider, database, migration, deployment, or release safety.",
+    "The local verifier reference normalizes trailing blank-line formatting from its upstream counterpart, so semantic replay and source provenance are recorded separately."
+  ],
+  "causal": {
+    "mode": "full",
+    "symptom": "The QuixBugs evidence report claimed its conftest hash matched the pinned upstream file, but the recorded digest was only 60 characters and therefore could not establish byte-level provenance.",
+    "evidence_artifacts": [
+      {
+        "id": "external-replay-result",
+        "kind": "test_output",
+        "path": "examples/external-quixbugs-replay.json",
+        "sha256": "80b4066e7a6e3168e77b72fb46e0777792749e72fcd68f57a9947bd3aea3db30",
+        "summary": "The replay records the corrected complete digest and validates the committed source, test and configuration bytes before candidate checks."
+      },
+      {
+        "id": "external-verifier-result",
+        "kind": "test_output",
+        "path": "examples/external-quixbugs-verifier-report.json",
+        "sha256": "91b98f51692044be6a8d8502e333399cbfe6071d35850a9838c1b9c6490a72e4",
+        "summary": "The original verifier report now records the corrected full conftest digest alongside candidate and source provenance."
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "The mismatch arose because the pinned upstream conftest changed after the evaluated revision.",
+        "prediction": "A committed fixture from the fixed revision would fail the complete source/test/conftest hash checks.",
+        "status": "rejected",
+        "evidence_refs": [
+          "external-replay-result"
+        ]
+      },
+      {
+        "id": "H2",
+        "claim": "The verifier report transcribed an incomplete conftest SHA-256 and its old test compared that malformed literal rather than recomputing fixture bytes.",
+        "prediction": "Replacing the digest with the complete recomputed value and replaying the fixture will pass; a malformed digest will no longer satisfy byte-level checks.",
+        "status": "supported",
+        "evidence_refs": [
+          "external-replay-result",
+          "external-verifier-result"
+        ]
+      }
+    ],
+    "discriminating_check": "Hash the fixture's source, public test and conftest bytes against the recorded values, reproduce the three buggy public failures, then run each candidate through public and hidden checks without altering the fixture.",
+    "upstream_path": "pinned GitHub conftest bytes -> external-quixbugs-verifier-report digest -> old literal-only evidence test -> published provenance claim",
+    "timeline_evidence": "The malformed digest was discovered during the current replay after a direct lookup of the pinned GitHub revision; the fresh fixture hash exposed the mismatch before final verification.",
+    "causal_owner": "examples/external-quixbugs-verifier-report.json:source and repair_fixture_integrity digest fields",
+    "counterfactual": {
+      "intervention": "Replace the incomplete conftest digest with the full recomputed SHA-256 and add a fixture-byte replay test that runs before candidate scoring.",
+      "expected_outcome": "The replay accepts only the exact pinned public fixture and both recorded candidates still reproduce their public and hidden outcomes.",
+      "observed_outcome": "The full digest matched the committed fixture, the pristine fixture failed three public tests, and baseline plus Skill-guided candidates each passed three public and two hidden checks.",
+      "controlled_factors": [
+        "Pinned repository revision and source paths",
+        "Public test and conftest content",
+        "Candidate source hashes",
+        "Hidden differential cases"
+      ]
+    },
+    "evidence_types": [
+      "reproduction",
+      "intervention"
+    ],
+    "conclusion": "root_cause_fix",
+    "confidence": "high"
+  }
+}

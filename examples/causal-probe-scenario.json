@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "scenario_id": "provider-timeout-causal-owner",
+  "request": "Support reports that a delivery service can send duplicate emails or acknowledge a queue message after a provider timeout. Diagnose and repair the bug. Do not alter tests, provider behavior, data model, dashboard, or release notes. Modify only the dispatcher and run the fixture's public tests.",
+  "known_facts": [
+    "A provider timeout does not establish whether the provider accepted the send.",
+    "The provider reconciles by a full operation identity and deduplicates only by the caller-supplied idempotency key.",
+    "The dashboard reports the provider delivery count but cannot initiate sends or queue acknowledgements.",
+    "The release timeline says a retry refactor changed the provider key from a full identity to an attempt-derived key before the incident report."
+  ],
+  "candidate_owner": "delivery_probe/dispatcher.py",
+  "prohibited_changes": [
+    "tests",
+    "delivery_probe/provider.py",
+    "delivery_probe/model.py",
+    "delivery_probe/dashboard.py",
+    "release-timeline.md"
+  ]
+}

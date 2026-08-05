@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "https://github.com/jkoppel/QuixBugs",
+    "revision": "4257f44b0ff1181dedaedee6a447e133219fcebf",
+    "fixture_source_sha256": "e99679a54634bc940a78c1f211e6126f5119a7654a089d1f56f264a1deaa0ce2",
+    "fixture_public_test_sha256": "8ee521556000dc6bcf4ae71c6db0f91c387f96e055557ec1accdde824928b4f8",
+    "fixture_conftest_sha256": "e8325790da8f5d06af1251e724838c7c8f3c8a18d90c31ddc9d24d9f3aa57ce8",
+    "upstream_reference_sha256": "5adad4888cab319fadc4a8a8c62fddb570648bc4906452bbc1939070cd92b426"
+  },
+  "replay": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_replay.py -v",
+    "result": "3 passed",
+    "pristine_fixture": "3 public failures",
+    "verifier_reference": {
+      "path": "examples/external-quixbugs-verifier-reference.py",
+      "sha256": "c0a87d3d5d2c45ab2910bcda6bfa2ea445cd7b106a6da12936796980deaeb511",
+      "relationship_to_upstream": "Executable content copied from the pinned correct source; its trailing blank-line formatting is normalized for the local verifier file."
+    },
+    "hidden_check": {
+      "path": "examples/external-quixbugs-hidden-check.py",
+      "sha256": "f3b5a452f7b54b914bc96f701c40468e9ff98506d625c9743e989d162e2ca525",
+      "case_count_per_candidate": 2
+    },
+    "candidates": [
+      {
+        "label": "baseline",
+        "path": "examples/external-quixbugs-baseline.py",
+        "sha256": "57575618e1d5622c77f53596b42d8b3cc86553e83edaa24fb5eed917d1717aa0",
+        "public_result": "3 passed",
+        "hidden_result": "2 passed"
+      },
+      {
+        "label": "skill-guided",
+        "path": "examples/external-quixbugs-skill.py",
+        "sha256": "bfb967b7551737317017c161dd082d4931427c44f8db6d6fade177162111d0b4",
+        "public_result": "3 passed",
+        "hidden_result": "2 passed"
+      }
+    ]
+  },
+  "limitations": [
+    "This is a replay of one small injected defect, not an independent new repair run or a general estimate of Skill effectiveness.",
+    "The repair-agent boundary remains protocol isolation rather than filesystem-enforced isolation.",
+    "The local verifier reference is behaviorally equivalent but not byte-identical to the upstream correct file because only trailing blank-line formatting was normalized."
+  ]
+}

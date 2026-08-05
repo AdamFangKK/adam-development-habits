@@ -153,8 +153,8 @@
       "id": "external-verifier-report",
       "kind": "test_output",
       "path": "examples/external-quixbugs-verifier-report.json",
-      "sha256": "e6efb44577afff8029f110305010a6d14233fe9e307c049a16f2cabd2f9284d1",
-      "summary": "Candidate, source, reference, test, configuration, diff, and hidden-check provenance plus observed results."
+      "sha256": "91b98f51692044be6a8d8502e333399cbfe6071d35850a9838c1b9c6490a72e4",
+      "summary": "Candidate, source, reference, test, configuration, diff, and hidden-check provenance plus corrected upstream conftest digest."
     },
     {
       "id": "external-evaluation",
@@ -169,6 +169,13 @@
       "path": "examples/external-quixbugs-review.json",
       "sha256": "7d23f25b4e21ae09ee131416e0fa7992136d1b38079d65f1a8257b42c46c305c",
       "summary": "Independent review findings, remediation, re-review approval, and residual risk."
+    },
+    {
+      "id": "external-replay",
+      "kind": "test_output",
+      "path": "examples/external-quixbugs-replay.json",
+      "sha256": "80b4066e7a6e3168e77b72fb46e0777792749e72fcd68f57a9947bd3aea3db30",
+      "summary": "Offline replay pins the public upstream source, tests and conftest, reproduces three failures, and reruns both candidate public and hidden checks."
     }
   ],
   "verification": [
@@ -186,6 +193,11 @@
       "command": "basedpyright tests/test_external_quixbugs_benchmark.py examples/external-quixbugs-hidden-check.py",
       "status": "passed",
       "result": "0 errors, 0 warnings, 0 notes."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_external_quixbugs_replay.py -v",
+      "status": "passed",
+      "result": "The pinned fixture reproduced three public failures; both recorded candidate sources passed three public and two hidden checks."
     },
     {
       "command": "PYTHONDONTWRITEBYTECODE=1 python3 -c 'import json; from pathlib import Path; [json.loads(path.read_text(encoding=\"utf-8\")) for path in (Path(\"examples/external-quixbugs-run-manifest.json\"), Path(\"examples/external-quixbugs-evaluation.json\"), Path(\"examples/external-quixbugs-verifier-report.json\"))]'",

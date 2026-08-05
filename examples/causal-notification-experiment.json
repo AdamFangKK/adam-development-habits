@@ -143,6 +143,18 @@
       }
     ],
     "discriminating_check": "Compare transport-derived retries with durable operation state while holding timeout, crash, retryable and terminal rejection, retry, duplicate message, restart, independent ledger instances, acknowledgement failure, unknown reconciliation, durable recovery handoff, and provider key-retention expiry constant; observe delivery count, ledger state, operation identity, acknowledgement timing, and redacted retry-decision audit output.",
+    "causal_owner": "The queue consumer derives external idempotency and recovery decisions before the EmailProvider and acknowledgement boundaries.",
+    "counterfactual": {
+      "intervention": "Replace transport-derived retry keys with one durable full-operation identity and three-state reconciliation while preserving the same failure schedule.",
+      "expected_outcome": "Timeouts, duplicate messages, restarts, and key expiry yield one delivery and no premature acknowledgement.",
+      "observed_outcome": "The deterministic report records one delivery, zero premature acknowledgements, and a durable recovery handoff for unknown reconciliation.",
+      "controlled_factors": [
+        "provider failure schedule",
+        "queue duplicate sequence",
+        "ledger database path",
+        "operation payload and recipient"
+      ]
+    },
     "upstream_path": "queue consumer -> DurableDispatchLedger.start -> EmailProvider.reconcile(found|absent|unknown|conflict) or EmailProvider.send -> DurableDispatchLedger.mark_confirmed -> RecordingQueue.acknowledge",
     "timeline_evidence": "The provider can accept a delivery before timeout or caller crash, or reject it before acceptance as retryable or terminal; the durable ledger remains pending and the queue unacknowledged until identity-based reconciliation confirms it. For an unavailable lookup, it remains unacknowledged or is acknowledged only after durable recovery handoff.",
     "evidence_types": [

@@ -79,6 +79,17 @@
       }
     ],
     "discriminating_check": "Inspect gateway records, then retry with only the idempotency-key derivation changed.",
+    "causal_owner": "The checkout retry handler chooses an idempotency key before the PaymentGateway boundary.",
+    "counterfactual": {
+      "intervention": "Change only retry key derivation from a per-attempt value to one stable checkout-request value.",
+      "expected_outcome": "The same two retry attempts create one gateway charge instead of two.",
+      "observed_outcome": "The deterministic intervention report records one stable-key gateway charge after the same retry sequence.",
+      "controlled_factors": [
+        "checkout request ID",
+        "gateway implementation",
+        "two-attempt retry sequence"
+      ]
+    },
     "upstream_path": "checkout retry handler -> submit_checkout_fixed -> PaymentGateway.charge",
     "timeline_evidence": "The first attempt and retry use the same request ID; only the retry attempt number changes before the second buggy charge is created.",
     "evidence_types": [

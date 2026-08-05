@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "kind": "protocol-isolated causal repair forward test",
+    "assurance": "Each repair agent received an explicit allowed-input boundary. Native subagents share a filesystem, so this records an instruction-based protocol boundary rather than filesystem isolation.",
+    "repair_agent_boundary": {
+      "allowed_fixture_paths": [
+        "delivery_probe/__init__.py",
+        "delivery_probe/dashboard.py",
+        "delivery_probe/dispatcher.py",
+        "delivery_probe/model.py",
+        "delivery_probe/provider.py",
+        "tests/test_dispatcher.py",
+        "release-timeline.md"
+      ],
+      "allowed_change": "delivery_probe/dispatcher.py",
+      "excluded_from_fixture": [
+        "scripts/score_causal_probe.py",
+        "examples/causal-probe-reference-dispatcher.py",
+        "hidden tests",
+        "prior outputs and evaluation artifacts",
+        "external network access"
+      ]
+    },
+    "verifier_boundary": {
+      "timing": "after both repair agents completed",
+      "allowed_inputs": [
+        "the pristine fixture",
+        "both candidate dispatcher sources",
+        "scripts/score_causal_probe.py"
+      ],
+      "purpose": "Run public and withheld behavior contracts and reject changes outside the canonical owner."
+    }
+  },
+  "inputs": {
+    "skill": {
+      "path": "SKILL.md",
+      "sha256": "afed2116e067f5a6c4d79edabdb7a15ffe2eb088138d7293c110a3dfd4a74910"
+    },
+    "scenario": {
+      "path": "examples/causal-probe-scenario.json",
+      "sha256": "fe764cc29c0ab048e58121c66d6f5480a37d870c2ec4a14917e8a4c4c8d02531"
+    },
+    "fixture_dispatcher": {
+      "path": "examples/causal-probe-fixture/delivery_probe/dispatcher.py",
+      "sha256": "9103f962f30b4644d21b7a77cbe0d5438a63dbf859960394eb3779194597f85b"
+    },
+    "fixture_public_test": {
+      "path": "examples/causal-probe-fixture/tests/test_dispatcher.py",
+      "sha256": "7328e1ee37f71e675eaff10fc3258d5a975ca66750f8de57c098d55c65af3c7b"
+    },
+    "fixture_timeline": {
+      "path": "examples/causal-probe-fixture/release-timeline.md",
+      "sha256": "930dfd546528365d71b553af74208655e2c9ddc26644a2bf734415ff88247c35"
+    },
+    "scorer": {
+      "path": "scripts/score_causal_probe.py",
+      "sha256": "62817d89b3784beab3ab074c1b9604abf40a9206a92b9a210ef213dc65ce80e4"
+    }
+  },
+  "runs": [
+    {
+      "id": "baseline",
+      "skill": "not supplied",
+      "task_name": "/root/causal_probe_baseline",
+      "prompt": "Diagnose and repair a delivery service that can send duplicate emails or acknowledge a queue message after a provider timeout. Inspect only the fixture, change only delivery_probe/dispatcher.py, and run its public unittests. Return a concise diagnosis, changed behavior, and exact result.",
+      "output": {
+        "path": "examples/causal-probe-baseline-output.md",
+        "sha256": "f1dc617f479b738711d2db28eb55e6f93e192516f36eb5822ba085c0ee36f396"
+      },
+      "candidate": {
+        "path": "examples/causal-probe-baseline-dispatcher.py",
+        "sha256": "8b4007dea891c73d1f5be4a32182e125563daf727799098b864102fa35b5f0bd"
+      }
+    },
+    {
+      "id": "skill-guided",
+      "skill": "SKILL.md",
+      "task_name": "/root/causal_probe_guided",
+      "prompt": "Use the Skill's Causal Full discipline to diagnose and repair the same fixture. Change only delivery_probe/dispatcher.py, run its public unittests, and return symptom, competing hypotheses, timeline, causal owner, counterfactual intervention, conclusion, changed behavior, and exact result.",
+      "output": {
+        "path": "examples/causal-probe-guided-output.md",
+        "sha256": "5612d7bc65273e9786127966eadc30d0d2884ceb3f4866722acb51b1f915ccc3"
+      },
+      "candidate": {
+        "path": "examples/causal-probe-guided-dispatcher.py",
+        "sha256": "126c162ade8f5ed577d6a3f1898d87d6d22d8e41900be97647bf488e5efa1741"
+      }
+    }
+  ],
+  "limitations": [
+    "This is one deterministic local fixture, not a statistically meaningful estimate of model-wide repair or causal-analysis capability.",
+    "Protocol isolation is weaker than filesystem-enforced isolation.",
+    "Both repairs may succeed because the public fixture is inspectable; hidden behavior protects against several but not all possible overfitted repairs."
+  ]
+}

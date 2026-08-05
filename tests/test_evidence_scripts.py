@@ -65,6 +65,16 @@ class EvidenceScriptTests(unittest.TestCase):
         self.assertIn("causal.upstream_path must be a non-empty string for full mode", errors)
         self.assertIn("causal.timeline_evidence must be a non-empty string for full mode", errors)
 
+    def test_root_cause_fix_requires_owner_counterfactual_and_alternative(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        del payload["causal"]["causal_owner"]
+        del payload["causal"]["counterfactual"]
+        payload["causal"]["hypotheses"] = [payload["causal"]["hypotheses"][1]]
+        errors = validate_evidence(payload)
+        self.assertIn("causal_owner must be a non-empty string", errors)
+        self.assertIn("causal.counterfactual must be an object for root_cause_fix", errors)
+        self.assertIn("causal.root_cause_fix requires a rejected or unresolved alternative hypothesis", errors)
+
     def test_causal_evidence_artifact_hash_is_verified(self) -> None:
         payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
         payload["causal"]["evidence_artifacts"][0]["sha256"] = "0" * 64

@@ -30,6 +30,11 @@ class SkillContractTests(unittest.TestCase):
             with self.subTest(heading=heading):
                 self.assertIn(heading, self.skill)
 
+    def test_causal_full_requires_a_counterfactual_owner_and_rejects_downstream_claims(self) -> None:
+        self.assertIn("trigger -> decision or state owner -> side effect -> symptom", self.skill)
+        self.assertIn("minimal counterfactual intervention", self.skill)
+        self.assertIn("Do not call a downstream display", self.skill)
+
     def test_completion_gate_and_ledger_capture_quality_decisions(self) -> None:
         for field in (
             "Design boundary:",

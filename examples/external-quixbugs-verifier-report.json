@@ -6,15 +6,15 @@
     "original_source_sha256": "e99679a54634bc940a78c1f211e6126f5119a7654a089d1f56f264a1deaa0ce2",
     "reference_source_sha256": "5adad4888cab319fadc4a8a8c62fddb570648bc4906452bbc1939070cd92b426",
     "public_test_sha256": "8ee521556000dc6bcf4ae71c6db0f91c387f96e055557ec1accdde824928b4f8",
-    "conftest_sha256": "e8325790da8f5d06af1251e724838c7c8a18d90c31ddc9d24d9f3aa57ce8"
+    "conftest_sha256": "e8325790da8f5d06af1251e724838c7c8f3c8a18d90c31ddc9d24d9f3aa57ce8"
   },
   "repair_fixture_integrity": {
     "baseline_candidate_source_sha256": "57575618e1d5622c77f53596b42d8b3cc86553e83edaa24fb5eed917d1717aa0",
     "skill_guided_candidate_source_sha256": "bfb967b7551737317017c161dd082d4931427c44f8db6d6fade177162111d0b4",
     "baseline_public_test_sha256": "8ee521556000dc6bcf4ae71c6db0f91c387f96e055557ec1accdde824928b4f8",
     "skill_guided_public_test_sha256": "8ee521556000dc6bcf4ae71c6db0f91c387f96e055557ec1accdde824928b4f8",
-    "baseline_conftest_sha256": "e8325790da8f5d06af1251e724838c7c8a18d90c31ddc9d24d9f3aa57ce8",
-    "skill_guided_conftest_sha256": "e8325790da8f5d06af1251e724838c7c8a18d90c31ddc9d24d9f3aa57ce8"
+    "baseline_conftest_sha256": "e8325790da8f5d06af1251e724838c7c8f3c8a18d90c31ddc9d24d9f3aa57ce8",
+    "skill_guided_conftest_sha256": "e8325790da8f5d06af1251e724838c7c8f3c8a18d90c31ddc9d24d9f3aa57ce8"
   },
   "public_test_runs": [
     {

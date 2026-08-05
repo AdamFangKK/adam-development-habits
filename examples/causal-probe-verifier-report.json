@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "source": {
+    "fixture_dispatcher_sha256": "9103f962f30b4644d21b7a77cbe0d5438a63dbf859960394eb3779194597f85b",
+    "public_test_sha256": "7328e1ee37f71e675eaff10fc3258d5a975ca66750f8de57c098d55c65af3c7b",
+    "timeline_sha256": "930dfd546528365d71b553af74208655e2c9ddc26644a2bf734415ff88247c35",
+    "scorer_sha256": "62817d89b3784beab3ab074c1b9604abf40a9206a92b9a210ef213dc65ce80e4"
+  },
+  "candidates": [
+    {
+      "label": "baseline",
+      "path": "examples/causal-probe-baseline-dispatcher.py",
+      "sha256": "8b4007dea891c73d1f5be4a32182e125563daf727799098b864102fa35b5f0bd",
+      "changed_paths": [
+        "delivery_probe/dispatcher.py"
+      ],
+      "public_test_count": 4,
+      "hidden_test_count": 3,
+      "result": "passed"
+    },
+    {
+      "label": "skill-guided",
+      "path": "examples/causal-probe-guided-dispatcher.py",
+      "sha256": "126c162ade8f5ed577d6a3f1898d87d6d22d8e41900be97647bf488e5efa1741",
+      "changed_paths": [
+        "delivery_probe/dispatcher.py"
+      ],
+      "public_test_count": 4,
+      "hidden_test_count": 3,
+      "result": "passed"
+    }
+  ],
+  "rejected_mutations": [
+    {
+      "label": "event-id-only-mitigation",
+      "public_test": "passed",
+      "hidden_test": "failed cross-tenant identity contract"
+    },
+    {
+      "label": "test-tampering",
+      "behavior": "passed",
+      "scope_check": "failed because tests/test_dispatcher.py changed"
+    }
+  ]
+}

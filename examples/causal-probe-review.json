@@ -1,0 +1,15 @@
+{
+  "reviewer": "Codex native code-reviewer: causal_probe_review",
+  "outcome": "approved",
+  "scope": "Current uncommitted causal-discipline policy, validator, causal probe, external QuixBugs replay, evidence, tests, and README changes.",
+  "findings": [],
+  "verification": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v -> 73 passed at review time.",
+    "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/external-quixbugs-benchmark.json -> valid.",
+    "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/composite-trap-evaluation.json -> valid.",
+    "python3 -m py_compile over changed and new Python files -> passed.",
+    "git diff --check and a narrow secret/debug-pattern scan -> passed.",
+    "PYTHONPATH=scripts basedpyright on the causal scorer and new tests -> 0 errors, 15 non-blocking warnings at review time."
+  ],
+  "residual_risk": "LSP diagnostics were not exposed in this runtime. The reviewer did not claim LSP coverage; package tests, evidence validators, py_compile, and basedpyright were used as available substitutes."
+}

@@ -109,7 +109,7 @@ class ExternalQuixBugsBenchmarkTests(unittest.TestCase):
         hidden = require_object(report["hidden_differential_check"], "hidden_differential_check")
         self.assertEqual(require_text(source["original_source_sha256"], "original source"), "e99679a54634bc940a78c1f211e6126f5119a7654a089d1f56f264a1deaa0ce2")
         self.assertEqual(require_text(source["public_test_sha256"], "public test"), "8ee521556000dc6bcf4ae71c6db0f91c387f96e055557ec1accdde824928b4f8")
-        self.assertEqual(require_text(source["conftest_sha256"], "conftest"), "e8325790da8f5d06af1251e724838c7c8a18d90c31ddc9d24d9f3aa57ce8")
+        self.assertEqual(require_text(source["conftest_sha256"], "conftest"), "e8325790da8f5d06af1251e724838c7c8f3c8a18d90c31ddc9d24d9f3aa57ce8")
         self.assertEqual(require_text(integrity["baseline_candidate_source_sha256"], "baseline candidate"), "57575618e1d5622c77f53596b42d8b3cc86553e83edaa24fb5eed917d1717aa0")
         self.assertEqual(require_text(integrity["skill_guided_candidate_source_sha256"], "guided candidate"), "bfb967b7551737317017c161dd082d4931427c44f8db6d6fade177162111d0b4")
         self.assertEqual(require_text(hidden["script_sha256"], "hidden script"), hashlib.sha256(HIDDEN_CHECK.read_bytes()).hexdigest())

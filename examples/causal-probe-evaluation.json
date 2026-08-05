@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "manifest": "examples/causal-probe-run-manifest.json",
+  "scenario": "examples/causal-probe-scenario.json",
+  "pre_repair": {
+    "public_test": "2 failed, 2 passed",
+    "symptom": "The timeout path issues a second send with a distinct attempt key and acknowledges before reconciliation."
+  },
+  "runs": {
+    "baseline": {
+      "public_test": "4 passed",
+      "hidden_test": "3 passed",
+      "only_canonical_owner_changed": true,
+      "causal_record": {
+        "symptom": true,
+        "alternative_hypothesis": false,
+        "timeline": false,
+        "causal_owner": false,
+        "counterfactual": false,
+        "explicit_conclusion": false
+      },
+      "result": "passed"
+    },
+    "skill_guided": {
+      "public_test": "4 passed",
+      "hidden_test": "3 passed",
+      "only_canonical_owner_changed": true,
+      "causal_record": {
+        "symptom": true,
+        "alternative_hypothesis": true,
+        "timeline": true,
+        "causal_owner": true,
+        "counterfactual": true,
+        "explicit_conclusion": true
+      },
+      "result": "passed"
+    }
+  },
+  "comparison": {
+    "functional_repair_delta": 0,
+    "evidence_discipline_delta": "The Skill-guided response records alternatives, release timeline, causal owner, counterfactual intervention, and an explicit root-cause classification. The baseline response repairs the same behavior but does not record those decision points.",
+    "conclusion": "This one run shows a stronger recorded causal chain, not a repair-success advantage or general causal-reasoning proof."
+  },
+  "adversarial_checks": [
+    "The scorer rejects any changed file other than delivery_probe/dispatcher.py.",
+    "A correct public-test repair using event_id only passes public tests but fails the hidden cross-tenant identity contract.",
+    "A correct implementation that also mutates a public test is rejected even when behavior passes.",
+    "The hidden contract requires pending state for unknown reconciliation and permits one resend only after definitive absence."
+  ],
+  "limitations": [
+    "The testing environment does not provide filesystem-enforced isolation between native agents.",
+    "The evaluator proves selected behavior and scope invariants, not an actual provider, queue, database, or production release contract.",
+    "The same agent platform and shared global instructions can influence both runs."
+  ]
+}

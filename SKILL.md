@@ -34,7 +34,7 @@ For **Causal Lite**, before the first edit, record:
 - a discriminating check that could weaken or reject the primary hypothesis; and
 - the actual result of that check, or why the check is unavailable.
 
-For **Causal Full**, also identify the upstream call, data, configuration, or dependency path; inspect the relevant change or release timeline; and reproduce the failure or run an isolated intervention when that can be done safely. Use read-only observation and local test/worktree experiments by default. Do not perform production experiments without explicit authorization.
+For **Causal Full**, also identify the upstream call, data, configuration, or dependency path; inspect the relevant change or release timeline; and reproduce the failure or run an isolated intervention when that can be done safely. Map the path as `trigger -> decision or state owner -> side effect -> symptom`, then name the first decision or state transition that diverges from the invariant. Record one minimal counterfactual intervention that changes that candidate while holding adjacent inputs and dependencies fixed, its expected result, its actual result, and which plausible alternative remains rejected or unresolved. Use read-only observation and local test/worktree experiments by default. Do not perform production experiments without explicit authorization.
 
 For an ambiguous remote create, update, charge, send, or enqueue operation, treat reconciliation as a three-state contract: confirmed, definitively absent, or unknown. Retry the write only when the dependency establishes definitive absence or returns a pre-acceptance rejection explicitly classified as retryable. Persist a terminal rejection with its safe reason as failed, acknowledge or dead-letter it only after that transition is durable, and do not revive or alter it on redelivery. When reconciliation is unknown, unavailable, delayed, or ambiguous, preserve the durable pending record; do not acknowledge it as successful, and acknowledge only after a deduplicated recovery job has been durably scheduled when queue semantics require that handoff. Persist and verify a canonical operation identity that includes the business event plus every side-effect-defining dimension, such as tenant, recipient, resource, amount, payload version, or content hash. A matching business-event ID alone is not enough to reuse a prior result safely: re-verify that identity at provider confirmation, acknowledgement, dead-letter, and recovery-handoff boundaries. Record the reconciliation class and retry decision with trace/correlation IDs, without payload content or personal data.
 
@@ -42,12 +42,12 @@ Treat evidence in descending order of strength: observation establishes correlat
 
 Classify the conclusion precisely:
 
-- **root-cause fix**: the changed behavior lies on the responsible path and reproduction or intervention supports the claim;
+- **root-cause fix**: the changed behavior lies at the named causal owner, the minimal counterfactual intervention removes the reproduction, and the evidence does not leave an equally plausible untested upstream owner;
 - **mitigation**: the change reduces impact but the responsible cause remains unproven;
 - **instrumentation-only**: the change adds evidence collection without altering the failing behavior; or
 - **unknown**: the available evidence cannot distinguish the hypotheses.
 
-When evidence is insufficient, prefer instrumentation, a minimal reproducer, a reversible guard, or escalation over a speculative behavioral change. Keep the hypothesis set small and choose the lowest-risk check that best distinguishes it; do not create analysis theatre by enumerating arbitrary possibilities.
+Do not call a downstream display, retry wrapper, test expectation, or alert-suppression change a root-cause fix merely because it hides the symptom. Classify it as mitigation unless it changes the responsible decision or state transition and the counterfactual evidence supports that link. When evidence is insufficient, prefer instrumentation, a minimal reproducer, a reversible guard, or escalation over a speculative behavioral change. Keep the hypothesis set small and choose the lowest-risk check that best distinguishes it; do not create analysis theatre by enumerating arbitrary possibilities.
 
 ## Project Constitution and Acceptance Criteria
 
@@ -93,7 +93,7 @@ Replaced paths: <what will be removed, or none>
 Retained compatibility: <consumer + removal condition + test, or none>
 Safeguards: <applicable items from the matrix>
 Verification: <commands run and actual results>
-Causal diagnosis: <not activated, or symptom + hypotheses + discriminating evidence + conclusion>
+Causal diagnosis: <not activated, or symptom + hypotheses + causal owner + counterfactual intervention + discriminating evidence + conclusion>
 Design boundary: <owner, contract, error outcome, side effects/state transition, or not applicable>
 Dependency audit: <new or changed dependencies, allowed direction, or not applicable>
 Extension decision: <real consumer/contract and test, or deliberately direct implementation>
@@ -112,7 +112,7 @@ Reproducibility: <setup/tool-version/minimal-data/clean-run evidence, or not app
 
 Use narrow searches to establish the ledger. Check imports, exports, registrations, routes, configuration keys, message names, tests, and dynamic lookup conventions. Never infer that code is dead only because a direct reference search is empty.
 
-When Causal Execution Discipline is active, add the symptom, hypotheses, discriminating check, evidence strength, conclusion classification, confidence, and any stop reason to the ledger. For Causal Full, also record the upstream path and the relevant change, release, or runtime timeline. In machine-enforced evidence mode, declare each referenced local evidence artifact by ID, repository-relative path, SHA-256 digest, and summary; reference only declared IDs from hypotheses. A root-cause fix must reference a hash-verified execution artifact such as command output, test output, or a trace export; source code alone is insufficient. A causal conclusion must link to actual command output, test output, trace data, or an equivalent artifact; a narrative assertion is not evidence.
+When Causal Execution Discipline is active, add the symptom, hypotheses, discriminating check, evidence strength, conclusion classification, confidence, and any stop reason to the ledger. For Causal Full, also record the upstream path, named causal owner, minimal counterfactual intervention with expected and actual outcomes, the relevant change, release, or runtime timeline, and any rejected or unresolved alternative. In machine-enforced evidence mode, declare each referenced local evidence artifact by ID, repository-relative path, SHA-256 digest, and summary; reference only declared IDs from hypotheses. A root-cause fix must reference a hash-verified execution artifact such as command output, test output, or a trace export; source code alone is insufficient. A causal conclusion must link to actual command output, test output, trace data, or an equivalent artifact; a narrative assertion is not evidence.
 
 ## Evidence Enforcement Mode
 

@@ -184,6 +184,21 @@ def validate_causal_evidence(causal: Any, errors: list[str], *, artifact_root: P
         if not is_nonempty_string(causal.get("timeline_evidence")):
             errors.append("causal.timeline_evidence must be a non-empty string for full mode")
 
+    if causal.get("conclusion") == "root_cause_fix":
+        require_string(causal, "causal_owner", errors)
+        counterfactual = causal.get("counterfactual")
+        if not isinstance(counterfactual, dict):
+            errors.append("causal.counterfactual must be an object for root_cause_fix")
+        else:
+            for field in ("intervention", "expected_outcome", "observed_outcome"):
+                if not is_nonempty_string(counterfactual.get(field)):
+                    errors.append(f"causal.counterfactual.{field} must be a non-empty string for root_cause_fix")
+            controlled_factors = counterfactual.get("controlled_factors")
+            if not isinstance(controlled_factors, list) or not controlled_factors or any(
+                not is_nonempty_string(item) for item in controlled_factors
+            ):
+                errors.append("causal.counterfactual.controlled_factors must be a non-empty list of non-empty strings")
+
     evidence_artifacts = causal.get("evidence_artifacts")
     artifact_ids: set[str] = set()
     artifact_kinds: dict[str, str] = {}
@@ -225,6 +240,7 @@ def validate_causal_evidence(causal: Any, errors: list[str], *, artifact_root: P
         errors.append("causal.hypotheses must be a non-empty list")
     else:
         supported_with_execution_evidence = False
+        rejected_or_unresolved_hypothesis = False
         for index, hypothesis in enumerate(hypotheses):
             if not isinstance(hypothesis, dict):
                 errors.append(f"causal.hypotheses[{index}] must be an object")
@@ -234,6 +250,8 @@ def validate_causal_evidence(causal: Any, errors: list[str], *, artifact_root: P
                     errors.append(f"causal.hypotheses[{index}].{field} must be a non-empty string")
             if hypothesis.get("status") not in CAUSAL_HYPOTHESIS_STATUSES:
                 errors.append(f"causal.hypotheses[{index}].status must be supported, rejected, or unresolved")
+            elif hypothesis.get("status") in {"rejected", "unresolved"}:
+                rejected_or_unresolved_hypothesis = True
             references = hypothesis.get("evidence_refs")
             if not isinstance(references, list) or any(not is_nonempty_string(item) for item in references):
                 errors.append(f"causal.hypotheses[{index}].evidence_refs must be a list of non-empty strings")
@@ -247,6 +265,8 @@ def validate_causal_evidence(causal: Any, errors: list[str], *, artifact_root: P
 
         if causal.get("conclusion") == "root_cause_fix" and not supported_with_execution_evidence:
             errors.append("causal.root_cause_fix requires a supported hypothesis with execution evidence")
+        if causal.get("conclusion") == "root_cause_fix" and not rejected_or_unresolved_hypothesis:
+            errors.append("causal.root_cause_fix requires a rejected or unresolved alternative hypothesis")
 
     if causal.get("conclusion") == "root_cause_fix" and isinstance(evidence_types, list):
         if not {"reproduction", "intervention"}.intersection(evidence_types):

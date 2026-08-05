@@ -141,7 +141,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py \
 
 对可部署、暴露或昂贵的流程，先定义可观察的结果和预算，例如 p95 延迟、错误率、队列年龄、外部调用数、内存或成本；优化前后都要测量。日志和指标必须脱敏且控制标签基数；告警需要明确 owner、阈值和处置方式，而不是对每个异常报警。
 
-安全审查按风险比例覆盖信任边界、服务端认证和授权、租户/资源所有权、输入验证、Secret、敏感数据、滥用路径和审计。AI 在证据不足时要保留 `unknown`，通过监控、最小复现或可回滚保护继续推进，而不是把猜测写成事实。
+安全审查按风险比例覆盖信任边界、服务端认证和授权、租户/资源所有权、输入验证、Secret、敏感数据、滥用路径和审计。AI 在证据不足时要保留 `unknown`，通过监控、最小复现或可回滚保护继续推进，而不是把猜测写成事实。对标记为根因修复的复杂故障，还要写明第一个偏离不变量的责任决策点，并以只改变该候选、保持相邻输入和依赖不变的反事实实验记录预期与实际结果；只隐藏 UI、日志或告警症状的修改只能称为缓解，不能称为根因修复。
 
 ### 交付、迁移与仓库卫生
 
@@ -163,7 +163,11 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py \
 
 包内还保留了一次真实 GitHub 基准的可审计运行：[QuixBugs `shortest_paths` 固定提交清单](./examples/external-quixbugs-run-manifest.json)、[基线输出](./examples/external-quixbugs-baseline-output.md)、[Skill 复测输出](./examples/external-quixbugs-skill-output.md) 和[独立验证结果](./examples/external-quixbugs-evaluation.json)。两组都把公开 `3` 个失败和两个有效隐藏输入修复为通过，因此这个单一样本**不能**宣称 Skill 提升了修复成功率；可观察到的差异是 Skill 组留下了可证伪假设、区分性检查、不变量、输入不变性检查和结论等级，并以更小的改动范围完成同一修复。
 
-修复 Agent 的夹具严格排除 `correct_python_programs`、上游 Git 元数据和评分工件；两个 Agent 结束后，独立验证器才读取固定参考实现来执行差分检查。原生子代理没有文件系统级隔离，所以这仍只称为协议隔离。`BugsInPy`、`Defects4J`、`Bugs.jar`、`Codeflaws` 与 `BugSwarm` 的本轮阻塞原因同样记录在结果中；没有把缺少工具链或依赖的情况伪装成“失败样本”。QuixBugs 的缺陷刻意较小，不能作为跨服务、迁移、发布或生产因果能力的证明。
+修复 Agent 的夹具严格排除 `correct_python_programs`、上游 Git 元数据和评分工件；两个 Agent 结束后，独立验证器才读取固定参考实现来执行差分检查。`tests/test_external_quixbugs_replay.py` 还从提交的公开源、测试和两个候选快照重放 `3` 个失败、`3` 个公开通过和每个候选的 `2` 个隐藏差分用例，并校验它们的 SHA-256。原生子代理没有文件系统级隔离，所以这仍只称为协议隔离。`BugsInPy`、`Defects4J`、`Bugs.jar`、`Codeflaws` 与 `BugSwarm` 的本轮阻塞原因同样记录在结果中；没有把缺少工具链或依赖的情况伪装成“失败样本”。QuixBugs 的缺陷刻意较小，不能作为跨服务、迁移、发布或生产因果能力的证明。
+
+### 多模块因果探针
+
+[`causal-probe-fixture`](./examples/causal-probe-fixture) 用发送超时、队列确认、持久化 ledger、供应商对账、租户身份和下游仪表盘组成一个可重放的多模块回归。评分器只允许改动 dispatcher，并拒绝测试篡改；隐藏契约要求“对账未知时保持 pending、完整操作身份包含租户、仅在明确不存在时重发”。基线与 Skill 组都通过 `4` 个公开和 `3` 个隐藏测试，因此它**不能**证明修复成功率提升。可观察差异仅在过程证据：Skill 组记录了替代假设、发布时间线、首个偏离不变量的 causal owner、反事实干预与明确结论；这一项由 [`tests/test_causal_probe_forward.py`](./tests/test_causal_probe_forward.py) 固化。该本地夹具仍不是实际队列、供应商、数据库或生产发布的证明。
 
 ### 机器可读证据模式
 

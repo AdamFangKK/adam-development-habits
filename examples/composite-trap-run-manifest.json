@@ -18,7 +18,7 @@
   "inputs": {
     "skill": {
       "path": "SKILL.md",
-      "sha256": "1b62624119586d4c48a99b92c09553d1dca8084be22b6cc88e3462de6bab76e7"
+      "sha256": "afed2116e067f5a6c4d79edabdb7a15ffe2eb088138d7293c110a3dfd4a74910"
     },
     "scenario": {
       "path": "examples/composite-trap-scenario.json",
