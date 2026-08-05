@@ -1,0 +1,105 @@
+from __future__ import annotations
+
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SKILL = ROOT / "SKILL.md"
+README = ROOT / "README.md"
+AGENT_METADATA = ROOT / "agents" / "openai.yaml"
+
+
+class SkillContractTests(unittest.TestCase):
+    def setUp(self) -> None:  # pyright: ignore[reportImplicitOverride]
+        self.skill = SKILL.read_text(encoding="utf-8")
+        self.readme = README.read_text(encoding="utf-8")
+        self.metadata = AGENT_METADATA.read_text(encoding="utf-8")
+
+    def test_quality_disciplines_are_normative_sections(self) -> None:
+        for heading in (
+            "## Causal Execution Discipline",
+            "## Maintainable Boundaries and Atomic Design",
+            "## Failure Semantics and Data Ownership",
+            "## Contract Evolution and Test Quality",
+            "## Operational Readiness, Performance, and Security",
+            "## Delivery Lifecycle and Repository Hygiene",
+            "## Evidence-Based AI Collaboration",
+        ):
+            with self.subTest(heading=heading):
+                self.assertIn(heading, self.skill)
+
+    def test_completion_gate_and_ledger_capture_quality_decisions(self) -> None:
+        for field in (
+            "Design boundary:",
+            "Dependency audit:",
+            "Extension decision:",
+            "Data ownership:",
+            "Error model:",
+            "Contract evolution:",
+            "Operational budget:",
+            "Delivery lifecycle:",
+            "Release and recovery:",
+            "Data migration:",
+            "Configuration and secrets:",
+            "Supply chain:",
+            "Operational knowledge:",
+            "Reproducibility:",
+        ):
+            with self.subTest(field=field):
+                self.assertIn(field, self.skill)
+
+        self.assertIn("ownership, lifecycle, failure semantics, compatibility, budget, and threat boundary", self.skill)
+        self.assertIn("quality_decisions", self.skill)
+        self.assertIn("Quality decisions:", self.skill)
+        self.assertIn("Delivery decisions:", self.skill)
+
+    def test_safeguard_matrix_covers_quality_and_operational_boundaries(self) -> None:
+        for situation in (
+            "| Mutable business or personal data |",
+            "| API, event, shared-library, or configuration boundary |",
+            "| Critical rule, public contract, or broad input domain |",
+            "| Expensive or exposed operation |",
+            "| Sensitive or privileged operation |",
+            "| Deployable service |",
+            "| Level 1 or Level 2 Git-tracked change |",
+            "| Release, feature rollout, or operational configuration |",
+            "| Schema, backfill, or persistence-format migration |",
+            "| Configuration, environment variable, or secret |",
+            "| Added or materially changed dependency |",
+        ):
+            with self.subTest(situation=situation):
+                self.assertIn(situation, self.skill)
+
+    def test_delivery_matrix_covers_every_requested_practice(self) -> None:
+        for practice in (
+            "| Atomic Git change and PR |",
+            "| Release and recovery |",
+            "| Data migration |",
+            "| Configuration and secrets |",
+            "| Dependency and supply chain |",
+            "| Documentation and operational knowledge |",
+            "| Reproducible development |",
+        ):
+            with self.subTest(practice=practice):
+                self.assertIn(practice, self.skill)
+
+    def test_readme_and_metadata_expose_the_quality_contract(self) -> None:
+        for summary in (
+            "| 失败语义与数据所有权 |",
+            "| 契约演进与测试质量 |",
+            "| 运行就绪、性能与安全 |",
+            "### 失败、数据、契约与测试",
+            "### 运行、性能与安全",
+            "### 交付、迁移与仓库卫生",
+            "Operational budget:",
+        ):
+            with self.subTest(summary=summary):
+                self.assertIn(summary, self.readme)
+
+        self.assertIn("$adam-development-habits", self.metadata)
+        self.assertIn("boundaries", self.metadata)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "method": "A fresh-context Codex native agent received only the Skill path and a Level 2 delivery-planning request. It performed no file changes, production actions, or external calls.",
+  "request": "Replace a payment settlement schema with a 40M-row backfill, rotate a production webhook secret, upgrade an advised transitive SDK dependency, and roll out a feature-flagged worker in a shared repository with existing CI, migrations, dashboards, and secrets management.",
+  "observed_decisions": [
+    "Classified the request as Level 2 and separated unknown repository facts from proposed controls.",
+    "Used six atomic PRs for compatible expansion, SDK upgrade, secret rotation support, backfill, worker rollout, and later cleanup rather than one mixed change.",
+    "Applied expand-migrate-contract with version-aware readers, deliberate dual-write or derived-write policy, resumable idempotent backfill, stop thresholds, and deferred old-schema removal.",
+    "Kept the worker flag disabled on deployment, used staged tenant/shard/percentage rollout, monitored outcome/queue/provider signals, and disabled the flag before deployment rollback.",
+    "Required fake secrets and fixtures for local reproduction, while prohibiting production credentials or secret values in source, logs, evidence, and test output.",
+    "Required manifest/lockfile review, advisory evidence, compatibility tests, rollback, operator runbooks, PR evidence, and CI without assuming exact commands or tools."
+  ],
+  "required_evidence": [
+    "Git diff, commit IDs, PR scope, CI result, and independent review.",
+    "Migration dry-run, compatibility and idempotency tests, backup/restore validation for destructive work, and cleanup condition.",
+    "Redacted secret/config validation, dependency/security signal, rollout metrics, stop condition, and rollback/recovery evidence.",
+    "Local setup/check/test output using non-secret configuration and minimal fixture data."
+  ],
+  "limitations": [
+    "The agent produced a design and acceptance-test plan because the visible workspace did not contain the described payments service.",
+    "This qualitative forward test does not prove the presence, correctness, or performance of a real migration runner, feature flag, secrets manager, SDK scan, CI system, or production rollout."
+  ]
+}

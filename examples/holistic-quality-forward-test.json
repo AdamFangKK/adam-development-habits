@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "method": "Three fresh-context Codex native agents received only the Skill path and a task-local Level 2 design request. They performed read-only repository discovery before producing a plan.",
+  "scenarios": [
+    {
+      "id": "account-deletion-lifecycle",
+      "request": "Design deletion of a tenant account spanning billing retention, analytics anonymization, support cleanup, and outages.",
+      "observed_decisions": [
+        "Returned durable 202 acceptance with a status resource rather than false terminal success.",
+        "Assigned authoritative owners, tenant-scoped idempotency, lifecycle states, legal-retention exceptions, and privacy-safe diagnostics.",
+        "Kept unknown downstream results pending for reconciliation instead of blindly retrying or reporting completion."
+      ]
+    },
+    {
+      "id": "catalog-contract-performance",
+      "request": "Evolve a public catalog API with optional inventory, retain a legacy field, and investigate a p95 regression from 140ms to 680ms.",
+      "observed_decisions": [
+        "Identified public consumers and retained the legacy field with deprecation telemetry, expiry, rollback, and contract coverage.",
+        "Separated authorized catalog reads from a bounded tenant-aware inventory read model and cache.",
+        "Proposed discriminating N+1 checks plus p95 and query-count budgets rather than calling the apparent cause proven."
+      ]
+    },
+    {
+      "id": "signed-webhook-atomicity",
+      "request": "Process signed partner delivery webhooks that update tenant orders, issue loyalty credit, and publish invoices through unreliable dependencies.",
+      "observed_decisions": [
+        "Selected HMAC/replay validation, a narrow partner adapter contract, tenant ownership checks, and an inbox plus transaction/outbox boundary.",
+        "Used a canonical remote-operation identity and confirmed/absent/unknown reconciliation for loyalty timeouts.",
+        "Specified compatibility, interruption, concurrency, redaction, and terminal-rejection tests."
+      ]
+    }
+  ],
+  "conclusion": "The scenarios exercised combined ownership, failure, contract, operational, security, and atomicity risks. They are qualitative forward-test records, not deterministic production integration tests or proof of any project's deployment behavior.",
+  "limitations": [
+    "The visible workspace did not contain implementations for the three synthetic domains, so agents produced design and test plans instead of code patches.",
+    "A generative agent's plan is not deterministic; this record preserves the evaluated output shape and conclusions but must be rerun for a new model or Skill revision."
+  ]
+}

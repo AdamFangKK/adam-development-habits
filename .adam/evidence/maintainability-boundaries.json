@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "change_id": "maintainability-boundaries",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Maintainable Boundaries and Atomic Design",
+    "SKILL.md:Evidence Ledger",
+    "SKILL.md:Safeguard Matrix"
+  ],
+  "affected_callers": [
+    "README.md",
+    "agents/openai.yaml"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The Skill defines readability, ownership, contracts, dependency direction, explicit effects, atomic state transitions, and extension decisions without imposing arbitrary size limits or mandatory abstractions.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    },
+    {
+      "id": "AC-2",
+      "condition": "Applicable Level 1 and Level 2 changes record a design boundary, dependency audit, and extension decision, and the completion gate requires their review.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    },
+    {
+      "id": "AC-3",
+      "condition": "The README provides an accurate Chinese summary of recoverable atomicity, dependency direction, and evidence-based extension decisions.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    },
+    {
+      "id": "AC-4",
+      "condition": "The captured forward-test records show the Skill guiding agents to keep narrow boundaries, avoid speculative abstractions, and use recoverable multi-resource transitions.",
+      "verification": "examples/holistic-quality-forward-test.json"
+    }
+  ],
+  "invariants": [
+    "The Skill remains dependency-free and does not require a project-wide architecture framework.",
+    "A direct implementation remains preferred over speculative abstraction.",
+    "No documentation rule may claim distributed writes are atomic without transaction or recovery evidence."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "ownership and contract review",
+      "status": "applied",
+      "rationale": "Applicable changes must state the owner, input/output contract, and state transition or side effect."
+    },
+    {
+      "name": "dependency-direction audit",
+      "status": "applied",
+      "rationale": "The Skill prohibits unreviewed cycles, reverse-layer imports, shared mutable globals, and private-state reach-through."
+    },
+    {
+      "name": "abstraction admission rule",
+      "status": "applied",
+      "rationale": "New seams need two independent consumers, a stable external contract, or a demonstrated testing boundary."
+    },
+    {
+      "name": "recoverable multi-resource transition",
+      "status": "applied",
+      "rationale": "The Safeguard Matrix requires a transaction or explicit durable ordering, recovery, and compensation/outbox design."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The normative Skill owns readable, recoverable module boundaries and its documentation remains a summary."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The policy explicitly reviews dependency direction, cycles, shared mutable state, and private-state reach-through."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "The Skill keeps direct implementation by default and admits seams only for concrete consumers, stable contracts, or test boundaries."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "This package policy change does not create or mutate application business or personal data."
+    },
+    "error_model": {
+      "status": "not_applicable",
+      "rationale": "This focused change adds structural guidance but does not change an application boundary's runtime error classification."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "This public Skill contract change preserves older evidence artifacts while adding new ledger guidance."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The structural policy update does not alter a measured service performance or resource path."
+    },
+    "threat_boundary": {
+      "status": "not_applicable",
+      "rationale": "The focused structural change does not expose or privilege an application operation."
+    },
+    "delivery_lifecycle": {
+      "status": "not_applicable",
+      "rationale": "This focused structural policy change did not define a repository commit or PR workflow."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "This focused structural policy change did not alter a deployable release or recovery path."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "This focused structural policy change did not migrate schema or business data."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "This focused structural policy change did not alter configuration or credential handling."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "This focused structural policy change added no dependency or supply-chain control."
+    },
+    "operational_knowledge": {
+      "status": "not_applicable",
+      "rationale": "This focused structural policy change did not require an ADR or runbook."
+    },
+    "reproducibility": {
+      "status": "not_applicable",
+      "rationale": "This focused structural policy change did not change setup or environment reproduction guidance."
+    }
+  },
+  "supporting_artifacts": [
+    {
+      "id": "boundary-forward-test",
+      "kind": "evaluation_transcript",
+      "path": "examples/holistic-quality-forward-test.json",
+      "sha256": "46100bc774b4671bc39339b372855f042191deb74efa65607a83c703caf62e83",
+      "summary": "Captured qualitative scenarios covering direct implementation, contract boundaries, and transaction/outbox recovery."
+    },
+    {
+      "id": "boundary-review",
+      "kind": "review_report",
+      "path": "examples/holistic-quality-review.json",
+      "sha256": "840592a747596322cd1c9aae76151aa7a746094b1b70d91d30f69212b6e8d5b1",
+      "summary": "Independent review findings and recorded remediations shared by the current related Skill changes."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed after the maintainability and metadata changes."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "41 package tests passed after the later delivery-lifecycle extension; this package-wide run includes evidence, report reproducibility, quality-decision, and supporting-artifact coverage."
+    },
+    {
+      "command": "ruby -e \"require 'yaml'; YAML.load_file('agents/openai.yaml'); YAML.load_file('.github/workflows/skill-quality.yml')\"",
+      "status": "passed",
+      "result": "The regenerated Codex UI metadata and active workflow parsed as YAML."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the Skill, README, agent metadata, validator, template, tests, captured evaluation artifacts, and this evidence artifact together. Existing project evidence remains compatible because quality_decisions and supporting_artifacts are optional schema extensions.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: independent_skill_review",
+    "outcome": "approved",
+    "notes": "The related public Skill changes received an initial review, then a follow-up review confirming the evidence schema, hash-verified support artifacts, final-report coverage, risk-scaled metadata, and regression tests after remediation."
+  },
+  "remaining_risks": [
+    "The Skill guides review and evidence but cannot automatically discover every dependency cycle or architectural violation without project-specific static-analysis tooling.",
+    "Projects with an established architecture may require stricter local layering rules than this generic policy."
+  ]
+}

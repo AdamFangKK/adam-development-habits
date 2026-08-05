@@ -1,6 +1,6 @@
 ---
 name: adam-development-habits
-description: "Enforce Adam's risk-scaled development habits for AI-assisted feature work, bug fixes, refactors, code optimization, reviews, integrations, configuration changes, and maintenance of this skill package. Trigger for requests to remove stale or dead code, prevent duplicate implementations, reduce coupling, improve code quality, add traceId or resilience safeguards, or provide verified cleanup, tests, builds, and static analysis. 适用于代码优化、重构、清理废弃代码、重复实现、降低耦合、代码质量、可观测性与验证。"
+description: "Enforce Adam's risk-scaled development habits for AI-assisted feature work, bug fixes, refactors, code optimization, reviews, integrations, configuration changes, and maintenance of this skill package. Trigger for requests to remove stale or dead code, prevent duplicate implementations, improve readability or maintainability, reduce coupling, define module boundaries or extension points, atomize state transitions, clarify failure semantics or data ownership, evolve API/schema/event contracts, strengthen test quality, set performance budgets or SLOs, improve security or observability, prepare atomic Git commits or PRs, plan releases, rollback or database migrations, change configuration, secrets or dependencies, write runbooks, or make development environments reproducible. 适用于代码优化、重构、可读性、可维护性、低耦合、原子化、错误语义、数据所有权、契约演进、测试、性能、安全、可观测性、Git 提交、PR、发布、迁移、配置、Secret、依赖、运行手册与可复现环境。"
 ---
 
 # Adam's Development Habits
@@ -68,6 +68,9 @@ Do not claim a code task is complete until all applicable items below have evide
 
 - the canonical implementation path and affected callers were identified before editing;
 - acceptance criteria and behavior-preserving invariants were defined;
+- when Maintainable Boundaries and Atomic Design applies, the owner, contract, error outcome, side effect or state transition, dependency direction, and extension decision are recorded and reviewed;
+- when mutable data, a public contract, operational behavior, performance, or security is material, ownership, lifecycle, failure semantics, compatibility, budget, and threat boundary are recorded and reviewed;
+- when Delivery Lifecycle and Repository Hygiene applies, the commit or PR scope, release/recovery, migration, configuration or secret, dependency, operational-knowledge, and reproducibility decisions are recorded and reviewed;
 - when Causal Execution Discipline was active, the conclusion is supported by recorded evidence and is labeled as a root-cause fix, mitigation, instrumentation-only, or unknown;
 - every replaced path was removed, or each retained path has a real consumer, removal condition, and coverage;
 - relevant safeguards were implemented or explicitly shown to be not applicable;
@@ -91,6 +94,20 @@ Retained compatibility: <consumer + removal condition + test, or none>
 Safeguards: <applicable items from the matrix>
 Verification: <commands run and actual results>
 Causal diagnosis: <not activated, or symptom + hypotheses + discriminating evidence + conclusion>
+Design boundary: <owner, contract, error outcome, side effects/state transition, or not applicable>
+Dependency audit: <new or changed dependencies, allowed direction, or not applicable>
+Extension decision: <real consumer/contract and test, or deliberately direct implementation>
+Data ownership: <authoritative owner, lifecycle/privacy boundary, or not applicable>
+Error model: <stable outcome classes, retry/unknown policy, or not applicable>
+Contract evolution: <compatibility, migration/rollback, consumer test, or not applicable>
+Operational budget: <SLO/performance/resource/security signal and response, or not applicable>
+Delivery lifecycle: <atomic commit/PR scope, pre-merge checks, or not applicable>
+Release and recovery: <flag/rollout/monitoring/rollback evidence, or not applicable>
+Data migration: <expand-migrate-contract/backup/restore evidence, or not applicable>
+Configuration and secrets: <owner/default/precedence/schema/access evidence, or not applicable>
+Supply chain: <dependency necessity/license/security/lockfile/removal evidence, or not applicable>
+Operational knowledge: <ADR/API change/runbook/regression record, or not applicable>
+Reproducibility: <setup/tool-version/minimal-data/clean-run evidence, or not applicable>
 ```
 
 Use narrow searches to establish the ledger. Check imports, exports, registrations, routes, configuration keys, message names, tests, and dynamic lookup conventions. Never infer that code is dead only because a direct reference search is empty.
@@ -105,6 +122,8 @@ For an opted-in repository, create one unique `.adam/evidence/<change-id>.json` 
 
 The artifact records facts after verification; it does not replace tests or let a failed command become passing by declaration. For a Level 2 change, include rollback or compatibility strategy and an independent review outcome.
 
+For new machine-enforced evidence authored under this policy, record every applicable ledger decision in `quality_decisions`: `design_boundary`, `dependency_audit`, `extension_decision`, `data_ownership`, `error_model`, `contract_evolution`, `operational_budget`, `threat_boundary`, `delivery_lifecycle`, `release_recovery`, `data_migration`, `configuration_secrets`, `dependency_supply_chain`, `operational_knowledge`, and `reproducibility`. Each entry uses `applied` or `not_applicable` with a concrete rationale. The validator accepts artifacts created before this field existed for compatibility; do not use that compatibility to omit an applicable decision from a new artifact. When a forward test or independent review supports a claim, attach its local transcript or command output through `supporting_artifacts` with a repository-relative path and SHA-256 digest.
+
 ## One Active Implementation
 
 1. Locate the existing owner of the behavior before adding code.
@@ -115,12 +134,88 @@ The artifact records facts after verification; it does not replace tests or let 
 
 Do not leave commented-out code, duplicate business rules, unused helpers, unused imports or exports, abandoned feature flags, dead endpoints, speculative abstractions, or two implementations that claim the same responsibility.
 
+## Maintainable Boundaries and Atomic Design
+
+Apply this discipline to a new or restructured business module, a cross-module responsibility change, an extension point, or a Level 1 or Level 2 change whose readability or coupling is material. Do not use it to force a style-only rewrite or an architecture framework into a small, local change.
+
+- Make names express domain intent, ownership, and outcomes. Keep non-obvious mutation, I/O, retry, authorization, and error behavior explicit at the boundary that owns it.
+- Give every changed module one coherent business responsibility and a small public contract. A unit may compose several adjacent steps; "atomic" means one decision or one recoverable state transition, not an arbitrary line-count target or a proliferation of tiny functions.
+- Separate deterministic policy from irreversible effects when practical: put storage, transport, clocks, randomness, and process-wide mutable state behind a narrow boundary. Do not hide domain decisions inside request handlers, ORM callbacks, framework hooks, or generic utility modules.
+- Define who owns each mutable state transition. Commit related state atomically when one transaction is available; otherwise document ordering, idempotency, recovery, and compensation or outbox behavior. Do not present multiple independent writes as atomic merely because they occur in one function.
+- Make dependency direction visible. Keep domain policy at the narrowest boundary that owns it, and avoid introducing transport, presentation, or storage coupling unless the existing repository architecture requires it; adapters may depend on domain contracts. Do not add cycles, bidirectional coordination, shared mutable globals, reach-through access to another module's internals, or a catch-all `utils` dependency without an explicit owner and review rationale.
+- Keep interfaces concrete until a real need exists. Add an abstraction only for two independent consumers, a stable external contract, or a demonstrated testing boundary. Record the consumer or contract and add a contract or integration test when it is public, versioned, or implemented by multiple adapters.
+- Extend a contract by compatible addition when possible. Preserve validation and ownership at the boundary, version a public contract when required, and do not use a broad refactor to smuggle in unrelated extensions.
+
+For applicable Level 1 and Level 2 changes, add these concise entries to the evidence ledger:
+
+```text
+Design boundary: <owner; input/output contract; error outcome; side effect or state transition>
+Dependency audit: <changed edge; permitted direction; cycle/private-state check>
+Extension decision: <second consumer or stable contract + test; otherwise why direct code remains>
+```
+
+During review, ask whether a reader can identify the owner, input/output contract, state change, error outcome, dependency direction, and extension decision without tracing unrelated modules. Prefer a direct implementation when it is clearer; reduce coupling at the actual boundary rather than adding indirection inside one module.
+
+## Failure Semantics and Data Ownership
+
+Apply this discipline whenever a change creates, changes, deletes, retains, synchronizes, or exposes mutable business or personal data, or when a dependency can fail after a local decision.
+
+- Name the authoritative owner for every mutable business fact. Other modules consume a contract, cache a derived view, or own a separate fact; they must not silently become a second source of truth.
+- Define the lifecycle at the owner: creation, valid transitions, retention, archival or deletion, and access boundary. Minimize collected data, record a lawful retention or deletion rule when applicable, and do not put personal or secret data in ordinary logs, identifiers, metrics, or errors.
+- Classify failures at system boundaries as validation/precondition, authorization/ownership, domain conflict, transient dependency, terminal dependency, or unknown outcome. Return a stable safe code or typed outcome; preserve the underlying detail only in redacted diagnostics.
+- State retry eligibility, attempt bound, idempotency key, deadline, and recovery owner. An unknown remote-write result is not a retryable failure by default; follow the three-state reconciliation discipline.
+- Make cancellation, timeout, resource cleanup, and partial-result behavior explicit for long-running work. Do not continue side effects after a cancelled or expired request unless a durable background handoff owns them.
+
+## Contract Evolution and Test Quality
+
+Apply this discipline to public APIs, events, schemas, configuration contracts, shared libraries, and behavior with more than one consumer.
+
+- Treat each public request, response, event, schema, configuration key, and error code as a contract. Prefer compatible additions with documented defaults; version or migrate breaking changes deliberately and define rollback before mutating production data.
+- Identify known consumers before removing, renaming, tightening validation, changing defaults, or altering event semantics. Retain a compatibility path only with a consumer, expiry condition, observability, and coverage.
+- Test business outcomes and invariants at the public or module boundary, not only private method calls or mocks. Cover representative success, validation, authorization, conflict, retry/unknown, and compatibility behavior.
+- Use contract or integration tests for public APIs, events, schema migrations, and multiple adapters. Use property, table-driven, or boundary-value tests when rules have broad input spaces; do not confuse a large test count with independent coverage.
+- Keep tests deterministic: control time, randomness, concurrency scheduling, external I/O, and test data ownership. Treat flaky tests as defects; find the shared state, timing, or nondeterministic dependency instead of normalizing retries.
+
+## Operational Readiness, Performance, and Security
+
+Apply the relevant parts to deployable services, exposed workflows, expensive operations, privileged data, or a change with a measurable latency, cost, availability, or abuse risk.
+
+- Define the observable user or business outcome, a baseline when changing performance, and a budget appropriate to the path: latency percentile, throughput, error rate, queue age, query/external-call count, memory, or cost. Measure before and after optimization; do not call an optimization successful without evidence.
+- Emit redacted structured logs and low-cardinality metrics that distinguish outcome classes. Propagate traces across boundaries; make alerts actionable with an owner, threshold, and a response or runbook rather than alerting on every exception.
+- Bound untrusted work with payload limits, pagination, deadlines, concurrency limits, rate limits, backpressure, and cancellation. Confirm that cache, retry, and fallback behavior preserve authorization and data freshness requirements.
+- Perform a proportional threat check for exposed or privileged behavior: trust boundary, authentication, authorization, tenant/resource ownership, input validation, secret handling, sensitive-data exposure, abuse path, and auditability. Do not rely on client-side controls for server authorization.
+- For a Level 2 security, privacy, public-contract, money, or operational change, require an independent review that explicitly covers these boundaries.
+
+## Delivery Lifecycle and Repository Hygiene
+
+Apply only the triggered rows below. Level 0 work does not trigger this section. For Level 1, record the named decision and execute the narrowest available local or CI check. For Level 2, create a concise plan before implementation, retain the corresponding evidence, and use an independent review. Reuse the repository's existing Git, hosting, CI, deployment, migration, secret, dependency, and documentation tools; do not add a dependency or external service merely to satisfy this policy.
+
+| Practice | Trigger | Level 1 | Level 2 | Evidence |
+|---|---|---|---|---|
+| Atomic Git change and PR | A Git-tracked behavior, configuration, test, or documentation change | Keep one coherent, reviewable scope; inspect the diff and complete required checks before committing. Do not commit secrets, generated credentials, or unrelated edits. | Create an atomic commit after verification. Where the repository uses PRs, keep the PR small and state scope, acceptance criteria, risk, rollback, and verification; CI is the minimum merge bar and must not be bypassed. | `git status`, diff/check output, commit ID, PR/CI result, or a recorded reason the repository has no PR workflow. |
+| Release and recovery | Deployable service, user-facing rollout, feature flag, or operational configuration change | Name the release owner, observable outcome, stop condition, and rollback mechanism. | Define rollout stages, monitoring window, thresholds, rollback steps, and recovery owner; rehearse or test rollback when the change can cause user or data impact. Do not perform production release actions without authorization. | Existing deployment/flag configuration, CI or staging output, rollout metrics, rollback test, or explicit residual risk. |
+| Data migration | Schema, persistence format, backfill, retention, or data transformation change | State forward compatibility, backout path, data owner, and migration-test or dry-run result. | Use expand-migrate-contract: add compatible representation, migrate or backfill, switch readers/writers, then remove old state only after consumer and recovery evidence. Validate backup/restore for destructive or irreversible work. | Migration plan, dry-run/test output, compatibility tests, backup/restore evidence, and cleanup condition. |
+| Configuration and secrets | Runtime configuration, environment variable, credential, key, or policy change | Name owner, default, precedence, environment scope, and schema/parse validation. Never place a secret in source, logs, evidence, or ordinary identifiers. | Review access boundary, rotation/expiry, rollout and rollback, and validate deployed configuration through existing secret/configuration controls. | Configuration validation, redacted diff, existing secret scan or CI result, access/rotation review, or residual risk. |
+| Dependency and supply chain | Add, update, remove, or materially configure a runtime/build dependency | Record necessity, existing alternative, lockfile impact, maintained status, license/security signal when available, and removal condition. | Review transitive impact, compatibility, known vulnerability/advisory evidence, upgrade/rollback path, and ownership; independently review privileged or high-blast-radius dependencies. | Manifest/lockfile diff, existing dependency/security scan or CI output, compatibility test, and removal plan. |
+| Documentation and operational knowledge | Non-obvious decision, public behavior, migration, incident fix, or high-risk operation | Update the closest API, configuration, or operator documentation and link a regression test or verification record. | Record an ADR for non-obvious irreversible choices; provide a runbook with diagnosis, recovery, ownership, and rollback for high-risk operations. | Documentation/ADR/runbook path, API change note, regression test, review, or drill output. |
+| Reproducible development | New service/tooling, onboarding friction, CI-only defect, or environment-sensitive behavior | Record the current start, check, and test commands plus required non-secret configuration and tool-version constraints. | Reproduce the critical path in a clean worktree, container, or existing CI environment with minimal test data; document unavailable external prerequisites and residual risk. | Setup/check/test output, version manifest, minimal-data fixture, CI run, or clean-environment record. |
+
+Do not create an empty branch, PR, release, migration, scan, runbook, or commit merely to claim compliance. A commit is an atomic unit of reviewed intent, not a snapshot after every keystroke. If a repository or user owns commit, PR, or release execution, prepare the evidence and handoff without performing an unauthorized external action.
+
+## Evidence-Based AI Collaboration
+
+- Separate observed facts, project constraints, hypotheses, and proposed changes. Read the owner, callers, tests, configuration, and runtime evidence before editing; do not promote generated explanation into a fact.
+- Convert vague requests into observable acceptance criteria and bounded tradeoffs. Escalate only when a missing choice materially changes authority, compatibility, data handling, or irreversible behavior.
+- Change one coherent behavior at a time, verify it, and preserve a rollback path. Use a second independent perspective to attack assumptions, failure paths, ownership, compatibility, security, and performance rather than to repeat the first plan.
+- Leave a concise decision record in the ledger for non-obvious tradeoffs, rejected alternatives, and deletion conditions. When evidence cannot distinguish explanations, report unknown and add instrumentation, a reproducer, or a reversible guard.
+
 ## Implementation, Tests, and Review
 
 State the behavioral invariant before implementation. Validate input, authorization, resource ownership, state transitions, and payload limits at system boundaries. Never swallow errors: classify them, return or raise a safe error, and log enough context to investigate.
 
 Use existing project utilities and patterns. Add an abstraction only when it removes meaningful duplication or matches an established local convention.
 
+- For an applicable structural change, test the behavior at the public or module boundary rather than its private decomposition. Cover the expected error outcome and any cross-boundary state transition; add a contract test for a public extension point or multiple adapters.
 - For a bug fix, add or strengthen a regression test before declaring the fix complete. Do not call it a root-cause fix unless the reported failure is reproduced or causally linked to the changed behavior; otherwise report it as mitigation and state the residual risk.
 - For a behavior change with an existing test surface, write or update the test before or alongside implementation; include important failure behavior.
 - For a behavior-preserving refactor without protection, add regression coverage before restructuring.
@@ -134,16 +229,29 @@ Apply the relevant row; explain a deliberate omission in the evidence ledger.
 |---|---|
 | Every externally handled service request | Emit structured logs with timestamp, level, service, environment, version, operation, `traceId`, duration, and outcome. |
 | Cross-service or asynchronous flow | Propagate `traceId`; use `spanId` for a dependency call and `correlationId` across request boundaries. |
-| API or public boundary | Validate input shape, size, range, authorization, and ownership. Return a stable error code and safe message. |
-| External network, database, cache, or SDK call | Set an explicit timeout; propagate a deadline where supported; log dependency and latency without secrets. |
+| Mutable business or personal data | Identify the authoritative owner, valid state transitions, retention/deletion boundary, authorization boundary, and redaction requirements. Do not create an unmanaged duplicate source of truth. |
+| API, event, shared-library, or configuration boundary | Validate input shape, size, range, authorization, and ownership. Return a stable error code and safe message; document consumers, compatibility/default behavior, migration, and rollback before a breaking change. |
+| External network, database, cache, or SDK call | Set an explicit timeout and cancellation behavior; propagate a deadline where supported; classify safe retry, terminal failure, and unknown outcome; log dependency and latency without secrets. |
 | Retryable remote operation | Retry only transient, idempotent work; bound attempts; use exponential backoff with jitter. |
 | Ambiguous remote write or expired idempotency window | Persist pending state before the call; reconcile by canonical operation identity as confirmed, absent, or unknown; resend only after definitive absence or retryable pre-acceptance rejection. Persist terminal rejection and safe reason as failed, then acknowledge or dead-letter; no later path may revive or alter it. Re-verify canonical identity before provider confirmation, acknowledgement, dead-letter, and recovery handoff. Test provider acceptance before timeout or crash, unavailable reconciliation, identity mismatch at every finalization boundary, acknowledgement failure after durable confirmation, retryable versus terminal rejection, concurrent recovery-job deduplication and handoff, and structured retry-decision audit output. |
+| New or restructured business module | Name its owner and input/output contract; make mutation and I/O explicit; keep domain policy independent from transport and storage where practical; review changed dependency direction and private-state access. |
+| New extension point or public contract | Keep the existing path direct unless there are two independent consumers, a stable external contract, or a demonstrated testing boundary. For a real extension seam, document consumers, compatibility/versioning, and a contract or integration test. |
+| Multi-resource state transition | Use one transaction when available. Otherwise define durable ordering, idempotency, recovery ownership, and compensation or outbox behavior; test an interruption between resources. |
 | Create, update, charge, send, or enqueue action | Guarantee idempotency with a key, uniqueness constraint, or equivalent; define consistency with a transaction or explicit design. |
-| Expensive or exposed operation | Apply pagination, payload limits, rate limits, concurrency limits, and backpressure as applicable. |
+| Critical rule, public contract, or broad input domain | Test representative success and failure cases plus invariants, compatibility, boundary values, and property/table-driven cases where appropriate. Keep time, randomness, concurrency, and external I/O deterministic. |
+| Expensive or exposed operation | Establish a latency, throughput, error, resource, call-count, or cost budget; measure a baseline and result. Apply pagination, payload limits, rate limits, concurrency limits, cancellation, and backpressure as applicable. |
 | Optional or failing dependency | Choose and test a failure mode: fallback, partial response, queued retry, or clear failure; use circuit breaking when available. |
-| Sensitive or privileged operation | Authenticate, authorize server-side, audit the action, and redact secrets and unnecessary personal data. |
-| Deployable service | Provide health/readiness checks, request/error/latency metrics, and environment-specific configuration. |
-| Schema or API evolution | Use versioned migrations and backward-compatible additions; establish rollback before production data changes. |
+| Sensitive or privileged operation | Review the trust boundary, server-side authentication and authorization, tenant/resource ownership, input validation, abuse path, secret handling, auditability, and sensitive-data redaction. |
+| Deployable service | Provide health/readiness checks, request/error/latency metrics, low-cardinality labels, actionable alerts with an owner and response, and environment-specific configuration. |
+| Schema or API evolution | Identify consumers; use versioned migrations and backward-compatible additions; establish rollback before production data changes; add migration, consumer-contract, and compatibility coverage. |
+| Level 1 or Level 2 Git-tracked change | Keep one atomic, verified change scope; inspect the final diff; do not commit secrets or unrelated edits. Use the repository's commit and PR workflow. |
+| Shared-repository merge | State PR scope, acceptance criteria, risk, rollback, and verification. Treat required CI as a merge minimum; record an approved exception with scope and expiry rather than bypassing it. |
+| Release, feature rollout, or operational configuration | Define the release owner, observable outcome, monitoring window, stop condition, rollback mechanism, and recovery owner; rehearse recovery when impact warrants it. |
+| Schema, backfill, or persistence-format migration | Use compatible expansion before migration and later contraction; retain consumer, dry-run, recovery, and backup/restore evidence for destructive work. |
+| Configuration, environment variable, or secret | Define owner/default/precedence/schema and environment scope; redact values and review access, rotation, expiry, rollout, and rollback as applicable. |
+| Added or materially changed dependency | Record necessity, existing alternative, lockfile/transitive impact, maintenance, license/security signal, compatibility coverage, and removal condition. |
+| Non-obvious or high-risk operation | Update nearest documentation; add an ADR or operator runbook when the choice is irreversible, public, or requires diagnosis/recovery. |
+| Environment-sensitive or onboarding-critical workflow | Record start/check/test commands, non-secret setup, tool versions, and clean-environment or CI reproduction evidence for Level 2. |
 
 `traceId` links one incoming request's full lifecycle. It is not a business ID and must not contain personal or secret data. Prefer structured logs; never log credentials, access tokens, session identifiers, full payment data, or unnecessary personal data.
 
@@ -155,6 +263,7 @@ Inspect the final diff and search specifically for leftovers created or supersed
 - obsolete handlers, components, routes, jobs, queues, event names, and API clients;
 - stale feature flags, configuration keys, environment variables, documentation, examples, and telemetry labels;
 - duplicate implementations or changed contracts without matching callers, tests, error handling, or migrations.
+- new dependency cycles, reverse-layer imports, shared mutable globals, reach-through access to private module state, catch-all utility modules, and domain decisions embedded in transport or persistence adapters.
 
 Delete confirmed leftovers. For a potentially dynamic reference, inspect its runtime registration before retaining or deleting it. Do not perform unrelated cleanup in a feature task.
 
@@ -206,6 +315,8 @@ Acceptance criteria: ...
 Changed: ...
 Removed or retained compatibility: ...
 Safeguards: ...
+Quality decisions: <design/dependency/extension; ownership/lifecycle; error/retry; contract; operational budget; threat boundary, or not applicable>
+Delivery decisions: <Git/PR; release/recovery; migration; configuration/secrets; supply chain; operational knowledge; reproducibility, or not applicable>
 Verified: <command> - <result>
 Independent review: <result or not required>
 Evidence artifact: <path or enforcement mode not enabled>

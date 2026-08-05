@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "change_id": "holistic-quality-discipline",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Failure Semantics and Data Ownership",
+    "SKILL.md:Contract Evolution and Test Quality",
+    "SKILL.md:Operational Readiness, Performance, and Security",
+    "SKILL.md:Evidence-Based AI Collaboration",
+    "tests/test_skill_contract.py:SkillContractTests"
+  ],
+  "affected_callers": [
+    "README.md",
+    "agents/openai.yaml",
+    ".adam/evidence/maintainability-boundaries.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The Skill defines authoritative data ownership and lifecycle, stable error classes, retry/unknown handling, and privacy-safe diagnostics without forcing the same workflow on Level 0 work.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The Skill requires deliberate public-contract compatibility, migration and rollback, outcome/invariant-based tests, and deterministic treatment of time, randomness, concurrency, and external I/O.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The Skill requires measurable performance and resource budgets, low-cardinality actionable observability, and proportional trust-boundary review for applicable work.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "Forward-test records show the combined rules applied to data deletion, public API performance evolution, and signed partner webhooks without treating unknown outcomes as success or creating speculative abstractions.",
+      "verification": "examples/holistic-quality-forward-test.json"
+    }
+  ],
+  "invariants": [
+    "The Skill remains dependency-free and risk-scaled.",
+    "A public or cross-service change is not complete based only on a happy-path implementation.",
+    "Performance, availability, security, and privacy claims require measured or explicitly limited evidence.",
+    "AI-generated explanation is not a substitute for project facts, tests, traces, or independent review."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "failure and data contract",
+      "status": "applied",
+      "rationale": "The Skill requires ownership, lifecycle, error classes, retry/unknown policy, cancellation, and redacted diagnostics at applicable boundaries."
+    },
+    {
+      "name": "contract and test discipline",
+      "status": "applied",
+      "rationale": "The Skill requires consumer-aware compatibility, migration/rollback, outcome/invariant tests, contract tests, and deterministic test inputs."
+    },
+    {
+      "name": "operational and security readiness",
+      "status": "applied",
+      "rationale": "The Skill requires measured budgets, actionable low-cardinality telemetry, bounded work, and a proportional trust-boundary review."
+    },
+    {
+      "name": "AI evidence discipline",
+      "status": "applied",
+      "rationale": "The Skill separates facts, hypotheses, and proposals; requires bounded changes, evidence, and adversarial independent review."
+    },
+    {
+      "name": "structural and behavioral evaluation",
+      "status": "applied",
+      "rationale": "Standard-library contract tests retain the normative anchors while three independent forward tests exercise them in combined-risk maintenance scenarios."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The Skill owns its risk-scaled workflow while the validator owns the optional machine evidence representation."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The package keeps evidence validation in the canonical root script and adds no dependency or reverse ownership edge."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "The evidence schema extension is justified by a stable public machine-evidence contract and is covered by validator tests."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "This package change does not create or mutate application business or personal data."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "The Skill now requires stable failure classes and explicit retry and unknown-outcome decisions at applicable boundaries."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The optional schema extension preserves validation compatibility for older artifacts while giving new artifacts an explicit quality-decision contract."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "The Skill now requires measurable performance and resource budgets, plus actionable observability, for applicable work."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The Skill now requires a proportional trust-boundary review for exposed or privileged behavior."
+    },
+    "delivery_lifecycle": {
+      "status": "not_applicable",
+      "rationale": "This earlier quality-policy change did not yet define commit, PR, release, or repository delivery workflow requirements."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "This earlier quality-policy change did not alter a deployable service release or recovery plan."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "This earlier quality-policy change did not introduce a schema or data migration."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "This earlier quality-policy change did not alter runtime configuration or secrets."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "This earlier quality-policy change added no dependency or supply-chain control."
+    },
+    "operational_knowledge": {
+      "status": "not_applicable",
+      "rationale": "This earlier quality-policy change did not require an ADR or operator runbook."
+    },
+    "reproducibility": {
+      "status": "not_applicable",
+      "rationale": "This earlier quality-policy change did not alter project setup or environment reproduction guidance."
+    }
+  },
+  "supporting_artifacts": [
+    {
+      "id": "holistic-forward-test",
+      "kind": "evaluation_transcript",
+      "path": "examples/holistic-quality-forward-test.json",
+      "sha256": "46100bc774b4671bc39339b372855f042191deb74efa65607a83c703caf62e83",
+      "summary": "Three qualitative, fresh-context Level 2 scenario outputs with their limits."
+    },
+    {
+      "id": "holistic-review",
+      "kind": "review_report",
+      "path": "examples/holistic-quality-review.json",
+      "sha256": "840592a747596322cd1c9aae76151aa7a746094b1b70d91d30f69212b6e8d5b1",
+      "summary": "Independent review findings and recorded remediations for this public Skill change."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "41 package tests passed after the later delivery-lifecycle extension; this package-wide run also covers this artifact's quality-decision and supporting-artifact rules."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile scripts/*.py examples/*.py tests/*.py",
+      "status": "passed",
+      "result": "All package Python sources, including the new Skill-contract test, compiled successfully."
+    },
+    {
+      "command": "ruby -e \"require 'yaml'; YAML.load_file('agents/openai.yaml'); YAML.load_file('.github/workflows/skill-quality.yml')\"",
+      "status": "passed",
+      "result": "Regenerated Codex metadata and active workflow parsed as YAML."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the Skill, README, generated agent metadata, validator, template, tests, captured evaluation artifacts, and this evidence artifact together. Existing project evidence remains compatible because quality_decisions and supporting_artifacts are optional schema extensions.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: independent_skill_review",
+    "outcome": "approved",
+    "notes": "The initial review raised four issues. The follow-up review confirmed the backward-compatible schema, hash-verified support artifacts, complete final-report format, risk-scaled metadata, and regression tests; it required only this final replacement of pending/stale evidence records."
+  },
+  "remaining_risks": [
+    "The generic Skill cannot discover all real consumer contracts, data-retention laws, dependency cycles, SLO values, or threat models without project-specific evidence and tooling.",
+    "Forward tests demonstrate agent guidance in synthetic scenarios; they do not prove production integration, regulatory compliance, or hosted CI behavior."
+  ]
+}

@@ -45,6 +45,68 @@
       "rationale": "The API request crosses payment and inventory services."
     }
   ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The order service owns the order-write contract and returns stable outcomes to callers."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The route depends on the order service; the order service owns payment and inventory adapter calls without reverse imports."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "This migration changes the existing order-write path and adds no new extension point."
+    },
+    "data_ownership": {
+      "status": "applied",
+      "rationale": "The order service is authoritative for order state; payment and inventory consume explicit requests and publish their own facts."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Validation, authorization, domain conflict, retryable dependency failure, and unknown payment outcomes have distinct safe results."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The legacy endpoint has a named consumer, expiry, compatibility test, and feature-flag rollback path."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "This example documents contract migration rather than a measured performance or resource change."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The route validates authorization and ownership before creating an order or invoking privileged payment work."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The migration is one reviewable change with required checks before the atomic commit and shared-repository merge."
+    },
+    "release_recovery": {
+      "status": "applied",
+      "rationale": "A feature flag, measured rollout, stop condition, and rollback route limit impact from the order-write migration."
+    },
+    "data_migration": {
+      "status": "applied",
+      "rationale": "The legacy endpoint is retained during compatible expansion, client migration, and later controlled removal."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "This example does not add or alter runtime configuration or credential handling."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "This example changes the existing order path without adding or updating a dependency."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The API migration note, rollback instructions, and compatibility test provide operator and consumer knowledge."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The documented test and type-check commands reproduce the migration checks with repository-managed tooling."
+    }
+  },
   "verification": [
     {
       "command": "pnpm test -- order legacy-order-route",

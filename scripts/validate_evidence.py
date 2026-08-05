@@ -21,6 +21,24 @@ CAUSAL_CONCLUSIONS = {"root_cause_fix", "mitigation", "instrumentation_only", "u
 CAUSAL_CONFIDENCE = {"low", "medium", "high"}
 CAUSAL_ARTIFACT_KINDS = {"command_output", "diff", "test_output", "test_source", "trace_export"}
 CAUSAL_EXECUTION_ARTIFACT_KINDS = {"command_output", "test_output", "trace_export"}
+QUALITY_DECISION_FIELDS = (
+    "design_boundary",
+    "dependency_audit",
+    "extension_decision",
+    "data_ownership",
+    "error_model",
+    "contract_evolution",
+    "operational_budget",
+    "threat_boundary",
+    "delivery_lifecycle",
+    "release_recovery",
+    "data_migration",
+    "configuration_secrets",
+    "dependency_supply_chain",
+    "operational_knowledge",
+    "reproducibility",
+)
+SUPPORTING_ARTIFACT_KINDS = {"command_output", "diff", "evaluation_transcript", "review_report", "test_output"}
 
 
 def is_nonempty_string(value: Any) -> bool:
@@ -70,6 +88,81 @@ def validate_causal_artifact_path(artifact: dict[str, Any], artifact_root: Path,
     digest = hashlib.sha256(resolved.read_bytes()).hexdigest()
     if digest != artifact.get("sha256"):
         errors.append(f"causal.evidence_artifacts[{index}].sha256 does not match the referenced file")
+
+
+def validate_supporting_artifact_path(artifact: dict[str, Any], artifact_root: Path, errors: list[str], index: int) -> None:
+    path_value = artifact.get("path")
+    if not is_nonempty_string(path_value):
+        return
+
+    path = Path(path_value)
+    if path.is_absolute() or ".." in path.parts:
+        errors.append(f"supporting_artifacts[{index}].path must stay inside the artifact root")
+        return
+
+    root = artifact_root.resolve()
+    resolved = (root / path).resolve()
+    try:
+        resolved.relative_to(root)
+    except ValueError:
+        errors.append(f"supporting_artifacts[{index}].path must stay inside the artifact root")
+        return
+
+    if not resolved.is_file():
+        errors.append(f"supporting_artifacts[{index}].path does not reference a file")
+        return
+
+    digest = hashlib.sha256(resolved.read_bytes()).hexdigest()
+    if digest != artifact.get("sha256"):
+        errors.append(f"supporting_artifacts[{index}].sha256 does not match the referenced file")
+
+
+def validate_quality_decisions(quality_decisions: Any, errors: list[str]) -> None:
+    if not isinstance(quality_decisions, dict):
+        errors.append("quality_decisions must be an object")
+        return
+
+    unknown_fields = set(quality_decisions).difference(QUALITY_DECISION_FIELDS)
+    if unknown_fields:
+        errors.append("quality_decisions contains unknown fields")
+
+    for field in QUALITY_DECISION_FIELDS:
+        decision = quality_decisions.get(field)
+        if not isinstance(decision, dict):
+            errors.append(f"quality_decisions.{field} must be an object")
+            continue
+        if decision.get("status") not in SAFEGUARD_STATUSES:
+            errors.append(f"quality_decisions.{field}.status must be applied or not_applicable")
+        require_string(decision, "rationale", errors)
+
+
+def validate_supporting_artifacts(supporting_artifacts: Any, errors: list[str], *, artifact_root: Path | None = None) -> None:
+    if not isinstance(supporting_artifacts, list) or not supporting_artifacts:
+        errors.append("supporting_artifacts must be a non-empty list")
+        return
+
+    artifact_ids: set[str] = set()
+    for index, artifact in enumerate(supporting_artifacts):
+        if not isinstance(artifact, dict):
+            errors.append(f"supporting_artifacts[{index}] must be an object")
+            continue
+        artifact_id = artifact.get("id")
+        if not is_nonempty_string(artifact_id):
+            errors.append(f"supporting_artifacts[{index}].id must be a non-empty string")
+        elif artifact_id in artifact_ids:
+            errors.append(f"supporting_artifacts[{index}].id must be unique")
+        else:
+            artifact_ids.add(artifact_id)
+        if artifact.get("kind") not in SUPPORTING_ARTIFACT_KINDS:
+            errors.append(
+                f"supporting_artifacts[{index}].kind must be command_output, diff, evaluation_transcript, review_report, or test_output"
+            )
+        require_string(artifact, "path", errors)
+        if not is_sha256(artifact.get("sha256")):
+            errors.append(f"supporting_artifacts[{index}].sha256 must be a lowercase SHA-256 digest")
+        require_string(artifact, "summary", errors)
+        if artifact_root is not None:
+            validate_supporting_artifact_path(artifact, artifact_root, errors, index)
 
 
 def validate_causal_evidence(causal: Any, errors: list[str], *, artifact_root: Path | None = None) -> None:
@@ -248,6 +341,12 @@ def validate_evidence(
             if review.get("outcome") not in REVIEW_OUTCOMES:
                 errors.append("independent_review.outcome must be approved")
             require_string(review, "notes", errors)
+
+    if "quality_decisions" in data:
+        validate_quality_decisions(data["quality_decisions"], errors)
+
+    if "supporting_artifacts" in data:
+        validate_supporting_artifacts(data["supporting_artifacts"], errors, artifact_root=artifact_root)
 
     if "causal" in data:
         validate_causal_evidence(data["causal"], errors, artifact_root=artifact_root)

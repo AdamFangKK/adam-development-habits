@@ -34,7 +34,7 @@ Enable this mode only when the repository owner wants CI-verifiable AI developme
 .github/workflows/adam-evidence-gate.yml
 ```
 
-Use `assets/evidence-ledger.example.json` as the artifact template and `assets/github-actions/adam-evidence-gate.yml` as the workflow template. Keep the scripts unmodified unless the repository has a documented reason to extend the schema. Create one unique artifact for each logical change; update it only while continuing that same change in the same branch or pull request.
+Use `assets/evidence-ledger.example.json` as the artifact template and `assets/github-actions/adam-evidence-gate.yml` as the workflow template. New artifacts authored under the current policy record applicable boundary, data, error, contract, operational, threat, delivery lifecycle, release/recovery, migration, configuration/secret, dependency, operational-knowledge, and reproducibility decisions in `quality_decisions`; attach a hash-verified `supporting_artifacts` entry when a forward test or independent review supports a claim. Keep the scripts unmodified unless the repository has a documented reason to extend the schema. Create one unique artifact for each logical change; update it only while continuing that same change in the same branch or pull request.
 
 The evidence gate validates artifacts changed in the pull request. With `--require-for-code-change`, it fails when source files or common behavior-defining configuration files change but no evidence artifact changes with them. This conservatively includes JSON, YAML, TOML, API contract files, dependency manifests, and CI configuration. Files under documentation, example, and fixture directories do not trigger it. The artifact filename must match its `change_id`, so use `.adam/evidence/<change-id>.json`.
 
@@ -62,9 +62,12 @@ type check
 unit and integration tests
 build
 static analysis or stale-code scan
+existing secret/dependency scan when the change triggers it
 ```
 
 Keep the command names identical or intentionally equivalent between local development and CI. Do not suppress failures with ignore flags, broad exclusions, lowered thresholds, or temporary bypasses without recording the reason, scope, expiry, and remediation task.
+
+For repositories that deploy or migrate data, use existing release/migration controls to retain rollout, stop-condition, rollback, dry-run, and backup/restore evidence. Do not add a release platform, migration framework, scanner, or secret manager merely to satisfy this reference.
 
 ## Repository Instruction Template
 

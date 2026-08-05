@@ -1,4 +1,4 @@
 interface:
   display_name: "Adam's Development Habits"
-  short_description: "Prevent stale code, duplicate paths, and unverified AI changes."
-  default_prompt: "Use $adam-development-habits to implement this change with cleanup, safeguards, and verified evidence."
+  short_description: "Build resilient code and safe, reviewable delivery."
+  default_prompt: "Use $adam-development-habits to deliver a risk-scaled, reviewable change with applicable boundaries, safeguards, delivery planning, and evidence."

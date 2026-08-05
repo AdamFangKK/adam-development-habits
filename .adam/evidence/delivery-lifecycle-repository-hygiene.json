@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "change_id": "delivery-lifecycle-repository-hygiene",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Delivery Lifecycle and Repository Hygiene",
+    "SKILL.md:Evidence Ledger",
+    "scripts/validate_evidence.py:QUALITY_DECISION_FIELDS",
+    "tests/test_skill_contract.py:SkillContractTests"
+  ],
+  "affected_callers": [
+    "README.md",
+    "agents/openai.yaml",
+    "assets/evidence-ledger.example.json",
+    "references/enforcement.md",
+    "tests/test_evidence_scripts.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "All seven delivery practices have an explicit trigger, do not trigger at Level 0, provide a lightweight Level 1 path, and require plan, review, and evidence at Level 2.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The Skill specifies results and evidence thresholds while reusing existing repository Git, CI, release, migration, configuration, dependency, and documentation tooling without mandating a dependency or platform.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    },
+    {
+      "id": "AC-3",
+      "condition": "The evidence template and validator expose every new quality decision, preserve older artifacts, and reject supporting-artifact hash, path, identity, and kind violations.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/*.json examples/causal-execution-experiment.json examples/causal-notification-experiment.json"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The README and Codex metadata describe the new risk-scaled delivery behavior without making it universal.",
+      "verification": "ruby -e \"require 'yaml'; YAML.load_file('agents/openai.yaml'); YAML.load_file('.github/workflows/skill-quality.yml')\""
+    },
+    {
+      "id": "AC-5",
+      "condition": "A fresh-context Level 2 payment migration scenario exercises atomic PRs, recovery, expand-migrate-contract, secret handling, supply-chain review, operational knowledge, and reproducibility without inventing project tools or production actions.",
+      "verification": "Hash-verified supporting artifact: examples/delivery-lifecycle-forward-test.json"
+    }
+  ],
+  "invariants": [
+    "Level 0 work remains exempt from delivery-lifecycle requirements.",
+    "The Skill records requirements and evidence thresholds instead of forcing a specific Git host, CI system, deployment platform, migration runner, or new dependency.",
+    "A release, migration, configuration, secret, dependency, or operational claim is not complete without the evidence required by its activated row."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "risk-scaled delivery matrix",
+      "status": "applied",
+      "rationale": "The seven practices declare trigger, Level 1, Level 2, and evidence columns, with an explicit Level 0 exemption."
+    },
+    {
+      "name": "machine evidence contract",
+      "status": "applied",
+      "rationale": "The ledger template and validator require all 15 quality decisions for new machine-enforced artifacts while retaining optional compatibility for older artifacts."
+    },
+    {
+      "name": "supporting-artifact trust boundary",
+      "status": "applied",
+      "rationale": "Hash, repository-bound path, unique-ID, and allowed-kind validation have direct deterministic regression coverage."
+    },
+    {
+      "name": "independent review",
+      "status": "applied",
+      "rationale": "A fresh reviewer found three evidence-boundary issues, and a separate re-review approved all remediations."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "SKILL.md owns normative lifecycle rules, while the root validator owns the optional machine-evidence representation and tests verify the contract."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The change reuses standard-library Python and existing package tooling; it adds no runtime, build, CI, Git, release, or migration dependency."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "The new quality-decision fields represent a stable evidence contract used by the template, validator, tests, and package self-application."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "This Skill package change does not create, transform, retain, or expose application business or personal data."
+    },
+    "error_model": {
+      "status": "not_applicable",
+      "rationale": "This documentation and validator change does not alter an application runtime error boundary."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "New quality decisions are required for newly authored machine-enforced artifacts but remain optional during validation for prior artifacts."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The Skill records the need for project-specific rollout and migration thresholds but this package does not operate a measured service path."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The configuration-and-secrets row forbids secret disclosure and requires access, rotation, expiry, and deployment-validation evidence when activated."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The Skill now requires coherent commit/PR scope, pre-merge verification, and CI as the minimum merge bar when Git-tracked work triggers the row."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "This package policy change is not a deployable release; it defines evidence gates for releases when repositories have those workflows."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No application schema or business data is migrated by this package change; the Skill defines expand-migrate-contract for future activated changes."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No runtime configuration or credential value changed in this package."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No manifest, lockfile, or dependency configuration changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The README, enforcement reference, forward-test transcript, review transcript, and evidence ledger document the policy and its evidence boundary."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The package uses documented repository-local validation commands, deterministic examples, and no production credentials or external platform prerequisite."
+    }
+  },
+  "supporting_artifacts": [
+    {
+      "id": "delivery-lifecycle-forward-test",
+      "kind": "evaluation_transcript",
+      "path": "examples/delivery-lifecycle-forward-test.json",
+      "sha256": "bbcae83ea445379e2a65f7e17340a400d8c711d717f497fbd39c05ed20579033",
+      "summary": "Fresh-context qualitative Level 2 payment-migration exercise with stated limits; it is not an executed production integration test."
+    },
+    {
+      "id": "delivery-lifecycle-review",
+      "kind": "review_report",
+      "path": "examples/delivery-lifecycle-review.json",
+      "sha256": "4d9ae38a84fb6d983273ac9e50ff35f731d00cedd23967c02649e014232eaa1e",
+      "summary": "Independent review findings, remediations, and approved re-review for the delivery-lifecycle extension."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "41 package tests passed, including all five new supporting-artifact validation regression tests and delivery-matrix contract coverage."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/*.json examples/causal-execution-experiment.json examples/causal-notification-experiment.json",
+      "status": "passed",
+      "result": "All supplied evidence artifacts validated, including the new delivery-lifecycle artifact and hash-linked supporting records."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile scripts/*.py examples/*.py tests/*.py",
+      "status": "passed",
+      "result": "All package Python sources compiled successfully."
+    },
+    {
+      "command": "ruby -e \"require 'yaml'; YAML.load_file('agents/openai.yaml'); YAML.load_file('.github/workflows/skill-quality.yml')\"",
+      "status": "passed",
+      "result": "Codex metadata and the active quality workflow parsed as YAML."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert SKILL.md, README.md, generated agent metadata, template, enforcement reference, validator, tests, and the new delivery evidence/review/forward-test artifacts together. Older evidence remains valid because the new machine-evidence fields are optional for artifacts created before this extension.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: delivery_skill_independent_review",
+    "outcome": "approved",
+    "notes": "The initial review identified stale/non-executed verification claims, missing supporting-artifact path-boundary tests, and an orphaned forward-test. After remediation, the re-review reported zero remaining issues and approved the change."
+  },
+  "remaining_risks": [
+    "The Skill cannot execute or validate a repository's hosted CI, release platform, migration runner, secret manager, or production rollback without project-specific access and authorization.",
+    "The forward test demonstrates decision quality in a synthetic scenario; it does not prove production migration throughput, provider behavior, regulatory compliance, or operational metrics."
+  ]
+}

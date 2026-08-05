@@ -14,6 +14,7 @@ SCRIPTS = ROOT / "scripts"
 EXAMPLE = ROOT / "assets" / "evidence-ledger.example.json"
 CAUSAL_EXAMPLE = ROOT / "examples" / "causal-execution-experiment.json"
 CAUSAL_NOTIFICATION_EXAMPLE = ROOT / "examples" / "causal-notification-experiment.json"
+HOLISTIC_EVIDENCE = ROOT / ".adam" / "evidence" / "holistic-quality-discipline.json"
 sys.path.insert(0, str(SCRIPTS))
 
 from validate_evidence import validate_evidence  # noqa: E402
@@ -120,6 +121,78 @@ class EvidenceScriptTests(unittest.TestCase):
         for verification in payload["verification"]:
             verification["status"] = "not_applicable"
         self.assertIn("verification must contain at least one passed result", validate_evidence(payload))
+
+    def test_quality_decisions_require_every_normative_field(self) -> None:
+        payload = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+        del payload["quality_decisions"]["threat_boundary"]
+        self.assertIn(
+            "quality_decisions.threat_boundary must be an object",
+            validate_evidence(payload),
+        )
+
+    def test_quality_decisions_require_delivery_lifecycle(self) -> None:
+        payload = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+        del payload["quality_decisions"]["delivery_lifecycle"]
+        self.assertIn(
+            "quality_decisions.delivery_lifecycle must be an object",
+            validate_evidence(payload),
+        )
+
+    def test_quality_decisions_reject_unknown_status(self) -> None:
+        payload = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+        payload["quality_decisions"]["error_model"]["status"] = "pending"
+        self.assertIn(
+            "quality_decisions.error_model.status must be applied or not_applicable",
+            validate_evidence(payload),
+        )
+
+    def test_supporting_artifact_hash_is_verified(self) -> None:
+        payload = json.loads(HOLISTIC_EVIDENCE.read_text(encoding="utf-8"))
+        payload["supporting_artifacts"][0]["sha256"] = "0" * 64
+        self.assertIn(
+            "supporting_artifacts[0].sha256 does not match the referenced file",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_supporting_artifact_path_cannot_escape_the_repository(self) -> None:
+        payload = json.loads(HOLISTIC_EVIDENCE.read_text(encoding="utf-8"))
+        payload["supporting_artifacts"][0]["path"] = "../outside.txt"
+        self.assertIn(
+            "supporting_artifacts[0].path must stay inside the artifact root",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_supporting_artifact_absolute_path_is_rejected(self) -> None:
+        payload = json.loads(HOLISTIC_EVIDENCE.read_text(encoding="utf-8"))
+        payload["supporting_artifacts"][0]["path"] = "/tmp/outside.txt"
+        self.assertIn(
+            "supporting_artifacts[0].path must stay inside the artifact root",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_supporting_artifact_must_reference_a_file(self) -> None:
+        payload = json.loads(HOLISTIC_EVIDENCE.read_text(encoding="utf-8"))
+        payload["supporting_artifacts"][0]["path"] = "examples/missing-evidence.json"
+        self.assertIn(
+            "supporting_artifacts[0].path does not reference a file",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_supporting_artifact_ids_must_be_unique(self) -> None:
+        payload = json.loads(HOLISTIC_EVIDENCE.read_text(encoding="utf-8"))
+        payload["supporting_artifacts"][1]["id"] = payload["supporting_artifacts"][0]["id"]
+        self.assertIn(
+            "supporting_artifacts[1].id must be unique",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_supporting_artifact_kind_must_be_supported(self) -> None:
+        payload = json.loads(HOLISTIC_EVIDENCE.read_text(encoding="utf-8"))
+        payload["supporting_artifacts"][0]["kind"] = "unknown_kind"
+        self.assertIn(
+            "supporting_artifacts[0].kind must be command_output, diff, evaluation_transcript, review_report, or test_output",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
 
     def test_code_change_requires_evidence_when_enabled(self) -> None:
         without_evidence = self._make_repository(include_evidence=False)

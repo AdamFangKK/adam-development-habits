@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "reviewer": "Codex native code-reviewer: independent_skill_review",
+  "initial_outcome": "changes_requested",
+  "findings": [
+    "The machine-readable evidence template did not represent the newly normative quality decisions.",
+    "Forward-test and review claims lacked local, hash-verifiable artifacts, and the review was marked approved before it completed.",
+    "The exact Level 1/2 final report omitted the newly required quality decisions.",
+    "The Codex metadata prompt required budgets and security on every invocation, contradicting risk scaling."
+  ],
+  "remediation": [
+    "Added optional, backward-compatible quality_decisions and supporting_artifacts validation plus regression tests.",
+    "Added this review record and the forward-test record as SHA-256-verifiable local artifacts.",
+    "Added the consolidated quality-decision line to the exact final report format.",
+    "Changed the default prompt to require only risk-scaled, applicable safeguards."
+  ],
+  "post_remediation_outcome": "approved",
+  "final_note": "A second independent review confirmed the schema, template, hash validation, final-report format, metadata scope, and remediation tests. Its only remaining action was to replace the previous pending review marker and stale command results with these actual records."
+}
