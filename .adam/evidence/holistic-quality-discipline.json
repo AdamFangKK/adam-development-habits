@@ -153,7 +153,7 @@
     {
       "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
       "status": "passed",
-      "result": "41 package tests passed after the later delivery-lifecycle extension; this package-wide run also covers this artifact's quality-decision and supporting-artifact rules."
+      "result": "49 package tests passed after the later composite-trap extension; this package-wide run also covers this artifact's quality-decision and supporting-artifact rules."
     },
     {
       "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",

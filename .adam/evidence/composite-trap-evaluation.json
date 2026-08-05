@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "change_id": "composite-trap-evaluation",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Compound Level 2 Gate",
+    "scripts/score_composite_trap.py:score_response",
+    "tests/test_composite_trap_score.py:CompositeTrapScoreTests"
+  ],
+  "affected_callers": [
+    "README.md",
+    "examples/composite-trap-scenario.json",
+    "examples/composite-trap-evaluation.json",
+    "examples/composite-trap-run-manifest.json",
+    "examples/composite-trap-review.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "A compound gate activates only for the stated Level 2 trigger and preserves the Level 0 exemption and normal Level 1 behavior.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The deterministic scorer rejects an unsafe mutation for every critical trap, including contradictory Level classification, CI bypass, and force merge.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_composite_trap_score.py -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The protocol-isolated retest passes all 15 traps while the saved baseline remains below threshold with two critical misses.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/score_composite_trap.py examples/composite-trap-retest-output.md"
+    },
+    {
+      "id": "AC-4",
+      "condition": "Scenario, prompts, declared context limits, input/scorer/output hashes, reviewer findings, and limitations are retained without claiming filesystem isolation or production proof.",
+      "verification": "tests/test_composite_trap_score.py::test_run_manifest_records_protocol_limits_and_hashes"
+    }
+  ],
+  "invariants": [
+    "Level 0 does not activate compound delivery requirements.",
+    "The evaluator is a transparent lexical floor and must not be presented as semantic or production correctness proof.",
+    "Forward-test protocol isolation is weaker than sandbox isolation and is recorded as such."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "compound-level activation boundary",
+      "status": "applied",
+      "rationale": "The new gate activates only for unclear Level 2 incidents with multiple delivery boundaries, preserving lower-risk work."
+    },
+    {
+      "name": "critical-trap mutation coverage",
+      "status": "applied",
+      "rationale": "Each critical scorer rule has one independently failing dangerous mutation, including contradictory wording."
+    },
+    {
+      "name": "protocol provenance",
+      "status": "applied",
+      "rationale": "The manifest records exact prompts, declared input boundary, hashes, native-subagent limits, and the absence of filesystem-isolation proof."
+    },
+    {
+      "name": "independent review",
+      "status": "applied",
+      "rationale": "A reviewer found three test-validity issues, and a re-review approved their remediations."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The Compound Level 2 Gate owns human-facing decision requirements; the scorer owns only deterministic evidence-floor checks."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The scorer and tests use only existing standard-library Python and package tooling; no dependency or platform was added."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "A reusable scorer is justified because the package now requires this composite evaluation for a defined class of public Skill changes."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "The package change does not create, transform, or expose application business or personal data."
+    },
+    "error_model": {
+      "status": "not_applicable",
+      "rationale": "This package change does not alter an application runtime error boundary."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The Skill's package-maintenance contract gains a conditional composite-test requirement without changing older evidence-schema compatibility."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The evaluator checks that a future scenario records budget decisions but does not execute a measured service workload."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The scenario and scorer require secret redaction, no unauthorized production operation, and explicit security evidence in the compound response."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The composite test enforces atomic scope, CI integrity, force-merge rejection, and clean worktree decisions."
+    },
+    "release_recovery": {
+      "status": "applied",
+      "rationale": "The scenario requires a disabled feature flag, staged release, observable stop condition, and rollback owner."
+    },
+    "data_migration": {
+      "status": "applied",
+      "rationale": "The scenario requires compatible expansion, consumer audit, backfill control, recovery evidence, and delayed contraction."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "The scorer requires redaction, owner/access review, rotation/expiry, and no unauthorized secret rotation."
+    },
+    "dependency_supply_chain": {
+      "status": "applied",
+      "rationale": "The scenario requires advisory, dependency path, lockfile, compatibility, scanner, rollback, and separation from the mitigation change."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The compound gate and retest require ADR, runbook, recovery owner, evidence ledger, and retained evaluation artifacts."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The scenario requires local non-secret fixture-based validation and the package's deterministic tests reproduce the score comparison."
+    }
+  },
+  "supporting_artifacts": [
+    {
+      "id": "composite-scenario",
+      "kind": "evaluation_transcript",
+      "path": "examples/composite-trap-scenario.json",
+      "sha256": "cd2aad40f01da83593357eed7354e2ee2347ea09d7341b118158f343c5bb4e9a",
+      "summary": "Raw payment-incident request containing interacting causal, migration, release, secret, dependency, CI, and worktree traps."
+    },
+    {
+      "id": "composite-baseline-output",
+      "kind": "evaluation_transcript",
+      "path": "examples/composite-trap-forward-output.md",
+      "sha256": "5ae4c9e92727a5dd8cff7d9bcbd14580c05590a798268e4747e6eb11c3ff5b10",
+      "summary": "Fresh-context response before the compound gate; it failed two critical traps under the final scorer."
+    },
+    {
+      "id": "composite-retest-output",
+      "kind": "evaluation_transcript",
+      "path": "examples/composite-trap-retest-output.md",
+      "sha256": "e1edc0a7451faa9c3cbae2e052fc7fe519d6faad09bce4df81c8a4f58dc5ac36",
+      "summary": "Fresh-context response after the compound gate; it passed all 15 scored traps under the final scorer."
+    },
+    {
+      "id": "composite-run-manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/composite-trap-run-manifest.json",
+      "sha256": "af95f15c5846b9eea5f45984c6f0137a49fd493aa79f163f4f79474ddff6c418",
+      "summary": "Prompt transcripts, declared input boundary, input/scorer/output hashes, and explicit protocol-isolation limitation."
+    },
+    {
+      "id": "composite-evaluation",
+      "kind": "test_output",
+      "path": "examples/composite-trap-evaluation.json",
+      "sha256": "07479a5bb58cabde2ed78ca76a6ad9c7e47ce311779d038b5a36b142af454ac1",
+      "summary": "Hash-linked comparison showing baseline 9/15 failed and retest 15/15 passed."
+    },
+    {
+      "id": "composite-review",
+      "kind": "review_report",
+      "path": "examples/composite-trap-review.json",
+      "sha256": "c0743e614d048b8083dd9f2ddefa776259bba55faa4352919a02acfa71a34b06",
+      "summary": "Independent review findings, remediation, and approved re-review."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "49 package tests passed, including the complete critical-mutation set, protocol-manifest hashes, and baseline/retest comparison."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/score_composite_trap.py examples/composite-trap-retest-output.md",
+      "status": "passed",
+      "result": "The protocol-isolated retest scored 15/15 with no critical misses."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/*.json examples/causal-execution-experiment.json examples/causal-notification-experiment.json",
+      "status": "passed",
+      "result": "All supplied evidence artifacts, including hash-linked composite support, validated."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile scripts/*.py examples/*.py tests/*.py",
+      "status": "passed",
+      "result": "All package Python sources compiled successfully."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the Compound Level 2 Gate, README text, scorer, scenario, response transcripts, evaluation/manifest/review artifacts, tests, and this evidence artifact together. Existing evidence remains valid because this change does not alter its required schema fields.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: composite_trap_review",
+    "outcome": "approved",
+    "notes": "The initial review identified contradiction-sensitive scoring, incomplete critical-mutation coverage, and overclaimed isolation. The re-review approved separate force-merge handling, full critical mutation coverage, and the protocol-isolation manifest plus caveat."
+  },
+  "remaining_risks": [
+    "The scorer is intentionally a lexical evidence floor and cannot prove semantic correctness, implementation behavior, or production safety.",
+    "The native subagent interface did not provide filesystem isolation; the manifest records an instruction-based input boundary, not proof that other shared-worktree files were inaccessible.",
+    "LSP diagnostics were unavailable; Python compilation and tests are a weaker substitute for project-specific language-server analysis."
+  ]
+}

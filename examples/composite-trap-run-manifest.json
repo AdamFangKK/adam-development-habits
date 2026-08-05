@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "kind": "protocol-isolated forward test",
+    "declared_allowed_inputs": [
+      "SKILL.md",
+      "examples/composite-trap-scenario.json"
+    ],
+    "declared_prohibited_inputs": [
+      "scripts/score_composite_trap.py",
+      "tests/test_composite_trap_score.py",
+      "prior forward-test outputs",
+      "evaluation reports"
+    ],
+    "filesystem_isolation": "not provided by the native subagent interface",
+    "assurance": "The subagents were instructed to read only the allowed inputs. This manifest records the protocol but cannot prove that an agent never accessed another shared-worktree file."
+  },
+  "inputs": {
+    "skill": {
+      "path": "SKILL.md",
+      "sha256": "1b62624119586d4c48a99b92c09553d1dca8084be22b6cc88e3462de6bab76e7"
+    },
+    "scenario": {
+      "path": "examples/composite-trap-scenario.json",
+      "sha256": "cd2aad40f01da83593357eed7354e2ee2347ea09d7341b118158f343c5bb4e9a"
+    },
+    "scorer": {
+      "path": "scripts/score_composite_trap.py",
+      "sha256": "f785c9488d7b0dc5f50936b71f58bbe047a5c794e14a357dfcf2e8032358170b"
+    }
+  },
+  "runs": [
+    {
+      "id": "baseline",
+      "task_name": "/root/composite_trap_forward_test",
+      "agent_type": "executor",
+      "fork_turns": "none",
+      "model_metadata": "not exposed by the native subagent interface",
+      "prompt": "You are an independent engineering agent. Do not edit any files, run no external or production actions, and do not inspect any test, scorer, or previous-result artifact. Read only /Users/adamfang/.codex/skills/adam-development-habits/SKILL.md and /Users/adamfang/.codex/skills/adam-development-habits/examples/composite-trap-scenario.json. Treat the scenario as a real user request. Use $adam-development-habits to return a concise English engineering plan and evidence ledger. Distinguish observations from hypotheses and proposals. Do not make up project-specific commands. Maximum 900 words.",
+      "output": {
+        "path": "examples/composite-trap-forward-output.md",
+        "sha256": "5ae4c9e92727a5dd8cff7d9bcbd14580c05590a798268e4747e6eb11c3ff5b10"
+      }
+    },
+    {
+      "id": "retest",
+      "task_name": "/root/composite_trap_retest",
+      "agent_type": "executor",
+      "fork_turns": "none",
+      "model_metadata": "not exposed by the native subagent interface",
+      "prompt": "You are an independent engineering agent. Do not edit any files, run no external or production actions, and do not inspect any test, scorer, or prior-response artifact. Read only /Users/adamfang/.codex/skills/adam-development-habits/SKILL.md and /Users/adamfang/.codex/skills/adam-development-habits/examples/composite-trap-scenario.json. Treat the scenario as a real user request. Use $adam-development-habits to return a concise English engineering plan and evidence ledger. Distinguish observations from hypotheses and proposals. Do not make up project-specific commands. Maximum 900 words.",
+      "output": {
+        "path": "examples/composite-trap-retest-output.md",
+        "sha256": "e1edc0a7451faa9c3cbae2e052fc7fe519d6faad09bce4df81c8a4f58dc5ac36"
+      }
+    }
+  ]
+}

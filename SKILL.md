@@ -202,6 +202,14 @@ Apply only the triggered rows below. Level 0 work does not trigger this section.
 
 Do not create an empty branch, PR, release, migration, scan, runbook, or commit merely to claim compliance. A commit is an atomic unit of reviewed intent, not a snapshot after every keystroke. If a repository or user owns commit, PR, or release execution, prepare the evidence and handoff without performing an unauthorized external action.
 
+## Compound Level 2 Gate
+
+Activate this gate only for a Level 2 request that combines an unclear failure or regression with three or more triggered delivery rows, or combines money/public-contract work with migration, release, secret, or dependency change. Level 0 never activates it; a normal Level 1 change uses only its directly triggered rows.
+
+Before implementation, list every triggered row as `mitigate now`, `stage separately`, or `block pending evidence`; give each one its owner, evidence, and rollback or removal condition. Do not let a same-day mitigation become permission to collapse an API change, backfill, credential rotation, dependency upgrade, and release into one PR.
+
+For an ambiguous remote write, preserve pending state and reconcile before retrying. For a public migration, expand compatibly, audit consumers, backfill under measurable stop conditions, and contract only after recovery evidence. For rollout, deploy with the flag disabled, stage exposure, monitor a named window, and disable the flag before reverting code. For secrets, record redaction, owner/access boundary, rotation/expiry, and rollback without reproducing values. For dependencies, record advisory, lockfile/transitive impact, compatibility, rollback, and removal. For CI and Git, exclude unrelated dirty changes, use green required checks, and reject force-merge or bypass. For operations, record ADR/runbook/recovery owner and a local non-secret fixture path before declaring the compound change ready.
+
 ## Evidence-Based AI Collaboration
 
 - Separate observed facts, project constraints, hypotheses, and proposed changes. Read the owner, callers, tests, configuration, and runtime evidence before editing; do not promote generated explanation into a fact.
@@ -295,6 +303,7 @@ For every change to this package:
 4. Keep the root `scripts/` files as this package's canonical implementation. Target repositories copy them into `.adam/scripts/`; do not maintain a second package-local implementation.
 5. Run the evidence-script tests after validator or gate changes, parse every JSON/YAML artifact changed, validate the Skill package, and verify the active workflow references real paths.
 6. Treat the Git default branch at its verified commit and passing required checks as the current state. Do not publish manually maintained version, date, or status claims that cannot be verified from Git or CI.
+7. For a Level 2 package update that changes three or more of causal diagnosis, design boundaries, data/contracts, operational readiness, delivery lifecycle, or evidence enforcement, run a composite forward test in a fresh context. Give the test agent an explicit allowed-input boundary of the raw request and Skill, keep the scoring rubric separate, include deliberate unsafe mutations in the deterministic evaluator, and record the prompt, declared boundary, input/scorer hashes, score, and limitations. Call this protocol-isolated unless an external sandbox proves stronger isolation.
 
 ## Adam's Project Overrides
 

@@ -24,6 +24,7 @@ class SkillContractTests(unittest.TestCase):
             "## Contract Evolution and Test Quality",
             "## Operational Readiness, Performance, and Security",
             "## Delivery Lifecycle and Repository Hygiene",
+            "## Compound Level 2 Gate",
             "## Evidence-Based AI Collaboration",
         ):
             with self.subTest(heading=heading):
@@ -99,6 +100,20 @@ class SkillContractTests(unittest.TestCase):
 
         self.assertIn("$adam-development-habits", self.metadata)
         self.assertIn("boundaries", self.metadata)
+
+    def test_complex_package_changes_require_an_isolated_composite_forward_test(self) -> None:
+        self.assertIn("changes three or more of causal diagnosis, design boundaries, data/contracts", self.skill)
+        self.assertIn("explicit allowed-input boundary of the raw request and Skill", self.skill)
+        self.assertIn("deliberate unsafe mutations", self.skill)
+        self.assertIn("protocol-isolated", self.skill)
+        self.assertIn("复合陷阱前向测试", self.readme)
+
+    def test_compound_level_two_gate_preserves_independent_delivery_decisions(self) -> None:
+        self.assertIn("three or more triggered delivery rows", self.skill)
+        self.assertIn("mitigate now`, `stage separately`, or `block pending evidence`", self.skill)
+        self.assertIn("deploy with the flag disabled", self.skill)
+        self.assertIn("reject force-merge or bypass", self.skill)
+        self.assertIn("复合门槛", self.readme)
 
 
 if __name__ == "__main__":

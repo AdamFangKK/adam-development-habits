@@ -149,7 +149,7 @@
     {
       "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
       "status": "passed",
-      "result": "41 package tests passed after the later delivery-lifecycle extension; this package-wide run includes evidence, report reproducibility, quality-decision, and supporting-artifact coverage."
+      "result": "49 package tests passed after the later composite-trap extension; this package-wide run includes evidence, report reproducibility, quality-decision, and supporting-artifact coverage."
     },
     {
       "command": "ruby -e \"require 'yaml'; YAML.load_file('agents/openai.yaml'); YAML.load_file('.github/workflows/skill-quality.yml')\"",

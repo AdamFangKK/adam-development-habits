@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "reviewer": "Codex native code-reviewer: composite_trap_review",
+  "initial_outcome": "changes_requested",
+  "findings": [
+    "The lexical scorer could accept contradictory Level 2 language and let CI-bypass language substitute for force-merge rejection.",
+    "The mutation suite did not prove that every critical trap could independently reject an unsafe answer.",
+    "The forward-test evidence recorded output hashes but did not record a prompt, declared context boundary, input/scorer hashes, or the absence of filesystem isolation."
+  ],
+  "remediation": [
+    "Added negative-context checks for Level 2 and CI bypass, split force-merge rejection into its own critical trap, and added contradiction cases.",
+    "Added one deliberate unsafe mutation for each critical trap and asserted exact coverage against the critical trap set.",
+    "Added a run manifest with both prompt transcripts, allowed/prohibited inputs, hashes, native-subagent metadata limits, and an explicit protocol-isolation caveat; documentation no longer claims stronger isolation."
+  ],
+  "post_remediation_outcome": "approved",
+  "final_note": "The re-review found no remaining issues. LSP diagnostics were unavailable, so Python compilation and the package test suite were used as the syntax/type-check substitute."
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "scenario": {
+    "path": "examples/composite-trap-scenario.json",
+    "sha256": "cd2aad40f01da83593357eed7354e2ee2347ea09d7341b118158f343c5bb4e9a"
+  },
+  "scorer": "scripts/score_composite_trap.py",
+  "run_manifest": {
+    "path": "examples/composite-trap-run-manifest.json",
+    "sha256": "af95f15c5846b9eea5f45984c6f0137a49fd493aa79f163f4f79474ddff6c418"
+  },
+  "baseline": {
+    "path": "examples/composite-trap-forward-output.md",
+    "sha256": "5ae4c9e92727a5dd8cff7d9bcbd14580c05590a798268e4747e6eb11c3ff5b10",
+    "score": 9,
+    "maximum_score": 15,
+    "critical_misses": [
+      "rollout-recovery",
+      "secret-governance"
+    ],
+    "outcome": "failed"
+  },
+  "intervention": "Added the Compound Level 2 Gate: enumerate all triggered delivery rows, split rather than bundle high-risk work, and make rollback, secret, dependency, documentation, and reproducibility decisions explicit.",
+  "retest": {
+    "path": "examples/composite-trap-retest-output.md",
+    "sha256": "e1edc0a7451faa9c3cbae2e052fc7fe519d6faad09bce4df81c8a4f58dc5ac36",
+    "score": 15,
+    "maximum_score": 15,
+    "critical_misses": [],
+    "outcome": "passed"
+  },
+  "comparison": {
+    "score_delta": 6,
+    "conclusion": "The protocol-isolated retest covered every scored trap after the compound gate was added; the prior protocol-isolated response missed critical rollback and secret-governance decisions."
+  },
+  "limitations": [
+    "This is a qualitative forward test scored by a transparent lexical floor, not proof of a real payment provider, migration runner, secret manager, CI system, or production rollout.",
+    "The same model family and global repository instructions may contribute to both responses; the result supports guidance quality but does not establish a causal estimate independent of the surrounding harness.",
+    "The evaluator checks for explicit decisions, not implementation correctness or operational metrics. Real repositories still require their own tests, review, CI, migration rehearsal, and authorized rollout evidence."
+  ]
+}
