@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -13,6 +14,13 @@ from typing import Any
 SAFEGUARD_STATUSES = {"applied", "not_applicable"}
 VERIFICATION_STATUSES = {"passed", "not_applicable"}
 REVIEW_OUTCOMES = {"approved"}
+CAUSAL_MODES = {"lite", "full"}
+CAUSAL_HYPOTHESIS_STATUSES = {"supported", "rejected", "unresolved"}
+CAUSAL_EVIDENCE_TYPES = {"observational", "reproduction", "intervention"}
+CAUSAL_CONCLUSIONS = {"root_cause_fix", "mitigation", "instrumentation_only", "unknown"}
+CAUSAL_CONFIDENCE = {"low", "medium", "high"}
+CAUSAL_ARTIFACT_KINDS = {"command_output", "diff", "test_output", "test_source", "trace_export"}
+CAUSAL_EXECUTION_ARTIFACT_KINDS = {"command_output", "test_output", "trace_export"}
 
 
 def is_nonempty_string(value: Any) -> bool:
@@ -33,7 +41,131 @@ def require_string_list(data: dict[str, Any], field: str, errors: list[str], *, 
         errors.append(f"{field} must contain only non-empty strings")
 
 
-def validate_evidence(data: Any, *, expected_change_id: str | None = None) -> list[str]:
+def is_sha256(value: Any) -> bool:
+    return isinstance(value, str) and len(value) == 64 and all(character in "0123456789abcdef" for character in value)
+
+
+def validate_causal_artifact_path(artifact: dict[str, Any], artifact_root: Path, errors: list[str], index: int) -> None:
+    path_value = artifact.get("path")
+    if not is_nonempty_string(path_value):
+        return
+
+    path = Path(path_value)
+    if path.is_absolute() or ".." in path.parts:
+        errors.append(f"causal.evidence_artifacts[{index}].path must stay inside the artifact root")
+        return
+
+    root = artifact_root.resolve()
+    resolved = (root / path).resolve()
+    try:
+        resolved.relative_to(root)
+    except ValueError:
+        errors.append(f"causal.evidence_artifacts[{index}].path must stay inside the artifact root")
+        return
+
+    if not resolved.is_file():
+        errors.append(f"causal.evidence_artifacts[{index}].path does not reference a file")
+        return
+
+    digest = hashlib.sha256(resolved.read_bytes()).hexdigest()
+    if digest != artifact.get("sha256"):
+        errors.append(f"causal.evidence_artifacts[{index}].sha256 does not match the referenced file")
+
+
+def validate_causal_evidence(causal: Any, errors: list[str], *, artifact_root: Path | None = None) -> None:
+    if not isinstance(causal, dict):
+        errors.append("causal must be an object")
+        return
+
+    if causal.get("mode") not in CAUSAL_MODES:
+        errors.append("causal.mode must be lite or full")
+    require_string(causal, "symptom", errors)
+    require_string(causal, "discriminating_check", errors)
+    if causal.get("conclusion") not in CAUSAL_CONCLUSIONS:
+        errors.append("causal.conclusion must be root_cause_fix, mitigation, instrumentation_only, or unknown")
+    if causal.get("confidence") not in CAUSAL_CONFIDENCE:
+        errors.append("causal.confidence must be low, medium, or high")
+    if causal.get("mode") == "full":
+        if not is_nonempty_string(causal.get("upstream_path")):
+            errors.append("causal.upstream_path must be a non-empty string for full mode")
+        if not is_nonempty_string(causal.get("timeline_evidence")):
+            errors.append("causal.timeline_evidence must be a non-empty string for full mode")
+
+    evidence_artifacts = causal.get("evidence_artifacts")
+    artifact_ids: set[str] = set()
+    artifact_kinds: dict[str, str] = {}
+    if not isinstance(evidence_artifacts, list) or not evidence_artifacts:
+        errors.append("causal.evidence_artifacts must be a non-empty list")
+    else:
+        for index, artifact in enumerate(evidence_artifacts):
+            if not isinstance(artifact, dict):
+                errors.append(f"causal.evidence_artifacts[{index}] must be an object")
+                continue
+            artifact_id = artifact.get("id")
+            if not is_nonempty_string(artifact_id):
+                errors.append(f"causal.evidence_artifacts[{index}].id must be a non-empty string")
+            elif artifact_id in artifact_ids:
+                errors.append(f"causal.evidence_artifacts[{index}].id must be unique")
+            else:
+                artifact_ids.add(artifact_id)
+                if isinstance(artifact.get("kind"), str):
+                    artifact_kinds[artifact_id] = artifact["kind"]
+            if artifact.get("kind") not in CAUSAL_ARTIFACT_KINDS:
+                errors.append(
+                    f"causal.evidence_artifacts[{index}].kind must be command_output, diff, test_output, test_source, or trace_export"
+                )
+            require_string(artifact, "path", errors)
+            if not is_sha256(artifact.get("sha256")):
+                errors.append(f"causal.evidence_artifacts[{index}].sha256 must be a lowercase SHA-256 digest")
+            require_string(artifact, "summary", errors)
+            if artifact_root is not None:
+                validate_causal_artifact_path(artifact, artifact_root, errors, index)
+
+    evidence_types = causal.get("evidence_types")
+    if not isinstance(evidence_types, list) or not evidence_types:
+        errors.append("causal.evidence_types must be a non-empty list")
+    elif any(item not in CAUSAL_EVIDENCE_TYPES for item in evidence_types):
+        errors.append("causal.evidence_types must contain only observational, reproduction, or intervention")
+
+    hypotheses = causal.get("hypotheses")
+    if not isinstance(hypotheses, list) or not hypotheses:
+        errors.append("causal.hypotheses must be a non-empty list")
+    else:
+        supported_with_execution_evidence = False
+        for index, hypothesis in enumerate(hypotheses):
+            if not isinstance(hypothesis, dict):
+                errors.append(f"causal.hypotheses[{index}] must be an object")
+                continue
+            for field in ("id", "claim", "prediction"):
+                if not is_nonempty_string(hypothesis.get(field)):
+                    errors.append(f"causal.hypotheses[{index}].{field} must be a non-empty string")
+            if hypothesis.get("status") not in CAUSAL_HYPOTHESIS_STATUSES:
+                errors.append(f"causal.hypotheses[{index}].status must be supported, rejected, or unresolved")
+            references = hypothesis.get("evidence_refs")
+            if not isinstance(references, list) or any(not is_nonempty_string(item) for item in references):
+                errors.append(f"causal.hypotheses[{index}].evidence_refs must be a list of non-empty strings")
+                continue
+            unknown_references = set(references).difference(artifact_ids)
+            if unknown_references:
+                errors.append(f"causal.hypotheses[{index}].evidence_refs must name declared evidence artifacts")
+            elif hypothesis.get("status") == "supported" and references:
+                if any(artifact_kinds.get(reference) in CAUSAL_EXECUTION_ARTIFACT_KINDS for reference in references):
+                    supported_with_execution_evidence = True
+
+        if causal.get("conclusion") == "root_cause_fix" and not supported_with_execution_evidence:
+            errors.append("causal.root_cause_fix requires a supported hypothesis with execution evidence")
+
+    if causal.get("conclusion") == "root_cause_fix" and isinstance(evidence_types, list):
+        if not {"reproduction", "intervention"}.intersection(evidence_types):
+            errors.append("causal.root_cause_fix requires reproduction or intervention evidence")
+
+
+def validate_evidence(
+    data: Any,
+    *,
+    expected_change_id: str | None = None,
+    artifact_root: Path | None = None,
+) -> list[str]:
     errors: list[str] = []
     if not isinstance(data, dict):
         return ["root value must be an object"]
@@ -117,6 +249,9 @@ def validate_evidence(data: Any, *, expected_change_id: str | None = None) -> li
                 errors.append("independent_review.outcome must be approved")
             require_string(review, "notes", errors)
 
+    if "causal" in data:
+        validate_causal_evidence(data["causal"], errors, artifact_root=artifact_root)
+
     return errors
 
 
@@ -132,13 +267,19 @@ def is_evidence_artifact(path: Path) -> bool:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate Adam's Development Habits evidence artifacts.")
     parser.add_argument("artifacts", nargs="+", type=Path, help="JSON evidence artifact paths")
+    parser.add_argument("--artifact-root", type=Path, default=Path.cwd())
     args = parser.parse_args()
+    artifact_root = args.artifact_root.resolve()
 
     failed = False
     for artifact in args.artifacts:
         try:
             expected_change_id = artifact.stem if is_evidence_artifact(artifact) else None
-            errors = validate_evidence(load_json(artifact), expected_change_id=expected_change_id)
+            errors = validate_evidence(
+                load_json(artifact),
+                expected_change_id=expected_change_id,
+                artifact_root=artifact_root,
+            )
         except (OSError, json.JSONDecodeError) as error:
             errors = [str(error)]
         if errors:

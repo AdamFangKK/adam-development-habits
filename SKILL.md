@@ -16,10 +16,38 @@ Apply the lightest level that preserves confidence:
 | Level | Scope | Required evidence |
 |---|---|---|
 | 0 | Documentation, comments, formatting, or an obvious one-line correction with no behavior change. | Inspect the diff and run the relevant narrow check. |
-| 1 | Normal feature, bug fix, refactor, integration, or configuration behavior change. | Acceptance criteria, evidence ledger, relevant tests/checks, and cleanup audit. |
-| 2 | Public API, schema migration, authentication, money, privacy, concurrency, cross-service flow, architectural change, or broad refactor. | Level 1 plus a concise plan, rollback/compatibility strategy, failure-path tests, and an independent review pass. |
+| 1 | Normal feature, bug fix, refactor, integration, or configuration behavior change. | Acceptance criteria, evidence ledger, relevant tests/checks, cleanup audit, and Causal Lite when the reported cause is unclear. |
+| 2 | Public API, schema migration, authentication, money, privacy, concurrency, cross-service flow, architectural change, or broad refactor. | Level 1 plus a concise plan, rollback/compatibility strategy, failure-path tests, an independent review pass, and Causal Full for ambiguous failures or regressions. |
 
 Do not downgrade a change to avoid evidence. If uncertain, use the higher level.
+
+## Causal Execution Discipline
+
+Use this discipline to avoid patching the nearest symptom instead of the responsible behavior. It is a diagnosis workflow, not a requirement to prove causality for every feature or obvious correction.
+
+Activate it for an unclear bug, a regression, a performance or reliability degradation, an intermittent failure, or a suspected interaction across a service, deployment, configuration, dependency, or concurrency boundary. Do not activate it for Level 0 work or a behavior change whose cause and owner are already established by a narrow check.
+
+For **Causal Lite**, before the first edit, record:
+
+- the observed symptom, separated from any interpretation of its cause;
+- one primary hypothesis and at least one plausible alternative;
+- a discriminating check that could weaken or reject the primary hypothesis; and
+- the actual result of that check, or why the check is unavailable.
+
+For **Causal Full**, also identify the upstream call, data, configuration, or dependency path; inspect the relevant change or release timeline; and reproduce the failure or run an isolated intervention when that can be done safely. Use read-only observation and local test/worktree experiments by default. Do not perform production experiments without explicit authorization.
+
+For an ambiguous remote create, update, charge, send, or enqueue operation, treat reconciliation as a three-state contract: confirmed, definitively absent, or unknown. Retry the write only when the dependency establishes definitive absence or returns a pre-acceptance rejection explicitly classified as retryable. Persist a terminal rejection with its safe reason as failed, acknowledge or dead-letter it only after that transition is durable, and do not revive or alter it on redelivery. When reconciliation is unknown, unavailable, delayed, or ambiguous, preserve the durable pending record; do not acknowledge it as successful, and acknowledge only after a deduplicated recovery job has been durably scheduled when queue semantics require that handoff. Persist and verify a canonical operation identity that includes the business event plus every side-effect-defining dimension, such as tenant, recipient, resource, amount, payload version, or content hash. A matching business-event ID alone is not enough to reuse a prior result safely: re-verify that identity at provider confirmation, acknowledgement, dead-letter, and recovery-handoff boundaries. Record the reconciliation class and retry decision with trace/correlation IDs, without payload content or personal data.
+
+Treat evidence in descending order of strength: observation establishes correlation, reproduction establishes repeatability, and an isolated intervention supports a causal claim. Git history, blame, and temporal proximity are candidate evidence only; they do not prove a root cause.
+
+Classify the conclusion precisely:
+
+- **root-cause fix**: the changed behavior lies on the responsible path and reproduction or intervention supports the claim;
+- **mitigation**: the change reduces impact but the responsible cause remains unproven;
+- **instrumentation-only**: the change adds evidence collection without altering the failing behavior; or
+- **unknown**: the available evidence cannot distinguish the hypotheses.
+
+When evidence is insufficient, prefer instrumentation, a minimal reproducer, a reversible guard, or escalation over a speculative behavioral change. Keep the hypothesis set small and choose the lowest-risk check that best distinguishes it; do not create analysis theatre by enumerating arbitrary possibilities.
 
 ## Project Constitution and Acceptance Criteria
 
@@ -40,6 +68,7 @@ Do not claim a code task is complete until all applicable items below have evide
 
 - the canonical implementation path and affected callers were identified before editing;
 - acceptance criteria and behavior-preserving invariants were defined;
+- when Causal Execution Discipline was active, the conclusion is supported by recorded evidence and is labeled as a root-cause fix, mitigation, instrumentation-only, or unknown;
 - every replaced path was removed, or each retained path has a real consumer, removal condition, and coverage;
 - relevant safeguards were implemented or explicitly shown to be not applicable;
 - the exact verification commands were run and their outcome was read;
@@ -61,9 +90,12 @@ Replaced paths: <what will be removed, or none>
 Retained compatibility: <consumer + removal condition + test, or none>
 Safeguards: <applicable items from the matrix>
 Verification: <commands run and actual results>
+Causal diagnosis: <not activated, or symptom + hypotheses + discriminating evidence + conclusion>
 ```
 
 Use narrow searches to establish the ledger. Check imports, exports, registrations, routes, configuration keys, message names, tests, and dynamic lookup conventions. Never infer that code is dead only because a direct reference search is empty.
+
+When Causal Execution Discipline is active, add the symptom, hypotheses, discriminating check, evidence strength, conclusion classification, confidence, and any stop reason to the ledger. For Causal Full, also record the upstream path and the relevant change, release, or runtime timeline. In machine-enforced evidence mode, declare each referenced local evidence artifact by ID, repository-relative path, SHA-256 digest, and summary; reference only declared IDs from hypotheses. A root-cause fix must reference a hash-verified execution artifact such as command output, test output, or a trace export; source code alone is insufficient. A causal conclusion must link to actual command output, test output, trace data, or an equivalent artifact; a narrative assertion is not evidence.
 
 ## Evidence Enforcement Mode
 
@@ -89,7 +121,7 @@ State the behavioral invariant before implementation. Validate input, authorizat
 
 Use existing project utilities and patterns. Add an abstraction only when it removes meaningful duplication or matches an established local convention.
 
-- For a bug fix, add or strengthen a regression test before declaring the fix complete.
+- For a bug fix, add or strengthen a regression test before declaring the fix complete. Do not call it a root-cause fix unless the reported failure is reproduced or causally linked to the changed behavior; otherwise report it as mitigation and state the residual risk.
 - For a behavior change with an existing test surface, write or update the test before or alongside implementation; include important failure behavior.
 - For a behavior-preserving refactor without protection, add regression coverage before restructuring.
 - For a Level 2 change, perform an independent review pass after implementation. Read the diff and acceptance criteria as a fresh reviewer; use a separate reviewer or agent when available. Check correctness, security, compatibility, cleanup, and test adequacy.
@@ -105,6 +137,7 @@ Apply the relevant row; explain a deliberate omission in the evidence ledger.
 | API or public boundary | Validate input shape, size, range, authorization, and ownership. Return a stable error code and safe message. |
 | External network, database, cache, or SDK call | Set an explicit timeout; propagate a deadline where supported; log dependency and latency without secrets. |
 | Retryable remote operation | Retry only transient, idempotent work; bound attempts; use exponential backoff with jitter. |
+| Ambiguous remote write or expired idempotency window | Persist pending state before the call; reconcile by canonical operation identity as confirmed, absent, or unknown; resend only after definitive absence or retryable pre-acceptance rejection. Persist terminal rejection and safe reason as failed, then acknowledge or dead-letter; no later path may revive or alter it. Re-verify canonical identity before provider confirmation, acknowledgement, dead-letter, and recovery handoff. Test provider acceptance before timeout or crash, unavailable reconciliation, identity mismatch at every finalization boundary, acknowledgement failure after durable confirmation, retryable versus terminal rejection, concurrent recovery-job deduplication and handoff, and structured retry-decision audit output. |
 | Create, update, charge, send, or enqueue action | Guarantee idempotency with a key, uniqueness constraint, or equivalent; define consistency with a transaction or explicit design. |
 | Expensive or exposed operation | Apply pagination, payload limits, rate limits, concurrency limits, and backpressure as applicable. |
 | Optional or failing dependency | Choose and test a failure mode: fallback, partial response, queued retry, or clear failure; use circuit breaking when available. |
@@ -177,6 +210,7 @@ Verified: <command> - <result>
 Independent review: <result or not required>
 Evidence artifact: <path or enforcement mode not enabled>
 Remaining risks: ...
+Causal conclusion: <not activated | root-cause fix | mitigation | instrumentation-only | unknown>
 ```
 
 Keep the report concise, factual, and based on executed work.

@@ -41,5 +41,11 @@ jobs:
         run: python scripts/validate_evidence.py .adam/evidence/*.json
       - name: Run evidence-script tests
         run: python -m unittest discover -s tests -v
+      - name: Run causal experiments and verify reports
+        run: |
+          python examples/causal-execution-experiment.py --report > /tmp/causal-execution-report.json
+          cmp /tmp/causal-execution-report.json examples/causal-execution-experiment.report.json
+          python examples/causal-notification-experiment.py --report > /tmp/causal-notification-report.json
+          cmp /tmp/causal-notification-report.json examples/causal-notification-experiment.report.json
       - name: Check patch formatting
         run: git diff --check "${{ steps.base.outputs.value }}...HEAD"

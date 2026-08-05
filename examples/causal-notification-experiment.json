@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "change_id": "notification-timeout-deduplication",
+  "level": 2,
+  "canonical_owner": [
+    "examples/causal-notification-experiment.py:dispatch_with_business_key"
+  ],
+  "affected_callers": [
+    "notification queue consumer",
+    "retry worker",
+    "duplicate upstream event handler"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "An accepted-but-timed-out provider call does not acknowledge its queue message before a durable provider confirmation exists.",
+      "verification": "python examples/causal-notification-experiment.py"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Retry, duplicate queue message, process restart, and concurrent workers result in one provider delivery and one durable ledger record per operation identity.",
+      "verification": "python examples/causal-notification-experiment.py"
+    },
+    {
+      "id": "AC-3",
+      "condition": "After provider idempotency-key retention expires, reconciliation by the full durable operation identity confirms the ledger before another send, leaving one provider delivery.",
+      "verification": "python examples/causal-notification-experiment.py"
+    },
+    {
+      "id": "AC-4",
+      "condition": "Unknown reconciliation, operation-identity conflicts at every finalization boundary, a crash after provider acceptance, queue acknowledgement failure, and retryable versus terminal pre-acceptance rejection never cause an unsafe resend, premature acknowledgement, or revival of terminal state; every safe-path decision emits a redacted audit record.",
+      "verification": "python examples/causal-notification-experiment.py"
+    }
+  ],
+  "invariants": [
+    "One notification operation identity must produce at most one external delivery.",
+    "A queue message must not be acknowledged until its matching operation is durably confirmed.",
+    "Each business event has exactly one durable ledger record across process restarts.",
+    "A reusable business event must preserve recipient and template identity.",
+    "An unknown reconciliation result is not permission to resend or acknowledge.",
+    "A terminally failed operation cannot be confirmed, have its reason changed, or be acknowledged by a mismatched operation identity."
+  ],
+  "replaced_paths": [
+    "Idempotency keys derived from queue message IDs and retry attempt numbers"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "durable operation boundary",
+      "status": "applied",
+      "rationale": "SQLite enforces one pending or confirmed record bound to a business event, recipient, and template version across ledger reinitialization."
+    },
+    {
+      "name": "cross-instance duplicate delivery",
+      "status": "applied",
+      "rationale": "The experiment dispatches duplicate messages through concurrent workers with independent ledger instances over one SQLite path."
+    },
+    {
+      "name": "queue acknowledgement ordering",
+      "status": "applied",
+      "rationale": "The queue boundary rejects acknowledgement unless the durable ledger has a confirmed provider delivery ID."
+    },
+    {
+      "name": "three-state reconciliation",
+      "status": "applied",
+      "rationale": "The retry path distinguishes provider history found, definitely absent, unknown, and identity conflict; only absence permits a new send."
+    },
+    {
+      "name": "operation identity validation",
+      "status": "applied",
+      "rationale": "The durable ledger rejects reuse of one business event with a different recipient or template version."
+    },
+    {
+      "name": "failure boundary recovery",
+      "status": "applied",
+      "rationale": "The experiment covers caller crash after provider acceptance and queue acknowledgement failure after durable confirmation."
+    },
+    {
+      "name": "retry-decision audit",
+      "status": "applied",
+      "rationale": "The experiment records trace ID, opaque session operation reference, and outcome without recipient or notification content."
+    },
+    {
+      "name": "durable recovery handoff",
+      "status": "applied",
+      "rationale": "An unknown reconciliation may be acknowledged only after a unique durable recovery job is scheduled for the pending operation."
+    }
+  ],
+  "verification": [
+    {
+      "command": "python examples/causal-notification-experiment.py",
+      "status": "passed",
+      "result": "Thirteen tests passed. The legacy path accepted three deliveries; the durable state-machine path produced zero premature acknowledgements, one provider delivery, and one SQLite record after timeout, restart, cross-instance concurrency, provider key expiry, unavailable reconciliation, identity conflict at confirmation and acknowledgement boundaries, caller crash, queue acknowledgement failure, retryable versus terminal pre-acceptance rejection, terminal-state immutability, and durable recovery handoff."
+    }
+  ],
+  "remaining_risks": [
+    "The example models a provider lookup contract but does not prove that a production provider exposes an equivalent durable operation-identity query with definitive absence semantics.",
+    "The example uses SQLite's local locking and does not model production database failover, multi-region replication, a real queue's visibility timeout, dead-letter policy, or backoff behavior."
+  ],
+  "rollback_or_compatibility": "Revert the example script, report artifact, this ledger, and the matching package evidence artifact together. The experiment is additive and has no runtime consumers.",
+  "independent_review": {
+    "reviewer": "independent causal experiment reviewer",
+    "outcome": "approved",
+    "notes": "Post-change independent review is recorded in the matching package evidence artifact."
+  },
+  "causal": {
+    "mode": "full",
+    "symptom": "A notification can be delivered repeatedly after an ambiguous provider timeout and duplicate queue messages.",
+    "evidence_artifacts": [
+      {
+        "id": "notification-test-source",
+        "kind": "test_source",
+        "path": "examples/causal-notification-experiment.py",
+        "sha256": "a5dd5c05e64a730d7f8470eff54056afac0bfb13973f6a4e0343ff29af93f95e",
+        "summary": "Reproduces timeout, crash, retryable and terminal rejection, retry, duplicate transport messages, restart, cross-instance concurrency, acknowledgement failure, identity conflict at confirmation and acknowledgement boundaries, unavailable reconciliation, terminal-state immutability, mandatory redacted audit records, durable recovery handoff, and provider key-retention expiry before applying durable operation state."
+      },
+      {
+        "id": "notification-test-output",
+        "kind": "test_output",
+        "path": "examples/causal-notification-experiment.report.json",
+        "sha256": "55d34bbcc63ba4895a5fe651d8c7ed7e2e286b7c18fb98ef52de5cc685eb169e",
+        "summary": "Deterministic report emitted only after all thirteen failure-path assertions pass, including terminal-failure, terminal-identity-conflict, and recovery-handoff acknowledgement counts."
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "The provider duplicates one stable operation-identity request when concurrent consumers reconcile it.",
+        "prediction": "Concurrent duplicate queue messages create multiple accepted deliveries even when they share a durable operation identity.",
+        "status": "rejected",
+        "evidence_refs": [
+          "notification-test-output"
+        ]
+      },
+      {
+        "id": "H2",
+        "claim": "Idempotency is scoped to transport attempts instead of a durable operation identity, so retries, duplicate messages, and provider key-retention expiry can reopen duplicate-send risk.",
+        "prediction": "Replacing transport-derived keys with durable operation state and three-state reconciliation reduces three accepted deliveries to one and prevents a late duplicate after provider key expiry.",
+        "status": "supported",
+        "evidence_refs": [
+          "notification-test-output"
+        ]
+      }
+    ],
+    "discriminating_check": "Compare transport-derived retries with durable operation state while holding timeout, crash, retryable and terminal rejection, retry, duplicate message, restart, independent ledger instances, acknowledgement failure, unknown reconciliation, durable recovery handoff, and provider key-retention expiry constant; observe delivery count, ledger state, operation identity, acknowledgement timing, and redacted retry-decision audit output.",
+    "upstream_path": "queue consumer -> DurableDispatchLedger.start -> EmailProvider.reconcile(found|absent|unknown|conflict) or EmailProvider.send -> DurableDispatchLedger.mark_confirmed -> RecordingQueue.acknowledge",
+    "timeline_evidence": "The provider can accept a delivery before timeout or caller crash, or reject it before acceptance as retryable or terminal; the durable ledger remains pending and the queue unacknowledged until identity-based reconciliation confirms it. For an unavailable lookup, it remains unacknowledged or is acknowledged only after durable recovery handoff.",
+    "evidence_types": [
+      "observational",
+      "reproduction",
+      "intervention"
+    ],
+    "conclusion": "root_cause_fix",
+    "confidence": "high"
+  }
+}

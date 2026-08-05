@@ -12,6 +12,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 EXAMPLE = ROOT / "assets" / "evidence-ledger.example.json"
+CAUSAL_EXAMPLE = ROOT / "examples" / "causal-execution-experiment.json"
+CAUSAL_NOTIFICATION_EXAMPLE = ROOT / "examples" / "causal-notification-experiment.json"
 sys.path.insert(0, str(SCRIPTS))
 
 from validate_evidence import validate_evidence  # noqa: E402
@@ -21,6 +23,87 @@ class EvidenceScriptTests(unittest.TestCase):
     def test_example_is_valid(self) -> None:
         payload = json.loads(EXAMPLE.read_text(encoding="utf-8"))
         self.assertEqual(validate_evidence(payload), [])
+
+    def test_causal_example_is_valid(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        self.assertEqual(validate_evidence(payload, artifact_root=ROOT), [])
+
+    def test_complex_causal_example_is_valid(self) -> None:
+        payload = json.loads(CAUSAL_NOTIFICATION_EXAMPLE.read_text(encoding="utf-8"))
+        self.assertEqual(validate_evidence(payload, artifact_root=ROOT), [])
+
+    def test_root_cause_fix_requires_stronger_than_observational_evidence(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        payload["causal"]["evidence_types"] = ["observational"]
+        self.assertIn(
+            "causal.root_cause_fix requires reproduction or intervention evidence",
+            validate_evidence(payload),
+        )
+
+    def test_root_cause_fix_requires_a_supported_hypothesis_with_evidence(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        payload["causal"]["hypotheses"][1]["evidence_refs"] = []
+        self.assertIn(
+            "causal.root_cause_fix requires a supported hypothesis with execution evidence",
+            validate_evidence(payload),
+        )
+
+    def test_root_cause_fix_rejects_a_supported_hypothesis_backed_only_by_source(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        payload["causal"]["hypotheses"][1]["evidence_refs"] = ["payment-test-source"]
+        self.assertIn(
+            "causal.root_cause_fix requires a supported hypothesis with execution evidence",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_full_causal_evidence_requires_path_and_timeline(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        del payload["causal"]["upstream_path"]
+        del payload["causal"]["timeline_evidence"]
+        errors = validate_evidence(payload)
+        self.assertIn("causal.upstream_path must be a non-empty string for full mode", errors)
+        self.assertIn("causal.timeline_evidence must be a non-empty string for full mode", errors)
+
+    def test_causal_evidence_artifact_hash_is_verified(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        payload["causal"]["evidence_artifacts"][0]["sha256"] = "0" * 64
+        self.assertIn(
+            "causal.evidence_artifacts[0].sha256 does not match the referenced file",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_causal_evidence_artifact_path_cannot_escape_the_repository(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        payload["causal"]["evidence_artifacts"][0]["path"] = "../outside.txt"
+        self.assertIn(
+            "causal.evidence_artifacts[0].path must stay inside the artifact root",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_causal_hypothesis_references_must_name_declared_artifacts(self) -> None:
+        payload = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        payload["causal"]["hypotheses"][1]["evidence_refs"] = ["missing"]
+        self.assertIn(
+            "causal.hypotheses[1].evidence_refs must name declared evidence artifacts",
+            validate_evidence(payload, artifact_root=ROOT),
+        )
+
+    def test_causal_experiment_reports_are_reproducible(self) -> None:
+        experiments = (
+            ("causal-execution-experiment.py", "causal-execution-experiment.report.json"),
+            ("causal-notification-experiment.py", "causal-notification-experiment.report.json"),
+        )
+        for script_name, report_name in experiments:
+            with self.subTest(script=script_name):
+                result = subprocess.run(
+                    [sys.executable, str(ROOT / "examples" / script_name), "--report"],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                expected_report = (ROOT / "examples" / report_name).read_text(encoding="utf-8")
+                self.assertEqual(result.stdout, expected_report)
 
     def test_level_two_requires_independent_review(self) -> None:
         payload = json.loads(EXAMPLE.read_text(encoding="utf-8"))
@@ -142,6 +225,33 @@ class EvidenceScriptTests(unittest.TestCase):
         result = self._run_gate(directory, evidence_dir=directory / ".adam" / "evidence")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("valid changed evidence", result.stdout)
+
+    def test_gate_rejects_a_stale_causal_evidence_artifact(self) -> None:
+        directory = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, directory, True)
+        self._git(directory, "init")
+        self._git(directory, "config", "user.name", "Evidence Test")
+        self._git(directory, "config", "user.email", "evidence-test@example.invalid")
+        (directory / "app.py").write_text("VALUE = 1\n", encoding="utf-8")
+        self._git(directory, "add", "app.py")
+        self._git(directory, "commit", "-m", "baseline")
+
+        example_path = directory / "examples" / "causal-execution-experiment.py"
+        example_path.parent.mkdir()
+        shutil.copy(ROOT / "examples" / "causal-execution-experiment.py", example_path)
+        example_path.write_text(example_path.read_text(encoding="utf-8") + "# stale evidence\n", encoding="utf-8")
+        evidence = json.loads(CAUSAL_EXAMPLE.read_text(encoding="utf-8"))
+        evidence["change_id"] = "stale-causal-evidence"
+        artifact = directory / ".adam" / "evidence" / "stale-causal-evidence.json"
+        artifact.parent.mkdir(parents=True)
+        artifact.write_text(json.dumps(evidence), encoding="utf-8")
+        (directory / "app.py").write_text("VALUE = 2\n", encoding="utf-8")
+        self._git(directory, "add", "-A")
+        self._git(directory, "commit", "-m", "code change")
+
+        result = self._run_gate(directory)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("sha256 does not match the referenced file", result.stderr)
 
     def _make_repository(
         self,

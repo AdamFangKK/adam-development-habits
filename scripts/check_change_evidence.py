@@ -82,18 +82,21 @@ def requires_evidence(path: Path, base: str) -> bool:
     )
 
 
-def normalize_evidence_dir(evidence_dir: Path) -> Path:
-    if not evidence_dir.is_absolute():
-        return evidence_dir
+def repository_root() -> Path:
     result = subprocess.run(
         ["git", "rev-parse", "--show-toplevel"],
         check=True,
         capture_output=True,
         text=True,
     )
-    repository_root = Path(result.stdout.strip()).resolve()
+    return Path(result.stdout.strip()).resolve()
+
+
+def normalize_evidence_dir(evidence_dir: Path, root: Path) -> Path:
+    if not evidence_dir.is_absolute():
+        return evidence_dir
     try:
-        return evidence_dir.resolve().relative_to(repository_root)
+        return evidence_dir.resolve().relative_to(root)
     except ValueError as error:
         raise ValueError("--evidence-dir must be inside the current Git repository") from error
 
@@ -106,7 +109,8 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        evidence_dir = normalize_evidence_dir(args.evidence_dir)
+        root = repository_root()
+        evidence_dir = normalize_evidence_dir(args.evidence_dir, root)
         changed = changed_files(args.base)
     except subprocess.CalledProcessError as error:
         print(error.stderr.strip() or "could not determine Git paths", file=sys.stderr)
@@ -130,7 +134,7 @@ def main() -> int:
     failed = False
     for artifact in artifacts:
         try:
-            errors = validate_evidence(load_json(artifact), expected_change_id=artifact.stem)
+            errors = validate_evidence(load_json(artifact), expected_change_id=artifact.stem, artifact_root=root)
         except Exception as error:  # Report invalid artifacts without a stack trace in CI.
             errors = [str(error)]
         if errors:

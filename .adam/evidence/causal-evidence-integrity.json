@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "change_id": "causal-evidence-integrity",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/validate_evidence.py:validate_causal_evidence",
+    "scripts/check_change_evidence.py:main",
+    ".github/workflows/skill-quality.yml:Run causal experiments and verify reports"
+  ],
+  "affected_callers": [
+    "SKILL.md",
+    "README.md",
+    "references/enforcement.md",
+    "tests/test_evidence_scripts.py",
+    "examples/causal-execution-experiment.py",
+    "examples/causal-execution-experiment.json",
+    "examples/causal-notification-experiment.py",
+    "examples/causal-notification-experiment.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "A root-cause conclusion cites a supported hypothesis with a hash-verified command, test, or trace output artifact rather than source code alone.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The validator and change-evidence gate reject undeclared references, path escapes, and stale evidence artifact digests.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The notification experiment reproduces three legacy deliveries and proves one durable-key delivery after an ambiguous timeout, restart, and concurrent duplicate messages.",
+      "verification": "python3 examples/causal-notification-experiment.py --report"
+    }
+  ],
+  "invariants": [
+    "Existing evidence artifacts without a causal block remain valid.",
+    "Causal artifact paths resolve only within the selected repository root.",
+    "CI must execute and compare a report before a test-output artifact can support a root-cause claim."
+  ],
+  "replaced_paths": [
+    "Root-cause validation that accepted a supported hypothesis backed only by a hash-verified test source"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "hash-verified causal artifacts",
+      "status": "applied",
+      "rationale": "The validator checks declared artifact IDs, repository-relative paths, SHA-256 digests, and hypothesis references."
+    },
+    {
+      "name": "execution-evidence gate",
+      "status": "applied",
+      "rationale": "A root-cause fix requires a supported hypothesis to cite command output, test output, or a trace export."
+    },
+    {
+      "name": "reproducible complex experiment",
+      "status": "applied",
+      "rationale": "CI regenerates and compares both causal experiment reports after their assertions run."
+    }
+  ],
+  "verification": [
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "27 tests passed, including stale digest, path escape, source-only, gate, and report reproducibility failures."
+    },
+    {
+      "command": "python3 examples/causal-execution-experiment.py --report",
+      "status": "passed",
+      "result": "The generated payment report matched its tracked execution artifact."
+    },
+    {
+      "command": "python3 examples/causal-notification-experiment.py --report",
+      "status": "passed",
+      "result": "The generated concurrent timeout/retry notification report matched its tracked execution artifact."
+    },
+    {
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json examples/causal-execution-experiment.json examples/causal-notification-experiment.json",
+      "status": "passed",
+      "result": "Stored evidence and both causal examples validated with artifact hashes."
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the validator, gate, policy text, report artifacts, examples, tests, CI report comparisons, and this evidence artifact together. Causal blocks remain optional for existing evidence artifacts.",
+  "independent_review": {
+    "reviewer": "independent code reviewer",
+    "outcome": "approved",
+    "notes": "Review found that source-only references did not prove execution; remediation now requires execution artifact kinds and CI report regeneration/comparison. Re-review found no remaining issues."
+  },
+  "remaining_risks": [
+    "A committed report can prove only the deterministic test scenario that CI reruns; it cannot replace production traces for unmodeled infrastructure or provider behavior.",
+    "Evidence summaries remain human-authored and require review even when their paths, hashes, and producing commands are verified."
+  ]
+}

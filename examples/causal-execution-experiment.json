@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "change_id": "checkout-retry-idempotency",
+  "level": 1,
+  "canonical_owner": [
+    "examples/causal-execution-experiment.py:submit_checkout_fixed"
+  ],
+  "affected_callers": [
+    "checkout retry handler"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Retrying one checkout request creates exactly one payment-gateway charge.",
+      "verification": "python examples/causal-execution-experiment.py"
+    }
+  ],
+  "invariants": [
+    "One checkout request must map to at most one charge."
+  ],
+  "replaced_paths": [
+    "Per-attempt payment idempotency key generation"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "idempotency",
+      "status": "applied",
+      "rationale": "The payment gateway deduplicates requests using a stable key derived from the checkout request ID."
+    }
+  ],
+  "verification": [
+    {
+      "command": "python examples/causal-execution-experiment.py",
+      "status": "passed",
+      "result": "The buggy path produced two gateway records; the stable-key intervention produced one."
+    }
+  ],
+  "remaining_risks": [
+    "Production systems still require durable, transactionally stored idempotency keys across process restarts."
+  ],
+  "causal": {
+    "mode": "full",
+    "symptom": "A retried checkout request creates two payment charges.",
+    "evidence_artifacts": [
+      {
+        "id": "payment-test-source",
+        "kind": "test_source",
+        "path": "examples/causal-execution-experiment.py",
+        "sha256": "50d38df147612be3d05ad08631304454f2c44c013ecd1bedba0b1a88d7d0e33d",
+        "summary": "Runs the duplicate-charge reproduction and stable-key intervention assertions."
+      },
+      {
+        "id": "payment-test-output",
+        "kind": "test_output",
+        "path": "examples/causal-execution-experiment.report.json",
+        "sha256": "f6f1386209f581efc891930cd3601f4985fc2ca44a548b821202a4453858349f",
+        "summary": "Deterministic report emitted only after the reproduction and intervention tests pass."
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "The UI displays a single charge twice.",
+        "prediction": "The payment gateway contains one charge for the order.",
+        "status": "rejected",
+        "evidence_refs": [
+          "payment-test-output"
+        ]
+      },
+      {
+        "id": "H2",
+        "claim": "The checkout retry path changes the idempotency key for each attempt.",
+        "prediction": "Using one stable key for both attempts produces one gateway charge.",
+        "status": "supported",
+        "evidence_refs": [
+          "payment-test-output"
+        ]
+      }
+    ],
+    "discriminating_check": "Inspect gateway records, then retry with only the idempotency-key derivation changed.",
+    "upstream_path": "checkout retry handler -> submit_checkout_fixed -> PaymentGateway.charge",
+    "timeline_evidence": "The first attempt and retry use the same request ID; only the retry attempt number changes before the second buggy charge is created.",
+    "evidence_types": [
+      "observational",
+      "reproduction",
+      "intervention"
+    ],
+    "conclusion": "root_cause_fix",
+    "confidence": "high"
+  }
+}

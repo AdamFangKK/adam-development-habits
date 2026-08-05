@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "change_id": "causal-execution-discipline",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Causal Execution Discipline",
+    "scripts/validate_evidence.py:validate_causal_evidence"
+  ],
+  "affected_callers": [
+    "README.md",
+    "tests/test_evidence_scripts.py",
+    "examples/causal-execution-experiment.py",
+    "examples/causal-execution-experiment.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The Skill applies causal diagnosis only to unclear defects, regressions, or risky interactions and preserves a lightweight Level 0 path.",
+      "verification": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    },
+    {
+      "id": "AC-2",
+      "condition": "A root-cause fix requires a supported hypothesis with evidence references plus reproduction or intervention evidence; Causal Full also requires upstream-path and timeline evidence.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The worked retry case rejects a presentation-only explanation and verifies that a stable payment idempotency key prevents duplicate charges.",
+      "verification": "python3 examples/causal-execution-experiment.py"
+    }
+  ],
+  "invariants": [
+    "SKILL.md remains the normative policy source.",
+    "The causal evidence block remains optional so existing Level 1 and Level 2 artifacts stay valid.",
+    "A validator can check evidence structure but cannot turn a narrative claim into proof."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "evidence-strength gate",
+      "status": "applied",
+      "rationale": "The validator rejects root-cause claims that lack a supported hypothesis with evidence references or reproduction/intervention evidence."
+    },
+    {
+      "name": "causal-full traceability",
+      "status": "applied",
+      "rationale": "Full-mode artifacts must record an upstream path and relevant timeline evidence."
+    },
+    {
+      "name": "runnable counterfactual case",
+      "status": "applied",
+      "rationale": "The example executes both the duplicate-charge reproduction and the stable-key intervention."
+    }
+  ],
+  "verification": [
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "20 evidence and causal-schema tests passed."
+    },
+    {
+      "command": "python3 examples/causal-execution-experiment.py",
+      "status": "passed",
+      "result": "The duplicate-charge reproduction and stable-key intervention tests passed."
+    },
+    {
+      "command": "python3 scripts/validate_evidence.py assets/evidence-ledger.example.json examples/causal-execution-experiment.json",
+      "status": "passed",
+      "result": "The legacy evidence template and causal example validated successfully."
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed."
+    },
+    {
+      "command": "python3 -m py_compile scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_evidence_scripts.py examples/causal-execution-experiment.py",
+      "status": "passed",
+      "result": "All changed Python sources compiled successfully."
+    },
+    {
+      "command": "ruby -e \"require 'yaml'; YAML.load_file('agents/openai.yaml'); YAML.load_file('assets/github-actions/adam-evidence-gate.yml'); YAML.load_file('.github/workflows/skill-quality.yml')\"",
+      "status": "passed",
+      "result": "Skill metadata and both workflow files parsed as YAML."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the policy, validator, tests, examples, README summary, and this evidence artifact together. Existing evidence artifacts remain compatible because the causal block is optional.",
+  "independent_review": {
+    "reviewer": "independent code reviewer",
+    "outcome": "approved",
+    "notes": "Review identified and then confirmed remediation of the missing Causal Full upstream-path and timeline requirements; no issues remained after re-review."
+  },
+  "remaining_risks": [
+    "Evidence references are structurally validated but still depend on the underlying command output, trace data, or CI artifact for factual truth.",
+    "The runnable payment example models gateway-side idempotency in memory; production systems require durable and transactionally coordinated idempotency storage."
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "change_id": "causal-notification-recovery",
+  "level": 2,
+  "canonical_owner": [
+    "examples/causal-notification-experiment.py:dispatch_with_business_key",
+    "examples/causal-notification-experiment.py:DurableDispatchLedger",
+    "examples/causal-notification-experiment.py:RecordingQueue",
+    "SKILL.md:Causal Execution Discipline",
+    "SKILL.md:Safeguard Matrix"
+  ],
+  "affected_callers": [
+    "examples/causal-notification-experiment.json",
+    "examples/causal-notification-experiment.report.json",
+    "README.md",
+    "tests/test_evidence_scripts.py:test_causal_experiment_reports_are_reproducible"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "An accepted-but-timed-out provider call remains pending and produces no queue acknowledgement before durable provider confirmation.",
+      "verification": "python3 examples/causal-notification-experiment.py --report"
+    },
+    {
+      "id": "AC-2",
+      "condition": "After process restart and duplicate concurrent delivery, one business event has exactly one SQLite record and one provider delivery.",
+      "verification": "python3 examples/causal-notification-experiment.py --report"
+    },
+    {
+      "id": "AC-3",
+      "condition": "Provider key-retention expiry can duplicate an unreconciled request, while full operation-identity reconciliation confirms the ledger and prevents the late retry from sending again.",
+      "verification": "python3 examples/causal-notification-experiment.py --report"
+    },
+    {
+      "id": "AC-4",
+      "condition": "Unknown reconciliation, identity conflict at every finalization boundary, caller crash after provider acceptance, acknowledgement failure, and retryable versus terminal pre-acceptance rejection preserve a safe retry boundary, cannot revive or alter terminal state, and emit a redacted retry-decision audit record.",
+      "verification": "python3 examples/causal-notification-experiment.py --report"
+    },
+    {
+      "id": "AC-5",
+      "condition": "The tracked causal report remains reproducible and every declared causal artifact hash validates.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-6",
+      "condition": "The README provides the exact command to reproduce the thirteen-scenario notification experiment, its evidence validation, and its production-evidence boundary.",
+      "verification": "python3 examples/causal-notification-experiment.py --report"
+    }
+  ],
+  "invariants": [
+    "A queue acknowledgement occurs only after a matching durable confirmed record has a provider delivery ID.",
+    "Each business event has one durable SQLite record across ledger reopen.",
+    "The local experiment must distinguish unreconciled provider key expiry from found, absent, unknown, and conflicting operation-identity reconciliation.",
+    "Unknown reconciliation cannot authorize resend or acknowledgement.",
+    "A business event cannot be reused with a different recipient or template version.",
+    "A terminally failed operation cannot be confirmed, have its safe reason changed, or be acknowledged by a mismatched operation identity."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "durable pending/confirmed state",
+      "status": "applied",
+      "rationale": "The experiment records pending state before dispatch and confirmation with a provider delivery ID before acknowledgement."
+    },
+    {
+      "name": "acknowledgement gate",
+      "status": "applied",
+      "rationale": "RecordingQueue raises if a call attempts to acknowledge before the durable confirmation invariant holds."
+    },
+    {
+      "name": "three-state reconciliation before retry",
+      "status": "applied",
+      "rationale": "The corrected path distinguishes found, absent, unknown, and identity-conflict provider history before another send."
+    },
+    {
+      "name": "restart and concurrency regression coverage",
+      "status": "applied",
+      "rationale": "The experiment reopens the SQLite ledger into two independent instances and executes duplicate messages through concurrent workers for ten rounds."
+    },
+    {
+      "name": "operation identity validation",
+      "status": "applied",
+      "rationale": "The ledger binds the business event to recipient and template version before a delivery can be reused or confirmed."
+    },
+    {
+      "name": "crash and acknowledgement recovery",
+      "status": "applied",
+      "rationale": "The experiment verifies safe recovery after caller crash following provider acceptance and acknowledgement failure after durable confirmation."
+    },
+    {
+      "name": "definitive failure and audit coverage",
+      "status": "applied",
+      "rationale": "The experiment distinguishes retryable and terminal provider rejection before acceptance from unknown outcomes and records trace ID, opaque session operation reference, and outcome without recipient or content."
+    },
+    {
+      "name": "durable recovery handoff",
+      "status": "applied",
+      "rationale": "An unknown reconciliation can be acknowledged only after a unique durable recovery job is created for the pending operation."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 examples/causal-notification-experiment.py --report",
+      "status": "passed",
+      "result": "Thirteen tests passed. The deterministic report records 0 premature acknowledgements and terminal-identity-conflict acknowledgements, 3 legacy deliveries, 2 deliveries after an unreconciled expired key, and 1 delivery plus 1 ledger record after identity-based reconciliation, crash recovery, acknowledgement recovery, retryable rejection, terminal rejection, terminal-state immutability, and durable recovery handoff."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "27 tests passed, including report reproducibility and hash-verified causal-artifact validation."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/*.json examples/causal-execution-experiment.json examples/causal-notification-experiment.json",
+      "status": "passed",
+      "result": "All package evidence artifacts and both causal examples validated with artifact hashes."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 basedpyright examples/causal-notification-experiment.py",
+      "status": "passed",
+      "result": "0 errors and 0 warnings under the installed strict checker."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 examples/causal-notification-experiment.py --report",
+      "status": "passed",
+      "result": "The README reproduction command completed thirteen deterministic scenarios and emitted the tracked report metrics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the notification experiment source, its JSON and report artifacts, and this evidence artifact together. The experiment is additive and has no runtime consumers.",
+  "independent_review": {
+    "reviewer": "causal_integrity_review",
+    "outcome": "approved",
+    "notes": "Independent review first identified an unsupported causal attribution to premature acknowledgement; the attribution was narrowed to transport-scoped idempotency and provider retention expiry, then re-reviewed with no findings. The final cross-ledger concurrency and Python 3.9 type-cleanup remediation was independently approved after 50 repeated report runs."
+  },
+  "remaining_risks": [
+    "This is an isolated model, not evidence from a production queue, provider, or database.",
+    "A real provider may not support durable lookup by the required full operation identity with definitive absence after idempotency-key retention expires.",
+    "SQLite local locking does not establish production guarantees for distributed queues, database failover, replication, visibility timeout, dead-letter policy, backoff, or provider outage behavior."
+  ],
+  "causal": {
+    "mode": "full",
+    "symptom": "The prior notification experiment lacked coverage for unknown reconciliation, operation identity, caller crash after provider acceptance, and acknowledgement failure after confirmation.",
+    "evidence_artifacts": [
+      {
+        "id": "notification-test-source",
+        "kind": "test_source",
+        "path": "examples/causal-notification-experiment.py",
+        "sha256": "a5dd5c05e64a730d7f8470eff54056afac0bfb13973f6a4e0343ff29af93f95e",
+        "summary": "Runnable isolated model of ambiguous timeout, caller crash, retryable and terminal pre-acceptance rejection, acknowledgement gating and failure, durable SQLite state, independent ledger instances, concurrent duplicates, operation identity at all finalization boundaries, provider retention expiry, three-state reconciliation, terminal-state immutability, mandatory redacted audit output, and durable recovery handoff."
+      },
+      {
+        "id": "notification-test-output",
+        "kind": "test_output",
+        "path": "examples/causal-notification-experiment.report.json",
+        "sha256": "55d34bbcc63ba4895a5fe651d8c7ed7e2e286b7c18fb98ef52de5cc685eb169e",
+        "summary": "Deterministic report emitted only after all thirteen failure-path assertions pass, including terminal-failure, terminal-identity-conflict, and recovery-handoff acknowledgement counts."
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "A stable provider idempotency key alone still prevents duplicates after the provider expires its retention for that key or reconciliation is unavailable.",
+        "prediction": "Reusing the same key after expiry or treating an unavailable lookup as absence does not create a second accepted delivery without reconciliation.",
+        "status": "rejected",
+        "evidence_refs": [
+          "notification-test-output"
+        ]
+      },
+      {
+        "id": "H2",
+        "claim": "Durable operation state plus three-state provider reconciliation can distinguish a prior accepted delivery from a safe new send after key retention expires.",
+        "prediction": "The reconciled retry produces one provider delivery and one durable ledger record while the unreconciled expired-key control produces two deliveries and the unavailable lookup path does not resend.",
+        "status": "supported",
+        "evidence_refs": [
+          "notification-test-output"
+        ]
+      }
+    ],
+    "discriminating_check": "Run matched timeout/retry scenarios with provider key retention expired, unknown lookup, identity conflict, caller crash, acknowledgement failure, retryable rejection, terminal rejection, and durable recovery handoff; compare delivery count, durable identity, ledger state, acknowledgement count, and redacted audit output.",
+    "upstream_path": "queue consumer -> DurableDispatchLedger.start -> EmailProvider.reconcile(found|absent|unknown|conflict) or EmailProvider.send -> DurableDispatchLedger.mark_confirmed -> RecordingQueue.acknowledge",
+    "timeline_evidence": "The provider accepts the first request before caller timeout or crash, or rejects it before acceptance as retryable or terminal; the ledger remains pending and the queue unacknowledged until identity-based reconciliation confirms it. An unavailable lookup remains unacknowledged or transitions only through a durable recovery handoff.",
+    "evidence_types": [
+      "reproduction",
+      "intervention"
+    ],
+    "conclusion": "instrumentation_only",
+    "confidence": "high"
+  }
+}
