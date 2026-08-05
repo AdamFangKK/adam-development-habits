@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "https://github.com/pallets/click",
+    "buggy_release": "8.0.1",
+    "buggy_revision": "baea6233ea2f5b6c40f40edde6e297e25e3d2b94",
+    "official_patch_revision": "986f322e435fac5e1fb8505d3683c8a224c18b06",
+    "buggy_click_tree_sha256": "a953ff4164cec5751cc4d5edea2efaf56ad8a6bfd02e95342c858fc126db34d0",
+    "official_patch_click_tree_sha256": "33df2a40572feaece15d76176cce9967d8cec8218e837ee430dbf743db5f0287",
+    "buggy_types_sha256": "9e09f7a8e687703bf278c176513e5024d369240015ac0f41463e2df31d713993",
+    "official_patch_types_sha256": "e9911bc8d78de6755d8b8b9e044926e0959452bad62ac6ab7b5d2c6701b675f4"
+  },
+  "materialization": {
+    "required_layout": "Each supplied root contains src/click/ from the pinned upstream revision.",
+    "runner_behavior": "The runner performs no network access. It validates each complete src/click tree and causal-owner file, then runs from a neutral temporary directory with only a fresh copy of the validated click package on PYTHONPATH.",
+    "dependency_requirement": "Python standard library and the supplied Click source only.",
+    "platform_requirement": "POSIX-style symlink creation must be available."
+  },
+  "protocol": {
+    "public_contract": "A standard-library adaptation of Click tests/test_types.py test_symlink_resolution verifies relative and absolute link resolution at click.Path's public boundary.",
+    "hidden_contract": "A separate test records os.access inputs and requires readable and writable checks to receive the resolved target rather than the original symlink.",
+    "variants": {
+      "buggy-8.0.1": "Pinned original source must fail the public and hidden contracts.",
+      "partial-repair": "A deliberately incomplete owner edit must pass public resolution but fail the hidden resolved-access contract.",
+      "official-owner-patch": "The original tree with the official src/click/types.py change must pass both contracts.",
+      "official-patch": "Pinned source at the official patch commit must pass both contracts."
+    },
+    "candidate_boundary": "Generated candidates begin with the verified buggy source and modify only src/click/types.py. Test programs and input source trees are not candidate-controlled. Each test process has a ten-second timeout."
+  },
+  "interpretation": {
+    "proved": "This specific public-plus-hidden protocol rejects the chosen shallow repair and accepts the official causal-owner repair.",
+    "not_proved": "One historical defect does not prove aggregate model repair uplift, general causal reasoning, behavior on Windows, or production safety."
+  }
+}

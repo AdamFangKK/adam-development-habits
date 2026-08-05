@@ -1,0 +1,92 @@
+{
+  "conclusion": {
+    "claim": "The hidden contract rejects a plausible partial repair that passes the public regression, while the official repair passes both.",
+    "not_proven": "This one regression protocol does not estimate model repair-success uplift, general causal reasoning, Windows behavior, or production safety.",
+    "protocol_effective": true
+  },
+  "protocol": {
+    "candidate_scope": "Only src/click/types.py changes in generated candidate trees; source inputs and test programs remain outside candidate control. Every supplied source tree is independently hash-validated, and test subprocesses receive only a fresh copy of the validated click package.",
+    "hidden_contract": "Checks that readable and writable access checks receive the resolved target rather than the original symlink input.",
+    "offline_after_materialization": true,
+    "platform_requirement": "POSIX-style symlink support is required.",
+    "public_contract": "Adapted from Click tests/test_types.py test_symlink_resolution; it checks relative and absolute symlink resolution at the Path public boundary."
+  },
+  "schema_version": 1,
+  "source": {
+    "buggy_click_tree_sha256": "a953ff4164cec5751cc4d5edea2efaf56ad8a6bfd02e95342c858fc126db34d0",
+    "buggy_revision": "baea6233ea2f5b6c40f40edde6e297e25e3d2b94",
+    "buggy_types_sha256": "9e09f7a8e687703bf278c176513e5024d369240015ac0f41463e2df31d713993",
+    "official_patch_revision": "986f322e435fac5e1fb8505d3683c8a224c18b06",
+    "patch_click_tree_sha256": "33df2a40572feaece15d76176cce9967d8cec8218e837ee430dbf743db5f0287",
+    "patch_types_sha256": "e9911bc8d78de6755d8b8b9e044926e0959452bad62ac6ab7b5d2c6701b675f4",
+    "repository": "https://github.com/pallets/click"
+  },
+  "tool": {
+    "path": "scripts/replay_external_click.py",
+    "platform": "darwin",
+    "python": "3.9.6",
+    "sha256": "66cc6e385246675f89611ab8c90ad6844787a1e8e18ae5dae1b7cad6c718a9ff"
+  },
+  "variants": {
+    "buggy-8.0.1": {
+      "hidden": {
+        "exit_code": 1,
+        "passed": false,
+        "summary": "FAILED (failures=1)"
+      },
+      "passed": false,
+      "public": {
+        "exit_code": 1,
+        "passed": false,
+        "summary": "FAILED (failures=2)"
+      },
+      "source_tree_sha256": "a953ff4164cec5751cc4d5edea2efaf56ad8a6bfd02e95342c858fc126db34d0",
+      "types_sha256": "9e09f7a8e687703bf278c176513e5024d369240015ac0f41463e2df31d713993"
+    },
+    "official-owner-patch": {
+      "hidden": {
+        "exit_code": 0,
+        "passed": true,
+        "summary": "OK"
+      },
+      "passed": true,
+      "public": {
+        "exit_code": 0,
+        "passed": true,
+        "summary": "OK"
+      },
+      "source_tree_sha256": "cfc27e20427a05bd63e60c24d735090dc4e2514b00a8b3a8b3c30f09777b3639",
+      "types_sha256": "e9911bc8d78de6755d8b8b9e044926e0959452bad62ac6ab7b5d2c6701b675f4"
+    },
+    "official-patch": {
+      "hidden": {
+        "exit_code": 0,
+        "passed": true,
+        "summary": "OK"
+      },
+      "passed": true,
+      "public": {
+        "exit_code": 0,
+        "passed": true,
+        "summary": "OK"
+      },
+      "source_tree_sha256": "33df2a40572feaece15d76176cce9967d8cec8218e837ee430dbf743db5f0287",
+      "types_sha256": "e9911bc8d78de6755d8b8b9e044926e0959452bad62ac6ab7b5d2c6701b675f4"
+    },
+    "partial-repair": {
+      "hidden": {
+        "exit_code": 1,
+        "passed": false,
+        "summary": "FAILED (failures=1)"
+      },
+      "passed": false,
+      "public": {
+        "exit_code": 0,
+        "passed": true,
+        "summary": "OK"
+      },
+      "source_tree_sha256": "638c6df5e7b17d4fd94a546e880fc0a88fd07ba75ce755e7aebde4eb269c4e56",
+      "types_sha256": "2b5b127702730f1d89e816020fd904f348a453994c57ea7729f0252adad4a96e"
+    }
+  }
+}

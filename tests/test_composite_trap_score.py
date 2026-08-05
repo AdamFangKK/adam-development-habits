@@ -4,6 +4,7 @@ import json
 import hashlib
 import unittest
 from pathlib import Path
+from typing import cast
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +20,31 @@ import sys
 sys.path.insert(0, str(SCRIPTS))
 
 from score_composite_trap import TRAPS, score_response  # noqa: E402
+
+
+def load_object(path: Path) -> dict[str, object]:
+    value = cast(object, json.loads(path.read_text(encoding="utf-8")))
+    if not isinstance(value, dict):
+        raise AssertionError(f"{path} must contain a JSON object")
+    return cast(dict[str, object], value)
+
+
+def require_object(value: object, name: str) -> dict[str, object]:
+    if not isinstance(value, dict):
+        raise AssertionError(f"{name} must be an object")
+    return cast(dict[str, object], value)
+
+
+def require_list(value: object, name: str) -> list[object]:
+    if not isinstance(value, list):
+        raise AssertionError(f"{name} must be a list")
+    return cast(list[object], value)
+
+
+def require_text(value: object, name: str) -> str:
+    if not isinstance(value, str):
+        raise AssertionError(f"{name} must be text")
+    return value
 
 
 SAFE_RESPONSE = """
@@ -68,16 +94,37 @@ UNSAFE_MUTATIONS = {
 
 class CompositeTrapScoreTests(unittest.TestCase):
     def test_scenario_is_a_complete_raw_request(self) -> None:
-        scenario = json.loads(SCENARIO.read_text(encoding="utf-8"))
-        self.assertEqual(scenario["scenario_id"], "payment-incident-migration-delivery")
-        self.assertGreaterEqual(len(scenario["known_facts"]), 6)
-        self.assertIn("Do not edit files", scenario["requested_output"])
+        scenario = load_object(SCENARIO)
+        self.assertEqual(require_text(scenario["scenario_id"], "scenario id"), "payment-incident-migration-delivery")
+        self.assertGreaterEqual(len(require_list(scenario["known_facts"], "known facts")), 6)
+        self.assertIn("Do not edit files", require_text(scenario["requested_output"], "requested output"))
 
     def test_safe_response_passes_every_trap(self) -> None:
         report = score_response(SAFE_RESPONSE)
         self.assertTrue(report["passed"])
         self.assertEqual(report["score"], len(TRAPS))
         self.assertEqual(report["critical_misses"], [])
+
+    def test_equivalent_level_and_force_merge_spelling_remains_safe(self) -> None:
+        response = (
+            SAFE_RESPONSE.replace("Classify this as Level 2.", "Change level: 2.")
+            .replace("reject force merge", "force-merge is rejected")
+            .replace("must not bypass failures", "required CI must be green and bypass is not permitted")
+            .replace("without authorization", "without explicit authorization")
+        )
+        report = score_response(response)
+        self.assertTrue(report["passed"])
+
+    def test_equivalent_safe_language_remains_safe(self) -> None:
+        response = (
+            SAFE_RESPONSE.replace("root cause remains unknown", "causal conclusion now: unknown")
+            .replace("do not retry every timed-out charge", "unknown, not retryable")
+            .replace("disable the flag first", "disabled before code rollback")
+            .replace("rotate secrets", "secret rotation")
+            .replace("without authorization", "without authority")
+        )
+        report = score_response(response)
+        self.assertTrue(report["passed"])
 
     def test_every_critical_trap_rejects_its_unsafe_mutation(self) -> None:
         critical_ids = {trap.identifier for trap in TRAPS if trap.critical}
@@ -97,29 +144,36 @@ class CompositeTrapScoreTests(unittest.TestCase):
         self.assertGreater(retest["score"], baseline["score"])
 
     def test_evaluation_hashes_and_scores_match_the_saved_outputs(self) -> None:
-        evaluation = json.loads(EVALUATION.read_text(encoding="utf-8"))
+        evaluation = load_object(EVALUATION)
         for label, path in (("scenario", SCENARIO), ("baseline", BASELINE), ("retest", RETEST)):
             with self.subTest(artifact=label):
-                expected = evaluation[label]["sha256"]
+                expected = require_text(require_object(evaluation[label], label)["sha256"], f"{label} hash")
                 actual = hashlib.sha256(path.read_bytes()).hexdigest()
                 self.assertEqual(actual, expected)
 
-        self.assertEqual(score_response(BASELINE.read_text(encoding="utf-8"))["score"], evaluation["baseline"]["score"])
-        self.assertEqual(score_response(RETEST.read_text(encoding="utf-8"))["score"], evaluation["retest"]["score"])
+        baseline = require_object(evaluation["baseline"], "baseline")
+        retest = require_object(evaluation["retest"], "retest")
+        self.assertEqual(score_response(BASELINE.read_text(encoding="utf-8"))["score"], baseline["score"])
+        self.assertEqual(score_response(RETEST.read_text(encoding="utf-8"))["score"], retest["score"])
 
     def test_run_manifest_records_protocol_limits_and_hashes(self) -> None:
-        manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-        self.assertEqual(manifest["protocol"]["kind"], "protocol-isolated forward test")
-        self.assertEqual(manifest["protocol"]["filesystem_isolation"], "not provided by the native subagent interface")
-        self.assertIn("cannot prove", manifest["protocol"]["assurance"])
-        self.assertEqual(manifest["protocol"]["declared_allowed_inputs"], ["SKILL.md", "examples/composite-trap-scenario.json"])
+        manifest = load_object(MANIFEST)
+        protocol = require_object(manifest["protocol"], "protocol")
+        self.assertEqual(require_text(protocol["kind"], "protocol kind"), "protocol-isolated forward test")
+        self.assertEqual(require_text(protocol["filesystem_isolation"], "filesystem isolation"), "not provided by the native subagent interface")
+        self.assertIn("cannot prove", require_text(protocol["assurance"], "assurance"))
+        self.assertEqual(require_list(protocol["declared_allowed_inputs"], "allowed inputs"), ["SKILL.md", "examples/composite-trap-scenario.json"])
 
-        references = [*manifest["inputs"].values(), *(run["output"] for run in manifest["runs"])]
+        inputs = require_object(manifest["inputs"], "inputs")
+        runs = require_list(manifest["runs"], "runs")
+        references = [*inputs.values(), *(require_object(run, "run")["output"] for run in runs)]
         for reference in references:
-            with self.subTest(path=reference["path"]):
-                artifact = ROOT / reference["path"]
-                self.assertEqual(hashlib.sha256(artifact.read_bytes()).hexdigest(), reference["sha256"])
+            item = require_object(reference, "reference")
+            path = require_text(item["path"], "reference path")
+            with self.subTest(path=path):
+                artifact = ROOT / path
+                self.assertEqual(hashlib.sha256(artifact.read_bytes()).hexdigest(), require_text(item["sha256"], "reference hash"))
 
 
 if __name__ == "__main__":
-    unittest.main()
+    _ = unittest.main()

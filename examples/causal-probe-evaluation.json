@@ -31,15 +31,16 @@
         "timeline": true,
         "causal_owner": true,
         "counterfactual": true,
-        "explicit_conclusion": true
+        "explicit_conclusion": true,
+        "conclusion": "unknown_pending_intervention"
       },
       "result": "passed"
     }
   },
   "comparison": {
     "functional_repair_delta": 0,
-    "evidence_discipline_delta": "The Skill-guided response records alternatives, release timeline, causal owner, counterfactual intervention, and an explicit root-cause classification. The baseline response repairs the same behavior but does not record those decision points.",
-    "conclusion": "This one run shows a stronger recorded causal chain, not a repair-success advantage or general causal-reasoning proof."
+    "evidence_discipline_delta": "The Skill-guided response records alternatives, release timeline, causal owner, a counterfactual intervention, and an explicit unknown conclusion while the counterfactual remains unrun. The baseline response repairs the same behavior but does not record those decision points.",
+    "conclusion": "This one run shows a stronger recorded causal chain and calibrated uncertainty, not a repair-success advantage or general causal-reasoning proof. The independent verifier later confirms the materialized candidate against selected contracts but cannot retroactively turn the agent's unrun intervention into a root-cause claim."
   },
   "adversarial_checks": [
     "The scorer rejects any changed file other than delivery_probe/dispatcher.py.",

@@ -21,7 +21,7 @@
     {
       "label": "skill-guided",
       "path": "examples/causal-probe-guided-dispatcher.py",
-      "sha256": "126c162ade8f5ed577d6a3f1898d87d6d22d8e41900be97647bf488e5efa1741",
+      "sha256": "778401c66cd5783d06ba450c91d03ea438d434b60d8d2fed29fc6491937e07d9",
       "changed_paths": [
         "delivery_probe/dispatcher.py"
       ],

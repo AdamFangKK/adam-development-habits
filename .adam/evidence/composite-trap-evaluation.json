@@ -27,7 +27,7 @@
     },
     {
       "id": "AC-3",
-      "condition": "The protocol-isolated retest passes all 15 traps while the saved baseline remains below threshold with two critical misses.",
+      "condition": "The protocol-isolated retest passes every critical trap and remains above threshold while the saved baseline remains below threshold with two critical misses.",
       "verification": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/score_composite_trap.py examples/composite-trap-retest-output.md"
     },
     {
@@ -146,22 +146,22 @@
       "id": "composite-retest-output",
       "kind": "evaluation_transcript",
       "path": "examples/composite-trap-retest-output.md",
-      "sha256": "e1edc0a7451faa9c3cbae2e052fc7fe519d6faad09bce4df81c8a4f58dc5ac36",
-      "summary": "Fresh-context response after the compound gate; it passed all 15 scored traps under the final scorer."
+      "sha256": "f0cc3a430fa6de3189b0935e10ceb124f3dbe04d30e49306dd53fad14a787b9f",
+      "summary": "Fresh-context response after the compound gate; it passed every critical trap and scored 14/15 under the final scorer."
     },
     {
       "id": "composite-run-manifest",
       "kind": "evaluation_transcript",
       "path": "examples/composite-trap-run-manifest.json",
-      "sha256": "49ecd8427af7467aebf46e464e14b716703bda89b15d888a1832f89b5295640f",
+      "sha256": "94666a197c7b6c4b19a0019704254845bc0cad56a455767b92e3e5e3401247a2",
       "summary": "Prompt transcripts, declared input boundary, input/scorer/output hashes, and explicit protocol-isolation limitation."
     },
     {
       "id": "composite-evaluation",
       "kind": "test_output",
       "path": "examples/composite-trap-evaluation.json",
-      "sha256": "07479a5bb58cabde2ed78ca76a6ad9c7e47ce311779d038b5a36b142af454ac1",
-      "summary": "Hash-linked comparison showing baseline 9/15 failed and retest 15/15 passed."
+      "sha256": "81545d3589c41f3e63e0579b2d0f7d07b4e195375392ee62efb192ce64b81f68",
+      "summary": "Hash-linked comparison showing baseline 9/15 failed and retest 14/15 passed with every critical trap covered."
     },
     {
       "id": "composite-review",
@@ -180,7 +180,7 @@
     {
       "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/score_composite_trap.py examples/composite-trap-retest-output.md",
       "status": "passed",
-      "result": "The protocol-isolated retest scored 15/15 with no critical misses."
+      "result": "The protocol-isolated retest scored 14/15 with no critical misses."
     },
     {
       "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/*.json examples/causal-execution-experiment.json examples/causal-notification-experiment.json",

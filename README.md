@@ -165,6 +165,22 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py \
 
 修复 Agent 的夹具严格排除 `correct_python_programs`、上游 Git 元数据和评分工件；两个 Agent 结束后，独立验证器才读取固定参考实现来执行差分检查。`tests/test_external_quixbugs_replay.py` 还从提交的公开源、测试和两个候选快照重放 `3` 个失败、`3` 个公开通过和每个候选的 `2` 个隐藏差分用例，并校验它们的 SHA-256。原生子代理没有文件系统级隔离，所以这仍只称为协议隔离。`BugsInPy`、`Defects4J`、`Bugs.jar`、`Codeflaws` 与 `BugSwarm` 的本轮阻塞原因同样记录在结果中；没有把缺少工具链或依赖的情况伪装成“失败样本”。QuixBugs 的缺陷刻意较小，不能作为跨服务、迁移、发布或生产因果能力的证明。
 
+另有 Pallets Click 的真实符号链接回归 [#1921](https://github.com/pallets/click/issues/1921) 的离线回放协议。[固定清单](./examples/external-click-run-manifest.json) 分别锁定 `8.0.1` 的缺陷版本和官方修复提交；[回放器](./scripts/replay_external_click.py) 不联网，只接受本地已 materialize 的两份源码并校验每个 `src/click` 树和 `types.py` 的 SHA-256。测试子进程从中立临时目录运行，只能导入验证后的 `click` 副本，并有十秒超时。它运行来自上游 `test_symlink_resolution` 的公开边界测试，并以独立隐藏契约验证 `os.access` 针对已解析目标而不是原始 symlink。评分包含原始缺陷、一个“只修路径解析”的近似补丁、仅改真正 owner 的官方补丁和官方补丁提交：近似补丁通过公开测试却被隐藏测试拒绝，官方两种修复都通过。运行记录在 [external-click-replay.json](./examples/external-click-replay.json)。
+
+准备两个精确版本的本地源码后，可复跑：
+
+```bash
+git clone https://github.com/pallets/click.git /tmp/click-8.0.1
+git -C /tmp/click-8.0.1 checkout baea6233ea2f5b6c40f40edde6e297e25e3d2b94
+git clone https://github.com/pallets/click.git /tmp/click-official-patch
+git -C /tmp/click-official-patch checkout 986f322e435fac5e1fb8505d3683c8a224c18b06
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/replay_external_click.py \
+  --bug-root /tmp/click-8.0.1 \
+  --patch-root /tmp/click-official-patch
+```
+
+该协议证明的是“这个测试结构能抓住这一类浅层修复”，不是模型修复成功率、一般因果能力、Windows 行为或生产安全的统计证明。
+
 ### 多模块因果探针
 
 [`causal-probe-fixture`](./examples/causal-probe-fixture) 用发送超时、队列确认、持久化 ledger、供应商对账、租户身份和下游仪表盘组成一个可重放的多模块回归。评分器只允许改动 dispatcher，并拒绝测试篡改；隐藏契约要求“对账未知时保持 pending、完整操作身份包含租户、仅在明确不存在时重发”。基线与 Skill 组都通过 `4` 个公开和 `3` 个隐藏测试，因此它**不能**证明修复成功率提升。可观察差异仅在过程证据：Skill 组记录了替代假设、发布时间线、首个偏离不变量的 causal owner、反事实干预与明确结论；这一项由 [`tests/test_causal_probe_forward.py`](./tests/test_causal_probe_forward.py) 固化。该本地夹具仍不是实际队列、供应商、数据库或生产发布的证明。

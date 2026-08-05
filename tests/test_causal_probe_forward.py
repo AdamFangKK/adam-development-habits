@@ -92,14 +92,17 @@ class CausalProbeForwardTests(unittest.TestCase):
         guided_record = require_object(guided["causal_record"], "guided record")
         self.assertFalse(baseline_record["counterfactual"])
         self.assertTrue(guided_record["counterfactual"])
+        self.assertEqual(guided_record["conclusion"], "unknown_pending_intervention")
 
     def test_guided_transcript_contains_causal_full_evidence(self) -> None:
         baseline = (ROOT / "examples" / "causal-probe-baseline-output.md").read_text(encoding="utf-8")
         guided = (ROOT / "examples" / "causal-probe-guided-output.md").read_text(encoding="utf-8")
-        for label in ("Alternative hypotheses:", "Timeline evidence:", "Causal owner:", "Counterfactual intervention:", "Conclusion: root-cause fix."):
+        for label in ("alternative hypotheses", "timeline", "causal owner", "counterfactual intervention"):
             with self.subTest(label=label):
-                self.assertIn(label, guided)
-        self.assertNotIn("Counterfactual intervention:", baseline)
+                self.assertIn(label, guided.lower())
+        self.assertIn("counterfactual actual result: unrun", guided.lower())
+        self.assertIn("unknown until the counterfactual", guided.lower())
+        self.assertNotIn("counterfactual intervention", baseline.lower())
 
 
 if __name__ == "__main__":

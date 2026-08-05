@@ -1,0 +1,38 @@
+{
+  "reviewer": "Codex native code-reviewer: external_click_review",
+  "initial_outcome": "changes_requested",
+  "initial_findings": [
+    {
+      "severity": "high",
+      "issue": "The Level 2 Click replay had no .adam machine-evidence artifact despite this repository opting into evidence enforcement."
+    },
+    {
+      "severity": "medium",
+      "issue": "The changed replay and probe surfaces did not pass basedpyright because local package typing and JSON boundaries were incomplete."
+    }
+  ],
+  "remediation": [
+    "Add a hash-linked Level 2 evidence artifact for the offline Click replay, including the pinned manifest, actual replay output, tests, quality decisions, causal claim limit, and review record.",
+    "Add the local package type marker, the composite-score interface stub, and checked JSON loaders; annotate intentionally ignored return values.",
+    "Re-run behavioral, evidence, static-analysis, package-validation, and whitespace checks before the re-review."
+  ],
+  "re_review": {
+    "outcome": "changes_requested",
+    "verification": [
+      "The initial evidence artifact was present but had an unapproved review outcome.",
+      "The initial static-analysis command had one missing validate_evidence stub warning.",
+      "The initial causal-probe support hashes were stale after type-boundary changes."
+    ],
+    "residual_risk": "A final re-review is required after the evidence outcome, static interface stub, and causal-probe hash chain are refreshed."
+  },
+  "final_re_review": {
+    "outcome": "approved",
+    "decision": "The evidence outcome may be changed from pending to approved after recording this review artifact's final hash.",
+    "verification": [
+      "PYTHONPATH=scripts:examples/causal-probe-fixture PYTHONDONTWRITEBYTECODE=1 basedpyright scripts/replay_external_click.py scripts/score_composite_trap.py tests/test_external_click_replay.py tests/test_composite_trap_score.py examples/causal-probe-guided-dispatcher.py tests/test_causal_probe_forward.py -> 0 errors, 0 warnings, 0 notes.",
+      "The Click replay produced buggy fail/fail, partial pass/fail, official-owner pass/pass, and official-patch pass/pass outcomes.",
+      "The remaining invalid evidence state was limited to the deliberately pending review marker and its stale draft hash."
+    ],
+    "residual_risk": "The replay remains one POSIX-focused historical defect and therefore supports protocol effectiveness only, not a general model, platform, or production claim."
+  }
+}

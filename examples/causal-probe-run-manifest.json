@@ -10,6 +10,7 @@
         "delivery_probe/dispatcher.py",
         "delivery_probe/model.py",
         "delivery_probe/provider.py",
+        "delivery_probe/py.typed",
         "tests/test_dispatcher.py",
         "release-timeline.md"
       ],
@@ -35,7 +36,7 @@
   "inputs": {
     "skill": {
       "path": "SKILL.md",
-      "sha256": "afed2116e067f5a6c4d79edabdb7a15ffe2eb088138d7293c110a3dfd4a74910"
+      "sha256": "66b27eb5fcf0582fb4aa139c421cc461f8d97562f6e57c18134ea48b38278dbc"
     },
     "scenario": {
       "path": "examples/causal-probe-scenario.json",
@@ -52,6 +53,10 @@
     "fixture_timeline": {
       "path": "examples/causal-probe-fixture/release-timeline.md",
       "sha256": "930dfd546528365d71b553af74208655e2c9ddc26644a2bf734415ff88247c35"
+    },
+    "fixture_type_marker": {
+      "path": "examples/causal-probe-fixture/delivery_probe/py.typed",
+      "sha256": "2035a435e107c8adeb1e3ca1275d870517b3562b36a60cdc3254e98348db715c"
     },
     "scorer": {
       "path": "scripts/score_causal_probe.py",
@@ -76,15 +81,15 @@
     {
       "id": "skill-guided",
       "skill": "SKILL.md",
-      "task_name": "/root/causal_probe_guided",
-      "prompt": "Use the Skill's Causal Full discipline to diagnose and repair the same fixture. Change only delivery_probe/dispatcher.py, run its public unittests, and return symptom, competing hypotheses, timeline, causal owner, counterfactual intervention, conclusion, changed behavior, and exact result.",
+      "task_name": "/root/causal_probe_guided_v3",
+      "prompt": "Use the Skill's Causal Full discipline to diagnose the same fixture without editing files. Return symptom, competing hypotheses, timeline, causal owner, a minimal counterfactual intervention, calibrated conclusion, exact behavioral diff limited to delivery_probe/dispatcher.py, and any actual result available from the fixture.",
       "output": {
         "path": "examples/causal-probe-guided-output.md",
-        "sha256": "5612d7bc65273e9786127966eadc30d0d2884ceb3f4866722acb51b1f915ccc3"
+        "sha256": "368cfd82ac13baad44379f1f6e4fe1e42e757db64005c3c9dd1a2149ebb76659"
       },
       "candidate": {
         "path": "examples/causal-probe-guided-dispatcher.py",
-        "sha256": "126c162ade8f5ed577d6a3f1898d87d6d22d8e41900be97647bf488e5efa1741"
+        "sha256": "778401c66cd5783d06ba450c91d03ea438d434b60d8d2fed29fc6491937e07d9"
       }
     }
   ],

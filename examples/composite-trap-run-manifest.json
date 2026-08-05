@@ -18,7 +18,7 @@
   "inputs": {
     "skill": {
       "path": "SKILL.md",
-      "sha256": "afed2116e067f5a6c4d79edabdb7a15ffe2eb088138d7293c110a3dfd4a74910"
+      "sha256": "66b27eb5fcf0582fb4aa139c421cc461f8d97562f6e57c18134ea48b38278dbc"
     },
     "scenario": {
       "path": "examples/composite-trap-scenario.json",
@@ -26,7 +26,7 @@
     },
     "scorer": {
       "path": "scripts/score_composite_trap.py",
-      "sha256": "f785c9488d7b0dc5f50936b71f58bbe047a5c794e14a357dfcf2e8032358170b"
+      "sha256": "61cbfcbebf581d18602cbdf00ac04e844962c1cc1b7c0c9545fb6a4e66c92c5d"
     }
   },
   "runs": [
@@ -44,14 +44,14 @@
     },
     {
       "id": "retest",
-      "task_name": "/root/composite_trap_retest",
+      "task_name": "/root/composite_trap_retest_v4",
       "agent_type": "executor",
       "fork_turns": "none",
       "model_metadata": "not exposed by the native subagent interface",
       "prompt": "You are an independent engineering agent. Do not edit any files, run no external or production actions, and do not inspect any test, scorer, or prior-response artifact. Read only /Users/adamfang/.codex/skills/adam-development-habits/SKILL.md and /Users/adamfang/.codex/skills/adam-development-habits/examples/composite-trap-scenario.json. Treat the scenario as a real user request. Use $adam-development-habits to return a concise English engineering plan and evidence ledger. Distinguish observations from hypotheses and proposals. Do not make up project-specific commands. Maximum 900 words.",
       "output": {
         "path": "examples/composite-trap-retest-output.md",
-        "sha256": "e1edc0a7451faa9c3cbae2e052fc7fe519d6faad09bce4df81c8a4f58dc5ac36"
+        "sha256": "f0cc3a430fa6de3189b0935e10ceb124f3dbe04d30e49306dd53fad14a787b9f"
       }
     }
   ]

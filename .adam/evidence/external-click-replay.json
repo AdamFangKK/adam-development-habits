@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "change_id": "external-click-replay",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/replay_external_click.py:replay",
+    "scripts/replay_external_click.py:materialize_variant",
+    "tests/test_external_click_replay.py:ExternalClickReplayTests"
+  ],
+  "affected_callers": [
+    "SKILL.md: Self-Application and Package Maintenance",
+    "README.md: external Click replay documentation",
+    "examples/external-click-run-manifest.json",
+    "examples/external-click-replay.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The replay accepts only the pinned buggy and official Click source trees before executing a test.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/replay_external_click.py --bug-root <pinned-bug-root> --patch-root <pinned-patch-root>"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The original bug fails public and hidden contracts, a deliberately partial owner edit passes only public, and both official repairs pass both contracts.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_external_click_replay.py' -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The subprocess does not import Click from the supplied checkout or user site, and every test invocation has a bounded timeout.",
+      "verification": "tests/test_external_click_replay.py::test_test_subprocess_sees_only_the_copied_click_package and ::test_test_subprocess_has_a_bounded_timeout"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The conclusion limits the result to protocol effectiveness and explicitly excludes aggregate model uplift, general causal reasoning, Windows behavior, and production safety.",
+      "verification": "tests/test_external_click_replay.py::test_report_declares_the_real_limit_of_the_claim"
+    }
+  ],
+  "invariants": [
+    "The runner performs no network access after callers materialize the two pinned source roots.",
+    "Candidate variants may modify only src/click/types.py; source inputs and contracts are outside candidate control.",
+    "A public-test pass alone never counts as a causal-owner repair in this protocol.",
+    "This one replay is evidence about a test protocol, not a statistical claim about model capability."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "pinned source provenance",
+      "status": "applied",
+      "rationale": "The manifest and runner fix the upstream revisions and independently validate each complete Click tree plus types.py SHA-256 before executing code."
+    },
+    {
+      "name": "adversarial hidden contract",
+      "status": "applied",
+      "rationale": "The hidden contract observes os.access calls and rejects the partial repair that passes the public symlink-resolution contract."
+    },
+    {
+      "name": "subprocess isolation and timeout",
+      "status": "applied",
+      "rationale": "Each contract runs from a neutral temporary directory with only a fresh validated click copy on PYTHONPATH, no user site, and a ten-second timeout."
+    },
+    {
+      "name": "claim-bound reporting",
+      "status": "applied",
+      "rationale": "The runner, README, and this record distinguish protocol effectiveness from model repair uplift or production safety."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The replay runner owns deterministic source validation and execution; the manifest owns upstream provenance; the unittest module owns regression assertions."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The replay uses only Python's standard library and caller-supplied Click source; no dependency, package manager, or external service was added."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "A dedicated runner is justified for this pinned regression because generic benchmark infrastructure would weaken the exact owner, source, and hidden-contract boundaries."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "The replay creates only temporary local symlink fixtures and records public source hashes; it has no business or personal-data owner."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "The runner differentiates unpinned input, ambiguous patch application, timeout, public failure, hidden failure, and full pass rather than treating all failures alike."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The Skill gains a conditional external-replay requirement for causal-effect package claims while existing evidence-schema compatibility remains unchanged."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "Each isolated subprocess is bounded by a ten-second timeout; no service-level performance claim is made."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The runner avoids network access, user-site packages, unvalidated source imports, and uncontrolled candidate changes; no secret is read or emitted."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The replay, documentation, evidence, tests, static analysis, and review form one scoped Level 2 package change before the atomic commit."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "This is a local Skill-package validation surface and changes no deployable runtime or rollout."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No persistent schema, representation, backfill, or production data is changed."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "The command accepts only local source-root paths and writes no runtime configuration or secret."
+    },
+    "dependency_supply_chain": {
+      "status": "applied",
+      "rationale": "The upstream Click repository and immutable revisions are pinned, complete source-tree hashes are checked, and no third-party dependency is installed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README, manifest, replay report, review record, tests, and this evidence describe prerequisites, commands, results, limitations, and failure boundaries."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "A caller can materialize the two exact commits, run offline, and verify source, tool, report, and test hashes with no hidden service state."
+    }
+  },
+  "supporting_artifacts": [
+    {
+      "id": "click-manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/external-click-run-manifest.json",
+      "sha256": "6c87bdef25223d3ba63610f712c041c25a973a1458f84202bb46be044b443e1c",
+      "summary": "Pinned repository, commits, complete source hashes, isolated execution contract, and protocol limits."
+    },
+    {
+      "id": "click-replay",
+      "kind": "test_output",
+      "path": "examples/external-click-replay.json",
+      "sha256": "8d402c9e106f04b8a7909422f48aa3754b5623b06c803c5f438d925fd0166f12",
+      "summary": "Actual offline execution showing buggy fail/fail, partial pass/fail, and official pass/pass outcomes."
+    },
+    {
+      "id": "click-tests",
+      "kind": "evaluation_transcript",
+      "path": "tests/test_external_click_replay.py",
+      "sha256": "84e8bccf5654d677796a5e2e991a60e2c9357b82596f7fbcbbf79b24ce1a56d6",
+      "summary": "Regression tests for provenance, variant outcomes, patch ambiguity, isolation, timeout, claim limits, and evidence validation."
+    },
+    {
+      "id": "click-review",
+      "kind": "review_report",
+      "path": "examples/external-click-review.json",
+      "sha256": "5e9ca8929f5987347564a054c7546f821fcbe080c081d77ce4e59e12380d7c5c",
+      "summary": "Independent initial review, mechanical remediation, and approved final re-review."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/replay_external_click.py --bug-root /var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/tmp.PXmC9PKRMs --patch-root /var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/tmp.3vjSaVkDWj --output examples/external-click-replay.json",
+      "status": "passed",
+      "result": "Pinned source validation passed; buggy source failed public/hidden, partial repair passed public but failed hidden, and both official variants passed both."
+    },
+    {
+      "command": "PYTHONPATH=scripts:examples/causal-probe-fixture PYTHONDONTWRITEBYTECODE=1 basedpyright scripts/replay_external_click.py scripts/score_composite_trap.py tests/test_external_click_replay.py tests/test_composite_trap_score.py examples/causal-probe-guided-dispatcher.py tests/test_causal_probe_forward.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_external_click_replay.py' -v",
+      "status": "passed",
+      "result": "9 Click replay, isolation, timeout, provenance, bounded-claim, and evidence-validation tests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "84 package tests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "status": "passed",
+      "result": "All 12 machine-evidence artifacts validated."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the Skill requirement, Click runner and interface stub, manifest, replay report, README paragraph, tests, review, and this evidence artifact together. Existing Skill use remains compatible because the external replay is conditional on a feasible reproducible source fixture.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: external_click_review",
+    "outcome": "approved",
+    "notes": "Initial review requested evidence closure and type-clean static analysis. Final re-review approved the completed hash chain, bounded claim, replay design, and zero-warning static check."
+  },
+  "remaining_risks": [
+    "The protocol covers one historical POSIX-compatible Click regression and does not estimate aggregate model repair success or general causal reasoning.",
+    "Source acquisition precedes the offline runner and still relies on callers obtaining the declared upstream commits correctly.",
+    "The subprocess contract excludes user site and the supplied source root but is not a virtual-machine or container security boundary.",
+    "Windows behavior is intentionally out of scope because the regression requires local symlink support."
+  ],
+  "causal": {
+    "mode": "full",
+    "symptom": "A public symlink-resolution test alone can accept a partial Click Path repair that leaves resolved-target access checks incorrect.",
+    "upstream_path": "Pinned Click source -> click.Path.convert in src/click/types.py -> resolved path and access checks -> public and hidden contracts",
+    "timeline_evidence": "The manifest pins the original 8.0.1 revision baea6233ea2f5b6c40f40edde6e297e25e3d2b94 and the official correction 986f322e435fac5e1fb8505d3683c8a224c18b06.",
+    "discriminating_check": "Run the same public and separate hidden contract against the original tree, an incomplete owner edit, a reconstructed official owner edit, and the official patch tree.",
+    "conclusion": "instrumentation_only",
+    "confidence": "high",
+    "evidence_artifacts": [
+      {
+        "id": "click-replay-result",
+        "kind": "test_output",
+        "path": "examples/external-click-replay.json",
+        "sha256": "8d402c9e106f04b8a7909422f48aa3754b5623b06c803c5f438d925fd0166f12",
+        "summary": "Actual variant outcomes establish that the hidden contract distinguishes the chosen partial and official repairs."
+      },
+      {
+        "id": "click-protocol",
+        "kind": "test_source",
+        "path": "examples/external-click-run-manifest.json",
+        "sha256": "6c87bdef25223d3ba63610f712c041c25a973a1458f84202bb46be044b443e1c",
+        "summary": "Pinned revision, source-hash, candidate-scope, and contract-boundary definition."
+      }
+    ],
+    "evidence_types": [
+      "reproduction",
+      "intervention"
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "The public contract alone is insufficient to detect the selected shallow owner edit.",
+        "prediction": "The partial repair passes public symlink resolution while failing the hidden access-target contract.",
+        "status": "supported",
+        "evidence_refs": [
+          "click-replay-result"
+        ]
+      },
+      {
+        "id": "H2",
+        "claim": "Passing public resolution proves all resolved-path behavior is correct.",
+        "prediction": "The partial repair passes both contracts.",
+        "status": "rejected",
+        "evidence_refs": [
+          "click-replay-result"
+        ]
+      }
+    ]
+  }
+}

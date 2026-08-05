@@ -135,22 +135,22 @@
       "id": "causal-probe-manifest",
       "kind": "evaluation_transcript",
       "path": "examples/causal-probe-run-manifest.json",
-      "sha256": "cf0f1fde8f4c6862f9cf4d8e428996d5a0c56d4c9b100825cb9d977e4011c87b",
-      "summary": "Declared fixture, repair/verifier boundaries, prompts, candidate hashes, and protocol-isolation limits."
+      "sha256": "a5220f508ed2668f251dc57626ebf882d1787609e361cdaab2183b90d7a29e31",
+      "summary": "Declared fixture, analysis/verifier boundaries, prompts, candidate hashes, calibrated guided conclusion, and protocol-isolation limits."
     },
     {
       "id": "causal-probe-verifier",
       "kind": "test_output",
       "path": "examples/causal-probe-verifier-report.json",
-      "sha256": "2121acd19972ec15c44da1d95b3fe94f0657bfd206abb31570f08daa12f51cf6",
+      "sha256": "19eed145680441de15417244d310e1d98bdff5d98f645c5cb84f12e5f60143f4",
       "summary": "Public and hidden results, canonical-owner scope checks, and rejected unsafe mutations for both candidates."
     },
     {
       "id": "causal-probe-evaluation",
       "kind": "test_output",
       "path": "examples/causal-probe-evaluation.json",
-      "sha256": "2262d84a543a917a9a521cb2ad0840635ca406477f3d28dde5b6d40370e0dd11",
-      "summary": "Comparison that records equal behavioral repair success and the limited evidence-discipline difference."
+      "sha256": "4094398e569a3860078b1ab7cfd38b526b2ff6a1a76c89cd7651e4df2cc3e32e",
+      "summary": "Comparison that records equal behavioral repair success, calibrated unknown conclusion, and the limited evidence-discipline difference."
     },
     {
       "id": "external-quixbugs-replay",
