@@ -153,7 +153,7 @@
       "id": "composite-run-manifest",
       "kind": "evaluation_transcript",
       "path": "examples/composite-trap-run-manifest.json",
-      "sha256": "94666a197c7b6c4b19a0019704254845bc0cad56a455767b92e3e5e3401247a2",
+      "sha256": "c48ada7d54d853a85cb9981047b684e0255860481c5178592c698cc6e8cb826e",
       "summary": "Prompt transcripts, declared input boundary, input/scorer/output hashes, and explicit protocol-isolation limitation."
     },
     {

@@ -11,6 +11,10 @@ AGENT_METADATA = ROOT / "agents" / "openai.yaml"
 
 
 class SkillContractTests(unittest.TestCase):
+    skill: str = ""
+    readme: str = ""
+    metadata: str = ""
+
     def setUp(self) -> None:  # pyright: ignore[reportImplicitOverride]
         self.skill = SKILL.read_text(encoding="utf-8")
         self.readme = README.read_text(encoding="utf-8")
@@ -19,6 +23,7 @@ class SkillContractTests(unittest.TestCase):
     def test_quality_disciplines_are_normative_sections(self) -> None:
         for heading in (
             "## Causal Execution Discipline",
+            "## Measuring Skill Effect",
             "## Maintainable Boundaries and Atomic Design",
             "## Failure Semantics and Data Ownership",
             "## Contract Evolution and Test Quality",
@@ -34,6 +39,12 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("trigger -> decision or state owner -> side effect -> symptom", self.skill)
         self.assertIn("minimal counterfactual intervention", self.skill)
         self.assertIn("Do not call a downstream display", self.skill)
+        self.assertIn("If a counterfactual is only proposed or its result is unrun, the causal conclusion is `unknown`", self.skill)
+        self.assertIn("End every Causal Full response with one exact line", self.skill)
+        self.assertIn("Causal conclusion: unknown", self.skill)
+        self.assertIn("A read-only diagnosis remains unknown even if it runs an in-memory probe", self.skill)
+        self.assertIn("call the owner only a candidate", self.skill)
+        self.assertIn("a retryable **pre-acceptance** rejection restores the state", self.skill)
 
     def test_completion_gate_and_ledger_capture_quality_decisions(self) -> None:
         for field in (
@@ -113,13 +124,23 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("protocol-isolated", self.skill)
         self.assertIn("复合陷阱前向测试", self.readme)
 
+    def test_effect_claims_require_preregistration_and_scoped_evidence(self) -> None:
+        self.assertIn("A finite experiment cannot prove an overall model capability", self.skill)
+        self.assertIn("Cluster repeated runs by task", self.skill)
+        self.assertIn("completed analysis reports `improved`", self.skill)
+        self.assertIn("Skill 效果的统计检验", self.readme)
+
     def test_compound_level_two_gate_preserves_independent_delivery_decisions(self) -> None:
         self.assertIn("three or more triggered delivery rows", self.skill)
         self.assertIn("mitigate now`, `stage separately`, or `block pending evidence`", self.skill)
         self.assertIn("deploy with the flag disabled", self.skill)
         self.assertIn("reject force-merge or bypass", self.skill)
+        self.assertIn("backfill metric and threshold", self.skill)
+        self.assertIn("non-secret fixture plus a clean worktree", self.skill)
+        self.assertIn("explicitly reject force-merge of red CI", self.skill)
+        self.assertIn("standalone `Operational knowledge:` and `Reproducibility:` lines", self.skill)
         self.assertIn("复合门槛", self.readme)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    _ = unittest.main()

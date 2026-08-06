@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "kind": "protocol-isolated forward test",
+    "declared_allowed_inputs": [
+      "SKILL.md",
+      "examples/composite-trap-scenario.json"
+    ],
+    "declared_prohibited_inputs": [
+      "scripts/score_composite_trap.py",
+      "tests/test_composite_trap_score.py",
+      "prior forward-test outputs",
+      "evaluation reports"
+    ],
+    "filesystem_isolation": "not provided by the native subagent interface",
+    "assurance": "The agent was instructed to read only the allowed inputs. This manifest records protocol isolation and cannot prove a shared-worktree agent never accessed another file."
+  },
+  "inputs": {
+    "skill": {
+      "path": "SKILL.md",
+      "sha256": "a2b2ad71069f2641b6a0f1b5b5de16e88dc101c1abb6c9ab22ae9c0c44150ad3"
+    },
+    "scenario": {
+      "path": "examples/composite-trap-scenario.json",
+      "sha256": "cd2aad40f01da83593357eed7354e2ee2347ea09d7341b118158f343c5bb4e9a"
+    },
+    "scorer": {
+      "path": "scripts/score_composite_trap.py",
+      "sha256": "87b164665f700f83ddd3c38abb53d348a2c66194dbf271e29e3e26ee8c164ca3"
+    }
+  },
+  "runs": [
+    {
+      "id": "skill-v10",
+      "task_name": "/root/composite_trap_retest_v10",
+      "agent_type": "executor",
+      "fork_turns": "none",
+      "model_metadata": "not exposed by the native subagent interface",
+      "prompt": "Use the Skill to respond only to the raw read-only scenario. Do not inspect scorers, tests, saved outputs, manifests, diffs, evidence, Git history, or external resources. Do not edit files, run production actions, or assume project-specific tool commands. Return a concise engineering plan and evidence ledger that distinguishes observations, hypotheses, and proposals.",
+      "output": {
+        "path": "examples/composite-trap-v10-output.md",
+        "sha256": "d097f72feb41d4612277122b6582fcb1b41cb398b4bc60e0d09e6e4ef2994e99"
+      }
+    }
+  ],
+  "limitations": [
+    "This is one protocol-isolated response, not a statistical estimate of model-wide repair success or causal reasoning.",
+    "The lexical scorer checks an evidence floor and cannot establish implementation correctness or production safety.",
+    "The scorer was run only after the response was complete; its phrases were excluded from the agent's declared input boundary."
+  ]
+}

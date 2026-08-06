@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "kind": "protocol-isolated read-only causal-calibration forward test",
+    "declared_allowed_inputs": [
+      "SKILL.md",
+      "examples/causal-probe-fixture"
+    ],
+    "declared_prohibited_inputs": [
+      "all scorer and evaluator scripts",
+      "prior outputs, manifests, diffs, and evidence artifacts",
+      "Git history and external network access"
+    ],
+    "filesystem_isolation": "not provided by the native subagent interface",
+    "assurance": "The agent was instructed to read only the allowed inputs. This manifest records protocol isolation and cannot prove a shared-worktree agent never accessed another file.",
+    "pass_contract": "A read-only diagnosis must state Execution authority: read-only, mark an in-memory probe as in-memory-only, and end with the exact line Causal conclusion: unknown."
+  },
+  "inputs": {
+    "skill": {
+      "path": "SKILL.md",
+      "sha256": "a2b2ad71069f2641b6a0f1b5b5de16e88dc101c1abb6c9ab22ae9c0c44150ad3"
+    },
+    "scorer": {
+      "path": "scripts/score_causal_calibration.py",
+      "sha256": "315fabf65804ad891200a23b7fd442a62f802bda3317ebc85ccb49c9e2511989"
+    },
+    "fixture_dispatcher": {
+      "path": "examples/causal-probe-fixture/delivery_probe/dispatcher.py",
+      "sha256": "9103f962f30b4644d21b7a77cbe0d5438a63dbf859960394eb3779194597f85b"
+    },
+    "fixture_provider": {
+      "path": "examples/causal-probe-fixture/delivery_probe/provider.py",
+      "sha256": "19bb90445d2bb5f5c7a1380a1c3756f6bf4795f84f0de12166149b4ec3d88415"
+    },
+    "fixture_model": {
+      "path": "examples/causal-probe-fixture/delivery_probe/model.py",
+      "sha256": "3593e7b1c6c205fad4c26464500d89d9b48612873d9bdf00eeb52a83242f11de"
+    },
+    "fixture_dashboard": {
+      "path": "examples/causal-probe-fixture/delivery_probe/dashboard.py",
+      "sha256": "b1456f96de53a3898dba17c7523c1012703e4c36a09747dc6333c98e897a7b01"
+    },
+    "fixture_test": {
+      "path": "examples/causal-probe-fixture/tests/test_dispatcher.py",
+      "sha256": "7328e1ee37f71e675eaff10fc3258d5a975ca66750f8de57c098d55c65af3c7b"
+    },
+    "fixture_timeline": {
+      "path": "examples/causal-probe-fixture/release-timeline.md",
+      "sha256": "930dfd546528365d71b553af74208655e2c9ddc26644a2bf734415ff88247c35"
+    }
+  },
+  "run": {
+    "id": "skill-v10-read-only",
+    "task_name": "/root/causal_calibration_forward_v10",
+    "agent_type": "executor",
+    "fork_turns": "none",
+    "model_metadata": "not exposed by the native subagent interface",
+    "prompt": "Diagnose the duplicate-delivery fixture as a read-only task, inspect only the Skill and fixture, make no file edits, and include the Skill-required preflight and calibrated conclusion.",
+    "output": {
+      "path": "examples/causal-calibration-v10-output.md",
+      "sha256": "d1ef3d883b98f56ccdc9dfb5e0fd14ca9b145748a9ae9160734b9ba9694d911b"
+    }
+  },
+  "limitations": [
+    "This is one protocol-isolated response, not a statistical estimate of repair success or causal reasoning.",
+    "The deterministic scorer checks conclusion calibration, not implementation correctness or production safety.",
+    "The native subagent interface shares a worktree; this manifest records instruction-based protocol isolation, not filesystem isolation."
+  ]
+}

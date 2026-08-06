@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-evaluation",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Causal Execution Discipline",
+    "SKILL.md:Measuring Skill Effect",
+    "scripts/analyze_skill_effect.py:analyze_experiment",
+    "scripts/score_causal_calibration.py:score_output",
+    "references/effect-evaluation.md"
+  ],
+  "affected_callers": [
+    "README.md",
+    "examples/skill-effect-preregistration.json",
+    "tests/test_skill_effect_analysis.py",
+    "tests/test_skill_contract.py",
+    "scripts/score_composite_trap.py",
+    "tests/test_composite_trap_score.py",
+    "tests/test_causal_calibration.py",
+    "examples/causal-calibration-v10-run-manifest.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "A completed effect record cannot silently alter its scope, protocol, analysis gate, task plan, or stopping rule after preregistration.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_skill_effect_analysis.py -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Every completed task pair has the registered stratum, fixed repeat count, deterministic condition order, matching model/Harness, and blind hidden-repair outcome.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_skill_effect_analysis.py -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The Skill and README describe a bounded claim and prohibit treating an unrun protocol or local forward test as model-wide improvement evidence.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_skill_contract.py tests/test_composite_trap_score.py -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "Historical forward-test inputs remain verifiable against the Git revision actually used rather than current mutable Skill or scorer bytes.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_causal_probe_forward.py tests/test_composite_trap_score.py -v"
+    },
+    {
+      "id": "AC-5",
+      "condition": "A read-only Causal Full diagnosis, including one with an in-memory probe, ends with the exact unknown conclusion instead of an overconfident causal-owner label.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_causal_calibration.py tests/test_skill_contract.py -v"
+    }
+  ],
+  "invariants": [
+    "A planned or incomplete experiment is not evidence of a Skill effect.",
+    "A completed improvement claim is limited to the preregistered model, Harness, Skill revision, corpus, and hidden scorer.",
+    "Repeated runs of one task remain one clustered task for inference.",
+    "Historical forward-test evidence is verified against the recorded input revision.",
+    "A read-only counterfactual remains an unknown causal conclusion, even when observations or an in-memory probe support a candidate owner."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "immutable preregistration envelope",
+      "status": "applied",
+      "rationale": "The analyzer rejects any completed record whose envelope hash no longer matches scope, protocol, analysis, task plan, or stopping rule."
+    },
+    {
+      "name": "paired task-cluster inference",
+      "status": "applied",
+      "rationale": "The analyzer uses task-cluster bootstrap intervals and paired sign-flip randomization rather than treating repeated task attempts as independent."
+    },
+    {
+      "name": "anti-selection and order checks",
+      "status": "applied",
+      "rationale": "Completed records must cover every planned task and repeat, and each pair must follow the deterministic order derived from the frozen seed."
+    },
+    {
+      "name": "bounded reporting",
+      "status": "applied",
+      "rationale": "The template reports not_run without trials, and docs reserve improved only for a completed scoped experiment."
+    },
+    {
+      "name": "fresh composite forward test",
+      "status": "applied",
+      "rationale": "A new protocol-isolated agent response passed 15 of 15 compound delivery checks while its manifest records the limited isolation boundary."
+    },
+    {
+      "name": "causal-calibration terminal gate",
+      "status": "applied",
+      "rationale": "Fresh V5, V7, and V9 responses failed by upgrading unrun or in-memory-only evidence; the preflight gate, context-aware scorer, and fresh V10 response require explicit authority/status fields and the exact unknown terminal conclusion."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "SKILL.md defines the claim boundary, the analyzer owns deterministic eligibility and inference, and the reference owns procedural detail."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The analyzer and tests use only the Python standard library and existing package tooling."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "A reusable analyzer is justified because aggregate-effect claims need the same nontrivial validation and inference rules across future runs."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "The package stores only public fixture metadata and synthetic trial schema; it owns no application or personal data."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "The analyzer distinguishes malformed evidence, not_run, improved, inconclusive, and no_demonstrated_improvement; the calibration scorer rejects unrun, proposed, or read-only conclusions without the unknown terminal label."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The public Skill contract adds a conditional evidence protocol while preserving previous use when no aggregate-effect claim is made."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "This package change does not alter a running service or establish an operational resource budget."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The protocol requires hidden scorer blinding and records that native shared-worktree execution is weaker than container isolation."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The package change is one Level 2 scope with tests, independent review, an evidence artifact, and an atomic commit planned after full verification."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "The local Skill package has no deployable rollout, feature flag, or recovery operation."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No production schema, persisted representation, or backfill changes."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No runtime configuration or secret is read, written, or recorded."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No dependency or lockfile changes; pinned Git revisions are used only to preserve historical local evidence."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README, reference protocol, template, manifests, review, and evidence retain the execution and claim-boundary knowledge."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The template, deterministic seed derivation, hashes, standard-library analyzer, and committed tests reproduce protocol validation without external services."
+    }
+  },
+  "supporting_artifacts": [
+    {
+      "id": "effect-analyzer",
+      "kind": "evaluation_transcript",
+      "path": "scripts/analyze_skill_effect.py",
+      "sha256": "1f0ac26557d2ac14fe94755e50339f2d101a348f9e32f0874f5eb39c0dccb4d8",
+      "summary": "Standard-library parser, immutable-envelope validation, task-plan/order checks, clustered bootstrap, paired randomization, and scoped decision output."
+    },
+    {
+      "id": "effect-tests",
+      "kind": "evaluation_transcript",
+      "path": "tests/test_skill_effect_analysis.py",
+      "sha256": "c3967de854cbf808e7d28959f520f53c13aa941d74f664d5077033f6beed9903",
+      "summary": "Synthetic positive, null, inconclusive, malformed, clustered-repeat, immutable-envelope, and randomized-order tests."
+    },
+    {
+      "id": "effect-protocol-reference",
+      "kind": "evaluation_transcript",
+      "path": "references/effect-evaluation.md",
+      "sha256": "75acff0f60ab31b039e07c1a69018356d4f86d632f715b87d3984df4b8dd974c",
+      "summary": "Pre-registration, isolation, blind scoring, stopping, inference, interpretation, and retest procedure."
+    },
+    {
+      "id": "current-composite-evaluation",
+      "kind": "test_output",
+      "path": "examples/composite-trap-v10-evaluation.json",
+      "sha256": "aaf5ff8dc1cda0328e087a39a3837a62f54c766b2473b99e6b0a92adcb2d4775",
+      "summary": "Fresh current-Skill forward-test result: 15/15 compound evidence checks with current Skill, scenario, scorer, and output hashes, explicitly bounded to protocol effectiveness."
+    },
+    {
+      "id": "causal-calibration-v10-manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/causal-calibration-v10-run-manifest.json",
+      "sha256": "318998a51fcefffcae8bb7052e1a07bf6717b7a9a85221451ed60ba3c86d1926",
+      "summary": "Current-Skill input, scorer, and fixture hashes; allowed-input boundary; fresh read-only output; explicit preflight contract; and a non-effect claim boundary."
+    },
+    {
+      "id": "causal-calibration-v5-output",
+      "kind": "evaluation_transcript",
+      "path": "examples/causal-calibration-v5-output.md",
+      "sha256": "c4e9e30f924e6fe9fc9a7d853b71dbf1a2cd349561fd1af2f8d0e3503921faa5",
+      "summary": "Fresh pre-rule transcript that fails the terminal calibration contract."
+    },
+    {
+      "id": "causal-calibration-v7-output",
+      "kind": "evaluation_transcript",
+      "path": "examples/causal-calibration-v7-output.md",
+      "sha256": "15b4ec306a9959c681cad87bbaa30c9568c28f75affc14e4929fbcca88c38c6a",
+      "summary": "Fresh read-only transcript that incorrectly treats an in-memory probe as a root-cause fix; retained as a negative control."
+    },
+    {
+      "id": "causal-calibration-v9-output",
+      "kind": "evaluation_transcript",
+      "path": "examples/causal-calibration-v9-output.md",
+      "sha256": "594a30d249b3acc4e39305afaa398c8a48f8a33ab705ead4707814eb5d1f8d43",
+      "summary": "Fresh current-Skill negative control that names a likely owner and an in-memory result but incorrectly ends with root-cause fix; retained to prove the preflight rule addressed a real failure."
+    },
+    {
+      "id": "causal-calibration-v10-output",
+      "kind": "evaluation_transcript",
+      "path": "examples/causal-calibration-v10-output.md",
+      "sha256": "d1ef3d883b98f56ccdc9dfb5e0fd14ca9b145748a9ae9160734b9ba9694d911b",
+      "summary": "Fresh post-rule read-only transcript with explicit authority/status/diff gate and exact unknown conclusion."
+    },
+    {
+      "id": "causal-calibration-scorer",
+      "kind": "evaluation_transcript",
+      "path": "scripts/score_causal_calibration.py",
+      "sha256": "315fabf65804ad891200a23b7fd442a62f802bda3317ebc85ccb49c9e2511989",
+      "summary": "Standard-library terminal-label scorer for unrun, proposed, read-only, and in-memory-only counterfactual contracts."
+    },
+    {
+      "id": "causal-calibration-tests",
+      "kind": "evaluation_transcript",
+      "path": "tests/test_causal_calibration.py",
+      "sha256": "38ab7b2949e38e6b87ad31e862b74adb40ed79096e5fddcf0255189651d17cc6",
+      "summary": "V5/V7/V9 negative controls, V10 final-output and manifest-hash checks, and preflight terminal-calibration regressions."
+    },
+    {
+      "id": "effect-review",
+      "kind": "review_report",
+      "path": "examples/skill-effect-evaluation-review.json",
+      "sha256": "4d7e1dbb91a99563c2f4fab819f0793683fa54a377049953913f65e95bac7b58",
+      "summary": "Independent review findings, remediation, and approved final re-review for the frozen effect-evaluation and calibration package."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_skill_effect_analysis.py -v",
+      "status": "passed",
+      "result": "9 synthetic protocol, inference, clustering, mutation, and CLI-gate tests passed."
+    },
+    {
+      "command": "PYTHONPATH=scripts PYTHONDONTWRITEBYTECODE=1 basedpyright scripts/analyze_skill_effect.py tests/test_skill_effect_analysis.py scripts/score_composite_trap.py tests/test_composite_trap_score.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/score_composite_trap.py examples/composite-trap-v10-output.md",
+      "status": "passed",
+      "result": "The fresh protocol-isolated response scored 15/15 with no critical misses against the current scorer."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_skill_contract.py tests/test_causal_probe_forward.py tests/test_composite_trap_score.py -v",
+      "status": "passed",
+      "result": "31 Skill-contract, historical-provenance, and composite-score tests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_causal_calibration.py tests/test_skill_contract.py -v && PYTHONDONTWRITEBYTECODE=1 python3 scripts/score_causal_calibration.py examples/causal-calibration-v10-output.md --require-unknown",
+      "status": "passed",
+      "result": "V5, V7, and V9 negative controls fail the deterministic calibration contract; the hash-linked fresh V10 read-only transcript passes with explicit preflight fields and Causal conclusion: unknown."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the effect-measurement policy, analyzer and stub, template, reference, README, causal-calibration contract and artifacts, forward-test artifacts, historical input-revision repair, tests, review, and this evidence artifact together. Existing Skill use remains compatible because the protocol is required only for aggregate-effect claims.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: effect_evaluation_review",
+    "outcome": "approved",
+    "notes": "Independent final review approved evidence closure after hash/path checks and confirmation that no overall uplift claim is made without the registered 20-task paired hidden-repair experiment."
+  },
+  "remaining_risks": [
+    "No actual paired agent corpus has been collected, so this package change does not show a repair-success advantage or an overall model causal-capability improvement.",
+    "A completed result remains scoped to its registered model, Harness, Skill revision, corpus, and hidden scorer.",
+    "Native subagents are protocol-isolated only; strong causal claims require external worktree or container isolation and blind scoring."
+  ]
+}

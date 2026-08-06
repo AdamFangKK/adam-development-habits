@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "manifest": {
+    "path": "examples/composite-trap-v10-run-manifest.json",
+    "sha256": "74f99c77a447ac82518a790639d38b1da0490c270cef38ee0834345bbedfe8e4"
+  },
+  "output": {
+    "path": "examples/composite-trap-v10-output.md",
+    "sha256": "d097f72feb41d4612277122b6582fcb1b41cb398b4bc60e0d09e6e4ef2994e99"
+  },
+  "score": {
+    "value": 15,
+    "maximum": 15,
+    "critical_misses": [],
+    "passed": true
+  },
+  "conclusion": "The fresh protocol-isolated response met this scorer's compound-delivery evidence floor. This is a forward-test result, not a repair-success advantage, model-wide causal-capability result, or production-safety claim."
+}

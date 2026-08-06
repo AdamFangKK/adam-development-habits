@@ -104,6 +104,8 @@ Operational budget: <SLO/性能/资源/安全信号与响应，或 not applicabl
 
 在 Causal Full 模式中，还要记录从症状回溯到调用方、数据、配置或依赖的上游路径，以及相关的变更、发布或运行时间线。
 
+提交结论前先做权限前置检查：明确写出 `Execution authority`（只读或已授权的代码变更 worktree）和 `Counterfactual status`（未运行、仅内存、提议、阻塞或已执行）。仅在授权 worktree 中实际产生候选 diff，并有该 worktree 的前后命令/测试输出时，才能使用 `Causal conclusion: root-cause fix`；只读观察、内存探针、伪代码和预期结果一律保持 `unknown`。
+
 Git 历史和时间接近性只能提供候选线索。只有复现或隔离干预支持时，才可以把改动称为根因修复。证据不足时，优先增加可观测性、构建最小复现或采取可回滚的保护措施。在机器可读证据模式中，因果假设只能引用已声明的本地证据工件；校验器会检查其仓库相对路径和 SHA-256，防止悬空或被静默修改的引用。根因修复还必须引用测试、命令或 trace 的执行工件，不能只引用测试源码；CI 会重新生成并比对报告。
 
 [`examples/causal-execution-experiment.py`](./examples/causal-execution-experiment.py) 是一个可运行的支付重试案例：它先证明重复扣款存在于支付网关记录而非 UI，再通过稳定幂等键的隔离干预验证上游修复点。配套的 [证据工件](./examples/causal-execution-experiment.json) 展示了机器可读的结论格式。
@@ -155,7 +157,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py \
 
 每项都以实际的 diff、提交 ID、CI、迁移演练、配置校验、扫描、文档审查或运行指标作为证据。不要为了满足规范虚构分支、PR、发布或演练；外部执行权不在当前任务时，应交付完整计划和证据而非擅自执行。
 
-当一个 Level 2 请求把原因不明的故障与三类以上交付动作混在一起时，Skill 会启用“复合门槛”：逐项标记立即缓解、拆分后续或等待证据，不能让紧急修复把 API、迁移、Secret、依赖和发布塞进同一个 PR。它要求支付未知结果保留 pending 并对账、迁移分阶段、Flag 先关闭再灰度、CI 不可绕过、Secret/供应链/运行手册/最小非敏感夹具都有明确证据。
+当一个 Level 2 请求把原因不明的故障与三类以上交付动作混在一起时，Skill 会启用“复合门槛”：逐项标记立即缓解、拆分后续或等待证据，不能让紧急修复把 API、迁移、Secret、依赖和发布塞进同一个 PR。它要求支付未知结果保留 pending 并对账、迁移分阶段、Flag 先关闭再灰度、CI 不可绕过、Secret/供应链/运行手册/最小非敏感夹具都有明确证据。迁移计划还必须给出实际的停止指标与阈值（或明确阻塞），本地复现必须落到夹具、干净环境及已发现的启动/检查/测试工具，且必须明确拒绝红 CI 的 force-merge；账本中必须单列运行知识和可复现性决策。
 
 当 Skill 本身的 Level 2 更新同时跨越三类以上治理边界时，包内自测还会执行复合陷阱前向测试：测试 Agent 被明确限制为只读取原始场景和 Skill，评分规则与危险变异测试独立保存，避免“看答案作答”。提示词、允许输入、Skill/评分器哈希和运行限制都会存证；没有外部沙箱时，这只能称为“协议隔离”，不能夸大为文件系统级隔离。
 
@@ -180,6 +182,19 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/replay_external_click.py \
 ```
 
 该协议证明的是“这个测试结构能抓住这一类浅层修复”，不是模型修复成功率、一般因果能力、Windows 行为或生产安全的统计证明。
+
+### Skill 效果的统计检验
+
+前述案例是机制和回归保障，不是“模型整体提升”的证据。要测量 Skill 是否实际提升修复成功率，本仓库提供了可预注册的成对实验分析器：[模板](./examples/skill-effect-preregistration.json)、[分析器](./scripts/analyze_skill_effect.py) 和[完整协议](./references/effect-evaluation.md)。它固定模型、Harness、Skill 修订、任务语料和隐藏评分器；每个任务分别运行无 Skill 与有 Skill 的条件，随机化先后顺序，隐藏评分器不看条件标签。
+
+主指标是隐藏修复契约的通过率，重复运行按任务聚类，不能把同一个任务的多次尝试伪装成多个样本。分析器用分层 task-cluster bootstrap 给出 95% 区间，用配对 sign-flip 随机化检验判断提升；只有预注册任务数达标、下界高于实际收益门槛且随机化检验通过时，才报告 `improved`。否则只报告 `inconclusive` 或 `no_demonstrated_improvement`。当前提交的是**尚未采样的协议**，不宣称已有模型修复成功率或整体因果能力提升。
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \
+  examples/skill-effect-preregistration.json
+```
+
+原生 Codex 子代理共享文件系统时仅能称为协议隔离；要让该结论更强，需要独立 worktree 或容器、独立保存的 prompt/output 和与条件标签隔离的评分器。即使满足这些条件，结论也只适用于预注册范围，不能外推到所有模型、仓库或生产系统。
 
 ### 多模块因果探针
 

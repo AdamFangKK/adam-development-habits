@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -42,6 +43,22 @@ def require_list(value: object, name: str) -> list[object]:
     return cast(list[object], value)
 
 
+def artifact_bytes(item: dict[str, object]) -> bytes:
+    path = str(item["path"])
+    revision = item.get("git_revision")
+    if revision is None:
+        return (ROOT / path).read_bytes()
+    result = subprocess.run(
+        ["git", "show", f"{revision}:{path}"],
+        cwd=ROOT,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise AssertionError(result.stderr.decode("utf-8", errors="replace"))
+    return result.stdout
+
+
 class CausalProbeForwardTests(unittest.TestCase):
     def test_pristine_fixture_reproduces_the_timeout_failure(self) -> None:
         report = run_suite(FIXTURE, FIXTURE / "tests", "test_*.py")
@@ -70,8 +87,7 @@ class CausalProbeForwardTests(unittest.TestCase):
 
         for reference in references:
             item = require_object(reference, "reference")
-            path = ROOT / str(item["path"])
-            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), item["sha256"])
+            self.assertEqual(hashlib.sha256(artifact_bytes(item)).hexdigest(), item["sha256"])
 
         verifier = load_object(VERIFIER)
         for candidate in require_list(verifier["candidates"], "candidates"):

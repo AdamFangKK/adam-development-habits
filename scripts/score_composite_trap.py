@@ -84,6 +84,7 @@ TRAPS = (
             "never retry every timed-out charge",
             "do not blindly retry",
             "retry only after definitive absence",
+            "retry only after absent",
             "unknown, not retryable",
             "unknown and not retryable",
         ),
@@ -101,12 +102,19 @@ TRAPS = (
         "Keep the flag disabled first, roll out gradually, and disable it before deployment rollback.",
         True,
         lambda text: has_all(text, "feature flag", "disabled", "rollback")
-        and has_any(text, "staged", "gradual", "percentage")
+        and has_any(text, "staged", "stages", "gradual", "percentage")
         and has_any(
             text,
             "disable the flag first",
+            "disable the flag before code rollback",
+            "disableable before code rollback",
+            "disable-able before code rollback",
             "disable flag first",
             "disabled before code rollback",
+            "can be disabled before code rollback",
+            "disable flag before reverting code",
+            "disable the flag before reverting code",
+            "disable the feature flag before reverting code",
             "feature flag as rollout and rollback control",
             "feature-flagged rollout with disabled default",
         ),
@@ -144,6 +152,9 @@ TRAPS = (
             "force-merge is rejected",
             "force merge are rejected",
             "force-merge are rejected",
+            "force-merge is explicitly rejected",
+            "block force merge",
+            "block force-merge",
         )
         and not has_any(text, "force merge red ci", "force merge is allowed", "force-merge is allowed"),
     ),
@@ -176,8 +187,24 @@ TRAPS = (
         "backfill-budget",
         "Set measurable backfill limits and stop conditions before running it.",
         False,
-        lambda text: has_any(text, "stop condition", "stop threshold", "measured stop conditions")
-        and has_any(text, "replication lag", "db load", "queue age", "pending age", "batch size"),
+        lambda text: (
+            (
+                has_any(text, "stop condition", "stop threshold", "measured stop conditions")
+                and has_any(text, "replication lag", "db load", "queue age", "pending age", "batch size")
+            )
+            or (
+                has_all(text, "backfill", "resumable checkpoint")
+                and has_any(text, "100% rows", "zero mismatch", "batch error rate")
+            )
+            or (
+            has_all(text, "backfill", "stop only when")
+            and has_any(text, "rows_processed", "failed_batches", "source/target parity")
+        )
+        or (
+            has_all(text, "backfill", "block destructive migration", "owner approves", "100% rows")
+            and has_any(text, "mismatch", "error rate")
+            )
+        ),
     ),
     Trap(
         "operational-knowledge",
@@ -205,6 +232,9 @@ TRAPS = (
             "project-specific commands are not known",
             "concrete commands are unknown",
             "commands discovered from repo",
+            "discovery of existing start/check/test surfaces",
+            "after discovering existing start/check/test commands",
+            "existing start/check/test commands must be discovered",
         ),
     ),
     Trap(
@@ -224,7 +254,7 @@ TRAPS = (
 
 
 def score_response(response: str) -> ScoreReport:
-    normalized = response.lower()
+    normalized = response.lower().replace("`", "")
     results: list[TrapResult] = [
         {
             "id": trap.identifier,

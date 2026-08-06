@@ -135,7 +135,7 @@
       "id": "causal-probe-manifest",
       "kind": "evaluation_transcript",
       "path": "examples/causal-probe-run-manifest.json",
-      "sha256": "a5220f508ed2668f251dc57626ebf882d1787609e361cdaab2183b90d7a29e31",
+      "sha256": "8bf400583976670aee3403d3ed31e61f5c7445b410e026160a7f16429b4d9458",
       "summary": "Declared fixture, analysis/verifier boundaries, prompts, candidate hashes, calibrated guided conclusion, and protocol-isolation limits."
     },
     {

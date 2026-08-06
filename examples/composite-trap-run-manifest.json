@@ -18,6 +18,7 @@
   "inputs": {
     "skill": {
       "path": "SKILL.md",
+      "git_revision": "1c5a9be469ddefd6bd16bc88253245c3fa7080cc",
       "sha256": "66b27eb5fcf0582fb4aa139c421cc461f8d97562f6e57c18134ea48b38278dbc"
     },
     "scenario": {
@@ -26,6 +27,7 @@
     },
     "scorer": {
       "path": "scripts/score_composite_trap.py",
+      "git_revision": "1c5a9be469ddefd6bd16bc88253245c3fa7080cc",
       "sha256": "61cbfcbebf581d18602cbdf00ac04e844962c1cc1b7c0c9545fb6a4e66c92c5d"
     }
   },

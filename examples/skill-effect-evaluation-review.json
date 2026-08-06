@@ -1,0 +1,38 @@
+{
+  "reviewer": "Codex native code-reviewer: effect_evaluation_review",
+  "initial_outcome": "changes_requested",
+  "initial_findings": [
+    {
+      "severity": "high",
+      "issue": "The preregistration digest covered protocol fields but not the analysis gate, task plan, stopping rule, or fixed model/Harness scope."
+    },
+    {
+      "severity": "high",
+      "issue": "The task order and stopping rule were prose commitments rather than verifier-enforced data constraints."
+    },
+    {
+      "severity": "medium",
+      "issue": "The Level 2 package update lacked its own machine-evidence artifact."
+    },
+    {
+      "severity": "low",
+      "issue": "The causal-quality score documentation excluded 1.0 while the analyzer accepted it."
+    }
+  ],
+  "remediation": [
+    "Hash the immutable envelope containing scope, protocol, analysis, task plan, and stopping rule.",
+    "Require planned task IDs and strata, deterministic seeded condition order, all planned pairs, and a no-early-stop fixed-pair rule.",
+    "Document the inclusive causal-quality range and add a Level 2 evidence artifact with hash-linked validation.",
+    "Preserve historical forward-test inputs by Git revision instead of substituting current Skill or scorer bytes."
+  ],
+  "re_review": {
+    "outcome": "approved",
+    "reviewer": "Codex native causal-probe-guided reviewer: causal_probe_guided_v3",
+    "verification": [
+      "Declared paths and SHA-256 digests in .adam/evidence/skill-effect-evaluation.json and examples/causal-calibration-v10-run-manifest.json match the current files.",
+      "V9 is retained as the overconfident in-memory negative control and V10 is calibrated to Causal conclusion: unknown.",
+      "The package makes no overall uplift claim; no 20-task paired hidden-repair experiment has been completed."
+    ],
+    "notes": "Approved for evidence closure. The result remains scoped to protocol and calibration behavior, not model-wide causal capability or repair success."
+  }
+}
