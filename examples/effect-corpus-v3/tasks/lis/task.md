@@ -1,0 +1,1 @@
+Repair the implementation of `lis` in `buggy.py`. Preserve the public function contract, do not edit `public_cases.json`, and keep the change limited to the implementation. Run the supplied public test command before finishing.

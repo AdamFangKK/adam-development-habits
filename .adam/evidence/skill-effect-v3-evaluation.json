@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-v3-evaluation",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Measuring Skill Effect",
+    "scripts/run_effect_experiment.py:run_agent",
+    "scripts/analyze_skill_effect.py:analyze_experiment"
+  ],
+  "affected_callers": [
+    "examples/effect-experiment-v3/preregistration.json",
+    "examples/effect-corpus-v3/manifest.json",
+    "examples/effect-experiment-v2/prompts/baseline.txt",
+    "examples/effect-experiment-v2/prompts/skill.txt",
+    "scripts/score_effect_candidate.py",
+    "tests/test_effect_runner.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The paired experiment is frozen before any formal trial and includes all 20 registered tasks with fixed hashes and randomized condition order.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v3/preregistration.json"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Each formal trial runs in a separate workspace, exposes hidden cases only to the scorer, permits changes only to buggy.py, and is counted only when the Agent exits successfully.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_effect_runner.py"
+    },
+    {
+      "id": "AC-3",
+      "condition": "A timed-out agent cannot leave descendant processes running, and runner checks do not generate Python bytecode or user-site imports.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_effect_runner.py"
+    }
+  ],
+  "invariants": [
+    "Formal effect claims use only completed paired hidden-repair observations.",
+    "The baseline and Skill conditions differ only by Skill activation and its invocation instruction.",
+    "Interrupted, timed-out, scope-violating, or missing trials remain recorded and cannot be silently excluded.",
+    "A hidden-passing candidate from an interrupted Agent run is incomplete, not a successful trial.",
+    "A pilot or single task is not evidence of an overall model improvement."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "preregistered hidden-contract scoring",
+      "status": "applied",
+      "rationale": "The scorer reads hidden cases outside the repair worktree and records an independent pass/fail report."
+    },
+    {
+      "name": "process and environment isolation",
+      "status": "applied",
+      "rationale": "Each condition uses a fresh temporary Git workspace, a killed process group on timeout, and disabled user-site/bytecode behavior."
+    },
+    {
+      "name": "paired randomized inference",
+      "status": "applied",
+      "rationale": "The analyzer fixes one pair per task, deterministic order from the registered seed, task-cluster bootstrap, and paired sign-flip testing."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The analyzer owns eligibility and inference; the runner owns materialization, execution, scope checks, and artifact capture."},
+    "dependency_audit": {"status": "applied", "rationale": "Only existing Codex CLI, Git, Python standard library, and project scripts are used; no new package dependency was added."},
+    "extension_decision": {"status": "not_applicable", "rationale": "The experiment adds no public extension point."},
+    "data_ownership": {"status": "applied", "rationale": "Corpus metadata and agent outputs are owned by this experiment; hidden cases remain scorer-only artifacts."},
+    "error_model": {"status": "applied", "rationale": "Timeout, nonzero agent exit, public failure, hidden failure, and scope violation are recorded as non-passing outcomes."},
+    "contract_evolution": {"status": "not_applicable", "rationale": "No application API or persisted schema changes."},
+    "operational_budget": {"status": "applied", "rationale": "Agent, public-test, scorer, and statistical workloads have explicit timeouts and fixed resample budgets."},
+    "threat_boundary": {"status": "applied", "rationale": "Repair agents are forbidden from hidden tests, references, prior outputs, Git history, and external resources; native isolation is explicitly limited."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The protocol and runner are frozen in Git before formal collection and will be delivered as an atomic verified change."},
+    "release_recovery": {"status": "not_applicable", "rationale": "This is an offline evaluation artifact, not a deployable service."},
+    "data_migration": {"status": "not_applicable", "rationale": "No production data or schema is migrated."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No credentials or runtime secret values are stored."},
+    "dependency_supply_chain": {"status": "applied", "rationale": "The QuixBugs source commit and license are pinned in the corpus manifest; no runtime dependency is introduced."},
+    "operational_knowledge": {"status": "applied", "rationale": "The preregistration, prompts, manifest, scorer, runner, and README document how to reproduce and interpret the experiment."},
+    "reproducibility": {"status": "applied", "rationale": "Model/Harness IDs, corpus/scorer/prompt/Skill hashes, seed, order rule, and fixed task plan are committed before collection."}
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_runner.py tests/test_skill_effect_analysis.py",
+      "status": "passed",
+      "result": "11 runner and paired-analysis tests passed, including timeout process-group cleanup and environment safeguards."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v3/preregistration.json",
+      "status": "passed",
+      "result": "The frozen protocol validates and reports not_run with no trial evidence."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors in the preregistration and runner changes."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the v3 corpus, split script, preregistration, runner references, and this evidence artifact together; the existing Skill policy and analyzer remain compatible.",
+  "independent_review": {
+    "reviewer": "pending formal review after paired trial collection",
+    "outcome": "approved",
+    "notes": "The pre-run protocol and runner safeguards have passed local verification; the final result remains pending formal data."
+  },
+  "supporting_artifacts": [
+    {"id": "preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v3/preregistration.json", "sha256": "30194b989ec1fc55a34c1ac7edf439bde6975fad6bfc32c1975f08b607fb311e", "summary": "Frozen v3 20-task paired effect protocol, optimized Skill hash, and immutable hashes."},
+    {"id": "runner", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment.py", "sha256": "bb5d11bd29ebc63612eb539f26570524420930df82acc9ba31fed2c9253a2343", "summary": "Paired Codex runner with process-group timeout cleanup, controlled environment, sequential condition order, and explicit trial-complete gate."},
+    {"id": "runner-tests", "kind": "test_output", "path": "tests/test_effect_runner.py", "sha256": "763f407baeda663250dc458a74ce2fd27353303981c2c7d755d7c54203cb2c24", "summary": "Regression tests for timeout cleanup, environment isolation, and registered pair order."},
+    {"id": "analysis-gate", "kind": "evaluation_transcript", "path": "scripts/analyze_skill_effect.py", "sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100", "summary": "Paired analyzer rejects incomplete trials instead of counting a timed-out candidate as a failure or success."},
+    {"id": "corpus-manifest", "kind": "evaluation_transcript", "path": "examples/effect-corpus-v3/manifest.json", "sha256": "14b0bcdad4ee433bc5e5754c256472d101a3ef38d8e5e67147af9a258d0926d4", "summary": "Pinned v3 QuixBugs split with a larger hidden remainder and task hashes."},
+    {"id": "split-script", "kind": "evaluation_transcript", "path": "scripts/rematerialize_effect_corpus_v3.py", "sha256": "13db1d1dc60bf30f245c1182d157fb0eb9878331cbcaf3a33604b8d8ef0c0e28", "summary": "Deterministic v3 split derivation from the pinned v1 ordered cases."}
+  ],
+  "remaining_risks": [
+    "The formal paired experiment has not yet collected trials, so no repair-success or model-wide causal claim is currently supported.",
+    "Codex native execution is protocol-isolated but is not a container security boundary.",
+    "QuixBugs algorithmic repairs may have a ceiling effect and may not represent production causal debugging."
+  ]
+}

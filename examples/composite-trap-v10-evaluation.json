@@ -2,7 +2,7 @@
   "schema_version": 1,
   "manifest": {
     "path": "examples/composite-trap-v10-run-manifest.json",
-    "sha256": "74f99c77a447ac82518a790639d38b1da0490c270cef38ee0834345bbedfe8e4"
+    "sha256": "83dbfa80c1a6c6c8e99d3adbf0e9fd84bc9873b150f7fa77ea556b8f1c8d4d27"
   },
   "output": {
     "path": "examples/composite-trap-v10-output.md",

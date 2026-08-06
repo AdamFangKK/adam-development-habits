@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "experiment_id": "causal-skill-effect-v3",
+  "status": "planned",
+  "scope": {
+    "claim": "For a fixed Codex model and Harness on a held-out repair corpus, enabling Adam's Development Habits improves hidden repair success by a practical margin.",
+    "model_id": "record-before-execution",
+    "harness_id": "record-before-execution",
+    "skill_revision_sha256": "cba50b3de60272added8b846ea08dabd95a439052e51e70743fec86b95a861f9"
+  },
+  "preregistration": {
+    "git_commit": "pending",
+    "recorded_before_first_trial": true,
+    "protocol_sha256": "6e6ab990d1047940a7d1eae859ce25f5c2433ae8c2c3116d77af2e28387cdec7",
+    "envelope_sha256": "f1d39ff6d5710392eb9faf895b1e4c8fd085322a156db38a11cf59971539b491"
+  },
+  "protocol": {
+    "corpus_manifest_sha256": "14b0bcdad4ee433bc5e5754c256472d101a3ef38d8e5e67147af9a258d0926d4",
+    "hidden_scorer_sha256": "9dcd72a5d99b22aecf46a3496632a5e15e306a5c93c247620a5cdf60cf22aaaf",
+    "baseline_prompt_sha256": "4c2c1892adcc633a4f53c79ae67a8709344d3d98cfe18cff0068a97e5f05d8d3",
+    "skill_prompt_sha256": "3c4866d1197ace1e64612934271d12f6ae1fe7bb70b70720414f5d5d148958a6",
+    "pairing": "same task, randomized condition order",
+    "hidden_scorer_blind_to_condition": true,
+    "runner_sha256": "bb5d11bd29ebc63612eb539f26570524420930df82acc9ba31fed2c9253a2343",
+    "split_derivation_script_sha256": "13db1d1dc60bf30f245c1182d157fb0eb9878331cbcaf3a33604b8d8ef0c0e28"
+  },
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "permutation_resamples": 10000,
+    "random_seed": 20260806,
+    "minimum_effect": 0.05,
+    "minimum_distinct_tasks": 20,
+    "stratum_weights": {
+      "single-module": 0.4,
+      "cross-module": 0.4,
+      "integration": 0.2
+    }
+  },
+  "task_plan": {
+    "tasks": [
+      {"task_id": "bitcount", "stratum": "single-module"},
+      {"task_id": "gcd", "stratum": "single-module"},
+      {"task_id": "is_valid_parenthesization", "stratum": "single-module"},
+      {"task_id": "lcs_length", "stratum": "single-module"},
+      {"task_id": "lis", "stratum": "single-module"},
+      {"task_id": "max_sublist_sum", "stratum": "single-module"},
+      {"task_id": "next_palindrome", "stratum": "single-module"},
+      {"task_id": "possible_change", "stratum": "single-module"},
+      {"task_id": "bucketsort", "stratum": "cross-module"},
+      {"task_id": "find_first_in_sorted", "stratum": "cross-module"},
+      {"task_id": "find_in_sorted", "stratum": "cross-module"},
+      {"task_id": "flatten", "stratum": "cross-module"},
+      {"task_id": "get_factors", "stratum": "cross-module"},
+      {"task_id": "hanoi", "stratum": "cross-module"},
+      {"task_id": "kth", "stratum": "cross-module"},
+      {"task_id": "longest_common_subsequence", "stratum": "cross-module"},
+      {"task_id": "kheapsort", "stratum": "integration"},
+      {"task_id": "knapsack", "stratum": "integration"},
+      {"task_id": "levenshtein", "stratum": "integration"},
+      {"task_id": "mergesort", "stratum": "integration"}
+    ]
+  },
+  "stopping_rule": {
+    "kind": "fixed_complete_pairs",
+    "pairs_per_task": 1,
+    "early_stop": "not allowed"
+  },
+  "trials": []
+}

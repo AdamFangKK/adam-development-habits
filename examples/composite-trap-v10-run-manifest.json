@@ -3,7 +3,7 @@
   "protocol": {
     "kind": "protocol-isolated forward test",
     "declared_allowed_inputs": [
-      "SKILL.md",
+      "examples/skill-snapshots/SKILL-v10.md",
       "examples/composite-trap-scenario.json"
     ],
     "declared_prohibited_inputs": [
@@ -17,7 +17,7 @@
   },
   "inputs": {
     "skill": {
-      "path": "SKILL.md",
+      "path": "examples/skill-snapshots/SKILL-v10.md",
       "sha256": "a2b2ad71069f2641b6a0f1b5b5de16e88dc101c1abb6c9ab22ae9c0c44150ad3"
     },
     "scenario": {
@@ -36,7 +36,7 @@
       "agent_type": "executor",
       "fork_turns": "none",
       "model_metadata": "not exposed by the native subagent interface",
-      "prompt": "Use the Skill to respond only to the raw read-only scenario. Do not inspect scorers, tests, saved outputs, manifests, diffs, evidence, Git history, or external resources. Do not edit files, run production actions, or assume project-specific tool commands. Return a concise engineering plan and evidence ledger that distinguishes observations, hypotheses, and proposals.",
+      "prompt": "Use the pinned historical Skill snapshot to respond only to the raw read-only scenario. Do not inspect scorers, tests, saved outputs, manifests, diffs, evidence, Git history, or external resources. Do not edit files, run production actions, or assume project-specific tool commands. Return a concise engineering plan and evidence ledger that distinguishes observations, hypotheses, and proposals.",
       "output": {
         "path": "examples/composite-trap-v10-output.md",
         "sha256": "d097f72feb41d4612277122b6582fcb1b41cb398b4bc60e0d09e6e4ef2994e99"

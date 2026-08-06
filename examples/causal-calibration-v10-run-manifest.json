@@ -3,7 +3,7 @@
   "protocol": {
     "kind": "protocol-isolated read-only causal-calibration forward test",
     "declared_allowed_inputs": [
-      "SKILL.md",
+      "examples/skill-snapshots/SKILL-v10.md",
       "examples/causal-probe-fixture"
     ],
     "declared_prohibited_inputs": [
@@ -17,7 +17,7 @@
   },
   "inputs": {
     "skill": {
-      "path": "SKILL.md",
+      "path": "examples/skill-snapshots/SKILL-v10.md",
       "sha256": "a2b2ad71069f2641b6a0f1b5b5de16e88dc101c1abb6c9ab22ae9c0c44150ad3"
     },
     "scorer": {
@@ -55,7 +55,7 @@
     "agent_type": "executor",
     "fork_turns": "none",
     "model_metadata": "not exposed by the native subagent interface",
-    "prompt": "Diagnose the duplicate-delivery fixture as a read-only task, inspect only the Skill and fixture, make no file edits, and include the Skill-required preflight and calibrated conclusion.",
+    "prompt": "Diagnose the duplicate-delivery fixture as a read-only task, inspect only the pinned historical Skill snapshot and fixture, make no file edits, and include the Skill-required preflight and calibrated conclusion.",
     "output": {
       "path": "examples/causal-calibration-v10-output.md",
       "sha256": "d1ef3d883b98f56ccdc9dfb5e0fd14ca9b145748a9ae9160734b9ba9694d911b"
