@@ -187,6 +187,8 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/replay_external_click.py \
 
 前述案例是机制和回归保障，不是“模型整体提升”的证据。要测量 Skill 是否实际提升修复成功率，本仓库提供了可预注册的成对实验分析器：[模板](./examples/skill-effect-preregistration.json)、[分析器](./scripts/analyze_skill_effect.py) 和[完整协议](./references/effect-evaluation.md)。它固定模型、Harness、Skill 修订、任务语料和隐藏评分器；每个任务分别运行无 Skill 与有 Skill 的条件，随机化先后顺序，隐藏评分器不看条件标签。
 
+当任务给出超时、延迟、内存、调用次数或成本预算时，公开用例通过仍不是完成证据。Skill 要求检查可见最大输入、估算最坏资源复杂度，并运行一个不越过声明契约的确定性边界探针；如果契约没有安全上界，只能记录预算未验证和剩余风险，不能把隐藏规模当作已知事实。
+
 主指标是隐藏修复契约的通过率，重复运行按任务聚类，不能把同一个任务的多次尝试伪装成多个样本。分析器用分层 task-cluster bootstrap 给出 95% 区间，用配对 sign-flip 随机化检验判断提升；只有预注册任务数达标、下界高于实际收益门槛且随机化检验通过时，才报告 `improved`。否则只报告 `inconclusive` 或 `no_demonstrated_improvement`。当前提交的是**尚未采样的协议**，不宣称已有模型修复成功率或整体因果能力提升。
 
 ```bash

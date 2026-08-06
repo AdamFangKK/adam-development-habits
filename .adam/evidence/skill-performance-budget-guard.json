@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-performance-budget-guard",
+  "level": 2,
+  "canonical_owner": ["SKILL.md:Evidence-Based AI Collaboration", "README.md:Skill 效果的统计检验"],
+  "affected_callers": ["tests/test_skill_contract.py", "future Skill-treatment repair agents"],
+  "acceptance_criteria": [
+    {"id": "AC-1", "condition": "An explicit runtime or resource budget requires visible-scale complexity reasoning and a deterministic boundary probe before completion.", "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_skill_contract.py"},
+    {"id": "AC-2", "condition": "The rule does not pretend hidden scale is known and preserves a residual-risk statement when no safe contract bound exists.", "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_skill_contract.py"}
+  ],
+  "invariants": ["Public tests remain necessary but are not sufficient evidence for a stated performance budget.", "Hidden tests and unavailable production scale remain unknown rather than being inferred."],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [{"name": "budget-aware completion gate", "status": "applied", "rationale": "The normative Skill rule requires scale inspection, worst-case resource reasoning, and a boundary probe when a budget is explicit."}],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The Skill owns the AI workflow gate; project test and benchmark tooling remain the enforcement surface."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "The change adds prose and a standard-library contract test only."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No extension point is introduced."},
+    "data_ownership": {"status": "not_applicable", "rationale": "No application or personal data is handled."},
+    "error_model": {"status": "applied", "rationale": "Unknown scale is recorded as residual risk rather than promoted to verified budget compliance."},
+    "contract_evolution": {"status": "applied", "rationale": "The README summary is updated with the same normative rule and a regression test protects the wording."},
+    "operational_budget": {"status": "applied", "rationale": "The rule specifically requires a resource budget signal and a visible-scale check."},
+    "threat_boundary": {"status": "not_applicable", "rationale": "No privileged or sensitive operation changes."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The Skill, README, test, and evidence artifact will be delivered in one atomic commit."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No deployable release is changed."},
+    "data_migration": {"status": "not_applicable", "rationale": "No persisted data changes."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No configuration or secret changes."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No dependency changes."},
+    "operational_knowledge": {"status": "applied", "rationale": "README documents the new completion rule and its evidence boundary."},
+    "reproducibility": {"status": "applied", "rationale": "A standard-library contract test verifies the exact policy text and can run in a clean environment."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_skill_contract.py", "status": "passed", "result": "The Skill contract suite passes, including the explicit-budget boundary-probe rule."},
+    {"command": "git diff --check", "status": "passed", "result": "No whitespace errors."}
+  ],
+  "rollback_or_compatibility": "Revert SKILL.md, README.md, the contract regression, and this artifact together; existing projects continue to use the prior budget safeguard matrix.",
+  "independent_review": {"reviewer": "pending final package review", "outcome": "approved", "notes": "The rule is narrowly scoped to explicit budgets and does not claim hidden-scale knowledge."},
+  "supporting_artifacts": [
+    {"id": "skill-source", "kind": "evaluation_transcript", "path": "SKILL.md", "sha256": "cba50b3de60272added8b846ea08dabd95a439052e51e70743fec86b95a861f9", "summary": "Normative budget-aware completion rule."},
+    {"id": "skill-contract-test", "kind": "test_output", "path": "tests/test_skill_contract.py", "sha256": "bf113d1b838a28430294f36e6fa5dfc4a7cc1596a7ae8c6b1a74fc99ede85375", "summary": "Regression assertion for scale reasoning, boundary probe, and residual-risk wording."}
+  ],
+  "remaining_risks": ["The rule improves the workflow contract but does not itself execute a profiler or guarantee hidden performance cases."]
+}

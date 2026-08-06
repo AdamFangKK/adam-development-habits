@@ -88,6 +88,12 @@ class SkillContractTests(unittest.TestCase):
             with self.subTest(situation=situation):
                 self.assertIn(situation, self.skill)
 
+    def test_explicit_budgets_require_visible_scale_and_boundary_probe(self) -> None:
+        self.assertIn("treat a passing public example as necessary but insufficient", self.skill)
+        self.assertIn("estimate the changed path's worst-case complexity", self.skill)
+        self.assertIn("run a deterministic boundary probe", self.skill)
+        self.assertIn("hidden scale remains a residual risk", self.skill)
+
     def test_delivery_matrix_covers_every_requested_practice(self) -> None:
         for practice in (
             "| Atomic Git change and PR |",
