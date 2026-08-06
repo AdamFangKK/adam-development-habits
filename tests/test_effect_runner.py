@@ -35,7 +35,7 @@ class EffectRunnerTests(unittest.TestCase):
         def fake_execute_condition(**kwargs: object) -> dict[str, object]:
             condition = str(kwargs["condition"])
             calls.append(condition)
-            return {"condition": condition, "hidden_repair_pass": True, "scope_ok": True}
+            return {"condition": condition, "trial_complete": True, "hidden_repair_pass": True, "scope_ok": True}
 
         with patch("run_effect_experiment.execute_condition", side_effect=fake_execute_condition):
             trials = execute_task_pair(

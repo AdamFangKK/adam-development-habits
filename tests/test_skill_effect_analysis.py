@@ -86,6 +86,7 @@ def make_completed_experiment(*, skill_repair_pass: bool, repeated_pairs: int = 
                         "replicate_index": replicate_index,
                         "model_id": "fixed-model",
                         "harness_id": "fixed-harness",
+                        "trial_complete": True,
                         "hidden_repair_pass": skill_repair_pass if first_is_skill else False,
                     },
                     {
@@ -97,6 +98,7 @@ def make_completed_experiment(*, skill_repair_pass: bool, repeated_pairs: int = 
                         "replicate_index": replicate_index,
                         "model_id": "fixed-model",
                         "harness_id": "fixed-harness",
+                        "trial_complete": True,
                         "hidden_repair_pass": False if first_is_skill else skill_repair_pass,
                     },
                 ]
@@ -157,6 +159,13 @@ class SkillEffectAnalysisTests(unittest.TestCase):
         trials = cast(list[dict[str, object]], experiment["trials"])
         _ = trials.pop()
         with self.assertRaisesRegex(ExperimentError, "exactly one baseline and one skill"):
+            _ = analyze_experiment(experiment)
+
+    def test_incomplete_agent_trial_is_rejected_instead_of_counted_as_a_failure(self) -> None:
+        experiment = make_completed_experiment(skill_repair_pass=True)
+        trials = cast(list[dict[str, object]], experiment["trials"])
+        trials[0] = {**trials[0], "trial_complete": False, "hidden_repair_pass": True}
+        with self.assertRaisesRegex(ExperimentError, "is incomplete and cannot be analyzed"):
             _ = analyze_experiment(experiment)
 
     def test_missing_stratum_and_nonrandomized_condition_order_are_rejected(self) -> None:

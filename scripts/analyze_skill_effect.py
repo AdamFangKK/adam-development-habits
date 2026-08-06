@@ -346,6 +346,8 @@ def parse_pair_observations(
         stratum = require_text(trial.get("stratum"), f"trials[{index}].stratum")
         if stratum not in config.stratum_weights:
             raise ExperimentError(f"trials[{index}].stratum is absent from analysis.stratum_weights")
+        if not require_bool(trial.get("trial_complete"), f"trials[{index}].trial_complete"):
+            raise ExperimentError(f"trials[{index}] is incomplete and cannot be analyzed")
         _ = require_bool(trial.get("hidden_repair_pass"), f"trials[{index}].hidden_repair_pass")
         order = require_integer(trial.get("execution_order"), f"trials[{index}].execution_order", minimum=1)
         if order > 2:

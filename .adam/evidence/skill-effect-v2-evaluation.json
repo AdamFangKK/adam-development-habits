@@ -23,7 +23,7 @@
     },
     {
       "id": "AC-2",
-      "condition": "Each formal trial runs in a separate workspace, exposes hidden cases only to the scorer, and permits changes only to buggy.py.",
+      "condition": "Each formal trial runs in a separate workspace, exposes hidden cases only to the scorer, permits changes only to buggy.py, and is counted only when the Agent exits successfully.",
       "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_effect_runner.py"
     },
     {
@@ -36,6 +36,7 @@
     "Formal effect claims use only completed paired hidden-repair observations.",
     "The baseline and Skill conditions differ only by Skill activation and its invocation instruction.",
     "Interrupted, timed-out, scope-violating, or missing trials remain recorded and cannot be silently excluded.",
+    "A hidden-passing candidate from an interrupted Agent run is incomplete, not a successful trial.",
     "A pilot or single task is not evidence of an overall model improvement."
   ],
   "replaced_paths": [],
@@ -99,8 +100,9 @@
   },
   "supporting_artifacts": [
     {"id": "preregistration", "kind": "evaluation_transcript", "path": "examples/skill-effect-preregistration.json", "sha256": "5300d537bcf2cff9b7224de1a83da10e3c5014c0fffac468557d401e5cf7248b", "summary": "Frozen 20-task paired effect protocol and immutable hashes."},
-    {"id": "runner", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment.py", "sha256": "9166a8422d7e44845a4c687376a80850267ece5956dd1eb31768bf5d0a8bf938", "summary": "Paired Codex runner with process-group timeout cleanup, controlled environment, and sequential condition order within each task."},
-    {"id": "runner-tests", "kind": "test_output", "path": "tests/test_effect_runner.py", "sha256": "575ace1019aadee0ab546706567139b1c3ea9b9073e132f6c72c36bd572a83cf", "summary": "Regression tests for timeout cleanup, environment isolation, and registered pair order."},
+    {"id": "runner", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment.py", "sha256": "bb5d11bd29ebc63612eb539f26570524420930df82acc9ba31fed2c9253a2343", "summary": "Paired Codex runner with process-group timeout cleanup, controlled environment, sequential condition order, and explicit trial-complete gate."},
+    {"id": "runner-tests", "kind": "test_output", "path": "tests/test_effect_runner.py", "sha256": "763f407baeda663250dc458a74ce2fd27353303981c2c7d755d7c54203cb2c24", "summary": "Regression tests for timeout cleanup, environment isolation, and registered pair order."},
+    {"id": "analysis-gate", "kind": "evaluation_transcript", "path": "scripts/analyze_skill_effect.py", "sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100", "summary": "Paired analyzer rejects incomplete trials instead of counting a timed-out candidate as a failure or success."},
     {"id": "corpus-manifest", "kind": "evaluation_transcript", "path": "examples/effect-corpus-v1/manifest.json", "sha256": "153f84b930bd9665dba0cccfa40440ae20eff143a7da1c0c54178109bd52898a", "summary": "Pinned QuixBugs source, strata, public/hidden split, and task hashes."}
   ],
   "remaining_risks": [

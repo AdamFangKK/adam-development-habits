@@ -211,7 +211,8 @@ def execute_condition(
         "harness_id": HARNESS_ID,
         "agent_exit": agent_exit,
         "public_pass": public.get("passed", False),
-        "hidden_repair_pass": bool(score_report.get("passed", False)),
+        "trial_complete": agent_exit == 0,
+        "hidden_repair_pass": agent_exit == 0 and bool(score_report.get("passed", False)),
         "scope_ok": scope_ok,
         "changed_paths": paths,
         "elapsed_seconds": round(elapsed, 3),
@@ -318,7 +319,7 @@ def main() -> int:
             pair_results = future.result()
             for result in pair_results:
                 results[(task["task_id"], cast(str, result["condition"]))] = result
-                print(json.dumps({"task_id": task["task_id"], "condition": result["condition"], "hidden_repair_pass": result["hidden_repair_pass"], "scope_ok": result["scope_ok"]}), flush=True)
+                print(json.dumps({"task_id": task["task_id"], "condition": result["condition"], "trial_complete": result["trial_complete"], "hidden_repair_pass": result["hidden_repair_pass"], "scope_ok": result["scope_ok"]}), flush=True)
     trials: list[dict[str, object]] = []
     for task in task_records:
         skill_first = skill_first_for(arguments.seed, task["task_id"], 1)
