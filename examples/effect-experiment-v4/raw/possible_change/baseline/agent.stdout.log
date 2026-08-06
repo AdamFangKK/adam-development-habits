@@ -1,0 +1,3 @@
+Updated [buggy.py](/private/tmp/adam-effect-possible_change-baseline-0_rhrtxa/buggy.py:5) to return `0` when no coins remain and the target is positive.
+
+Verified with `python3 test_public.py`: all 3 public cases passed.

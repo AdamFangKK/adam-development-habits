@@ -1,0 +1,2 @@
+# Preserve raw agent transcripts byte-for-byte; they are evidence artifacts, not source files.
+examples/effect-experiment-v4/raw/** -text whitespace=-trailing-space,-blank-at-eof

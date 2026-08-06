@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: [`buggy.py:kth`](/tmp/adam-effect-kth-skill-7srh0k5a/buggy.py:1)  
+Acceptance criteria: Return the valid 0-based kth-lowest element, including duplicates.  
+Changed: Adjusted `k` when recursing into values greater than the pivot.  
+Removed or retained compatibility: None.  
+Safeguards: Public regression test and deterministic boundary probe.  
+Quality decisions: Direct implementation; no dependencies, state, or public-contract changes.  
+Delivery decisions: Only `buggy.py` modified; no commit.  
+Verified: `python3 test_public.py` - `2 public cases passed`; `git diff --check` passed; boundary probe passed.  
+Independent review: Not required for this narrow fix.  
+Evidence artifact: Conversational ledger; enforcement mode not enabled.  
+Remaining risks: Hidden cases are not inspected; valid-input preconditions remain unchanged.  
+Causal conclusion: root-cause fix

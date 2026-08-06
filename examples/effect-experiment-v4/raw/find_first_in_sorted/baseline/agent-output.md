@@ -1,0 +1,3 @@
+Fixed `find_first_in_sorted` with a bounded lower-bound binary search that handles empty arrays, missing values, and duplicates correctly.
+
+Verified: `python3 test_public.py` → `2 public cases passed`.

@@ -1,0 +1,3 @@
+Updated [buggy.py](/tmp/adam-effect-lis-baseline-tkt9425d/buggy.py) with an `O(n log n)` LIS implementation using `bisect_left`.
+
+Verification: `python3 test_public.py` passed all 4 public cases.

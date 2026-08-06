@@ -94,6 +94,21 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("run a deterministic boundary probe", self.skill)
         self.assertIn("hidden scale remains a residual risk", self.skill)
 
+    def test_budget_aware_repair_gate_blocks_semantic_only_repairs(self) -> None:
+        for requirement in (
+            "## Budget-Aware Repair Gate",
+            "Shape: <caller-controlled dimensions",
+            "Worst case: <time, space, and failure mode",
+            "Bound: <the required timeout/memory/call budget",
+            "Do not preserve recursion, repeated slicing",
+            "Prefer a complexity bound expressed in input size",
+            "budget unverified",
+            "Separate semantic repair from performance repair",
+            "multiple valid outputs",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.skill)
+
     def test_delivery_matrix_covers_every_requested_practice(self) -> None:
         for practice in (
             "| Atomic Git change and PR |",

@@ -1,0 +1,11 @@
+Repaired [`buggy.py`](/tmp/adam-effect-kheapsort-skill-fka9nrer/buggy.py).
+
+Evidence ledger:
+
+- Change level: 1
+- Canonical owner: `kheapsort`
+- Invariant: heap contains at most `k + 1` unread elements.
+- Fix: seed with `arr[:k + 1]`, process only `arr[k + 1:]`.
+- Changed files: `buggy.py` only.
+- Verification: `python3 test_public.py` → `2 public cases passed`.
+- Remaining risk: hidden cases were not inspected or run.

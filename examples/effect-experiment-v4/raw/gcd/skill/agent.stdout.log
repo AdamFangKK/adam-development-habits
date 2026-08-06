@@ -1,0 +1,8 @@
+Repaired `gcd` in [buggy.py](/tmp/adam-effect-gcd-skill-5aafdjd9/buggy.py:1) by correcting the Euclidean recursion argument order.
+
+Evidence ledger:
+- Change level: 1
+- Acceptance: correct GCD behavior; public contract preserved; only `buggy.py` changed
+- Verification: `python3 test_public.py` -> `2 public cases passed`
+- Diff check: passed
+- Remaining risk: no hidden-test visibility; implementation is standard Euclidean GCD for the stated nonnegative-integer contract

@@ -1,0 +1,3 @@
+Updated [`buggy.py`](/tmp/adam-effect-max_sublist_sum-baseline-pokys46d/buggy.py) to reset the running sum at zero for correct maximum sublist handling.
+
+Verification: `python3 test_public.py` → `2 public cases passed`.

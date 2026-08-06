@@ -1,0 +1,46 @@
+diff --git a/buggy.py b/buggy.py
+index dd763e5..ebb8c0f 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,16 +1,29 @@
+ def longest_common_subsequence(a, b):
+-    if not a or not b:
+-        return ''
+-
+-    elif a[0] == b[0]:
+-        return a[0] + longest_common_subsequence(a[1:], b)
+-
+-    else:
+-        return max(
+-            longest_common_subsequence(a, b[1:]),
+-            longest_common_subsequence(a[1:], b),
+-            key=len
+-        )
++    rows, columns = len(a), len(b)
++    lengths = [[0] * (columns + 1) for _ in range(rows + 1)]
++
++    for row in range(rows - 1, -1, -1):
++        for column in range(columns - 1, -1, -1):
++            if a[row] == b[column]:
++                lengths[row][column] = lengths[row + 1][column + 1] + 1
++            else:
++                lengths[row][column] = max(
++                    lengths[row + 1][column], lengths[row][column + 1]
++                )
++
++    result = []
++    row = column = 0
++    while row < rows and column < columns:
++        if a[row] == b[column]:
++            result.append(a[row])
++            row += 1
++            column += 1
++        elif lengths[row + 1][column] >= lengths[row][column + 1]:
++            row += 1
++        else:
++            column += 1
++
++    return ''.join(result)
+ 
+ 
+ 

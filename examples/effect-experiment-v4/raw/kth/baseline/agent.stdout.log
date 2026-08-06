@@ -1,0 +1,3 @@
+Fixed `kth` to adjust `k` when recursing into the greater partition.
+
+`python3 test_public.py` passes: 2 public cases.

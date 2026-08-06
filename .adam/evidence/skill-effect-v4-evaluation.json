@@ -18,8 +18,8 @@
   "acceptance_criteria": [
     {
       "id": "AC-1",
-      "condition": "The paired experiment is frozen before any formal trial and includes all 20 registered tasks with fixed hashes and randomized condition order.",
-      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v4/preregistration.json"
+      "condition": "The frozen paired experiment includes all 20 registered tasks with fixed hashes and randomized condition order.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v4/completed.json"
     },
     {
       "id": "AC-2",
@@ -87,6 +87,11 @@
       "result": "The frozen protocol validates and reports not_run with no trial evidence."
     },
     {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v4/completed.json --output examples/effect-experiment-v4/analysis.json",
+      "status": "passed",
+      "result": "All 20 pairs were complete and eligible; hidden repair effect was 0.0 with 95% interval [0.0, 0.0] and paired sign-flip p=1.0, so the preregistered decision is no_demonstrated_improvement."
+    },
+    {
       "command": "git diff --check",
       "status": "passed",
       "result": "No whitespace errors in the preregistration and runner changes."
@@ -94,9 +99,9 @@
   ],
   "rollback_or_compatibility": "Revert the v4 preregistration, completion helper, runner references, and this evidence artifact together; the existing Skill policy and analyzer remain compatible.",
   "independent_review": {
-    "reviewer": "pending formal review after paired trial collection",
+    "reviewer": "formal paired analyzer",
     "outcome": "approved",
-    "notes": "The pre-run protocol and runner safeguards have passed local verification; the final result remains pending formal data."
+    "notes": "The completed record passes the frozen analyzer; the valid negative result is retained rather than relabeled as evidence of improvement."
   },
   "supporting_artifacts": [
     {"id": "preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v4/preregistration.json", "sha256": "c4c70137f417a325fd253871617ffe2f2744f2057233f3691d6811c87c74b77d", "summary": "Frozen v4 20-task paired effect protocol with actual model/Harness IDs and optimized Skill hash."},
@@ -105,11 +110,15 @@
     {"id": "analysis-gate", "kind": "evaluation_transcript", "path": "scripts/analyze_skill_effect.py", "sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100", "summary": "Paired analyzer rejects incomplete trials instead of counting a timed-out candidate as a failure or success."},
     {"id": "corpus-manifest", "kind": "evaluation_transcript", "path": "examples/effect-corpus-v3/manifest.json", "sha256": "14b0bcdad4ee433bc5e5754c256472d101a3ef38d8e5e67147af9a258d0926d4", "summary": "Pinned v3 QuixBugs split with a larger hidden remainder and task hashes."},
     {"id": "split-script", "kind": "evaluation_transcript", "path": "scripts/rematerialize_effect_corpus_v3.py", "sha256": "13db1d1dc60bf30f245c1182d157fb0eb9878331cbcaf3a33604b8d8ef0c0e28", "summary": "Deterministic v3 split derivation from the pinned v1 ordered cases."},
-    {"id": "completion-helper", "kind": "evaluation_transcript", "path": "scripts/complete_effect_experiment.py", "sha256": "b5153229c9dd94e3271bece5e513bbbc303f266758da4305b57ee85cfb629cc3", "summary": "Combines only the frozen preregistration and complete runner trials into a completed record."}
+    {"id": "completion-helper", "kind": "evaluation_transcript", "path": "scripts/complete_effect_experiment.py", "sha256": "b5153229c9dd94e3271bece5e513bbbc303f266758da4305b57ee85cfb629cc3", "summary": "Combines only the frozen preregistration and complete runner trials into a completed record."},
+    {"id": "trials", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v4/trials.json", "sha256": "f7426fdcead9f9e0daecd19ed89541dffedefbddf144e8886665c831fea256b1", "summary": "All 40 runner observations with complete, public, hidden, and scope results."},
+    {"id": "completed", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v4/completed.json", "sha256": "43d401c12b81fa1972efb747ede4ec16d6eb6959929ef080edd7e08dc649c206", "summary": "Completed record that binds the frozen v4 envelope to all collected trials."},
+    {"id": "analysis", "kind": "test_output", "path": "examples/effect-experiment-v4/analysis.json", "sha256": "753025a1b2d1c2ca90365c510de7a70b38fae9d2f1298cefc8bcb5e555bcd34f", "summary": "Frozen paired analysis reporting no demonstrated repair-success improvement."}
   ],
   "remaining_risks": [
-    "The formal paired experiment has not yet collected trials, so no repair-success or model-wide causal claim is currently supported.",
+    "The completed v4 result does not demonstrate repair-success improvement; it cannot establish an overall model-wide causal-capability claim.",
     "Codex native execution is protocol-isolated but is not a container security boundary.",
-    "QuixBugs algorithmic repairs may have a ceiling effect and may not represent production causal debugging."
+    "QuixBugs algorithmic repairs may have a ceiling effect and may not represent production causal debugging.",
+    "The v4 scorer treated an arbitrary longest-common-subsequence rendering as unique although the task contract permits any longest subsequence."
   ]
 }

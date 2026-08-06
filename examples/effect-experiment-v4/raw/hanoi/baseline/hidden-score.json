@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "23d2c1539b60f87420452a0d932cd0859d4837709393112f940de12849515111",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 6,
+  "task_id": "hanoi",
+  "total_cases": 6
+}

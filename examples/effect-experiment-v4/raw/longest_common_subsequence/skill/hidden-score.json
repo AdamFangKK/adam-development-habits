@@ -1,0 +1,39 @@
+{
+  "candidate_sha256": "fcf2e8d408b120dad2a98b70df82caf88ad5c9104e421d8d62bfa6296ca1ea56",
+  "failures": [
+    {
+      "actual": "bdab",
+      "expected": "bcba",
+      "index": 2,
+      "input": [
+        "abcbdab",
+        "bdcaba"
+      ],
+      "kind": "case"
+    },
+    {
+      "actual": "TAGC",
+      "expected": "TAAG",
+      "index": 3,
+      "input": [
+        "TATAGC",
+        "TAGCAG"
+      ],
+      "kind": "case"
+    },
+    {
+      "actual": "BDAB",
+      "expected": "BCBA",
+      "index": 4,
+      "input": [
+        "ABCBDAB",
+        "BDCABA"
+      ],
+      "kind": "case"
+    }
+  ],
+  "passed": false,
+  "passed_cases": 4,
+  "task_id": "longest_common_subsequence",
+  "total_cases": 7
+}

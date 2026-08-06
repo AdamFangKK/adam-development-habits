@@ -21,6 +21,27 @@ Apply the lightest level that preserves confidence:
 
 Do not downgrade a change to avoid evidence. If uncertain, use the higher level.
 
+## Budget-Aware Repair Gate
+
+Activate this gate for any repair whose existing test command enforces a timeout, deadline, memory limit, query/call budget, or other resource bound, and for any algorithm whose work scales with a caller-controlled numeric dimension (capacity, range, recursion depth, input length, or number of states). A passing visible case proves only the observed inputs; it does not prove the implementation is safe at the declared boundary.
+
+Before editing, write a three-line resource check in the evidence ledger:
+
+```text
+Shape: <caller-controlled dimensions and the current loop/recursion state space>
+Worst case: <time, space, and failure mode at the largest credible input; unknown is explicit>
+Bound: <the required timeout/memory/call budget and the algorithmic strategy that stays within it>
+```
+
+Then apply all of these rules:
+
+- Treat hidden or production scale as unknown when only small examples are visible. Do not preserve recursion, repeated slicing, or a table indexed by an unbounded numeric value merely because public tests pass.
+- Prefer a complexity bound expressed in input size (or a sparse representation of reachable states) over a bound proportional to a raw numeric magnitude. If the contract makes a numeric bound unavoidable, state it and reject inputs outside it rather than silently allocating unbounded memory.
+- Run the supplied checks plus one deterministic stress probe that is larger or structurally harder than the largest visible case while remaining inside the declared contract. Record the command, elapsed time or resource result, and the remaining untested boundary. If no safe probe can be constructed, record `budget unverified` and do not claim the optimization is complete.
+- Separate semantic repair from performance repair: first preserve the public invariant, then verify that the candidate algorithm meets the budget. A minimal condition-only patch is incomplete when the original algorithm still violates the resource bound.
+
+For functions with multiple valid outputs, verify the mathematical contract (validity plus optimality) rather than treating one reference rendering as the only answer. A scorer or test that cannot express the contract is a test limitation, not evidence that a correct alternative is wrong.
+
 ## Causal Execution Discipline
 
 Use this discipline to avoid patching the nearest symptom instead of the responsible behavior. It is a diagnosis workflow, not a requirement to prove causality for every feature or obvious correction.

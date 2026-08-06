@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-v5-preparation",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Budget-Aware Repair Gate",
+    "scripts/materialize_effect_corpus_v5.py:materialize",
+    "examples/effect-experiment-v5/preregistration.json"
+  ],
+  "affected_callers": [
+    "tests/test_skill_contract.py",
+    "tests/test_effect_corpus_v5.py",
+    "scripts/run_effect_experiment.py",
+    "scripts/score_effect_candidate.py",
+    "scripts/analyze_skill_effect.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "A timeout or raw-numeric state-space repair requires an explicit shape, worst-case, bound, and stress-probe gate before completion.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_skill_contract.py"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The independent corpus has at least 20 tasks spanning every registered stratum; every fixture fails at least one public case and every hidden expected value matches the deterministic reference contract.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_corpus_v5.py"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The v5 model, Harness, Skill hash, corpus, scorer, prompts, generator, randomized order, stopping rule, and inference thresholds are frozen before the first trial.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v5/preregistration.json"
+    }
+  ],
+  "invariants": [
+    "v4 hidden cases are not reused as v5 hidden contracts.",
+    "The repair agent receives only the task workspace, public cases, test harness, and treatment Skill path.",
+    "A correct non-unique result is never rejected for differing from an arbitrary rendering because this corpus uses only unambiguous scalar, boolean, or canonical list outputs.",
+    "Only a completed v5 analysis with decision improved can support the scoped repair-success claim."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "front-loaded budget repair gate",
+      "status": "applied",
+      "rationale": "The resource rule is placed before the causal workflow so an Agent that reads only the Skill prefix receives it."
+    },
+    {
+      "name": "fresh synthetic hidden corpus",
+      "status": "applied",
+      "rationale": "v5 uses newly generated task IDs and cases rather than the v4 QuixBugs hidden files; the generator and manifest are committed before collection."
+    },
+    {
+      "name": "scorer-contract scope",
+      "status": "applied",
+      "rationale": "This corpus excludes multiple-valid-output functions so exact comparison remains a valid contract for every task."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The Skill owns the workflow gate; the generator owns corpus materialization; the existing runner and scorer remain the execution and blind-scoring boundaries."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "Only Python standard library and existing project scripts are used."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No public extension contract is added."},
+    "data_ownership": {"status": "applied", "rationale": "The committed corpus owns its public and hidden case data; runner artifacts are generated only after preregistration."},
+    "error_model": {"status": "applied", "rationale": "Fixture public failure, timeout, incomplete trial, hidden failure, and scope violation remain explicit non-passing states."},
+    "contract_evolution": {"status": "applied", "rationale": "The Skill gains an explicit budget gate and the README distinguishes v4's valid negative result from v5's unrun protocol."},
+    "operational_budget": {"status": "applied", "rationale": "The corpus contains explicit one-second resource contracts and the Skill requires complexity and stress-probe evidence."},
+    "threat_boundary": {"status": "applied", "rationale": "Hidden cases and references are scorer-only by protocol; native workspace isolation remains a documented limitation."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The Skill rule, corpus generator, corpus, preregistration, tests, evidence, and documentation are frozen together before formal collection."},
+    "release_recovery": {"status": "not_applicable", "rationale": "This is an offline evaluation package, not a deployable service."},
+    "data_migration": {"status": "not_applicable", "rationale": "No production data or schema changes."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No credentials or runtime secrets are stored."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "The v5 synthetic corpus introduces no external runtime dependency."},
+    "operational_knowledge": {"status": "applied", "rationale": "README and preregistration state the evaluation scope, limitations, and replay path."},
+    "reproducibility": {"status": "applied", "rationale": "Generator hash, manifest hash, model/Harness IDs, prompts, scorer, seed, order, and stopping rule are captured before trials."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_skill_contract.py tests/test_effect_corpus_v5.py", "status": "passed", "result": "The Skill contract and generated corpus checks passed; all 22 fixtures require a visible repair and reference hidden contracts are consistent."},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v5/preregistration.json", "status": "passed", "result": "The frozen v5 protocol validates as not_run with no trial evidence."},
+    {"command": "git diff --check", "status": "passed", "result": "No whitespace errors before preregistration commit."}
+  ],
+  "rollback_or_compatibility": "Revert the Budget-Aware Repair Gate, generator, corpus, tests, preregistration, README update, and this evidence artifact together; v4 results remain historical evidence.",
+  "independent_review": {"reviewer": "automated contract and preregistration checks", "outcome": "approved", "notes": "The checks validate corpus consistency and preregistration shape, but they do not pre-judge the unrun treatment outcome."},
+  "supporting_artifacts": [
+    {"id": "skill", "kind": "evaluation_transcript", "path": "SKILL.md", "sha256": "880ac837fea6be2cceb2430ff106bdfd5b50b50cb7be5a13740ba9e7952c0df5", "summary": "Normative budget-aware repair gate placed near the Skill entry point."},
+    {"id": "skill-test", "kind": "test_output", "path": "tests/test_skill_contract.py", "sha256": "437ab3dbcfd2ee28d43aaa36a0596b98e4f2bc94b63d66509579b23ec4345a16", "summary": "Regression test for shape, bound, stress probe, semantic/performance separation, and non-unique-output rule."},
+    {"id": "generator", "kind": "evaluation_transcript", "path": "scripts/materialize_effect_corpus_v5.py", "sha256": "b33df1e23e51e65d3209e2303dea54f7d8f876abffe04402dfc8f1d030c52834", "summary": "Deterministic v5 resource-trap corpus generator."},
+    {"id": "corpus-test", "kind": "test_output", "path": "tests/test_effect_corpus_v5.py", "sha256": "4e9af0b9ad2bcd66cbd0b11e49353461146385a10ece4237b0e29cd86fc73331", "summary": "Checks all fixtures have visible failures and all generated expected values and hashes are internally consistent."},
+    {"id": "manifest", "kind": "evaluation_transcript", "path": "examples/effect-corpus-v5/manifest.json", "sha256": "d80d173e76635c8875d22b0553bb64cee195f24bdfd5103f529275ae31b8148c", "summary": "Frozen 22-task independent corpus manifest."},
+    {"id": "preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v5/preregistration.json", "sha256": "9ca30f3f1d255ed3ffe1275b5bab9f8d1f0eaa9d59f84a5ed184bb262fc38dbc", "summary": "Frozen v5 paired effect protocol with actual Skill, corpus, scorer, prompt, model, and Harness hashes."}
+  ],
+  "remaining_risks": [
+    "v5 is unrun at this commit; no repair-success claim is supported yet.",
+    "The synthetic corpus intentionally emphasizes explicit resource bounds and cannot represent all production causal-debugging work.",
+    "Native Codex execution is protocol-isolated rather than container-isolated."
+  ]
+}

@@ -1,0 +1,3 @@
+Updated [buggy.py](/private/tmp/adam-effect-hanoi-baseline-h1mm8zex/buggy.py) to emit the correct destination move as list pairs.
+
+`python3 test_public.py` passes: 2 public cases.

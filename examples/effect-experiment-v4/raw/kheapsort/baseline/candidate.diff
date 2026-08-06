@@ -1,0 +1,18 @@
+diff --git a/buggy.py b/buggy.py
+index 967926d..9fdcef3 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,10 +1,11 @@
+ def kheapsort(arr, k):
+     import heapq
+ 
+-    heap = arr[:k]
++    heap_size = min(len(arr), k + 1)
++    heap = arr[:heap_size]
+     heapq.heapify(heap)
+ 
+-    for x in arr:
++    for x in arr[heap_size:]:
+         yield heapq.heappushpop(heap, x)
+ 
+     while heap:

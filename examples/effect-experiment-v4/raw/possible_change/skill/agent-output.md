@@ -1,0 +1,11 @@
+Implemented the repair in [buggy.py](/tmp/adam-effect-possible_change-skill-714oik51/buggy.py).
+
+Evidence ledger:
+- Level 1; owner: `possible_change`
+- Replaced failing recursion with bottom-up coin-change counting.
+- Handles zero, negative, and unavailable totals; avoids recursive blowups.
+- Verification: `python3 test_public.py` → `3 public cases passed`
+- `git diff --check` passed.
+- Only `buggy.py` was modified.
+
+Remaining risk: inputs outside the documented positive-integer coin contract are unspecified.

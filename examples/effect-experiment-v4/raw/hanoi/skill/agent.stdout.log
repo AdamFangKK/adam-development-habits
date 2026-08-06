@@ -1,0 +1,9 @@
+Repaired `hanoi` in [buggy.py](/tmp/adam-effect-hanoi-skill-xczwznam/buggy.py:6) so moves target `end` and use list pairs.
+
+Evidence ledger:
+
+- Change level: 1
+- Acceptance: shortest legal move sequence with public list-pair format
+- Changed files: `buggy.py` only
+- Verification: `python3 test_public.py` passed 2 cases using the supplied one-second timeout
+- Remaining risk: hidden-case coverage was not available for inspection

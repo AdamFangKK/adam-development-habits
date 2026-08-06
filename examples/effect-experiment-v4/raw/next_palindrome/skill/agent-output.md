@@ -1,0 +1,14 @@
+Change level: 1  
+Canonical owner: `buggy.py:next_palindrome`  
+Acceptance criteria: Return the next palindrome, including all-9 inputs, while preserving the existing contract.  
+Changed: Corrected all-9 overflow to produce one additional digit.  
+Removed or retained compatibility: Removed the incorrect extra-zero behavior; no compatibility path added.  
+Safeguards: Supplied one-second per-case timeout; no dependencies or external I/O.  
+Quality decisions: Direct implementation retained; no new abstraction or dependency.  
+Delivery decisions: Only `buggy.py` modified; no commit or metadata changes.  
+Verified: `python3 test_public.py` passed 2 cases; `git diff --check` passed; exhaustive sweep checked 1,998 palindrome inputs.  
+Independent review: Not required for this Level 1 change.  
+Evidence artifact: Conversational ledger; no artifact requested.  
+Remaining risks: Inputs remain subject to the documented palindrome/base-10 precondition.  
+Causal diagnosis: All-9 overflow emitted two extra digits; `[9]` and `[99]` boundary probes isolated the faulty length formula.  
+Causal conclusion: root-cause fix

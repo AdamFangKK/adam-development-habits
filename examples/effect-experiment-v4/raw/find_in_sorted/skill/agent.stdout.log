@@ -1,0 +1,3 @@
+Repaired `find_in_sorted` in [buggy.py](/tmp/adam-effect-find_in_sorted-skill-5j7b1437/buggy.py:8) by advancing the lower bound with `mid + 1`, preventing infinite recursion on upper-bound misses.
+
+Evidence: `python3 test_public.py` passed all 2 public cases. Only `buggy.py` was modified; no tests or metadata changed.

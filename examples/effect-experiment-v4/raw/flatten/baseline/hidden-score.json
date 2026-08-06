@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "d4933e1703965abc2ff647a553e61c7b630641d6497a3a02910fd7ef176e489a",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 5,
+  "task_id": "flatten",
+  "total_cases": 5
+}

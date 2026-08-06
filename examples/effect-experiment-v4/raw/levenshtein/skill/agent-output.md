@@ -1,0 +1,11 @@
+Implemented the corrected iterative Levenshtein algorithm in [buggy.py](/tmp/adam-effect-levenshtein-skill-2po3ieaa/buggy.py).
+
+Evidence ledger:
+
+- Change level: 1
+- Acceptance: correct edit distance for string inputs
+- Invariant: insertions, deletions, and substitutions have unit cost; equal characters cost zero
+- Verification: `python3 test_public.py` -> `2 public cases passed`
+- Boundary probes: passed for empty, equal, and substitution cases
+- Scope: only `buggy.py` modified; tests and metadata unchanged
+- Causal diagnosis: direct recurrence defect; no separate causal workflow needed

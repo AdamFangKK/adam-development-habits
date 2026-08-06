@@ -189,7 +189,11 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/replay_external_click.py \
 
 当任务给出超时、延迟、内存、调用次数或成本预算时，公开用例通过仍不是完成证据。Skill 要求检查可见最大输入、估算最坏资源复杂度，并运行一个不越过声明契约的确定性边界探针；如果契约没有安全上界，只能记录预算未验证和剩余风险，不能把隐藏规模当作已知事实。
 
-主指标是隐藏修复契约的通过率，重复运行按任务聚类，不能把同一个任务的多次尝试伪装成多个样本。分析器用分层 task-cluster bootstrap 给出 95% 区间，用配对 sign-flip 随机化检验判断提升；只有预注册任务数达标、下界高于实际收益门槛且随机化检验通过时，才报告 `improved`。否则只报告 `inconclusive` 或 `no_demonstrated_improvement`。当前提交的是**尚未采样的协议**，不宣称已有模型修复成功率或整体因果能力提升。
+主指标是隐藏修复契约的通过率，重复运行按任务聚类，不能把同一个任务的多次尝试伪装成多个样本。分析器用分层 task-cluster bootstrap 给出 95% 区间，用配对 sign-flip 随机化检验判断提升；只有预注册任务数达标、下界高于实际收益门槛且随机化检验通过时，才报告 `improved`。否则只报告 `inconclusive` 或 `no_demonstrated_improvement`。
+
+v4 是首个 metadata 有效、完整采样的 20-task QuixBugs paired run：40/40 trial 完整且未越权，baseline 与 Skill 都通过 18/20 个隐藏修复契约，效应为 `0.0`，95% 区间 `[0.0, 0.0]`，配对随机化 p 值为 `1.0`，结论为 `no_demonstrated_improvement`。这个结果不能支持修复成功率或整体因果能力提升的说法；`longest_common_subsequence` 的“任一最长子序列均有效”与固定字符串 scorer 不一致，也作为 v4 的 scorer 限制保留。
+
+为避免针对 v4 hidden cases 调参，后续 v5 使用独立的 22-task synthetic resource-trap corpus：每个 fixture 都有公开可见的故障，隐藏 scorer 保留不在 repair workspace 中的大规模或边界契约；多解输出不进入这一轮。v5 在 trial 前固定 Skill、generator、manifest、scorer、prompt、seed、随机化顺序和统计门槛。它仍只会给出固定 model/Harness/Skill/corpus/scorer 范围内的结论，不能证明任意模型或生产系统的整体因果能力。
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \

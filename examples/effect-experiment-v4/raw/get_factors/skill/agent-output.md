@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: `buggy.py:get_factors`  
+Acceptance criteria: Correct prime and composite factorization; preserve `n >= 1` contract.  
+Changed: Return remaining prime `n` instead of `[]`.  
+Removed or retained compatibility: None.  
+Safeguards: Existing public contract and timeout harness.  
+Quality decisions: Direct implementation; no dependencies or boundary changes.  
+Delivery decisions: Only `buggy.py` modified; no commit.  
+Verified: `python3 test_public.py` - 3 public cases passed; `git diff --check` passed.  
+Independent review: Not required for this narrow fix.  
+Evidence artifact: Enforcement mode not enabled.  
+Remaining risks: Naive trial division remains subject to hidden large-input performance.  
+Causal conclusion: not activated

@@ -1,0 +1,3 @@
+Updated [`buggy.py`](/tmp/adam-effect-next_palindrome-baseline-6smsyjq6/buggy.py) with correct middle carry propagation, mirroring, and all-9 handling.
+
+Verification: `python3 test_public.py` → `2 public cases passed`.

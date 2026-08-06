@@ -1,0 +1,13 @@
+diff --git a/buggy.py b/buggy.py
+index 223e209..9a5eb81 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -6,7 +6,7 @@ def find_in_sorted(arr, x):
+         if x < arr[mid]:
+             return binsearch(start, mid)
+         elif x > arr[mid]:
+-            return binsearch(mid, end)
++            return binsearch(mid + 1, end)
+         else:
+             return mid
+ 

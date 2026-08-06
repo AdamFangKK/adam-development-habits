@@ -1,0 +1,3 @@
+[["leetcode", ["leet", "code"]], true]
+[["", ["a"]], true]
+[["catsandog", ["cats", "dog", "sand", "and", "cat"]], false]

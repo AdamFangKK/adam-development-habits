@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "f9ab924e71a1d6465f4cd77e8efe72025299f83cb76e3f28d7af317118b39c72",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 5,
+  "task_id": "levenshtein",
+  "total_cases": 5
+}

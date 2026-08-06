@@ -1,0 +1,3 @@
+Fixed `flatten` in [buggy.py](/tmp/adam-effect-flatten-baseline-67vhxrxf/buggy.py) to yield non-list values directly.
+
+Verification: `python3 test_public.py` passed all 2 public cases.

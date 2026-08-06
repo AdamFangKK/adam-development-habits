@@ -1,0 +1,43 @@
+{
+  "conclusion": "no scoped repair-success improvement has been demonstrated",
+  "experiment_id": "causal-skill-effect-v4",
+  "limitations": [
+    "The result cannot prove a model-wide, repository-wide, or production causal effect.",
+    "A native subagent worktree is protocol isolation, not a container security boundary.",
+    "The causal-quality metric is secondary and must be evaluated blind to condition."
+  ],
+  "primary_metric": {
+    "confidence_interval_95": [
+      0.0,
+      0.0
+    ],
+    "decision": "no_demonstrated_improvement",
+    "distinct_tasks": 20,
+    "effect": 0.0,
+    "eligible": true,
+    "metric": "hidden_repair_success",
+    "one_sided_randomization_p_value": 1.0,
+    "paired_runs": 20,
+    "randomization_method": "Monte Carlo paired sign-flip randomization",
+    "reason": "The upper confidence bound is non-positive; the data do not support an improvement claim."
+  },
+  "scope": {
+    "claim": "For a fixed Codex model and Harness on a held-out repair corpus, enabling Adam's Development Habits improves hidden repair success by a practical margin.",
+    "harness_id": "codex-cli-0.146.0-alpha.9.2;exec;workspace-write;ephemeral",
+    "model_id": "gpt-5.6-terra",
+    "skill_revision_sha256": "cba50b3de60272added8b846ea08dabd95a439052e51e70743fec86b95a861f9"
+  },
+  "secondary_metric": {
+    "confidence_interval_95": null,
+    "decision": "not_measured",
+    "distinct_tasks": 0,
+    "effect": null,
+    "eligible": false,
+    "metric": "blinded_causal_quality",
+    "one_sided_randomization_p_value": null,
+    "paired_runs": 0,
+    "randomization_method": null,
+    "reason": "No paired observations supplied this metric."
+  },
+  "status": "completed"
+}

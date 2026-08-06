@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "199d5fef091f2092c24b2569128400887754b47490598ae45729d2dcc4054944",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 1,
+  "task_id": "is_valid_parenthesization",
+  "total_cases": 1
+}

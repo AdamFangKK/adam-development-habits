@@ -1,0 +1,13 @@
+diff --git a/buggy.py b/buggy.py
+index 6105365..f70b142 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -9,7 +9,7 @@ def kth(arr, k):
+     if k < num_less:
+         return kth(below, k)
+     elif k >= num_lessoreq:
+-        return kth(above, k)
++        return kth(above, k - num_lessoreq)
+     else:
+         return pivot
+ 

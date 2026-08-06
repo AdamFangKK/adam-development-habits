@@ -1,0 +1,72 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "minimum_distinct_tasks": 20,
+    "minimum_effect": 0.05,
+    "permutation_resamples": 10000,
+    "random_seed": 20260809,
+    "stratum_weights": {
+      "cross-module": 0.4,
+      "integration": 0.2,
+      "single-module": 0.4
+    }
+  },
+  "experiment_id": "causal-skill-effect-v5",
+  "preregistration": {
+    "envelope_sha256": "da8ba790285ef586359be5073d3581236efaffb6bbb1252bc0a0798c264eaa4f",
+    "git_commit": "pending",
+    "protocol_sha256": "a0b3c6cad6c9fb29a7d579e6d40d358181183bf8bc941e59d3ea1b44bf7af27d",
+    "recorded_before_first_trial": true
+  },
+  "protocol": {
+    "baseline_prompt_sha256": "4c2c1892adcc633a4f53c79ae67a8709344d3d98cfe18cff0068a97e5f05d8d3",
+    "corpus_manifest_sha256": "d80d173e76635c8875d22b0553bb64cee195f24bdfd5103f529275ae31b8148c",
+    "generator_sha256": "b33df1e23e51e65d3209e2303dea54f7d8f876abffe04402dfc8f1d030c52834",
+    "hidden_scorer_blind_to_condition": true,
+    "hidden_scorer_sha256": "9dcd72a5d99b22aecf46a3496632a5e15e306a5c93c247620a5cdf60cf22aaaf",
+    "pairing": "same task, randomized condition order",
+    "runner_sha256": "bb5d11bd29ebc63612eb539f26570524420930df82acc9ba31fed2c9253a2343",
+    "skill_prompt_sha256": "3c4866d1197ace1e64612934271d12f6ae1fe7bb70b70720414f5d5d148958a6"
+  },
+  "schema_version": 1,
+  "scope": {
+    "claim": "For a fixed Codex model and Harness on an independent synthetic repair corpus with declared resource bounds, enabling Adam's Development Habits improves hidden repair success by a practical margin.",
+    "harness_id": "codex-cli-0.146.0-alpha.9.2;exec;workspace-write;ephemeral",
+    "model_id": "gpt-5.6-terra",
+    "skill_revision_sha256": "880ac837fea6be2cceb2430ff106bdfd5b50b50cb7be5a13740ba9e7952c0df5"
+  },
+  "status": "planned",
+  "stopping_rule": {
+    "early_stop": "not allowed",
+    "kind": "fixed_complete_pairs",
+    "pairs_per_task": 1
+  },
+  "task_plan": {
+    "tasks": [
+      {"stratum": "single-module", "task_id": "large_fib_mod"},
+      {"stratum": "single-module", "task_id": "large_min_coins"},
+      {"stratum": "single-module", "task_id": "large_edit_distance"},
+      {"stratum": "single-module", "task_id": "large_lcs_length"},
+      {"stratum": "single-module", "task_id": "large_subset_sum"},
+      {"stratum": "cross-module", "task_id": "large_count_paths"},
+      {"stratum": "cross-module", "task_id": "large_partition_equal"},
+      {"stratum": "cross-module", "task_id": "large_word_break"},
+      {"stratum": "cross-module", "task_id": "large_matrix_chain"},
+      {"stratum": "integration", "task_id": "large_knapsack"},
+      {"stratum": "integration", "task_id": "binary_first"},
+      {"stratum": "single-module", "task_id": "rotate_right"},
+      {"stratum": "single-module", "task_id": "merge_intervals"},
+      {"stratum": "single-module", "task_id": "max_subarray"},
+      {"stratum": "cross-module", "task_id": "balanced_delimiters"},
+      {"stratum": "cross-module", "task_id": "range_sum_queries"},
+      {"stratum": "cross-module", "task_id": "majority_element"},
+      {"stratum": "cross-module", "task_id": "inversion_count"},
+      {"stratum": "single-module", "task_id": "count_paths_small"},
+      {"stratum": "single-module", "task_id": "lcs_length_small"},
+      {"stratum": "integration", "task_id": "edit_distance_small"},
+      {"stratum": "integration", "task_id": "subset_sum_small"}
+    ]
+  },
+  "trials": []
+}
