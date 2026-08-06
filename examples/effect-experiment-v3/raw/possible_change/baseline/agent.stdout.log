@@ -1,0 +1,3 @@
+Fixed `possible_change` by handling an exhausted coin list correctly.
+
+Verification: `python3 test_public.py` → `3 public cases passed`.

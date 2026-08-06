@@ -1,0 +1,13 @@
+diff --git a/buggy.py b/buggy.py
+index d0a6618..c1cebd7 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -2,7 +2,7 @@ def gcd(a, b):
+     if b == 0:
+         return a
+     else:
+-        return gcd(a % b, b)
++        return gcd(b, a % b)
+ 
+ 
+ """

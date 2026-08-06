@@ -1,0 +1,3 @@
+Fixed `find_in_sorted` by advancing the right search bound past `mid`, preventing non-terminating recursion.
+
+`python3 test_public.py` passes: 2 public cases.

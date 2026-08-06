@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "e55ae72ac2012fbfb6eea2c3e2817aea895732a608c8e71b2fd81dee0ac44085",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 7,
+  "task_id": "longest_common_subsequence",
+  "total_cases": 7
+}

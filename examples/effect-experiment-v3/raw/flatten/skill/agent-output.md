@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: `buggy.py:flatten`  
+Acceptance criteria: Flatten nested lists and yield non-list values unchanged.  
+Changed: Replaced `yield flatten(x)` with `yield x`.  
+Removed or retained compatibility: Preserved recursive generator contract.  
+Safeguards: Supplied one-second-per-case public timeout.  
+Quality decisions: No new dependencies or abstractions.  
+Delivery decisions: Only `buggy.py` changed; no commit.  
+Verified: `python3 test_public.py` - `2 public cases passed`; `git diff --check` passed.  
+Independent review: Final diff inspected.  
+Evidence artifact: Conversational ledger; enforcement mode not enabled.  
+Remaining risks: Inputs with list cycles remain excluded by the stated contract.  
+Causal conclusion: not activated

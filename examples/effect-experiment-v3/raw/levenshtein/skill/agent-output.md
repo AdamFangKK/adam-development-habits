@@ -1,0 +1,12 @@
+Implemented the Levenshtein dynamic-programming recurrence in [buggy.py](/tmp/adam-effect-levenshtein-skill-d12h1oaj/buggy.py:1). It now assigns zero cost to matching characters and avoids exponential recursion.
+
+Evidence ledger:
+
+- Change level: 1
+- Canonical owner: `buggy.py:levenshtein`
+- Acceptance criteria: correct edit distance; public API unchanged; each case completes within one second
+- Simplification: replaced recursive branches with one iterative implementation
+- Verification: baseline failed `electron/neutron` (`8`, expected `3`); `python3 test_public.py` now passes `2 public cases`
+- Causal diagnosis: matching-character branch incorrectly added an edit cost; replacement removes the reproduced failure
+- Changed files: `buggy.py` only
+- Remaining risk: verification is limited to the two supplied public cases; hidden tests were not inspected per instruction.

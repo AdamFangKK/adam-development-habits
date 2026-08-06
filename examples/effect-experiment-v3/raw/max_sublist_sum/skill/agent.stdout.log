@@ -1,0 +1,3 @@
+Fixed `max_sublist_sum` in [buggy.py](/tmp/adam-effect-max_sublist_sum-skill-hyjyfg69/buggy.py:7) by restarting the running sum at zero when it becomes negative.
+
+Evidence ledger: Level 1; canonical owner `max_sublist_sum`; O(n)/O(1) invariant preserved; no dependencies or compatibility paths changed; Causal Lite not needed because the public cases directly identified the local transition bug. `python3 test_public.py` passed: `2 public cases passed`. Only `buggy.py` was modified.

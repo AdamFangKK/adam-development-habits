@@ -1,0 +1,3 @@
+Repaired [`buggy.py`](/tmp/adam-effect-gcd-skill-t1gnqwdh/buggy.py:5) by correcting the Euclidean recursion to `gcd(b, a % b)`.
+
+Evidence ledger: the pre-edit run overflowed recursion on `[13, 13]`; `python3 test_public.py` now reports `2 public cases passed`; `git diff --check` is clean. Only `buggy.py` was modified.

@@ -1,0 +1,13 @@
+diff --git a/buggy.py b/buggy.py
+index 14faff8..bb9434a 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -14,7 +14,7 @@ def mergesort(arr):
+         result.extend(left[i:] or right[j:])
+         return result
+ 
+-    if len(arr) == 0:
++    if len(arr) <= 1:
+         return arr
+     else:
+         middle = len(arr) // 2

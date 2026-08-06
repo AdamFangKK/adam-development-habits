@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "a0ec600c411a124edcda62d627b22aa8ce29c4eda65dbf5927e12e4f3c344213",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 4,
+  "task_id": "gcd",
+  "total_cases": 4
+}

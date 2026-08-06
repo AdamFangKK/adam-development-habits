@@ -1,0 +1,35 @@
+diff --git a/buggy.py b/buggy.py
+index ba5c682..05ea7f7 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,16 +1,18 @@
+ def levenshtein(source, target):
+-    if source == '' or target == '':
+-        return len(source) or len(target)
+-
+-    elif source[0] == target[0]:
+-        return 1 + levenshtein(source[1:], target[1:])
+-
+-    else:
+-        return 1 + min(
+-            levenshtein(source,     target[1:]),
+-            levenshtein(source[1:], target[1:]),
+-            levenshtein(source[1:], target)
+-        )
++    if len(source) < len(target):
++        source, target = target, source
++
++    previous = list(range(len(target) + 1))
++    for source_index, source_character in enumerate(source, start=1):
++        current = [source_index]
++        for target_index, target_character in enumerate(target, start=1):
++            current.append(min(
++                current[-1] + 1,
++                previous[target_index] + 1,
++                previous[target_index - 1] + (source_character != target_character),
++            ))
++        previous = current
++    return previous[-1]
+ 
+ """
+ Levenshtein Distance

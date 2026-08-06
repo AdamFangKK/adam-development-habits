@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "8969f68ccd0262e203d95668e863dc76c43abce227b47a2a744d1c6665d89dfa",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 2,
+  "task_id": "kheapsort",
+  "total_cases": 2
+}

@@ -1,0 +1,13 @@
+diff --git a/buggy.py b/buggy.py
+index e3e7933..e09d8bb 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -4,7 +4,7 @@ def flatten(arr):
+             for y in flatten(x):
+                 yield y
+         else:
+-            yield flatten(x)
++            yield x
+ 
+ 
+ 

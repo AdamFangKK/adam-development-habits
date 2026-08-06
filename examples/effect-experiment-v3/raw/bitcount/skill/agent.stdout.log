@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: `buggy.py:bitcount`  
+Acceptance criteria: Count set bits for nonnegative integers within the supplied timeout.  
+Changed: Replaced `^=` with `&=` to clear the lowest set bit.  
+Removed or retained compatibility: None.  
+Safeguards: No dependencies or side effects introduced.  
+Quality decisions: Direct implementation retained; other decisions not applicable.  
+Delivery decisions: Single-file change; no commit made.  
+Verified: `python3 test_public.py` - 3 public cases passed; boundary probe - 7 cases passed; `git diff --check` passed.  
+Independent review: Not required.  
+Evidence artifact: Enforcement mode not enabled.  
+Remaining risks: Hidden tests were not inspected, per task constraints.  
+Causal conclusion: root-cause fix

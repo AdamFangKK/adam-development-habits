@@ -1,0 +1,31 @@
+diff --git a/buggy.py b/buggy.py
+index 681c964..e3f37fe 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,14 +1,16 @@
+ def lcs_length(s, t):
+-    from collections import Counter
+-
+-    dp = Counter()
+-
+-    for i in range(len(s)):
+-        for j in range(len(t)):
+-            if s[i] == t[j]:
+-                dp[i, j] = dp[i - 1, j] + 1
+-
+-    return max(dp.values()) if dp else 0
++    dp = [0] * (len(t) + 1)
++    best = 0
++
++    for char in s:
++        for j in range(len(t), 0, -1):
++            if char == t[j - 1]:
++                dp[j] = dp[j - 1] + 1
++                best = max(best, dp[j])
++            else:
++                dp[j] = 0
++
++    return best
+ 
+ 
+ 

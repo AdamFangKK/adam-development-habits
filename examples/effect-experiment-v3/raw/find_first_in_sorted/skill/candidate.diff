@@ -1,0 +1,21 @@
+diff --git a/buggy.py b/buggy.py
+index a131a02..29b4e3d 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,6 +1,6 @@
+ def find_first_in_sorted(arr, x):
+     lo = 0
+-    hi = len(arr)
++    hi = len(arr) - 1
+ 
+     while lo <= hi:
+         mid = (lo + hi) // 2
+@@ -9,7 +9,7 @@ def find_first_in_sorted(arr, x):
+             return mid
+ 
+         elif x <= arr[mid]:
+-            hi = mid
++            hi = mid - 1
+ 
+         else:
+             lo = mid + 1

@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "10cfd8ea14a3109c07a93536af855bb405efd5529f2f4d9e8f9b77b8665c79d2",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 7,
+  "task_id": "possible_change",
+  "total_cases": 7
+}

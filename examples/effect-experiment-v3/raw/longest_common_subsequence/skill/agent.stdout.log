@@ -1,0 +1,3 @@
+Repaired [buggy.py](/tmp/adam-effect-longest_common_subsequence-skill-km8m855s/buggy.py:1) with an O(len(a)·len(b)) dynamic-programming implementation and backtracking. The exponential recursive path was removed; empty inputs and tie flexibility remain unchanged.
+
+Evidence ledger: owner `longest_common_subsequence`; only `buggy.py` changed; no dependencies or tests modified. `python3 test_public.py` passed: `3 public cases passed`. Remaining risk is O(mn) memory for extremely large inputs.

@@ -1,0 +1,13 @@
+diff --git a/buggy.py b/buggy.py
+index ba5c682..bb9875e 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -3,7 +3,7 @@ def levenshtein(source, target):
+         return len(source) or len(target)
+ 
+     elif source[0] == target[0]:
+-        return 1 + levenshtein(source[1:], target[1:])
++        return levenshtein(source[1:], target[1:])
+ 
+     else:
+         return 1 + min(

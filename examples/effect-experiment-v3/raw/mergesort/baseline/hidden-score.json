@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "951356e1b5087d7b9a3bfd57261ff38d0178ea9809c1fd841a3fd26c9494add2",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 10,
+  "task_id": "mergesort",
+  "total_cases": 10
+}

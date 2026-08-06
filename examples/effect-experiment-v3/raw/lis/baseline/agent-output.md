@@ -1,0 +1,3 @@
+Repaired `lis` in [buggy.py](/tmp/adam-effect-lis-baseline-grq_lpvv/buggy.py) with an `O(n log n)` implementation using binary search.
+
+Verified: `python3 test_public.py` → `4 public cases passed`.

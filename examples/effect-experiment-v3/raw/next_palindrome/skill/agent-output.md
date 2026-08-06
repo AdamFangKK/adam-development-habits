@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: `buggy.py:next_palindrome`  
+Acceptance criteria: Return the next strictly greater palindrome, including all-9 inputs.  
+Changed: Corrected all-9 fallback length in `buggy.py`.  
+Removed or retained compatibility: No paths removed; no compatibility changes.  
+Safeguards: Public timeout harness and exhaustive boundary probe.  
+Quality decisions: Direct implementation; no dependencies or abstractions.  
+Delivery decisions: No commit, per request; only `buggy.py` modified.  
+Verified: `python3 test_public.py` - 2 public cases passed; exhaustive probe through 7 digits passed; `git diff --check` passed.  
+Independent review: Not required for this narrow fix.  
+Evidence artifact: Not created; edits were restricted to `buggy.py`.  
+Remaining risks: Inputs outside the documented palindrome/digit preconditions are untested.  
+Causal conclusion: root-cause fix

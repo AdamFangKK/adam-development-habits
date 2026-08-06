@@ -1,0 +1,3 @@
+Repaired `is_valid_parenthesization` in [buggy.py](/tmp/adam-effect-is_valid_parenthesization-skill-r2oadn5t/buggy.py) by requiring final nesting depth to be zero.
+
+Verification: `python3 test_public.py` passed all 2 public cases. Only `buggy.py` was modified; no dependencies or compatibility paths changed. Hidden tests were not inspected or run.

@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "dc91fa3a2eb5752637bab6dbf98cb20e9569aef0e6f48ee901fb207410422d6d",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 3,
+  "task_id": "next_palindrome",
+  "total_cases": 3
+}

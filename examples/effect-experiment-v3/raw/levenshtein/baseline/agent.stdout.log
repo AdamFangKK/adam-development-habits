@@ -1,0 +1,3 @@
+Fixed `levenshtein` so matching characters incur no edit cost.
+
+Verification: `python3 test_public.py` passed all 2 public cases.

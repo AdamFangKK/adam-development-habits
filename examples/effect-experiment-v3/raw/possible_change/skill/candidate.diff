@@ -1,0 +1,13 @@
+diff --git a/buggy.py b/buggy.py
+index d99752a..956a201 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -4,6 +4,8 @@ def possible_change(coins, total):
+         return 1
+     if total < 0:
+         return 0
++    if not coins:
++        return 0
+ 
+     first, *rest = coins
+     return possible_change(coins, total - first) + possible_change(rest, total)

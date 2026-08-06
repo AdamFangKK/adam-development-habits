@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: `buggy.py:kheapsort`  
+Acceptance criteria: sorted output, no duplicate processing, generator contract preserved.  
+Changed: Initialized heap with `k + 1` items and streamed remaining items only.  
+Removed or retained compatibility: Removed duplicate-processing path; no compatibility path needed.  
+Safeguards: O(n log(k+1)); no dependencies added.  
+Quality decisions: Direct implementation retained; no mutable-data, API, or operational concerns.  
+Delivery decisions: Only `buggy.py` changed; no commit performed.  
+Verified: `python3 test_public.py` - 2 public cases passed; `git diff --check` passed.  
+Independent review: Not required for this narrow fix.  
+Evidence artifact: Conversational ledger.  
+Remaining risks: Hidden tests were intentionally not inspected.  
+Causal conclusion: not activated

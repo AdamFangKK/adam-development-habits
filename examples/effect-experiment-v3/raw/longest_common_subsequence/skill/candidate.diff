@@ -1,0 +1,41 @@
+diff --git a/buggy.py b/buggy.py
+index dd763e5..1cb5699 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -2,15 +2,27 @@ def longest_common_subsequence(a, b):
+     if not a or not b:
+         return ''
+ 
+-    elif a[0] == b[0]:
+-        return a[0] + longest_common_subsequence(a[1:], b)
+-
+-    else:
+-        return max(
+-            longest_common_subsequence(a, b[1:]),
+-            longest_common_subsequence(a[1:], b),
+-            key=len
+-        )
++    lengths = [[0] * (len(b) + 1) for _ in range(len(a) + 1)]
++    for i, char_a in enumerate(a, 1):
++        for j, char_b in enumerate(b, 1):
++            if char_a == char_b:
++                lengths[i][j] = lengths[i - 1][j - 1] + 1
++            else:
++                lengths[i][j] = max(lengths[i - 1][j], lengths[i][j - 1])
++
++    result = []
++    i, j = len(a), len(b)
++    while i and j:
++        if a[i - 1] == b[j - 1]:
++            result.append(a[i - 1])
++            i -= 1
++            j -= 1
++        elif lengths[i - 1][j] >= lengths[i][j - 1]:
++            i -= 1
++        else:
++            j -= 1
++
++    return ''.join(reversed(result))
+ 
+ 
+ 

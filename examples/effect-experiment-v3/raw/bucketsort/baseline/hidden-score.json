@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "5b072ff85c439769e2c957c8152cd224a713791902d7c59cabd8c6dd1e60ac04",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 5,
+  "task_id": "bucketsort",
+  "total_cases": 5
+}

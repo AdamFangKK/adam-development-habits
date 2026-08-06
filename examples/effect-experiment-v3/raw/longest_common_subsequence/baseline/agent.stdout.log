@@ -1,0 +1,6 @@
+Repaired `longest_common_subsequence` in [buggy.py](/tmp/adam-effect-longest_common_subsequence-baseline-ov38owi_/buggy.py) using dynamic programming with deterministic backtracking.
+
+Verified:
+- `python3 test_public.py`: 3 public cases passed
+- In-memory syntax compilation passed
+- Only `buggy.py` was modified

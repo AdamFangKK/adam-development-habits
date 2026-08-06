@@ -1,0 +1,35 @@
+{
+  "candidate_sha256": "dfca7b1c843530d7895a598f197af6092645987fa330e08f8546fe5bd6bfe2b4",
+  "failures": [
+    {
+      "detail": {
+        "error": "CallTimeout: function call exceeded one second",
+        "index": 0,
+        "status": "error"
+      },
+      "index": 0,
+      "input": [
+        "rosettacode",
+        "raisethysword"
+      ],
+      "kind": "case"
+    },
+    {
+      "detail": {
+        "error": "CallTimeout: function call exceeded one second",
+        "index": 1,
+        "status": "error"
+      },
+      "index": 1,
+      "input": [
+        "amanaplanacanalpanama",
+        "docnoteidissentafastneverpreventsafatnessidietoncod"
+      ],
+      "kind": "case"
+    }
+  ],
+  "passed": false,
+  "passed_cases": 3,
+  "task_id": "levenshtein",
+  "total_cases": 5
+}

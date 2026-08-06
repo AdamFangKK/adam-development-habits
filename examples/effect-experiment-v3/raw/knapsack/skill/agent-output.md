@@ -1,0 +1,16 @@
+Fixed the exact-fit boundary in [`buggy.py`](/tmp/adam-effect-knapsack-skill-3shcvwaj/buggy.py:12): items now fit when `weight == remaining_capacity`.
+
+Change level: 1  
+Canonical owner: `knapsack`  
+Acceptance criteria: compute the maximum 0/1 knapsack value, including exact-fit selections.  
+Changed: `weight < j` to `weight <= j`.  
+Removed or retained compatibility: none.  
+Safeguards: existing O(items * capacity) DP retained; no contract change.  
+Quality decisions: direct one-line owner fix; no new dependencies or abstractions.  
+Delivery decisions: only `buggy.py` modified; no commit made.  
+Verified: `python3 test_public.py` - 3 public cases passed under its one-second per-case timeout.  
+Verified: `git diff --check` and in-memory Python compilation passed.  
+Independent review: final diff inspected; only intended condition changed.  
+Evidence artifact: enforcement mode not enabled.  
+Remaining risks: hidden tests were intentionally not inspected or run.  
+Causal conclusion: root-cause fix.

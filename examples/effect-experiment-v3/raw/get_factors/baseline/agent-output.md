@@ -1,0 +1,3 @@
+Fixed `get_factors` so prime inputs return the prime factor itself.
+
+Verified with `python3 test_public.py`: 3 public cases passed.

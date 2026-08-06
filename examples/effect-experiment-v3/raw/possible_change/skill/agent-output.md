@@ -1,0 +1,10 @@
+Implemented the smallest repair in [buggy.py](/tmp/adam-effect-possible_change-skill-_617pt36/buggy.py:8): return `0` when no coin types remain for a positive total.
+
+Evidence ledger:
+
+- Canonical owner: `possible_change`
+- Acceptance: preserve zero/negative handling; empty coins return `0`
+- Changed files: `buggy.py` only
+- Verification: `python3 test_public.py` → `3 public cases passed`
+- Edge checks: passed for empty, zero, and negative totals
+- Remaining risk: original recursive complexity remains for unusually large inputs.

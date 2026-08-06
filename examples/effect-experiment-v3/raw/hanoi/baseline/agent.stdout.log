@@ -1,0 +1,3 @@
+Fixed `hanoi` in `buggy.py` to record moves as `[start, end]`.
+
+`python3 test_public.py` passes all 2 public cases.

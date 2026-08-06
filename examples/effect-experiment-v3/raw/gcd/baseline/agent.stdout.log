@@ -1,0 +1,3 @@
+Fixed `gcd` in [buggy.py](/tmp/adam-effect-gcd-baseline-9egn531y/buggy.py) by correcting the recursive Euclidean step.
+
+Verified: `python3 test_public.py` → `2 public cases passed`.
