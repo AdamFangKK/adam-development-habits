@@ -512,6 +512,14 @@ def analyze_experiment(experiment: Mapping[str, object]) -> AnalysisReport:
     scope = require_object(experiment.get("scope"), "scope")
     _ = require_text(scope.get("claim"), "scope.claim")
     _ = require_sha256(scope.get("skill_revision_sha256"), "scope.skill_revision_sha256", allow_pending=planned)
+    harness_id = require_text(scope.get("harness_id"), "scope.harness_id")
+    if status == "completed" and "checkpointed-v8" in harness_id:
+        collection = require_object(experiment.get("collection"), "collection")
+        if collection.get("isolation_audit_passed") is not True:
+            raise ExperimentError("V8 completed experiments require a passed isolation audit")
+        audit = require_object(collection.get("isolation_audit"), "collection.isolation_audit")
+        if audit.get("passed") is not True:
+            raise ExperimentError("V8 completed experiments require a passed isolation audit")
     config = parse_config(experiment, planned=planned)
     task_plan = parse_task_plan(experiment, config, planned=planned)
     if planned:

@@ -1,0 +1,1 @@
+A merge-patch implementation ignores null values instead of deleting keys.

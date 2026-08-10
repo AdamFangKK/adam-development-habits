@@ -1,0 +1,1 @@
+An email canonicalizer lowercases the local part even though only domains are case-insensitive.

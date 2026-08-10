@@ -1,0 +1,1 @@
+An order keeps a live reference to a profile address instead of the checkout-time snapshot.

@@ -1,0 +1,1 @@
+A scope check treats a required permission as satisfied when it is only a substring of another scope.

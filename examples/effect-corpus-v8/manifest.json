@@ -1,0 +1,650 @@
+{
+  "corpus_id": "effect-corpus-v8",
+  "generated_by": "scripts/materialize_effect_corpus_v8.py",
+  "schema_version": 1,
+  "split": {
+    "hidden_tests_are_injected_after_agent_exit": true,
+    "public_workspace_excludes_hidden_tests": true,
+    "references_and_expected_repairs_are_scorer_only": true
+  },
+  "strata": {
+    "cross-module": 8,
+    "integration": 6,
+    "single-module": 6
+  },
+  "task_count": 20,
+  "tasks": [
+    {
+      "allowed_edit_paths": [
+        "calendar_key.py"
+      ],
+      "causal_owner_candidates": [
+        "calendar_key.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/iso_week_year_rollover",
+      "hidden_tree_sha256": "c01d65a21b91d277268c1e0b896f8a96ff1464e35fee720e5c0143465ada58cd",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "iso_week_year_rollover",
+      "workspace_path": "tasks/iso_week_year_rollover",
+      "workspace_tree_sha256": "1065447f7c13b27856476f3d7db00155dfda1597b638ec0c86544bd2fa8311a9"
+    },
+    {
+      "allowed_edit_paths": [
+        "row_parser.py"
+      ],
+      "causal_owner_candidates": [
+        "row_parser.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/csv_blank_cell_preservation",
+      "hidden_tree_sha256": "76396a7a74ebed044508aae76a31f12e946214830606ad0706f1dfdedcd75f99",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "csv_blank_cell_preservation",
+      "workspace_path": "tasks/csv_blank_cell_preservation",
+      "workspace_tree_sha256": "432deb46665b1c79658e426e13765a26deaf933a8c800632fc8916075124e793"
+    },
+    {
+      "allowed_edit_paths": [
+        "scopes.py"
+      ],
+      "causal_owner_candidates": [
+        "scopes.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/scope_token_boundary",
+      "hidden_tree_sha256": "b3bbc4dc85205af8c7db937d7a2aa97f7063d8dde4197da369153c25ce577b71",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "scope_token_boundary",
+      "workspace_path": "tasks/scope_token_boundary",
+      "workspace_tree_sha256": "078c109a553b1f936258b7eb323de7bb39d19d2981b2c2ebf91005744a5a6e79"
+    },
+    {
+      "allowed_edit_paths": [
+        "expiry.py"
+      ],
+      "causal_owner_candidates": [
+        "expiry.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/expiry_at_deadline",
+      "hidden_tree_sha256": "27f5e9d31266d0388401005a309eae56e5e84b61f2685a3ac1fe735c038b8815",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "expiry_at_deadline",
+      "workspace_path": "tasks/expiry_at_deadline",
+      "workspace_tree_sha256": "03b0a3b35dbae00e001ef78038d3fc27da7723792db099e27085dbb807e2d7d8"
+    },
+    {
+      "allowed_edit_paths": [
+        "merge_patch.py"
+      ],
+      "causal_owner_candidates": [
+        "merge_patch.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/merge_patch_deletes_null",
+      "hidden_tree_sha256": "8baa4c9abcc56fa0f4d9702843720057a4faadc0dc276726fbffe3ac462cc40e",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "merge_patch_deletes_null",
+      "workspace_path": "tasks/merge_patch_deletes_null",
+      "workspace_tree_sha256": "4f4cb6a8bd1af6a2e12c682dd598d9ea9b0d9833ac9f5183ef14b98fa295909c"
+    },
+    {
+      "allowed_edit_paths": [
+        "checksums.py"
+      ],
+      "causal_owner_candidates": [
+        "checksums.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/checksum_field_boundaries",
+      "hidden_tree_sha256": "3212907c81dcda73ac75828dedbd305af2d47e726de0f9df089a484ef6a5c7a5",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "checksum_field_boundaries",
+      "workspace_path": "tasks/checksum_field_boundaries",
+      "workspace_tree_sha256": "14f1fdf32078607a374d09c31939ab3e2a4fd4c0c018861eba72bd31291874f6"
+    },
+    {
+      "allowed_edit_paths": [
+        "orders.py",
+        "profile.py"
+      ],
+      "causal_owner_candidates": [
+        "orders.py",
+        "profile.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/shipment_address_snapshot",
+      "hidden_tree_sha256": "0d545cd572dcce3bb4e2c9f76f6dcd6ac134f2413b3bfb9a2e7c566748a43a83",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "shipment_address_snapshot",
+      "workspace_path": "tasks/shipment_address_snapshot",
+      "workspace_tree_sha256": "cc4e25a0ea658d2ee64492ffb290a9a2911826733854b785fe75a40e3149903e"
+    },
+    {
+      "allowed_edit_paths": [
+        "checkout.py",
+        "coupons.py"
+      ],
+      "causal_owner_candidates": [
+        "checkout.py",
+        "coupons.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/coupon_currency_guard",
+      "hidden_tree_sha256": "1a2b92076e5472211b57759f4c1b66b128d9b07139555335523e579dbe94a1f5",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "coupon_currency_guard",
+      "workspace_path": "tasks/coupon_currency_guard",
+      "workspace_tree_sha256": "991c82224150401ed89693f2a49e13bc75b70bbfe330913d741624698f7f4d36"
+    },
+    {
+      "allowed_edit_paths": [
+        "keys.py",
+        "notifier.py"
+      ],
+      "causal_owner_candidates": [
+        "keys.py",
+        "notifier.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/alert_dedupe_per_channel",
+      "hidden_tree_sha256": "a94bb0e05012e90278f8ce09da6ffc5af008f701e7f673e5840c81fd963bc9a7",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "alert_dedupe_per_channel",
+      "workspace_path": "tasks/alert_dedupe_per_channel",
+      "workspace_tree_sha256": "fc01414042f194c9fc4b65fae1a7e6c9917799685e33e558d4c4908e421466d1"
+    },
+    {
+      "allowed_edit_paths": [
+        "accounts.py",
+        "normalize.py"
+      ],
+      "causal_owner_candidates": [
+        "accounts.py",
+        "normalize.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/email_domain_normalization",
+      "hidden_tree_sha256": "aace05806125cafc33a44a5209336470e54f0e4cc4af8aa897c84bd39a65db2c",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "email_domain_normalization",
+      "workspace_path": "tasks/email_domain_normalization",
+      "workspace_tree_sha256": "ea204c6800eb26f4724c5e730e315b25e55778c46addb049e9c40f7b59cf0e74"
+    },
+    {
+      "allowed_edit_paths": [
+        "handler.py",
+        "signer.py"
+      ],
+      "causal_owner_candidates": [
+        "handler.py",
+        "signer.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/webhook_raw_body_signature",
+      "hidden_tree_sha256": "2a9166eb96152835170dd849e0a07b97c5759e449cb78180debb5fab715b83b1",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "webhook_raw_body_signature",
+      "workspace_path": "tasks/webhook_raw_body_signature",
+      "workspace_tree_sha256": "c5d05bfa41a11d749b62de4310982639de8ac70f1a622ac273a9e01619cf09e0"
+    },
+    {
+      "allowed_edit_paths": [
+        "policy.py",
+        "scheduler.py"
+      ],
+      "causal_owner_candidates": [
+        "policy.py",
+        "scheduler.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/slot_overlap_half_open",
+      "hidden_tree_sha256": "2f25cf2f55c9b6fbb2e6f4b0fcb8fc03245dda05878faad164ee314809171b8f",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "slot_overlap_half_open",
+      "workspace_path": "tasks/slot_overlap_half_open",
+      "workspace_tree_sha256": "c7c66571ded90a39e2a72f8f8538130096d1261b83ed074197609dce13e35dae"
+    },
+    {
+      "allowed_edit_paths": [
+        "client.py",
+        "errors.py"
+      ],
+      "causal_owner_candidates": [
+        "client.py",
+        "errors.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/validation_errors_not_retryable",
+      "hidden_tree_sha256": "44b6b5f598d8a2b1ca76456d2742e45aaaaebbb7792957c3c796dd824ac2e181",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "validation_errors_not_retryable",
+      "workspace_path": "tasks/validation_errors_not_retryable",
+      "workspace_tree_sha256": "7f804db84e04a52c06b1db9e06c498a97761d913834a22b1123ae8a886860e97"
+    },
+    {
+      "allowed_edit_paths": [
+        "ledger.py",
+        "serializer.py"
+      ],
+      "causal_owner_candidates": [
+        "ledger.py",
+        "serializer.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/ledger_chronological_export",
+      "hidden_tree_sha256": "590c533b42b262f18a271a4da354e7b08a3a75b5de0dc9e436b29f4d41baa261",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "ledger_chronological_export",
+      "workspace_path": "tasks/ledger_chronological_export",
+      "workspace_tree_sha256": "f83ae9024a8ffd610e52c0f6eee8feea879e46c9850f0ba3e7deaae41c68fedb"
+    },
+    {
+      "allowed_edit_paths": [
+        "accounts.py",
+        "billing.py",
+        "provision.py"
+      ],
+      "causal_owner_candidates": [
+        "accounts.py",
+        "billing.py",
+        "provision.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/provision_email_compensation",
+      "hidden_tree_sha256": "79bb33c6b18abb80b26be85de732ca9cf553bac05616bf81029676a7ced3b59a",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "provision_email_compensation",
+      "workspace_path": "tasks/provision_email_compensation",
+      "workspace_tree_sha256": "c6e2ff2a8af60677a519ac8b8221310d0b8b73585ef1d54213e0ea117f282831"
+    },
+    {
+      "allowed_edit_paths": [
+        "nonces.py",
+        "receiver.py"
+      ],
+      "causal_owner_candidates": [
+        "nonces.py",
+        "receiver.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/webhook_claim_before_effect",
+      "hidden_tree_sha256": "f167a1e7ee2b381c9b53ab17e80302c463483cf9259efded524ccf273cd8b8a8",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "webhook_claim_before_effect",
+      "workspace_path": "tasks/webhook_claim_before_effect",
+      "workspace_tree_sha256": "9c7abf51582a58b98895563ab4cfb94ce945e722219c415c3515a9074b30d4e2"
+    },
+    {
+      "allowed_edit_paths": [
+        "inventory.py",
+        "transfer.py"
+      ],
+      "causal_owner_candidates": [
+        "inventory.py",
+        "transfer.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/transfer_destination_preflight",
+      "hidden_tree_sha256": "b9e80993cafe41aceef4eaa407b2f2486850aeadc03bf567d7dc212d6d01dc7f",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "transfer_destination_preflight",
+      "workspace_path": "tasks/transfer_destination_preflight",
+      "workspace_tree_sha256": "1c91b1b9c86a812e4134b78613423300c66ac83716cae397381404d8739de9d8"
+    },
+    {
+      "allowed_edit_paths": [
+        "blob_store.py",
+        "manifest.py",
+        "publisher.py"
+      ],
+      "causal_owner_candidates": [
+        "blob_store.py",
+        "manifest.py",
+        "publisher.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/manifest_after_blob_write",
+      "hidden_tree_sha256": "8a8c3fba3a2ab899fd2272a0f3cec995bc24533bbe592ceea194ff65c932410c",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "manifest_after_blob_write",
+      "workspace_path": "tasks/manifest_after_blob_write",
+      "workspace_tree_sha256": "70028f180b790ac25c968cd524bfe078eb6fc63bce7de960bd06462b44e2830b"
+    },
+    {
+      "allowed_edit_paths": [
+        "auth.py",
+        "tokens.py"
+      ],
+      "causal_owner_candidates": [
+        "auth.py",
+        "tokens.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/session_rotation_invalidates_old",
+      "hidden_tree_sha256": "631638405faeaf01b965a5f7302324134b2b96b27956ab7c6584ccea99e26148",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "session_rotation_invalidates_old",
+      "workspace_path": "tasks/session_rotation_invalidates_old",
+      "workspace_tree_sha256": "968f6719eacf3d3e9146a7e37008f97d280105b71f067b24c6d83df7ba475040"
+    },
+    {
+      "allowed_edit_paths": [
+        "lock.py",
+        "runner.py"
+      ],
+      "causal_owner_candidates": [
+        "lock.py",
+        "runner.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/pipeline_lock_release_on_error",
+      "hidden_tree_sha256": "a4e06c5c0cc9bdf1d0a5f66cc2546e9ba0d81bf3206149f9f0e3a774cc641ea7",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "pipeline_lock_release_on_error",
+      "workspace_path": "tasks/pipeline_lock_release_on_error",
+      "workspace_tree_sha256": "58b6efee47998028daf36d2764e5770c763fd908c536b29b674bea2c4fe25c41"
+    }
+  ]
+}

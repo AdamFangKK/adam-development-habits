@@ -1,0 +1,1 @@
+A pipeline runner leaves its lock held when the guarded step raises.

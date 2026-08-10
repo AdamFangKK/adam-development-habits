@@ -1,0 +1,1 @@
+A CSV-like row parser drops blank cells that are significant to column alignment.

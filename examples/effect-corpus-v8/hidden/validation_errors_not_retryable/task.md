@@ -1,0 +1,1 @@
+A retry loop retries validation failures instead of surfacing them immediately.

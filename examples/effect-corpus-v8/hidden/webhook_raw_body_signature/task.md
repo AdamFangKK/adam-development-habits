@@ -1,0 +1,1 @@
+A webhook handler verifies a normalized JSON string instead of the exact signed raw body.

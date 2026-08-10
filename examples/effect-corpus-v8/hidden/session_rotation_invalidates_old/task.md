@@ -1,0 +1,1 @@
+A session rotation issues a new token but keeps the prior token authorized.

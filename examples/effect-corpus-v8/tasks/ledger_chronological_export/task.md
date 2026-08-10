@@ -1,0 +1,1 @@
+A ledger export sorts entries by account and loses chronological order.

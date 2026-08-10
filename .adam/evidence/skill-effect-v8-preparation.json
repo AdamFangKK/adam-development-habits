@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-v8-preparation",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/run_effect_experiment_v8.py:main",
+    "scripts/audit_effect_isolation_v8.py:audit_collection",
+    "scripts/score_effect_workspace_v8.py:main",
+    "scripts/materialize_effect_corpus_v8.py:materialize",
+    "examples/effect-experiment-v8/preregistration.json"
+  ],
+  "affected_callers": [
+    "tests/test_effect_runner_v8.py",
+    "tests/test_effect_corpus_v8.py",
+    "tests/test_effect_experiment_v8.py",
+    "README.md"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The fresh V8 corpus contains exactly 20 new tasks in 6/8/6 strata; every buggy public suite fails and every fixed public plus hidden suite passes.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_corpus_v8 -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Both conditions run through one wrapper that injects --disable skill_search, while only the treatment reads its temporary Skill snapshot.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_runner_v8 -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "V8 binds its versioned scorer and restores delegated V6 bindings; absolute artifact paths and the full task plan are frozen in the planned preregistration.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_experiment_v8 -v && python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The complete package remains regression-clean in the repository's normal Python environment.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "V8 has a fresh held-out corpus and does not reuse V7 task IDs or candidate artifacts.",
+    "The only planned treatment difference is explicit Skill activation; automatic Skill search is disabled for both conditions.",
+    "Hidden tests and reference repairs are injected only after Agent exit into a temporary scoring copy.",
+    "Any missing output, missing wrapper evidence, global baseline Skill read, or missing treatment snapshot read makes collection ineligible.",
+    "A planned preregistration with no trials reports not_run and cannot support an effect claim."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {"name": "fresh held-out corpus", "status": "applied", "rationale": "V8 materializes 20 new task IDs with manifest-linked public and hidden tree digests."},
+    {"name": "condition isolation", "status": "applied", "rationale": "The wrapper disables automatic Skill search for both conditions and the audit rejects global baseline reads or missing treatment snapshot reads."},
+    {"name": "blind post-exit scoring", "status": "applied", "rationale": "The versioned scorer copies hidden tests into a temporary candidate directory only after the Agent process exits."},
+    {"name": "complete-pair gate", "status": "applied", "rationale": "The delegated runner checkpoints every pair and marks incomplete conditions interrupted; the V8 audit can only add an ineligibility reason."},
+    {"name": "immutable preregistration", "status": "applied", "rationale": "Model, Harness, prompts, corpus, scripts, task plan, seed, and analysis thresholds are hash-linked before collection."}
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The generator owns fixture construction, the runner owns paired execution, the wrapper owns Skill-search isolation, the audit owns collection eligibility, and the scorer owns hidden contracts."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "No dependency or lockfile change; only existing Python standard-library and Codex CLI surfaces are used."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No application extension point or public adapter contract is added."},
+    "data_ownership": {"status": "applied", "rationale": "Public workspaces, hidden reference trees, prompt inputs, raw outputs, and result records have separate lifecycle boundaries; hidden content remains scorer-only."},
+    "error_model": {"status": "applied", "rationale": "Timeout, nonzero Agent exit, scope violation, public failure, hidden failure, missing artifact, and isolation contamination remain distinct recorded outcomes."},
+    "contract_evolution": {"status": "applied", "rationale": "V8 is a new versioned envelope and corpus; V7's interrupted result remains historical and is not rebound to the corrected runner."},
+    "operational_budget": {"status": "applied", "rationale": "Agent and hidden-test timeouts remain explicit in the runner; collection uses fixed complete pairs with no early stopping."},
+    "threat_boundary": {"status": "applied", "rationale": "Hidden tests, reference repairs, condition labels, and prior outputs stay outside the repair Agent input boundary; native Codex isolation is protocol isolation, not a security sandbox."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The V8 protocol, corpus, tests, README, and evidence ledger form one atomic verified Git scope before collection."},
+    "release_recovery": {"status": "not_applicable", "rationale": "This is an offline evaluation protocol with no production rollout."},
+    "data_migration": {"status": "not_applicable", "rationale": "No application schema or user data is changed."},
+    "configuration_secrets": {"status": "applied", "rationale": "Only non-secret model and Harness identifiers are frozen; no credentials or Skill contents are duplicated into logs or metadata."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No runtime or build dependency is added or updated."},
+    "operational_knowledge": {"status": "applied", "rationale": "README records V8's isolation limitation and the not-run boundary; the test suite records the exact audit and scorer contracts."},
+    "reproducibility": {"status": "applied", "rationale": "The manifest, prompts, scripts, Skill revision, task strata, randomization seed, timeouts, and analyzer thresholds are hash-linked in the planned preregistration."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_corpus_v8 tests.test_effect_runner_v8 tests.test_effect_experiment_v8 -v", "status": "passed", "result": "10 V8 corpus, runner, wrapper, audit, preregistration, scorer-binding, and completed-result isolation-gate tests passed."},
+    {"command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright scripts/audit_effect_isolation_v8.py scripts/codex_v8_isolated.py scripts/materialize_effect_corpus_v8.py scripts/run_effect_experiment_v8.py scripts/score_effect_workspace_v8.py tests/test_effect_corpus_v8.py tests/test_effect_experiment_v8.py tests/test_effect_runner_v8.py", "status": "passed", "result": "0 errors, 0 warnings, 0 notes."},
+    {"command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .", "status": "passed", "result": "Skill frontmatter and package structure are valid."},
+    {"command": "python3 -m unittest discover -s tests -v", "status": "passed", "result": "149 package tests passed in the repository's normal Python environment, including the external QuixBugs and Click replays."},
+    {"command": "python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json", "status": "passed", "result": "Status planned; conclusion not_run; no trial data or effect statistic is present."},
+    {"command": "git diff --check", "status": "passed", "result": "No whitespace errors."}
+  ],
+  "rollback_or_compatibility": "Revert the V8 preparation commit as one scope to remove the new protocol, corpus, wrappers, tests, README entry, and evidence ledger. Retain historical V5-V7 interrupted records unchanged. Do not start collection from an uncommitted or modified envelope.",
+  "independent_review": {"reviewer": "Codex native code-reviewer: v7_closure_review", "outcome": "approved", "notes": "A second read-only review confirmed that both-condition global-Skill reads are rejected, passed audits are persisted and required for V8 analysis, all preregistration digests match current files, and no hidden-test leakage was found."},
+  "supporting_artifacts": [
+    {"id": "v8-preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v8/preregistration.json", "sha256": "9a7ce61ab601a6c640361a3c3115e945efe905acc8e7c7b8e2b303b8ec7656ff", "summary": "Hash-linked planned V8 envelope with zero trials."},
+    {"id": "v8-manifest", "kind": "evaluation_transcript", "path": "examples/effect-corpus-v8/manifest.json", "sha256": "c4bee700af88a1613e6ad91cd542c7b83d64ec18813a8daa30e03ba821fecb09", "summary": "Frozen V8 manifest for 20 fresh tasks in 6/8/6 strata."},
+    {"id": "v8-runner", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment_v8.py", "sha256": "6198fc21d9dc86de1187546680eaccdf9ffe7ef2b8fe14f48fc4b6e640b9123e", "summary": "V8 absolute-path checkpointed runner with versioned hidden scoring and durable audit result."},
+    {"id": "v8-scorer", "kind": "evaluation_transcript", "path": "scripts/score_effect_workspace_v8.py", "sha256": "139b1f24273cf6bcc9c79143b066669f6844337b88f499a6e0846bbd7959fc63", "summary": "Versioned post-exit hidden scorer entry point."},
+    {"id": "v8-analyzer", "kind": "evaluation_transcript", "path": "scripts/analyze_skill_effect.py", "sha256": "12770fa4eeba0e7246a1729efd0ec8c802495845388abdc0c7a44507038061ea", "summary": "Paired analyzer that requires durable isolation proof for completed V8 results."},
+    {"id": "v8-isolation-audit", "kind": "evaluation_transcript", "path": "scripts/audit_effect_isolation_v8.py", "sha256": "f346e700099423de73dfc48bcc2fa00aad90161fdddba3c965c447b468511a0c", "summary": "Machine audit for wrapper, output, both-condition global-read rejection, and treatment snapshot evidence."},
+    {"id": "v8-wrapper", "kind": "evaluation_transcript", "path": "scripts/codex_v8_isolated.py", "sha256": "aee4c02304465e500856ded998597fe2b7d3d70ce999903d25a574f9a237961e", "summary": "Codex wrapper that injects --disable skill_search exactly once."},
+    {"id": "v8-corpus-test", "kind": "test_output", "path": "tests/test_effect_corpus_v8.py", "sha256": "2bf7a09d0c4b72e416556a5a69ec98bede37eecf59aa6fc520b595091132471d", "summary": "Corpus contract tests for buggy public failures, fixed hidden success, strata, and deterministic manifests."},
+    {"id": "v8-runner-test", "kind": "test_output", "path": "tests/test_effect_runner_v8.py", "sha256": "b3a0db70e257f32c8b21118e63df4f90b71209289d4253a846adc480e00f8079", "summary": "Isolation, absolute path, scorer binding, durable audit, and wrapper execution regression tests."},
+    {"id": "v8-preregistration-test", "kind": "test_output", "path": "tests/test_effect_experiment_v8.py", "sha256": "5d6d29f18f41eb85a86203a3d971f0dcd507b58919b826bf2c78a85f13462b7a", "summary": "Pre-registration hash, planned not-run, and completed-result audit-gate tests."},
+    {"id": "v8-readme", "kind": "evaluation_transcript", "path": "README.md", "sha256": "e97f95a0c11e03a5bf765259bccac2bb3acf1bcdc63a38154fce1541a7723663", "summary": "Documentation of V7 invalidity and V8's not-run isolation-aware scope."}
+  ],
+  "remaining_risks": [
+    "No V8 Agent condition has run; no Skill repair-success or causal-quality improvement claim is supported.",
+    "Native Codex process and workspace isolation is protocol isolation, not a filesystem or container security boundary.",
+    "The synthetic corpus covers selected boundary, ownership, retry, and integration contracts and cannot represent every production causal failure.",
+    "The full package suite requires the repository's normal Python environment with pytest available for the external replay; a PYTHONNOUSERSITE run intentionally reports that prerequisite as unavailable."
+  ],
+  "execution_authority": "authorized code-changing worktree",
+  "counterfactual_status": "unrun",
+  "causal": {
+    "mode": "full",
+    "symptom": "V7 could not support a Skill-effect estimate because its fixed pair collection was incomplete and baseline conditions loaded the global Skill.",
+    "discriminating_check": "Run the V8 corpus, runner, wrapper, and audit contract tests; recompute the preregistration hashes; and require a future complete paired collection before analysis.",
+    "upstream_path": "Codex invocation flags -> Skill discovery boundary and output artifact path -> condition eligibility -> paired effect analysis",
+    "timeline_evidence": "V7's frozen interruption record predates this V8 preparation; the V8 preregistration is status planned with an empty trials list and its hash-linked isolation tests pass.",
+    "conclusion": "unknown",
+    "confidence": "high",
+    "evidence_types": ["observational", "reproduction"],
+    "evidence_artifacts": [
+      {"id": "v8-preregistration-causal", "kind": "test_source", "path": "tests/test_effect_experiment_v8.py", "sha256": "5d6d29f18f41eb85a86203a3d971f0dcd507b58919b826bf2c78a85f13462b7a", "summary": "Test source that rejects stale component hashes, planned-only evidence, and completed results without durable isolation proof."},
+      {"id": "v8-isolation-causal", "kind": "test_source", "path": "tests/test_effect_runner_v8.py", "sha256": "b3a0db70e257f32c8b21118e63df4f90b71209289d4253a846adc480e00f8079", "summary": "Test source that rejects missing wrapper, treatment snapshot-read, and both-condition global-read evidence."}
+    ],
+    "hypotheses": [
+      {"id": "H1", "claim": "The V8 protocol prevents the specific V7 condition-contamination and artifact-path failure modes.", "prediction": "The isolation and preregistration contract tests pass while no trial data are present.", "status": "supported", "evidence_refs": ["v8-preregistration-causal", "v8-isolation-causal"]},
+      {"id": "H2", "claim": "The Skill improves hidden repair success on the fixed model and V8 corpus.", "prediction": "A complete blinded paired run would report improved under the preregistered thresholds.", "status": "unresolved", "evidence_refs": ["v8-preregistration-causal"]}
+    ]
+  }
+}

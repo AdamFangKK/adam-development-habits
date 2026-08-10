@@ -1,0 +1,1 @@
+An alert dedupe key ignores delivery channel and suppresses a required second notification.

@@ -1,0 +1,1 @@
+An expiry helper keeps credentials valid at the exact deadline.

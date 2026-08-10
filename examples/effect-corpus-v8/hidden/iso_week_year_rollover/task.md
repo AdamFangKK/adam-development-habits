@@ -1,0 +1,1 @@
+A calendar key uses the Gregorian year for ISO week numbers at year boundaries.

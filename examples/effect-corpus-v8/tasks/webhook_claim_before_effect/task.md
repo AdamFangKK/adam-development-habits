@@ -1,0 +1,1 @@
+A webhook receiver marks a nonce only after handling, so a partial failure can replay side effects.

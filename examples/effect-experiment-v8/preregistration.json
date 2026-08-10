@@ -1,0 +1,77 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "minimum_distinct_tasks": 20,
+    "minimum_effect": 0.05,
+    "permutation_resamples": 10000,
+    "random_seed": 20260812,
+    "stratum_weights": {
+      "cross-module": 0.4,
+      "integration": 0.4,
+      "single-module": 0.2
+    }
+  },
+  "experiment_id": "causal-skill-effect-v8",
+  "preregistration": {
+    "envelope_sha256": "7412b0509993d9c70cbf1f03676065aeac7252e6e952cffa9abf5e7d2d5003db",
+    "git_commit": "pending",
+    "protocol_sha256": "a5fccd90211e6eab27eadad16e723dcecc1501670f22b7ab86bc1a0a893ed8e7",
+    "recorded_before_first_trial": true
+  },
+  "protocol": {
+    "analyzer_sha256": "12770fa4eeba0e7246a1729efd0ec8c802495845388abdc0c7a44507038061ea",
+    "base_hidden_scorer_sha256": "2e3a1c507c1dec023fe58ff7cb11f84d0b845df44ee305fa8e6768250285a4e9",
+    "base_runner_sha256": "06b65db8695798a94c52993257cb9c4963af98ed9bd684e13ae1d795582ab97d",
+    "baseline_prompt_sha256": "2a92d7bfe5b7b56d352088c9b0e605ba8e247dc3c63f94f7af75969029de3fff",
+    "codex_wrapper_sha256": "aee4c02304465e500856ded998597fe2b7d3d70ce999903d25a574f9a237961e",
+    "corpus_manifest_sha256": "c4bee700af88a1613e6ad91cd542c7b83d64ec18813a8daa30e03ba821fecb09",
+    "generator_sha256": "b5d64a164736ee8fa6c5b35902a4199823d69b3b95a93a0fc580dc3b89767afe",
+    "hidden_scorer_blind_to_condition": true,
+    "hidden_scorer_sha256": "139b1f24273cf6bcc9c79143b066669f6844337b88f499a6e0846bbd7959fc63",
+    "isolation_auditor_sha256": "f346e700099423de73dfc48bcc2fa00aad90161fdddba3c965c447b468511a0c",
+    "pairing": "same task, randomized condition order",
+    "runner_sha256": "6198fc21d9dc86de1187546680eaccdf9ffe7ef2b8fe14f48fc4b6e640b9123e",
+    "skill_prompt_sha256": "529fa8a8bfa6da3508b53edcdbcdfdfbba4b4e59d35ea7b15607887bcf7aad6c",
+    "skill_search_disabled_for_both_conditions": true,
+    "treatment_requires_snapshot_read_evidence": true
+  },
+  "schema_version": 1,
+  "scope": {
+    "claim": "For the fixed Codex model, Harness, Skill revision, V8 held-out causal-repair corpus, and blind hidden scorer declared here, enabling Adam's Development Habits improves hidden repair success by the preregistered practical margin.",
+    "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;skill-search-disabled;absolute-output;checkpointed-v8",
+    "model_id": "gpt-5.6-terra",
+    "skill_revision_sha256": "2d0a7c91b872a189df0a1cf0fc68390ce68dba5c13d07f571d8f3faab83fdd92"
+  },
+  "status": "planned",
+  "stopping_rule": {
+    "early_stop": "not allowed",
+    "kind": "fixed_complete_pairs",
+    "pairs_per_task": 1
+  },
+  "task_plan": {
+    "tasks": [
+      {"stratum": "single-module", "task_id": "iso_week_year_rollover"},
+      {"stratum": "single-module", "task_id": "csv_blank_cell_preservation"},
+      {"stratum": "single-module", "task_id": "scope_token_boundary"},
+      {"stratum": "single-module", "task_id": "expiry_at_deadline"},
+      {"stratum": "single-module", "task_id": "merge_patch_deletes_null"},
+      {"stratum": "single-module", "task_id": "checksum_field_boundaries"},
+      {"stratum": "cross-module", "task_id": "shipment_address_snapshot"},
+      {"stratum": "cross-module", "task_id": "coupon_currency_guard"},
+      {"stratum": "cross-module", "task_id": "alert_dedupe_per_channel"},
+      {"stratum": "cross-module", "task_id": "email_domain_normalization"},
+      {"stratum": "cross-module", "task_id": "webhook_raw_body_signature"},
+      {"stratum": "cross-module", "task_id": "slot_overlap_half_open"},
+      {"stratum": "cross-module", "task_id": "validation_errors_not_retryable"},
+      {"stratum": "cross-module", "task_id": "ledger_chronological_export"},
+      {"stratum": "integration", "task_id": "provision_email_compensation"},
+      {"stratum": "integration", "task_id": "webhook_claim_before_effect"},
+      {"stratum": "integration", "task_id": "transfer_destination_preflight"},
+      {"stratum": "integration", "task_id": "manifest_after_blob_write"},
+      {"stratum": "integration", "task_id": "session_rotation_invalidates_old"},
+      {"stratum": "integration", "task_id": "pipeline_lock_release_on_error"}
+    ]
+  },
+  "trials": []
+}

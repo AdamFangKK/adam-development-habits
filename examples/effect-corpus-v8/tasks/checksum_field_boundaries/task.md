@@ -1,0 +1,1 @@
+A checksum concatenates fields without boundaries and collides for different records.

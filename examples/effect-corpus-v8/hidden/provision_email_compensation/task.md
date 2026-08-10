@@ -1,0 +1,1 @@
+A provisioning flow leaves an active account and captured charge after welcome email delivery fails.

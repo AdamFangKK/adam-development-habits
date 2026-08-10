@@ -1,0 +1,1 @@
+A scheduler treats adjacent half-open time slots as overlapping.

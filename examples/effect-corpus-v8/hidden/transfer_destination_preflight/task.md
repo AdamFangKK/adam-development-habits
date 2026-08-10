@@ -1,0 +1,1 @@
+A stock transfer removes source inventory before verifying destination capacity.

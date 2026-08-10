@@ -1,0 +1,1 @@
+A coupon lookup ignores currency and applies a discount in the wrong monetary unit.

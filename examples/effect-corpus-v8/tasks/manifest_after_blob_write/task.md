@@ -1,0 +1,1 @@
+A publisher commits a manifest entry before the referenced blob write is durable.

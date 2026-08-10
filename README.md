@@ -203,6 +203,8 @@ v6 首次收集在 Agent 启动前因 runner 将任务树复制到已存在的�
 
 v7 的首次收集已归档为 `interrupted`：20 个预注册 task 的 40 个条件中只捕获 16 个，`canonical_audit_path/baseline` 在 180 秒 Agent 限时后未完整结束，因此固定完整配对规则已失效。更根本的是，6 个已捕获的 baseline stderr 日志读取了全局安装的 `adam-development-habits` Skill；这违背了“只有显式 Skill treatment 可读取冻结 Skill 快照”的条件差异约束。因此，哪怕已完成的配对也不能当作基线对照或部分效果统计。原始 trial、冻结的 [`preregistration.json`](./examples/effect-experiment-v7/preregistration.json)、[`result.json`](./examples/effect-experiment-v7/result.json)、归档判定 [`interruption.json`](./examples/effect-experiment-v7/interruption.json) 和一致性测试 [`test_effect_experiment_v7_interruption.py`](./tests/test_effect_experiment_v7_interruption.py) 均被保留。下一次正式采集必须使用全新 V8 语料与预注册；在此之前需先证明 Codex 的基线/处理组 Skill 隔离、使用绝对 `-o` 工件路径，并按新预注册提高超时预算。V7 不支持任何 Skill 效果、模型修复成功率或一般因果能力声明。
 
+V8 已冻结为尚未运行的协议：[`materialize_effect_corpus_v8.py`](./scripts/materialize_effect_corpus_v8.py) 与 [`effect-corpus-v8`](./examples/effect-corpus-v8) 固定了 20 个全新任务和 `6/8/6` 分层；[`run_effect_experiment_v8.py`](./scripts/run_effect_experiment_v8.py) 通过 [`codex_v8_isolated.py`](./scripts/codex_v8_isolated.py) 对两组统一注入 `--disable skill_search`，处理组只能显式读取临时 Skill 快照。每个条件的绝对 `agent-output.md`、wrapper 标记和 treatment 的实际快照读取记录必须通过 [`audit_effect_isolation_v8.py`](./scripts/audit_effect_isolation_v8.py)；任一条件读取全局 Skill 都会失败。通过后，成功审计报告会持久化到结果的 `collection.isolation_audit_passed`，而 V8 分析器拒绝没有这份证明的 completed 结果。审计失败时结果被标记为 `interrupted`，禁止分析或重试。完整输入与哈希锁定在 [`effect-experiment-v8/preregistration.json`](./examples/effect-experiment-v8/preregistration.json)。它目前只证明实验设计与夹具已验证，**不**证明 Skill、修复成功率或模型因果能力已有提升。
+
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \
   examples/skill-effect-preregistration.json
