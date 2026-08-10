@@ -1,0 +1,3 @@
+Fixed `rotate` in `buggy.py` to perform right rotations while preserving empty lists and zero shifts.
+
+Verification: `python3 test_public.py` → 3 public cases passed.

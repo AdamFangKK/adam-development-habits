@@ -1,0 +1,25 @@
+diff --git a/buggy.py b/buggy.py
+index 077c28d..353f1ec 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,6 +1,17 @@
+ def lcs_length(a, b):
+     if not a or not b:
+         return 0
+-    if a[0] == b[0]:
+-        return lcs_length(a[1:], b[1:])
+-    return max(lcs_length(a[1:], b), lcs_length(a, b[1:]))
++    if len(a) < len(b):
++        a, b = b, a
++
++    row = [0] * (len(b) + 1)
++    for item_a in a:
++        diagonal = 0
++        for index_b, item_b in enumerate(b, 1):
++            previous = row[index_b]
++            if item_a == item_b:
++                row[index_b] = diagonal + 1
++            elif row[index_b - 1] > row[index_b]:
++                row[index_b] = row[index_b - 1]
++            diagonal = previous
++    return row[-1]

@@ -1,0 +1,10 @@
+diff --git a/buggy.py b/buggy.py
+index f8db910..8b8a5e8 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -2,4 +2,4 @@ def rotate(values, shift):
+     if not values:
+         return []
+     shift %= len(values)
+-    return values[shift:] + values[:shift]
++    return values[-shift:] + values[:-shift]

@@ -1,0 +1,9 @@
+Implemented the minimal bitset repair in [buggy.py](/tmp/adam-effect-large_partition_equal-skill-xlokkq9s/buggy.py:1).
+
+Evidence ledger:
+
+- Level: 1
+- Removed: incorrect O(n·target) table scan that skipped equality and reused items.
+- Verification: `python3 test_public.py` passed; 3,000,000-sum stress probe completed under one second; exhaustive small invariant probe passed; syntax compilation passed.
+- Scope: only `buggy.py` changed.
+- Remaining risk: assumes non-negative subset-sum values, as implied by the task contract.

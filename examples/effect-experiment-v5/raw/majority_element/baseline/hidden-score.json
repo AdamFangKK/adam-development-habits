@@ -1,0 +1,23 @@
+{
+  "candidate_sha256": "6cc6adc1eae453f1d31e8ddbc8c3452ee1d78405f3d6af8afc9a89b25a127fc6",
+  "failures": [
+    {
+      "actual": 1,
+      "expected": -1,
+      "index": 0,
+      "input": [
+        [
+          -1,
+          -1,
+          2
+        ]
+      ],
+      "kind": "case"
+    }
+  ],
+  "passed": false,
+  "passed_cases": 0,
+  "scope_violation": [],
+  "task_id": "majority_element",
+  "total_cases": 1
+}

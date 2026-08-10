@@ -1,0 +1,16 @@
+diff --git a/buggy.py b/buggy.py
+index 995bf2c..f8c8534 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,4 +1,9 @@
+ def count_paths(rows, columns):
+-    if rows == 1 or columns == 1:
++    if rows <= 0 or columns <= 0:
+         return 0
+-    return count_paths(rows - 1, columns) + count_paths(rows, columns - 1)
++
++    paths = [1] * columns
++    for _ in range(1, rows):
++        for column in range(1, columns):
++            paths[column] += paths[column - 1]
++    return paths[-1]

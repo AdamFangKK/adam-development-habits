@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "cdd2e870c07238c4a2e2f7087f19aa03ae40deae49d12df4df60a9aaf01862af",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 1,
+  "task_id": "large_partition_equal",
+  "total_cases": 1
+}

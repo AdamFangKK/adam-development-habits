@@ -1,0 +1,3 @@
+Updated [buggy.py](/private/tmp/adam-effect-large_subset_sum-baseline-u4nigz7i/buggy.py) to use a bounded integer bitset for efficient subset-sum checks and exact matches.
+
+Verification: `python3 test_public.py` passed all 3 public cases within the supplied timeout.

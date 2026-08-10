@@ -1,0 +1,10 @@
+diff --git a/buggy.py b/buggy.py
+index 6d80287..41ec252 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -2,4 +2,4 @@ def prefix(values, queries):
+     sums = [0]
+     for value in values:
+         sums.append(sums[-1] + value)
+-    return [sums[end - 1] - sums[start] for start, end in queries]
++    return [sums[end] - sums[start] for start, end in queries]

@@ -1,0 +1,12 @@
+Implemented the knapsack repair in [buggy.py](/tmp/adam-effect-large_knapsack-skill-mn73vvl3/buggy.py).
+
+Evidence ledger:
+
+- Replaced capacity-sized DP with meet-in-the-middle subset enumeration.
+- Correctly enforces 0/1 item usage and exact-capacity fits.
+- Complexity: O(2^(n/2) log 2^(n/2)) time, O(2^(n/2)) space.
+- `python3 test_public.py`: 2 public cases passed.
+- Maximum-capacity stress probe: passed in `0.01s`.
+- Exhaustive small-case validation: passed.
+- Syntax and diff checks: passed.
+- Only `buggy.py` was modified.

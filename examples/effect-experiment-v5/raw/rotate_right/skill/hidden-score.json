@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "eea92dd928aa245b905f9183a0871b6d6899164813b55d8de3257203cd1c345f",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 2,
+  "task_id": "rotate_right",
+  "total_cases": 2
+}

@@ -1,0 +1,3 @@
+Updated [buggy.py](/tmp/adam-effect-large_word_break-baseline-vl4a7kxg/buggy.py) with polynomial dynamic programming for word segmentation.
+
+Verified: `python3 test_public.py` → 3 public cases passed.

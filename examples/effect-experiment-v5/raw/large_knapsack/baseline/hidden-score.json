@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "3ca7d4d6b9d353e77bbce0e6e0097f8c18c932bc360dc9a1ce6d292cb165c6a3",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 2,
+  "task_id": "large_knapsack",
+  "total_cases": 2
+}

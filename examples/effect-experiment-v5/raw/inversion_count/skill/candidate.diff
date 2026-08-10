@@ -1,0 +1,32 @@
+diff --git a/buggy.py b/buggy.py
+index 53d5942..689fcd7 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,2 +1,26 @@
+ def inversion_count(values):
+-    return sum(1 for left in range(len(values)) for right in range(left + 1, len(values) - 1) if values[left] > values[right])
++    def sort_and_count(items):
++        if len(items) < 2:
++            return items, 0
++
++        midpoint = len(items) // 2
++        left, left_count = sort_and_count(items[:midpoint])
++        right, right_count = sort_and_count(items[midpoint:])
++        merged = []
++        inversions = left_count + right_count
++        left_index = right_index = 0
++
++        while left_index < len(left) and right_index < len(right):
++            if left[left_index] <= right[right_index]:
++                merged.append(left[left_index])
++                left_index += 1
++            else:
++                merged.append(right[right_index])
++                inversions += len(left) - left_index
++                right_index += 1
++
++        merged.extend(left[left_index:])
++        merged.extend(right[right_index:])
++        return merged, inversions
++
++    return sort_and_count(list(values))[1]

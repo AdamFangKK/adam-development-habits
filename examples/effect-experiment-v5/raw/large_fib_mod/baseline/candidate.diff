@@ -1,0 +1,21 @@
+diff --git a/buggy.py b/buggy.py
+index 990ec0e..6189ba3 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,4 +1,13 @@
+ def fib_mod(n, modulus):
+-    if n <= 1:
+-        return 1
+-    return (fib_mod(n - 1, modulus) + fib_mod(n - 2, modulus)) % modulus
++    def doubling(k):
++        if k == 0:
++            return 0, 1 % modulus
++
++        a, b = doubling(k // 2)
++        c = (a * (2 * b - a)) % modulus
++        d = (a * a + b * b) % modulus
++        if k % 2:
++            return d, (c + d) % modulus
++        return c, d
++
++    return doubling(n)[0]

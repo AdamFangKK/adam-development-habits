@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "f4fea011ffb41d94519f0d7213121af21f7d07d356f596f7c50eebf1e085799c",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 2,
+  "task_id": "large_edit_distance",
+  "total_cases": 2
+}

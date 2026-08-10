@@ -1,0 +1,9 @@
+Implemented the minimal repair in [buggy.py](/private/tmp/adam-effect-large_edit_distance-skill-uvzfu0rc/buggy.py:1).
+
+Evidence ledger:
+
+- Shape: Two strings; replaced exponential recursion with O(m*n) time and O(min(m,n)) space.
+- Invariant: Standard Levenshtein insert/delete/substitute costs.
+- Verification: `python3 test_public.py` passed all 3 cases. A 220x220 stress case completed in `0.009787s` under the one-second timeout.
+- Scope: Only `buggy.py` modified; `git diff --check` passed.
+- Remaining risk: Hidden cases beyond the stated 220-character contract were not exercised.

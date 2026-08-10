@@ -1,0 +1,30 @@
+{
+  "candidate_sha256": "9d70547c8106557f1df9e691d2b2a9c258341ab95ae08fbefcc79864d703a42d",
+  "failures": [
+    {
+      "actual": 0,
+      "expected": 4,
+      "index": 0,
+      "input": [
+        "AGGTAB",
+        "GXTXAYB"
+      ],
+      "kind": "case"
+    },
+    {
+      "actual": 0,
+      "expected": 2,
+      "index": 1,
+      "input": [
+        "aaaa",
+        "aa"
+      ],
+      "kind": "case"
+    }
+  ],
+  "passed": false,
+  "passed_cases": 0,
+  "scope_violation": [],
+  "task_id": "lcs_length_small",
+  "total_cases": 2
+}

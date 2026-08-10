@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "experiment_id": "causal-skill-effect-v5",
+  "status": "interrupted",
+  "preregistration": "examples/effect-experiment-v5/preregistration.json",
+  "collection": {
+    "model_id": "gpt-5.6-terra",
+    "harness_id": "codex-cli-0.146.0-alpha.9.2;exec;workspace-write;ephemeral",
+    "seed": 20260809,
+    "planned_conditions": 44,
+    "captured_condition_artifacts": 44,
+    "completed_agent_conditions": 32,
+    "interrupted_agent_conditions": 12,
+    "raw_tree_sha256": "95ff9c91fa5cb367c968935e76cd85ece1073738afb1af09949ed0f5e9112f02",
+    "error_classes": {
+      "model_service_503": 10,
+      "model_service_429": 2
+    },
+    "analysis_eligibility": "ineligible",
+    "analysis_reason": "The preregistered analyzer rejects every non-complete trial. The runner did not write trials.json after the service interruption, so no paired effect statistic was computed."
+  },
+  "interrupted_conditions": [
+    {"task_id": "balanced_delimiters", "condition": "baseline", "error_class": "model_service_429", "candidate_written_before_failure": true},
+    {"task_id": "count_paths_small", "condition": "baseline", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "count_paths_small", "condition": "skill", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "edit_distance_small", "condition": "baseline", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "edit_distance_small", "condition": "skill", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "inversion_count", "condition": "baseline", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "inversion_count", "condition": "skill", "error_class": "model_service_429", "candidate_written_before_failure": true},
+    {"task_id": "lcs_length_small", "condition": "baseline", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "lcs_length_small", "condition": "skill", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "majority_element", "condition": "baseline", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "subset_sum_small", "condition": "baseline", "error_class": "model_service_503", "candidate_written_before_failure": false},
+    {"task_id": "subset_sum_small", "condition": "skill", "error_class": "model_service_503", "candidate_written_before_failure": false}
+  ],
+  "decision": "No Skill-effect or model-causal-capability claim is supported by this interrupted collection.",
+  "next_formal_step": "Classify no more than the infrastructure interruption, then preregister a new Skill revision only if it changes and use a fresh held-out corpus for a complete paired run."
+}

@@ -1,0 +1,10 @@
+diff --git a/buggy.py b/buggy.py
+index e8935b0..4e7a676 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -6,4 +6,4 @@ def binary_first(values, target):
+             low = middle + 1
+         else:
+             high = middle
+-    return low if values and values[low] == target else -1
++    return low if low < len(values) and values[low] == target else -1

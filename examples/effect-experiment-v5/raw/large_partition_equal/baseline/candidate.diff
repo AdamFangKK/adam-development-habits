@@ -1,0 +1,19 @@
+diff --git a/buggy.py b/buggy.py
+index 7129723..8441fb7 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -2,10 +2,8 @@ def partition_equal(values):
+     total = sum(values)
+     if total % 2:
+         return False
+-    reachable = [False] * (total // 2 + 1)
+-    reachable[0] = True
++    target = total // 2
++    reachable = 1
+     for value in values:
+-        for total_value in range(1, len(reachable)):
+-            if value < total_value:
+-                reachable[total_value] = reachable[total_value] or reachable[total_value - value]
+-    return reachable[-1]
++        reachable |= reachable << value
++    return bool(reachable & (1 << target))

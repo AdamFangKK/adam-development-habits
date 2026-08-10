@@ -1,0 +1,14 @@
+Implemented the repair in [buggy.py](/tmp/adam-effect-large_count_paths-skill-z2_ty4ns/buggy.py:1):
+
+- Replaced exponential recursion with O(rows*columns) dynamic programming.
+- Correctly handles single-row/column and non-positive dimensions.
+- Only `buggy.py` was modified.
+
+Verification:
+
+- `python3 test_public.py`: 3 public cases passed.
+- `28x31` stress probe: exact result, `0.000103s`.
+- Boundary probes passed.
+- In-memory syntax compile and `git diff --check` passed.
+
+Remaining risk: hidden contract cases were not inspected, per instruction.

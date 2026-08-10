@@ -1,0 +1,30 @@
+{
+  "candidate_sha256": "43d3b9916de53c2318fc92dc06e552b9eb0a0198af97fcae4f03803757a4adcd",
+  "failures": [
+    {
+      "actual": 4,
+      "expected": 2,
+      "index": 0,
+      "input": [
+        "flaw",
+        "lawn"
+      ],
+      "kind": "case"
+    },
+    {
+      "actual": 6,
+      "expected": 2,
+      "index": 1,
+      "input": [
+        "gumbo",
+        "gambol"
+      ],
+      "kind": "case"
+    }
+  ],
+  "passed": false,
+  "passed_cases": 0,
+  "scope_violation": [],
+  "task_id": "edit_distance_small",
+  "total_cases": 2
+}

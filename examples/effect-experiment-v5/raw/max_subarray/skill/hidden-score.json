@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "d101f049120d536e13742d11c86e1925aad96fe7807194f46b20e6342e340398",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 1,
+  "task_id": "max_subarray",
+  "total_cases": 1
+}

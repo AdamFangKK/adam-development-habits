@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "617bdac25935fb9690c7b3bf9b1e9a4d73bb65088ee4eaf2446f11e829ac955c",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 2,
+  "task_id": "large_lcs_length",
+  "total_cases": 2
+}

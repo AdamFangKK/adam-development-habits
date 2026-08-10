@@ -1,0 +1,43 @@
+diff --git a/buggy.py b/buggy.py
+index 21ccf22..ee75623 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,7 +1,32 @@
++from bisect import bisect_right
++
++
+ def knapsack(capacity, items):
+-    best = [0] * (capacity + 1)
+-    for weight, value in items:
+-        for current in range(1, capacity + 1):
+-            if weight < current:
+-                best[current] = max(best[current], value + best[current - weight])
+-    return best[capacity]
++    items = list(items)
++    midpoint = len(items) // 2
++
++    def subset_totals(group):
++        totals = [(0, 0)]
++        for weight, value in group:
++            totals += [(total_weight + weight, total_value + value)
++                       for total_weight, total_value in totals]
++        return totals
++
++    left = subset_totals(items[:midpoint])
++    right = subset_totals(items[midpoint:])
++    right.sort(key=lambda pair: pair[0])
++
++    right_weights = [weight for weight, _ in right]
++    right_best_values = []
++    best_value = float("-inf")
++    for _, value in right:
++        best_value = max(best_value, value)
++        right_best_values.append(best_value)
++
++    answer = 0
++    for left_weight, left_value in left:
++        remaining = capacity - left_weight
++        right_index = bisect_right(right_weights, remaining) - 1
++        if right_index >= 0:
++            answer = max(answer, left_value + right_best_values[right_index])
++    return answer

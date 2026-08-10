@@ -195,6 +195,8 @@ v4 是首个 metadata 有效、完整采样的 20-task QuixBugs paired run：40/
 
 为避免针对 v4 hidden cases 调参，后续 v5 使用独立的 22-task synthetic resource-trap corpus：每个 fixture 都有公开可见的故障，隐藏 scorer 保留不在 repair workspace 中的大规模或边界契约；多解输出不进入这一轮。v5 在 trial 前固定 Skill、generator、manifest、scorer、prompt、seed、随机化顺序和统计门槛。它仍只会给出固定 model/Harness/Skill/corpus/scorer 范围内的结论，不能证明任意模型或生产系统的整体因果能力。
 
+v5 的首次收集在全部 44 个条件工件都已落盘后遭遇模型服务限流（10 个 `503`、2 个 `429`）：这 12 次 Agent 均未成功结束，其中两次虽已写出候选补丁也不能计为成功。运行器因此没有生成最终 trial bundle，按固定规则这次收集是 `interrupted`，不能把未完成调用作为失败样本、不能排除它们后分析，也不能产生 Skill 效果结论。完整原始记录、条件清单与可执行一致性检查在 [`effect-experiment-v5`](./examples/effect-experiment-v5)；下一次正式尝试必须使用新的、未用于调参的 held-out corpus 和新预注册。
+
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \
   examples/skill-effect-preregistration.json

@@ -1,0 +1,10 @@
+Implemented the repair in [buggy.py](/tmp/adam-effect-large_subset_sum-skill-9kg3u8bw/buggy.py).
+
+Evidence ledger:
+- Replaced O(capacity × items) Boolean scanning with a masked integer bitset.
+- Correctly handles capacity `0` and exact item matches.
+- `python3 test_public.py`: 3 public cases passed.
+- Upper-bound stress probe (`capacity=3,000,000`): passed in `0.004596s`.
+- 500 deterministic brute-force comparisons: passed.
+- Worktree scope: only `buggy.py` modified.
+- Remaining risk: behavior outside the stated nonnegative-item contract is untested.

@@ -1,0 +1,14 @@
+diff --git a/buggy.py b/buggy.py
+index e11cb3f..9ad1c8e 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,6 +1,7 @@
+ def max_subarray(values):
+-    current = best = 0
++    values = iter(values)
++    current = best = next(values)
+     for value in values:
+-        current = max(0, current + value)
++        current = max(value, current + value)
+         best = max(best, current)
+     return best

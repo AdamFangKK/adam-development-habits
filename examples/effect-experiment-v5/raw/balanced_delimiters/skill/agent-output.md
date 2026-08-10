@@ -1,0 +1,11 @@
+Change level: 1  
+Canonical owner: [`buggy.py:balanced`](/tmp/adam-effect-balanced_delimiters-skill-mw7pu14_/buggy.py:10)  
+Acceptance criteria: Return `True` only when delimiters are fully and correctly balanced.  
+Changed: Corrected the final stack predicate from `bool(stack)` to `not stack`.  
+Removed or retained compatibility: No compatibility paths or dependencies changed.  
+Safeguards: Linear scan, O(n) space; 100,000 nested pairs completed in 0.008877s.  
+Verified: `python3 test_public.py` - 2 public cases passed; 7 deterministic edge cases passed; `git diff --check` clean.  
+Independent review: Not required for this narrow Level 1 fix.  
+Evidence artifact: Conversational ledger only; no additional files modified.  
+Remaining risks: Inputs outside the existing text/iterable contract were not specified or tested.  
+Causal conclusion: root-cause fix

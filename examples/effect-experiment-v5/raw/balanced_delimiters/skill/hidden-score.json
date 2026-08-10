@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "8af5eead5efff63c47d91b27dfb8df959af4648d1eccbec3cea6e903ec0ca066",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 3,
+  "task_id": "balanced_delimiters",
+  "total_cases": 3
+}

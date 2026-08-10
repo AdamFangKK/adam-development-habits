@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: `buggy.py:merge_intervals`  
+Acceptance criteria: Merge overlapping or touching closed intervals; preserve sorted, disjoint output.  
+Changed: Use `start <= merged[-1][1]` for touching intervals.  
+Removed or retained compatibility: None.  
+Safeguards: `O(n log n)` time, `O(n)` space; no unbounded numeric allocation.  
+Verified: `python3 test_public.py` - `2 public cases passed`  
+Verified: 100,000-interval stress probe - `0.023648s`, correct output.  
+Verified: `git diff --check -- buggy.py` - passed.  
+Independent review: Not required for Level 1.  
+Evidence artifact: Conversational ledger.  
+Remaining risks: Additional contract boundaries are not represented in supplied cases.  
+Causal conclusion: Not activated.

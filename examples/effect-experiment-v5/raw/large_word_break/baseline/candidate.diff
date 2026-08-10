@@ -1,0 +1,19 @@
+diff --git a/buggy.py b/buggy.py
+index b2f9d02..3b49107 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,4 +1,11 @@
+ def word_break(text, words):
+-    if not text:
+-        return True
+-    return any(text.startswith(word) and word_break(text[len(word) + 1:], words) for word in words)
++    reachable = [False] * (len(text) + 1)
++    reachable[0] = True
++    for start in range(len(text)):
++        if not reachable[start]:
++            continue
++        for word in words:
++            end = start + len(word)
++            if text.startswith(word, start) and end <= len(text):
++                reachable[end] = True
++    return reachable[-1]

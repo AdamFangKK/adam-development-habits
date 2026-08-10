@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "f9da6f5aa0a67b5d58c53c5755ec47d32dd77e184ee06b3f7ff467ffce1ee458",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 2,
+  "task_id": "large_fib_mod",
+  "total_cases": 2
+}

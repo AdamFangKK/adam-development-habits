@@ -154,14 +154,14 @@
       "id": "effect-analyzer",
       "kind": "evaluation_transcript",
       "path": "scripts/analyze_skill_effect.py",
-      "sha256": "1f0ac26557d2ac14fe94755e50339f2d101a348f9e32f0874f5eb39c0dccb4d8",
+      "sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100",
       "summary": "Standard-library parser, immutable-envelope validation, task-plan/order checks, clustered bootstrap, paired randomization, and scoped decision output."
     },
     {
       "id": "effect-tests",
       "kind": "evaluation_transcript",
       "path": "tests/test_skill_effect_analysis.py",
-      "sha256": "c3967de854cbf808e7d28959f520f53c13aa941d74f664d5077033f6beed9903",
+      "sha256": "0763be01c09c61b4eccb5811fb387c1fd5ba51eea47f151dbde744e8fb49f35e",
       "summary": "Synthetic positive, null, inconclusive, malformed, clustered-repeat, immutable-envelope, and randomized-order tests."
     },
     {
@@ -175,14 +175,14 @@
       "id": "current-composite-evaluation",
       "kind": "test_output",
       "path": "examples/composite-trap-v10-evaluation.json",
-      "sha256": "aaf5ff8dc1cda0328e087a39a3837a62f54c766b2473b99e6b0a92adcb2d4775",
+      "sha256": "3503fef64bf6df3ab6c3f045b7f9fbf49e9e3c6ded465665d36c1421163a0545",
       "summary": "Fresh current-Skill forward-test result: 15/15 compound evidence checks with current Skill, scenario, scorer, and output hashes, explicitly bounded to protocol effectiveness."
     },
     {
       "id": "causal-calibration-v10-manifest",
       "kind": "evaluation_transcript",
       "path": "examples/causal-calibration-v10-run-manifest.json",
-      "sha256": "318998a51fcefffcae8bb7052e1a07bf6717b7a9a85221451ed60ba3c86d1926",
+      "sha256": "ff71cc8014b1642a9ac89ba095b3891ff0c7c7bb13b3f9ad74975567e52bf0a1",
       "summary": "Current-Skill input, scorer, and fixture hashes; allowed-input boundary; fresh read-only output; explicit preflight contract; and a non-effect claim boundary."
     },
     {

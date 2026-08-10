@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: `buggy.py:rotate`  
+Acceptance criteria: right rotation; preserve zero-shift and empty-list behavior; do not mutate input.  
+Changed: Corrected slice direction from left rotation to right rotation.  
+Removed or retained compatibility: Retained empty guard and modulo normalization; no compatibility path added.  
+Safeguards: O(n) time and O(n) output space; no shift-sized allocation.  
+Quality decisions: Direct implementation; no dependencies, extensions, I/O, or error-policy changes.  
+Delivery decisions: Only `buggy.py` changed; no commit or metadata changes.  
+Verified: `python3 test_public.py` passed 3 cases; deterministic `n=100000` stress probe passed in 0.01s; `git diff --check` passed.  
+Independent review: Not required for this narrow fix.  
+Evidence artifact: Enforcement mode not enabled.  
+Remaining risks: Hidden tests may exercise additional input types outside the stated list contract.  
+Causal conclusion: not activated

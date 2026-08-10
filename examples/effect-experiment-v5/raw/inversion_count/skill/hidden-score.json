@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "3924ac00bf2254ccc04f788f63529c6d631df306a8a7786025db1b556d343d1e",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 1,
+  "task_id": "inversion_count",
+  "total_cases": 1
+}

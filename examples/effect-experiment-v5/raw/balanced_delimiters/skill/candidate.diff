@@ -1,0 +1,10 @@
+diff --git a/buggy.py b/buggy.py
+index 228ef95..b1b1adb 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -7,4 +7,4 @@ def balanced(text):
+         elif char in pairs:
+             if not stack or stack.pop() != pairs[char]:
+                 return False
+-    return bool(stack)
++    return not stack

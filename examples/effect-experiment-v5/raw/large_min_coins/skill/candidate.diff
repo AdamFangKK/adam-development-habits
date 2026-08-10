@@ -1,0 +1,23 @@
+diff --git a/buggy.py b/buggy.py
+index 03a878f..e7b9bb4 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,4 +1,17 @@
+ def min_coins(amount, coins):
+     if amount == 0:
+         return 0
+-    return min(1 + min_coins(amount - coin, coins) for coin in coins if coin < amount)
++    if amount < 0:
++        return -1
++
++    usable_coins = [coin for coin in coins if 0 < coin <= amount]
++    unreachable = amount + 1
++    best = [unreachable] * (amount + 1)
++    best[0] = 0
++
++    for current in range(1, amount + 1):
++        for coin in usable_coins:
++            if coin <= current:
++                best[current] = min(best[current], best[current - coin] + 1)
++
++    return -1 if best[amount] == unreachable else best[amount]

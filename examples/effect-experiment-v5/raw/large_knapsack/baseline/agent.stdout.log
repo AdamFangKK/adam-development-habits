@@ -1,0 +1,3 @@
+Implemented the 0/1 knapsack fix in [buggy.py](/tmp/adam-effect-large_knapsack-baseline-ups4d556/buggy.py) using meet-in-the-middle subset enumeration, avoiding capacity-sized tables.
+
+Verification: `python3 test_public.py` passed 2 public cases.

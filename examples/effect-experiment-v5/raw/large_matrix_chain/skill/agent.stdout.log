@@ -1,0 +1,13 @@
+Implemented the minimal repair in [buggy.py](/tmp/adam-effect-large_matrix_chain-skill-k9r11qf7/buggy.py):
+
+- Replaced exponential recursion with O(n³) bottom-up dynamic programming.
+- Corrected the split multiplication index.
+- Preserved `0` for zero/one matrix chains.
+
+Evidence:
+
+- `python3 test_public.py`: 2 public cases passed.
+- 35-matrix stress probe: passed in `0.002017s` under the one-second timeout.
+- Edge and classic optimality probes: passed.
+- Read-only syntax compilation: passed.
+- Worktree confirms only `buggy.py` changed.

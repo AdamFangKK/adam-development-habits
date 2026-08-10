@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "612ec94fce988dd0ddea055cf29a90aaa8153c4b04813dbb0f2db3fb073c59c8",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 2,
+  "task_id": "large_min_coins",
+  "total_cases": 2
+}

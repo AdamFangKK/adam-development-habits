@@ -1,0 +1,3 @@
+Fixed `buggy.py` to avoid out-of-range indexing when the target is absent above all values.
+
+Verification: `python3 test_public.py` passed all 3 public cases.

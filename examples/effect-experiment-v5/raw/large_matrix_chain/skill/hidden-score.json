@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "cc6f400ccadde66d466fbc3e8c59df5223ecb32409b60812b5dba11490af5c64",
+  "failures": [],
+  "passed": true,
+  "passed_cases": 1,
+  "task_id": "large_matrix_chain",
+  "total_cases": 1
+}

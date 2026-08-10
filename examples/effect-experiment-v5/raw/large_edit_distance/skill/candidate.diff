@@ -1,0 +1,29 @@
+diff --git a/buggy.py b/buggy.py
+index e894945..1d1b51a 100644
+--- a/buggy.py
++++ b/buggy.py
+@@ -1,6 +1,19 @@
+ def edit_distance(source, target):
+-    if not source or not target:
+-        return len(source) or len(target)
+-    if source[0] == target[0]:
+-        return 1 + edit_distance(source[1:], target[1:])
+-    return 1 + min(edit_distance(source, target[1:]), edit_distance(source[1:], target[1:]), edit_distance(source[1:], target))
++    if len(source) < len(target):
++        source, target = target, source
++    if not target:
++        return len(source)
++
++    distances = list(range(len(target) + 1))
++    for source_index, source_char in enumerate(source, 1):
++        previous_diagonal = distances[0]
++        distances[0] = source_index
++        for target_index, target_char in enumerate(target, 1):
++            previous_row = distances[target_index]
++            distances[target_index] = min(
++                distances[target_index] + 1,
++                distances[target_index - 1] + 1,
++                previous_diagonal + (source_char != target_char),
++            )
++            previous_diagonal = previous_row
++    return distances[-1]

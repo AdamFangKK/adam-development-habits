@@ -1,0 +1,6 @@
+{
+  "passed": false,
+  "returncode": 1,
+  "stderr": "Traceback (most recent call last):\n  File \"/private/tmp/adam-effect-count_paths_small-baseline-s0l3bzrc/test_public.py\", line 28, in <module>\n    raise AssertionError(f\"input={input_data!r}: expected={expected!r}, actual={actual!r}\")\nAssertionError: input=[1, 1]: expected=1, actual=0\n",
+  "stdout": ""
+}
