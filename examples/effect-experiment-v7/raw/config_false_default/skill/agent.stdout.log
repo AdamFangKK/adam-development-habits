@@ -1,0 +1,9 @@
+Change level: 1  
+Canonical owner: `settings.enabled`  
+Acceptance criteria: Preserve explicit `False`; default missing values to `True`.  
+Changed: [settings.py](/private/tmp/adam-effect-v6-config_false_default-skill-0x2af4su/settings.py:2) now uses `values.get("enabled", True)`.  
+Removed or retained compatibility: No API change.  
+Safeguards: No dependencies or unrelated changes.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed; `git diff --check` passed.  
+Remaining risks: None identified.  
+Causal conclusion: not activated.

@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: `rounding.cents`  
+Acceptance criteria: decimal text ties round half-even to cents.  
+Changed: [rounding.py](/tmp/adam-effect-v6-round_half_even-baseline-yw34tls9/rounding.py:1) now uses `Decimal.quantize(..., ROUND_HALF_EVEN)`.  
+Removed or retained compatibility: replaced binary-float rounding; retains float return type.  
+Safeguards: no dependencies or external effects.  
+Quality decisions: direct local implementation; all other categories not applicable.  
+Delivery decisions: no commit requested; all other categories not applicable.  
+Verified: `git diff --check` and `python3 -m unittest discover -s tests` - passed (1 test).  
+Independent review: not required.  
+Evidence artifact: enforcement mode not enabled.  
+Remaining risks: invalid-input exception types remain unspecified.  
+Causal conclusion: root-cause fix

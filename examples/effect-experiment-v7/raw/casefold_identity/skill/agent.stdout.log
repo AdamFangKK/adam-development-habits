@@ -1,0 +1,8 @@
+Change level: 1  
+Canonical owner: `identity.same`  
+Acceptance criteria: Unicode case-fold equivalents compare equal.  
+Changed: [identity.py](/tmp/adam-effect-v6-casefold_identity-skill-3iwmeeym/identity.py:2) now compares `casefold()` values.  
+Removed or retained compatibility: none.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed; `git diff --check` - passed.  
+Remaining risks: none identified within scope.  
+Causal conclusion: not activated

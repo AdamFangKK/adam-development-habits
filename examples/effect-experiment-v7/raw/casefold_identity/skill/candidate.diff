@@ -1,0 +1,8 @@
+diff --git a/identity.py b/identity.py
+index fe1701b..a99307e 100644
+--- a/identity.py
++++ b/identity.py
+@@ -1,2 +1,2 @@
+ def same(left, right):
+-    return left.lower() == right.lower()
++    return left.casefold() == right.casefold()

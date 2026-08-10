@@ -1,0 +1,7 @@
+Change level: 1  
+Canonical owner: `audit.read_and_record`  
+Changed: [audit.py](/tmp/adam-effect-v6-canonical_audit_path-skill-6lsc9yzd/audit.py:8) now records the resolved canonical path.  
+Removed or retained compatibility: `record` behavior retained.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed.  
+Remaining risks: None identified.  
+Causal conclusion: not activated

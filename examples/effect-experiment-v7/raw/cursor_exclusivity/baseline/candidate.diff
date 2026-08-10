@@ -1,0 +1,10 @@
+diff --git a/pager.py b/pager.py
+index 622e550..7498903 100644
+--- a/pager.py
++++ b/pager.py
+@@ -1,4 +1,4 @@
+ def page(items, start, end):
+     if start < 0 or end < start:
+         raise ValueError("invalid range")
+-    return items[start:end + 1]
++    return items[start:end]

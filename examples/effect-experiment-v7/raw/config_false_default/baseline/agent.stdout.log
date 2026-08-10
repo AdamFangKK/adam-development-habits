@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: [settings.py](/tmp/adam-effect-v6-config_false_default-baseline-16sqcf4o/settings.py:1) `enabled`  
+Acceptance criteria: missing key defaults to `True`; explicit `False` is preserved.  
+Changed: replaced truthiness fallback with `values.get("enabled", True)`.  
+Removed or retained compatibility: none.  
+Safeguards: not applicable.  
+Quality decisions: direct local behavior change; no dependencies or new abstraction.  
+Delivery decisions: no commit, per instruction.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed; `git diff --check` passed.  
+Independent review: final diff reviewed; not required.  
+Evidence artifact: none.  
+Remaining risks: non-boolean configuration validation is outside task scope.  
+Causal conclusion: not activated

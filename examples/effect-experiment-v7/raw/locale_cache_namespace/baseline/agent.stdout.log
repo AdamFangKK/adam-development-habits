@@ -1,0 +1,3 @@
+Updated [policy.py](/tmp/adam-effect-v6-locale_cache_namespace-baseline-hzhmiyl3/policy.py:2) so cache keys include the locale, preventing cross-locale label reuse.
+
+Verified with `python3 -m unittest discover -s tests`: 1 test passed. No remaining known risks.

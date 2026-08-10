@@ -1,0 +1,474 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "minimum_distinct_tasks": 20,
+    "minimum_effect": 0.05,
+    "permutation_resamples": 10000,
+    "random_seed": 20260811,
+    "stratum_weights": {
+      "cross-module": 0.4,
+      "integration": 0.4,
+      "single-module": 0.2
+    }
+  },
+  "collection": {
+    "agent_timeout_seconds": 180.0,
+    "checkpointed_after_each_pair": true,
+    "ineligible_reason": "At least one planned agent condition did not complete; no retry or partial analysis is allowed.",
+    "test_timeout_seconds": 20.0
+  },
+  "experiment_id": "causal-skill-effect-v7",
+  "preregistration": {
+    "envelope_sha256": "d9cd38f1ac254c44ff3f59233afa1a5ebbfb38bb40409f2ab220f867203898f1",
+    "git_commit": "7ce912182e2102cdc545d4ef51b17488a4587065",
+    "protocol_sha256": "4f41acd39b0db444e4cabe708f8f49644dd6d611e596c989ba1b1a7fb1bc0b28",
+    "recorded_before_first_trial": true
+  },
+  "protocol": {
+    "analyzer_sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100",
+    "base_hidden_scorer_sha256": "2e3a1c507c1dec023fe58ff7cb11f84d0b845df44ee305fa8e6768250285a4e9",
+    "base_runner_sha256": "06b65db8695798a94c52993257cb9c4963af98ed9bd684e13ae1d795582ab97d",
+    "baseline_prompt_sha256": "2a92d7bfe5b7b56d352088c9b0e605ba8e247dc3c63f94f7af75969029de3fff",
+    "corpus_manifest_sha256": "b5301b5b34a3cadab2b1edc380a2ecf0caf8ab2cbbf688d2aa3fc8977c6d3dd7",
+    "generator_sha256": "94284dbecec79066bc047870a61d77813c2b05c0c5fcce9de8e8bd13d1dc0bd7",
+    "hidden_scorer_blind_to_condition": true,
+    "hidden_scorer_sha256": "62a33669d9413a2df043e389bb1d297a44a534f4716d89c0f9e10a5c2d029926",
+    "pairing": "same task, randomized condition order",
+    "runner_sha256": "7450cbd1e14ef3dd63060d3a235537328d53d730bdd0280790067a6ca28c0924",
+    "skill_prompt_sha256": "529fa8a8bfa6da3508b53edcdbcdfdfbba4b4e59d35ea7b15607887bcf7aad6c"
+  },
+  "schema_version": 1,
+  "scope": {
+    "claim": "For the fixed Codex model, Harness, Skill revision, v7 held-out multi-file causal-repair corpus, and blind hidden scorer declared here, enabling Adam's Development Habits improves hidden repair success by the preregistered practical margin.",
+    "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+    "model_id": "gpt-5.6-terra",
+    "skill_revision_sha256": "2d0a7c91b872a189df0a1cf0fc68390ce68dba5c13d07f571d8f3faab83fdd92"
+  },
+  "status": "interrupted",
+  "stopping_rule": {
+    "early_stop": "not allowed",
+    "kind": "fixed_complete_pairs",
+    "pairs_per_task": 1
+  },
+  "task_plan": {
+    "tasks": [
+      {
+        "stratum": "single-module",
+        "task_id": "cursor_exclusivity"
+      },
+      {
+        "stratum": "single-module",
+        "task_id": "config_false_default"
+      },
+      {
+        "stratum": "single-module",
+        "task_id": "casefold_identity"
+      },
+      {
+        "stratum": "single-module",
+        "task_id": "path_segment_escape"
+      },
+      {
+        "stratum": "single-module",
+        "task_id": "round_half_even"
+      },
+      {
+        "stratum": "single-module",
+        "task_id": "stable_dedup_order"
+      },
+      {
+        "stratum": "cross-module",
+        "task_id": "locale_cache_namespace"
+      },
+      {
+        "stratum": "cross-module",
+        "task_id": "canonical_audit_path"
+      },
+      {
+        "stratum": "cross-module",
+        "task_id": "feature_rollout_scope"
+      },
+      {
+        "stratum": "cross-module",
+        "task_id": "snapshot_revision_gate"
+      },
+      {
+        "stratum": "cross-module",
+        "task_id": "header_precedence"
+      },
+      {
+        "stratum": "cross-module",
+        "task_id": "filter_before_limit"
+      },
+      {
+        "stratum": "cross-module",
+        "task_id": "versioned_event_default"
+      },
+      {
+        "stratum": "cross-module",
+        "task_id": "cache_invalidation_scope"
+      },
+      {
+        "stratum": "integration",
+        "task_id": "outbox_acceptance"
+      },
+      {
+        "stratum": "integration",
+        "task_id": "retry_global_budget"
+      },
+      {
+        "stratum": "integration",
+        "task_id": "quota_failure_release"
+      },
+      {
+        "stratum": "integration",
+        "task_id": "batch_payload_identity"
+      },
+      {
+        "stratum": "integration",
+        "task_id": "monotonic_revision"
+      },
+      {
+        "stratum": "integration",
+        "task_id": "lease_owner_expiry"
+      }
+    ]
+  },
+  "trials": [
+    {
+      "agent_exit": 0,
+      "artifact_path": "cursor_exclusivity/skill",
+      "candidate_tree_sha256": "534424cb8df70b46f0783cbaa1517e4349e3400d54972391b2e2e136b2e9148b",
+      "changed_paths": [
+        "pager.py"
+      ],
+      "condition": "skill",
+      "elapsed_seconds": 118.858,
+      "execution_order": 1,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "cursor_exclusivity-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "cursor_exclusivity",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "cursor_exclusivity/baseline",
+      "candidate_tree_sha256": "534424cb8df70b46f0783cbaa1517e4349e3400d54972391b2e2e136b2e9148b",
+      "changed_paths": [
+        "pager.py"
+      ],
+      "condition": "baseline",
+      "elapsed_seconds": 117.444,
+      "execution_order": 2,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "cursor_exclusivity-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "cursor_exclusivity",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "config_false_default/skill",
+      "candidate_tree_sha256": "dc181eb77b41170923342649c080a01b4fbf568c6e7e21a35efe9ce8d642cd60",
+      "changed_paths": [
+        "settings.py"
+      ],
+      "condition": "skill",
+      "elapsed_seconds": 111.692,
+      "execution_order": 1,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "config_false_default-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "config_false_default",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "config_false_default/baseline",
+      "candidate_tree_sha256": "dc181eb77b41170923342649c080a01b4fbf568c6e7e21a35efe9ce8d642cd60",
+      "changed_paths": [
+        "settings.py"
+      ],
+      "condition": "baseline",
+      "elapsed_seconds": 100.865,
+      "execution_order": 2,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "config_false_default-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "config_false_default",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "casefold_identity/baseline",
+      "candidate_tree_sha256": "0f83d627f9a5adcb3584a9bf5cd418f4167a08d14380db8c388e84ab9207e2f3",
+      "changed_paths": [
+        "identity.py"
+      ],
+      "condition": "baseline",
+      "elapsed_seconds": 81.162,
+      "execution_order": 1,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "casefold_identity-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "casefold_identity",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "casefold_identity/skill",
+      "candidate_tree_sha256": "0f83d627f9a5adcb3584a9bf5cd418f4167a08d14380db8c388e84ab9207e2f3",
+      "changed_paths": [
+        "identity.py"
+      ],
+      "condition": "skill",
+      "elapsed_seconds": 103.873,
+      "execution_order": 2,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "casefold_identity-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "casefold_identity",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "path_segment_escape/baseline",
+      "candidate_tree_sha256": "48d790c46bd98a0f57bc81c7d2379b003f69d30824edc7124aa50a2369844dfb",
+      "changed_paths": [
+        "paths.py"
+      ],
+      "condition": "baseline",
+      "elapsed_seconds": 64.068,
+      "execution_order": 1,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "path_segment_escape-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "path_segment_escape",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "path_segment_escape/skill",
+      "candidate_tree_sha256": "48d790c46bd98a0f57bc81c7d2379b003f69d30824edc7124aa50a2369844dfb",
+      "changed_paths": [
+        "paths.py"
+      ],
+      "condition": "skill",
+      "elapsed_seconds": 125.347,
+      "execution_order": 2,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "path_segment_escape-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "path_segment_escape",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "round_half_even/skill",
+      "candidate_tree_sha256": "36ead6e3f521d95a54c84dcc739e387a358f7c363bb84a0b67665316fba45088",
+      "changed_paths": [
+        "rounding.py"
+      ],
+      "condition": "skill",
+      "elapsed_seconds": 128.56,
+      "execution_order": 1,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "round_half_even-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "round_half_even",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "round_half_even/baseline",
+      "candidate_tree_sha256": "36ead6e3f521d95a54c84dcc739e387a358f7c363bb84a0b67665316fba45088",
+      "changed_paths": [
+        "rounding.py"
+      ],
+      "condition": "baseline",
+      "elapsed_seconds": 117.576,
+      "execution_order": 2,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "round_half_even-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "round_half_even",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "stable_dedup_order/baseline",
+      "candidate_tree_sha256": "e71455c3b5694835b58f542e6c94404e0376ca14be64c49ed1c8fd53564a80d3",
+      "changed_paths": [
+        "dedup.py"
+      ],
+      "condition": "baseline",
+      "elapsed_seconds": 95.469,
+      "execution_order": 1,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "stable_dedup_order-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "stable_dedup_order",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "stable_dedup_order/skill",
+      "candidate_tree_sha256": "e71455c3b5694835b58f542e6c94404e0376ca14be64c49ed1c8fd53564a80d3",
+      "changed_paths": [
+        "dedup.py"
+      ],
+      "condition": "skill",
+      "elapsed_seconds": 118.327,
+      "execution_order": 2,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "stable_dedup_order-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "single-module",
+      "task_id": "stable_dedup_order",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "locale_cache_namespace/baseline",
+      "candidate_tree_sha256": "780cdc68fad3b76e8d76fabf5ef793c8dc417520335583c9885e4f80bbe3d97c",
+      "changed_paths": [
+        "policy.py"
+      ],
+      "condition": "baseline",
+      "elapsed_seconds": 73.341,
+      "execution_order": 1,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "locale_cache_namespace-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "cross-module",
+      "task_id": "locale_cache_namespace",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "locale_cache_namespace/skill",
+      "candidate_tree_sha256": "780cdc68fad3b76e8d76fabf5ef793c8dc417520335583c9885e4f80bbe3d97c",
+      "changed_paths": [
+        "policy.py"
+      ],
+      "condition": "skill",
+      "elapsed_seconds": 136.322,
+      "execution_order": 2,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "locale_cache_namespace-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "cross-module",
+      "task_id": "locale_cache_namespace",
+      "trial_complete": true
+    },
+    {
+      "agent_exit": null,
+      "artifact_path": "canonical_audit_path/baseline",
+      "candidate_tree_sha256": "7a4c564827d60162c9128c9b48da2deaa837ef7912d672696b78b292928ef14d",
+      "changed_paths": [],
+      "condition": "baseline",
+      "elapsed_seconds": 180.331,
+      "execution_order": 1,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": false,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "canonical_audit_path-run-1",
+      "public_pass": false,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "cross-module",
+      "task_id": "canonical_audit_path",
+      "trial_complete": false
+    },
+    {
+      "agent_exit": 0,
+      "artifact_path": "canonical_audit_path/skill",
+      "candidate_tree_sha256": "3039f33ffa5fadd65921d5a91cfede3379272a5c7bb806220a46e4711f180a87",
+      "changed_paths": [
+        "audit.py"
+      ],
+      "condition": "skill",
+      "elapsed_seconds": 179.039,
+      "execution_order": 2,
+      "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+      "hidden_repair_pass": true,
+      "model_id": "gpt-5.6-terra",
+      "pair_id": "canonical_audit_path-run-1",
+      "public_pass": true,
+      "replicate_index": 1,
+      "scope_ok": true,
+      "stratum": "cross-module",
+      "task_id": "canonical_audit_path",
+      "trial_complete": true
+    }
+  ]
+}

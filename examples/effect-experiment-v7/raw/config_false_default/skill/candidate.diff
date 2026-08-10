@@ -1,0 +1,8 @@
+diff --git a/settings.py b/settings.py
+index 0c32545..2c2e65c 100644
+--- a/settings.py
++++ b/settings.py
+@@ -1,2 +1,2 @@
+ def enabled(values):
+-    return values.get("enabled") or True
++    return values.get("enabled", True)

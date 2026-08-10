@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-v7-interruption",
+  "level": 2,
+  "canonical_owner": [
+    "examples/effect-experiment-v7/result.json",
+    "examples/effect-experiment-v7/raw/",
+    "examples/effect-experiment-v7/interruption.json",
+    "tests/test_effect_experiment_v7_interruption.py",
+    "README.md"
+  ],
+  "affected_callers": [
+    "scripts/analyze_skill_effect.py",
+    "tests/test_effect_experiment_v7_interruption.py",
+    "tests/test_effect_runner_v7.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The archive report recomputes the retained V7 raw-tree and result digests and preserves the frozen preregistration digest.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_experiment_v7_interruption.EffectExperimentV7InterruptionTests.test_interruption_report_preserves_both_ineligibility_causes -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "A timeout and a condition-difference violation both make V7 ineligible; the regression rejects partial effect analysis and verifies every listed contaminated baseline log.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_experiment_v7_interruption -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The package documentation states the actual interrupted V7 outcome and prohibits Skill-effect, repair-success, or general causal-capability claims from it.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The updated package passes its existing full test suite and type check without changing frozen V7 trial artifacts.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v; PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright tests/test_effect_experiment_v7_interruption.py scripts/run_effect_experiment_v7.py scripts/run_effect_experiment_v6.py scripts/score_effect_workspace_v7.py"
+    }
+  ],
+  "invariants": [
+    "The frozen V7 preregistration, result, and raw condition artifacts are retained byte-for-byte and are never retried, resumed, or partially analyzed.",
+    "Any incomplete planned condition or violation of the Skill-only condition difference makes the collection ineligible for an effect statistic.",
+    "The archive records observed evidence without upgrading it to a causal or model-capability claim."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "frozen raw evidence",
+      "status": "applied",
+      "rationale": "The report stores the raw-tree and result SHA-256 digests and the regression recomputes both before accepting the archive."
+    },
+    {
+      "name": "complete-pair gate",
+      "status": "applied",
+      "rationale": "The test requires 16 captured records, 15 complete records, exactly one timed-out baseline, and an ineligible result; it cannot reinterpret the partial set as a statistic."
+    },
+    {
+      "name": "condition-isolation gate",
+      "status": "applied",
+      "rationale": "The archive and test identify six baseline stderr artifacts that read the global Skill, so the preregistered treatment difference is explicitly marked invalid."
+    },
+    {
+      "name": "blind-claim boundary",
+      "status": "applied",
+      "rationale": "The README and archive state that V7 supports no Skill-effect, model repair-success, or general causal-capability claim."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The archive owns collection validity and evidence eligibility; the runner and scorer remain unchanged and V8 remediation is staged separately."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "No dependency, lockfile, or external service is added or changed."},
+    "extension_decision": {"status": "not_applicable", "rationale": "The change adds a version-specific archive and regression, not a public extension point."},
+    "data_ownership": {"status": "applied", "rationale": "Raw logs, result, and preregistration are authoritative historical evidence; the interruption report is a derived integrity record tied to their hashes."},
+    "error_model": {"status": "applied", "rationale": "Agent timeout and condition-difference contamination are distinct invalidity classes; neither is reclassified as a repair failure or success."},
+    "contract_evolution": {"status": "applied", "rationale": "The frozen V7 protocol contract is not rebound to a repaired runner; any future collection requires a new V8 envelope and corpus."},
+    "operational_budget": {"status": "applied", "rationale": "The 180-second timeout is recorded as an observed boundary failure, and the next collection is required to preregister a larger budget before trial start."},
+    "threat_boundary": {"status": "applied", "rationale": "The archive preserves the hidden-scorer boundary and treats global Skill discovery as a protocol contamination, not as an analyzable treatment effect."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "Archive, regression, README, and evidence are one atomic, verified Git change; no unrelated work is included."},
+    "release_recovery": {"status": "not_applicable", "rationale": "This is an offline evaluation archive with no production rollout or user-facing release."},
+    "data_migration": {"status": "not_applicable", "rationale": "No application schema, persistence format, or user data is migrated."},
+    "configuration_secrets": {"status": "applied", "rationale": "No secret is stored; the observed global Skill-loading configuration boundary is recorded as a required isolation control before V8."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No package or supply-chain input changes."},
+    "operational_knowledge": {"status": "applied", "rationale": "README, interruption report, raw stderr, regression test, and this evidence ledger preserve diagnosis, ownership, and next-run prerequisites."},
+    "reproducibility": {"status": "applied", "rationale": "The archive includes immutable hashes, fixed task/result paths, deterministic digest code, and exact commands for targeted, full, and type-check verification."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_experiment_v7_interruption -v", "status": "passed", "result": "2 tests passed; the raw-tree/result/preregistration hashes, 16 captured conditions, one timeout, six contaminated baseline logs, and ineligible result all matched."},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_experiment_v7_interruption tests.test_effect_corpus_v7 tests.test_effect_runner_v7 tests.test_skill_contract -v", "status": "passed", "result": "20 targeted V7/archive/Skill-contract tests passed."},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v", "status": "passed", "result": "139 package tests passed, including external QuixBugs replay using the repository's available user-site pytest."},
+    {"command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright tests/test_effect_experiment_v7_interruption.py scripts/run_effect_experiment_v7.py scripts/run_effect_experiment_v6.py scripts/score_effect_workspace_v7.py", "status": "passed", "result": "0 errors, 0 warnings, 0 notes."},
+    {"command": "git diff --cached --check -- README.md .adam/evidence/skill-effect-v7-interruption.json examples/effect-experiment-v7/interruption.json tests/test_effect_experiment_v7_interruption.py", "status": "passed", "result": "No whitespace errors in authored closure files; immutable captured raw logs are excluded from this scoped check."}
+  ],
+  "rollback_or_compatibility": "Revert this single closure commit to remove the derived report, regression, README status, and evidence ledger while retaining the original raw artifacts and frozen result in the parent revision. Do not resurrect V7 analysis; a replacement collection must use a new preregistration and held-out corpus.",
+  "independent_review": {"reviewer": "Codex native code-reviewer: v7_closure_review", "outcome": "approved", "notes": "Independent read-only review found no remaining issues. It rechecked the updated trial binding, interruption/result/preregistration hashes, evidence ledger, targeted tests, Skill contract tests, and basedpyright output."},
+  "supporting_artifacts": [
+    {"id": "v7-interruption-report", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v7/interruption.json", "sha256": "aa138f0d7a3d6e51f7a6acfe4c9bcb48ddbb730cf56becfe0221aa995aa0def6", "summary": "Versioned V7 archive classifying the timeout, six captured baseline Skill reads, digest integrity, and ineligibility."},
+    {"id": "v7-result", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v7/result.json", "sha256": "b6db54db5d65777210a11c8f3f921d53c68c80ab6a33d89dbeb8fbcb3d6c0ae3", "summary": "Frozen V7 result with 16 trial records and one incomplete baseline condition."},
+    {"id": "v7-preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v7/preregistration.json", "sha256": "c726b5e74642e90f2df8b7a4759413b702de9fbf4725a81b146dcf50fcaad5f1", "summary": "Byte-preserved preregistration frozen before V7 collection."},
+    {"id": "v7-timeout-log", "kind": "command_output", "path": "examples/effect-experiment-v7/raw/canonical_audit_path/baseline/agent.stderr.log", "sha256": "dcb99543d62f46404c4d6c1a06c42d24dba92fc1d1df7decec304e04036e4a87", "summary": "Raw baseline stderr containing both the global Skill read and the 180-second timeout."},
+    {"id": "v7-archive-test", "kind": "test_output", "path": "tests/test_effect_experiment_v7_interruption.py", "sha256": "85ea66e1fa4832a3810dd25b11f9a6d656aea69a49505b66aa7a9813b0e63e4e", "summary": "Regression source that recomputes digests, binds the interrupted row to the report, and rejects partial or contaminated V7 evidence."}
+  ],
+  "remaining_risks": [
+    "V7 cannot establish whether the Skill improves repair success or causal-analysis quality because its treatment difference was not isolated and its fixed paired collection was incomplete.",
+    "The runner's relative -o output path omitted agent-output.md from captured artifacts; V8 must correct and preflight this evidence path before collection.",
+    "A global git diff --check reports trailing whitespace present in immutable captured raw logs. The raw logs are retained byte-for-byte; only the authored closure files receive the scoped whitespace check.",
+    "The Codex Skill-isolation mechanism is not yet proven; do not create or run a formal V8 preregistration until an isolated preflight and regression test pass."
+  ],
+  "execution_authority": "authorized code-changing worktree",
+  "counterfactual_status": "unrun",
+  "causal": {
+    "mode": "full",
+    "symptom": "V7 cannot support a paired Skill-effect estimate because one planned condition timed out and baseline conditions were not isolated from the global Skill.",
+    "discriminating_check": "Recompute the result/raw/preregistration hashes, inspect every incomplete trial, and scan the baseline stderr artifacts for the global Skill path before any effect analysis.",
+    "upstream_path": "Codex invocation/configuration -> Skill discovery and treatment boundary; Agent timeout budget -> incomplete condition -> fixed-pair eligibility decision",
+    "timeline_evidence": "The frozen preregistration predates collection; result.json records the first incomplete condition at 180.331 seconds; raw baseline stderr records the global Skill read and timeout; the archive test reproduces those facts without changing source.",
+    "conclusion": "unknown",
+    "confidence": "high",
+    "evidence_types": ["observational"],
+    "evidence_artifacts": [
+      {"id": "timeout-result", "kind": "command_output", "path": "examples/effect-experiment-v7/result.json", "sha256": "b6db54db5d65777210a11c8f3f921d53c68c80ab6a33d89dbeb8fbcb3d6c0ae3", "summary": "Recorded interrupted result and incomplete baseline trial."},
+      {"id": "contaminated-baseline", "kind": "command_output", "path": "examples/effect-experiment-v7/raw/canonical_audit_path/baseline/agent.stderr.log", "sha256": "dcb99543d62f46404c4d6c1a06c42d24dba92fc1d1df7decec304e04036e4a87", "summary": "Raw log proving global Skill loading and timeout in the same baseline condition."}
+    ],
+    "hypotheses": [
+      {"id": "H1", "claim": "The fixed paired collection is ineligible because the baseline Agent condition exceeded the preregistered timeout.", "prediction": "The result contains a baseline trial with null Agent exit, elapsed time above the budget, and trial_complete=false.", "status": "supported", "evidence_refs": ["timeout-result", "contaminated-baseline"]},
+      {"id": "H2", "claim": "The baseline treatment boundary is invalid because Codex automatically loads the globally installed Skill.", "prediction": "Baseline stderr contains a read of the global adam-development-habits Skill path.", "status": "supported", "evidence_refs": ["contaminated-baseline"]},
+      {"id": "H3", "claim": "The interrupted result is a valid partial baseline-versus-Skill sample that can be analyzed after dropping the incomplete pair.", "prediction": "The result status and preregistered stopping rule permit partial analysis.", "status": "rejected", "evidence_refs": ["timeout-result"]}
+    ]
+  }
+}

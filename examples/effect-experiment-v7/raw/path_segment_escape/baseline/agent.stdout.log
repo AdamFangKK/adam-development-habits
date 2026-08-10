@@ -1,0 +1,5 @@
+Updated [paths.py](/tmp/adam-effect-v6-path_segment_escape-baseline-_bz57az2/paths.py:6) to compare normalized path components via `os.path.commonpath`, preventing sibling-prefix escapes.
+
+Simplification: replaced the unsafe string-prefix check with one standard-library containment check. Remaining risks: none known.
+
+Verified: `python3 -m unittest discover -s tests` passed.

@@ -1,0 +1,11 @@
+diff --git a/rounding.py b/rounding.py
+index b44da15..f95a208 100644
+--- a/rounding.py
++++ b/rounding.py
+@@ -1,2 +1,5 @@
++from decimal import Decimal, ROUND_HALF_EVEN
++
++
+ def cents(value):
+-    return int(float(value) * 100 + 0.5) / 100
++    return float(Decimal(value).quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN))

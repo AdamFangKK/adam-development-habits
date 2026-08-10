@@ -1,0 +1,7 @@
+Change level: 1  
+Canonical owner: `rounding.cents`  
+Changed: [rounding.py](/tmp/adam-effect-v6-round_half_even-skill-abd77urr/rounding.py:1) now uses `Decimal.quantize(..., ROUND_HALF_EVEN)` instead of float-based half-up arithmetic.  
+Removed or retained compatibility: removed the incorrect half-up path; return type remains `float`.  
+Verified: `python3 -m unittest discover -s tests` - passed (1 test). `git diff --check` - passed.  
+Remaining risks: none known within the decimal-text formatter contract.  
+Causal conclusion: root-cause fix.

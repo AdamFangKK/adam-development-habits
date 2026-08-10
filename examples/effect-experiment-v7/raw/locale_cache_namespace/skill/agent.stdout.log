@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: [`policy.py`](/private/tmp/adam-effect-v6-locale_cache_namespace-skill-yot2y1pb/policy.py:1) `key`  
+Acceptance criteria: cache keys distinguish locale-product pairs.  
+Changed: added `locale` to the existing cache-key namespace.  
+Removed or retained compatibility: none.  
+Safeguards: not applicable.  
+Quality decisions: direct local change; no data, dependency, contract, or operational changes.  
+Delivery decisions: no commit requested.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed; direct two-locale cache probe passed; `git diff --check` passed.  
+Independent review: final diff inspected.  
+Evidence artifact: enforcement mode not enabled.  
+Remaining risks: none identified.  
+Causal conclusion: root-cause fix

@@ -1,0 +1,8 @@
+Change level: 1  
+Canonical owner: [`paths.py`](/tmp/adam-effect-v6-path_segment_escape-skill-8y1i9edo/paths.py:3) `inside`  
+Acceptance criteria: sibling prefix paths are outside; true descendants remain inside.  
+Changed: replaced string-prefix matching with component-aware `os.path.commonpath`.  
+Removed or retained compatibility: no compatibility path added.  
+Verified: `git diff --check` - passed; `python3 -m unittest discover -s tests` - 1 test passed.  
+Remaining risks: mixed absolute and relative inputs remain outside the defined public case.  
+Causal conclusion: not activated.

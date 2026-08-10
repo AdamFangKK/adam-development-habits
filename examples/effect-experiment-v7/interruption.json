@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "experiment_id": "causal-skill-effect-v7",
+  "status": "interrupted",
+  "preregistration": "examples/effect-experiment-v7/preregistration.json",
+  "collection": {
+    "model_id": "gpt-5.6-terra",
+    "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+    "seed": 20260811,
+    "planned_conditions": 40,
+    "captured_condition_artifacts": 16,
+    "completed_agent_conditions": 15,
+    "interrupted_agent_conditions": 1,
+    "raw_tree_sha256": "e55e70d95940246e458ad584c2884b70f9bffd489239e21f3bf940a9c934da81",
+    "result_sha256": "b6db54db5d65777210a11c8f3f921d53c68c80ab6a33d89dbeb8fbcb3d6c0ae3",
+    "analysis_eligibility": "ineligible",
+    "analysis_reason": "The fixed-complete-pairs stopping rule was not met because canonical_audit_path/baseline timed out. Independently, captured baseline logs show that the globally installed Adam's Development Habits Skill was read, violating the preregistered requirement that Skill activation be the only condition difference. No partial statistic, retry, or capability claim is allowed."
+  },
+  "interrupted_conditions": [
+    {
+      "task_id": "canonical_audit_path",
+      "condition": "baseline",
+      "error_class": "agent_timeout",
+      "agent_launched": true,
+      "candidate_written": false,
+      "elapsed_seconds": 180.331,
+      "artifact_path": "examples/effect-experiment-v7/raw/canonical_audit_path/baseline"
+    }
+  ],
+  "integrity_failures": [
+    {
+      "id": "baseline-global-skill-contamination",
+      "kind": "condition_difference_violation",
+      "condition": "baseline",
+      "observed_artifact_paths": [
+        "examples/effect-experiment-v7/raw/cursor_exclusivity/baseline/agent.stderr.log",
+        "examples/effect-experiment-v7/raw/config_false_default/baseline/agent.stderr.log",
+        "examples/effect-experiment-v7/raw/casefold_identity/baseline/agent.stderr.log",
+        "examples/effect-experiment-v7/raw/round_half_even/baseline/agent.stderr.log",
+        "examples/effect-experiment-v7/raw/stable_dedup_order/baseline/agent.stderr.log",
+        "examples/effect-experiment-v7/raw/canonical_audit_path/baseline/agent.stderr.log"
+      ],
+      "required_condition_difference": "Only the explicit Skill treatment may read the frozen Skill snapshot; baseline must not load the globally installed Adam's Development Habits Skill.",
+      "observed_behavior": "Each listed baseline stderr log contains a read of /Users/adamfang/.codex/skills/adam-development-habits/SKILL.md. The canonical_audit_path baseline also states that it is applying the development-habits workflow.",
+      "consequence": "The conditions are not a valid baseline-versus-Skill comparison even for fully completed pairs."
+    }
+  ],
+  "operational_observations": [
+    {
+      "id": "relative-agent-output-path",
+      "observation": "No captured V7 condition contains agent-output.md although stdout and stderr logs exist. The V7 runner passed a relative -o path while Codex executed from the temporary task workspace.",
+      "required_before_next_collection": "A new versioned runner must use an absolute artifact output path and prove it in an isolated preflight; this observation does not make the interrupted V7 data analyzable."
+    }
+  ],
+  "decision": "No V7 Skill-effect, model-repair-success, or causal-capability claim is supported. The captured trials are retained only as an invalid interrupted collection.",
+  "next_formal_step": "Before a new V8 preregistration, prove baseline/treatment Skill isolation using an officially documented Codex configuration or invocation mechanism, add a regression preflight that rejects global-Skill reads, correct the agent-output artifact path, preregister a larger timeout before collection, and materialize a fresh held-out corpus."
+}

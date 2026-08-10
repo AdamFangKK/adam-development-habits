@@ -1,0 +1,8 @@
+Change level: 1  
+Canonical owner: `pager.page`  
+Acceptance criteria: end cursor is exclusive; validation remains unchanged.  
+Changed: [pager.py](/tmp/adam-effect-v6-cursor_exclusivity-skill-_6yhlke_/pager.py:4) now slices `items[start:end]`.  
+Removed or retained compatibility: Removed the inclusive `+ 1` adjustment; no compatibility path retained.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed; `git diff --check -- pager.py` - clean.  
+Remaining risks: Public coverage is limited to one cursor case.  
+Causal conclusion: root-cause fix

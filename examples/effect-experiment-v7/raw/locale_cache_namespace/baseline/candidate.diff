@@ -1,0 +1,8 @@
+diff --git a/policy.py b/policy.py
+index 4d03b5f..fa28cf1 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,2 +1,2 @@
+ def key(locale, product):
+-    return "product:" + product
++    return "product:" + locale + ":" + product

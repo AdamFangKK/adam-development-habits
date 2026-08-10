@@ -1,0 +1,8 @@
+Change level: 1  
+Canonical owner: `dedup.unique`  
+Acceptance criteria: deduplicate while preserving first-occurrence order.  
+Changed: [dedup.py](/tmp/adam-effect-v6-stable_dedup_order-baseline-836l3b69/dedup.py:1) now uses insertion-ordered dictionary keys.  
+Removed or retained compatibility: removed sorting behavior; hashable-item input contract retained.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed.  
+Remaining risks: no additional public cases beyond the supplied suite.  
+Causal conclusion: root-cause fix

@@ -1,0 +1,13 @@
+Change level: 1  
+Canonical owner: [`dedup.py`](/tmp/adam-effect-v6-stable_dedup_order-skill-9_cw5zun/dedup.py:1) `unique`  
+Acceptance criteria: preserve first-occurrence order while removing duplicates.  
+Changed: replaced `sorted(set(items))` with insertion-ordered `dict.fromkeys`.  
+Removed or retained compatibility: hashable-item requirement remains unchanged.  
+Safeguards: not applicable.  
+Quality decisions: not applicable.  
+Delivery decisions: no commit, per instruction.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed.  
+Independent review: not required.  
+Evidence artifact: not created within the permitted file scope.  
+Remaining risks: none identified for the public contract.  
+Causal conclusion: not activated

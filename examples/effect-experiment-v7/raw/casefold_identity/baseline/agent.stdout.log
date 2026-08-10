@@ -1,0 +1,5 @@
+Changed [identity.py](/tmp/adam-effect-v6-casefold_identity-baseline-1ki33a9e/identity.py:2) to compare strings with Unicode-aware `casefold()`.
+
+Verified: `python3 -m unittest discover -s tests` passed (`1` test). `git diff --check` passed.
+
+No tests or metadata changed; no commit created. Remaining risks: none within the existing string-input contract.

@@ -1,0 +1,7 @@
+{
+  "passed": false,
+  "returncode": 1,
+  "stderr": "F\n======================================================================\nFAIL: test_alias_audit_uses_canonical_path (test_public.Public)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/tmp/adam-effect-v6-canonical_audit_path-baseline-9ewoepy8/tests/test_public.py\", line 7, in test_alias_audit_uses_canonical_path\n    self.assertEqual(event[\"resource\"], \"/documents/secret\")\nAssertionError: '/shortcut' != '/documents/secret'\n- /shortcut\n+ /documents/secret\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (failures=1)\n",
+  "stdout": "",
+  "timeout": false
+}

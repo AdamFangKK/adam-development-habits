@@ -1,0 +1,8 @@
+diff --git a/dedup.py b/dedup.py
+index 8ca9167..93b9802 100644
+--- a/dedup.py
++++ b/dedup.py
+@@ -1,2 +1,2 @@
+ def unique(items):
+-    return sorted(set(items))
++    return list(dict.fromkeys(items))

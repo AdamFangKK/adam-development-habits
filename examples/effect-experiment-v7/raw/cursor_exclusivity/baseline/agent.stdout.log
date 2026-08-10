@@ -1,0 +1,7 @@
+Change level: 1  
+Canonical owner: `page` in [pager.py](/tmp/adam-effect-v6-cursor_exclusivity-baseline-67s9c4ha/pager.py:1)  
+Acceptance criteria: `end` is exclusive; invalid-range validation is unchanged.  
+Changed: removed the extra `+ 1` from the slice end.  
+Verified: `python3 -m unittest discover -s tests` - 1 test passed; `git diff --check` - passed.  
+Remaining risks: none observed in the scoped behavior.  
+Causal conclusion: not activated
