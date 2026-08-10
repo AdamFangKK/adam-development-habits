@@ -1,0 +1,70 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "minimum_distinct_tasks": 20,
+    "minimum_effect": 0.05,
+    "permutation_resamples": 10000,
+    "random_seed": 20260810,
+    "stratum_weights": {
+      "cross-module": 0.4,
+      "integration": 0.4,
+      "single-module": 0.2
+    }
+  },
+  "experiment_id": "causal-skill-effect-v6",
+  "preregistration": {
+    "envelope_sha256": "8044169442f8eef05f667e0c0bb48f5436a78b690b3065177f20e7e43c36f3b2",
+    "git_commit": "pending",
+    "protocol_sha256": "51f86417e14cb8cb3ba25eceec1bdf3abe51c3f21ab1d9da1d7c6a692c6ab405",
+    "recorded_before_first_trial": true
+  },
+  "protocol": {
+    "baseline_prompt_sha256": "5982031f42f73e21a851c676325e550c23259983b6879ad9222b37ea002ca527",
+    "corpus_manifest_sha256": "98511463f3ed59e502bd8ca68ef4ee4ec543282e7e44d1306cbaccf42db2ef85",
+    "generator_sha256": "8fdaa7d113de8ec9504b7bd348a6daf636774acc566b78963f88af7b4603c575",
+    "hidden_scorer_blind_to_condition": true,
+    "hidden_scorer_sha256": "2e3a1c507c1dec023fe58ff7cb11f84d0b845df44ee305fa8e6768250285a4e9",
+    "pairing": "same task, randomized condition order",
+    "runner_sha256": "4d64ff00c6babb48c10363dfe46d9757efddc4adbc7933032da4c9d74475252e",
+    "skill_prompt_sha256": "beaa82f62e70563cabb08a7117212dd7999a70b4fb6272a9139cf0d09000b3e4"
+  },
+  "schema_version": 1,
+  "scope": {
+    "claim": "For a fixed Codex model and Harness on an independent multi-file causal-repair corpus with hidden state-owner contracts, enabling Adam's Development Habits improves hidden repair success by a practical margin.",
+    "harness_id": "codex-cli-0.146.0-alpha.9.2;exec;workspace-write;ephemeral;checkpointed-v6",
+    "model_id": "gpt-5.6-terra",
+    "skill_revision_sha256": "2d0a7c91b872a189df0a1cf0fc68390ce68dba5c13d07f571d8f3faab83fdd92"
+  },
+  "status": "planned",
+  "stopping_rule": {
+    "early_stop": "not allowed",
+    "kind": "fixed_complete_pairs",
+    "pairs_per_task": 1
+  },
+  "task_plan": {
+    "tasks": [
+      {"stratum": "cross-module", "task_id": "tenant_cache_identity"},
+      {"stratum": "cross-module", "task_id": "permission_target_resolution"},
+      {"stratum": "integration", "task_id": "unknown_write_reconciliation"},
+      {"stratum": "integration", "task_id": "operation_identity_dimensions"},
+      {"stratum": "single-module", "task_id": "configuration_precedence"},
+      {"stratum": "cross-module", "task_id": "snapshot_revision_invalidation"},
+      {"stratum": "integration", "task_id": "ack_after_durable_save"},
+      {"stratum": "single-module", "task_id": "half_open_pagination"},
+      {"stratum": "cross-module", "task_id": "tenant_rate_limit_scope"},
+      {"stratum": "integration", "task_id": "money_rounding_owner"},
+      {"stratum": "cross-module", "task_id": "role_cache_revision"},
+      {"stratum": "single-module", "task_id": "event_missing_version"},
+      {"stratum": "integration", "task_id": "global_retry_deadline"},
+      {"stratum": "cross-module", "task_id": "tenant_record_ownership"},
+      {"stratum": "integration", "task_id": "terminal_job_lifecycle"},
+      {"stratum": "integration", "task_id": "atomic_batch_commit"},
+      {"stratum": "cross-module", "task_id": "tenant_feature_assignment"},
+      {"stratum": "cross-module", "task_id": "canonical_search_index"},
+      {"stratum": "single-module", "task_id": "cache_ttl_units"},
+      {"stratum": "integration", "task_id": "inventory_compare_and_swap"}
+    ]
+  },
+  "trials": []
+}

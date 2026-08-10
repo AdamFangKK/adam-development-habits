@@ -46,6 +46,21 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("call the owner only a candidate", self.skill)
         self.assertIn("a retryable **pre-acceptance** rejection restores the state", self.skill)
 
+    def test_front_loaded_causal_repair_card_preserves_the_owner_first_sequence(self) -> None:
+        card = self.skill.index("## Causal Repair Card")
+        detailed_policy = self.skill.index("## Causal Execution Discipline")
+        self.assertLess(card, detailed_policy)
+        for requirement in (
+            "symptom** from the violated **invariant",
+            "trigger -> decision or state owner -> side effect -> symptom",
+            "one primary hypothesis and one plausible alternative",
+            "lowest-risk discriminating probe",
+            "responsible decision or state owner, not the nearest downstream consumer",
+            "Causal conclusion: unknown",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.skill[card:detailed_policy])
+
     def test_completion_gate_and_ledger_capture_quality_decisions(self) -> None:
         for field in (
             "Design boundary:",

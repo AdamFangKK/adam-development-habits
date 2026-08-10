@@ -36,8 +36,8 @@
   "rollback_or_compatibility": "Revert SKILL.md, README.md, the contract regression, and this artifact together; existing projects continue to use the prior budget safeguard matrix.",
   "independent_review": {"reviewer": "pending final package review", "outcome": "approved", "notes": "The rule is narrowly scoped to explicit budgets and does not claim hidden-scale knowledge."},
   "supporting_artifacts": [
-    {"id": "skill-source", "kind": "evaluation_transcript", "path": "SKILL.md", "sha256": "880ac837fea6be2cceb2430ff106bdfd5b50b50cb7be5a13740ba9e7952c0df5", "summary": "Normative budget-aware completion rule."},
-    {"id": "skill-contract-test", "kind": "test_output", "path": "tests/test_skill_contract.py", "sha256": "437ab3dbcfd2ee28d43aaa36a0596b98e4f2bc94b63d66509579b23ec4345a16", "summary": "Regression assertion for scale reasoning, boundary probe, and residual-risk wording."}
+    {"id": "skill-source", "kind": "evaluation_transcript", "path": "SKILL.md", "sha256": "2d0a7c91b872a189df0a1cf0fc68390ce68dba5c13d07f571d8f3faab83fdd92", "summary": "Normative budget-aware completion rule."},
+    {"id": "skill-contract-test", "kind": "test_output", "path": "tests/test_skill_contract.py", "sha256": "5c40ab57aa7a68a25575f177620f9645b668670b8d66e84ce7df0bb18f6b5213", "summary": "Regression assertion for scale reasoning, boundary probe, and residual-risk wording."}
   ],
   "remaining_risks": ["The rule improves the workflow contract but does not itself execute a profiler or guarantee hidden performance cases."]
 }

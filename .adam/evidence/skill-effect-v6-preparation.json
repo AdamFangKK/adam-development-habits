@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-v6-preparation",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Causal Repair Card",
+    "scripts/run_effect_experiment_v6.py:main",
+    "scripts/score_effect_workspace_v6.py:score_workspace",
+    "scripts/materialize_effect_corpus_v6.py:materialize",
+    "examples/effect-experiment-v6/preregistration.json"
+  ],
+  "affected_callers": [
+    "tests/test_skill_contract.py",
+    "tests/test_effect_runner_v6.py",
+    "tests/test_effect_corpus_v6.py",
+    "references/effect-evaluation.md",
+    "README.md"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The Causal Repair Card appears before the detailed causal policy and requires symptom/invariant separation, owner path, alternative hypothesis, discriminating probe, and calibrated conclusion.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_skill_contract.py"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The v6 runner supports multi-file workspaces, explicit relative edit scope, hidden-test injection only after Agent exit, and an atomic checkpoint after each complete pair; an incomplete pair is marked ineligible without retry.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_runner_v6.py"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The fresh corpus contains exactly 20 unique tasks across all preregistered strata; every buggy workspace fails its public suite and every reference workspace passes public plus hidden tests.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_corpus_v6.py"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The v6 effect envelope hashes the Skill, prompts, generator, runner, scorer, corpus manifest, task plan, and statistical thresholds before collection and contains no trials.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v6/preregistration.json"
+    }
+  ],
+  "invariants": [
+    "v4 and v5 hidden contracts are not reused as v6 task inputs.",
+    "The repair Agent receives a public task workspace and a snapshot containing only SKILL.md; hidden tests and reference repairs remain scorer-only.",
+    "A non-complete Agent condition invalidates the collection; the runner records the interruption and does not silently retry or analyze partial pairs.",
+    "An `improved` result, if later observed, can support only the preregistered fixed model, Harness, corpus, Skill revision, and hidden scorer scope."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "front-loaded causal owner card",
+      "status": "applied",
+      "rationale": "The short owner-first sequence is placed before detailed gates so it is available before a repair edit."
+    },
+    {
+      "name": "scorer-only hidden workspace",
+      "status": "applied",
+      "rationale": "The scorer copies the candidate into a temporary directory and injects hidden tests only after the Agent process exits; raw Agent artifacts never contain hidden files."
+    },
+    {
+      "name": "pair checkpoint and interruption gate",
+      "status": "applied",
+      "rationale": "The output is atomically replaced after each pair and an incomplete condition produces an ineligible interrupted record rather than a partial statistic."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "SKILL.md owns the causal workflow; the v6 runner owns execution/checkpoint state; the v6 scorer owns hidden-contract execution; the generator owns fixture materialization."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "The new protocol uses only Python standard library, Git, unittest, and existing Codex CLI surfaces."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No public application extension point is introduced."},
+    "data_ownership": {"status": "applied", "rationale": "Public task trees, hidden scorer trees, and raw trial artifacts have separate owners and lifecycle boundaries; hidden data never enters Agent workspaces."},
+    "error_model": {"status": "applied", "rationale": "Public failure, hidden failure, scope violation, timeout, nonzero Agent exit, and interrupted collection remain distinct recorded outcomes."},
+    "contract_evolution": {"status": "applied", "rationale": "The existing analyzer remains unchanged; v6 adds a separate manifest and runner contract while v4/v5 protocols remain replayable."},
+    "operational_budget": {"status": "applied", "rationale": "The runner declares Agent and scorer timeouts, kills timed-out process groups, and records elapsed time and test timeout state."},
+    "threat_boundary": {"status": "applied", "rationale": "Hidden tests and reference repairs are outside the Agent input boundary; native Codex isolation is explicitly treated as protocol isolation, not a container security boundary."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The Skill card, v6 scripts, corpus, prompts, preregistration, tests, README, reference protocol, and evidence are frozen as one atomic verified change before any trial."},
+    "release_recovery": {"status": "not_applicable", "rationale": "This is an offline evaluation package and performs no production rollout."},
+    "data_migration": {"status": "not_applicable", "rationale": "No production or persistent application schema is changed."},
+    "configuration_secrets": {"status": "applied", "rationale": "The experiment declares non-secret model/Harness IDs and sanitizes user-site/bytecode environment behavior; no credential is stored."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No dependency or lockfile is added."},
+    "operational_knowledge": {"status": "applied", "rationale": "README and effect-evaluation reference describe the v6 boundary, hidden injection order, checkpoint rule, and interpretation limit."},
+    "reproducibility": {"status": "applied", "rationale": "The manifest, source tree hashes, prompt hashes, generator/runner/scorer hashes, fixed seed, task strata, model, Harness, and statistical stopping rule are preregistered."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py tests/test_skill_contract.py", "status": "passed", "result": "20 tests passed, including 20/20 buggy public failures and 20/20 reference public+hidden passes."},
+    {"command": "PYTHONPATH=scripts basedpyright scripts/materialize_effect_corpus_v6.py scripts/run_effect_experiment_v6.py scripts/score_effect_workspace_v6.py tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py", "status": "passed", "result": "0 errors, 0 warnings, 0 notes."},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v6/preregistration.json", "status": "passed", "result": "The frozen protocol is valid and reports not_run; no trial evidence or effect claim is present."},
+    {"command": "git diff --check", "status": "passed", "result": "No whitespace errors."}
+  ],
+  "rollback_or_compatibility": "Revert this evidence artifact, the front-loaded card, v6 scripts, corpus, prompts, tests, and documentation together; historical v4 and v5 evidence remains unchanged.",
+  "independent_review": {"reviewer": "deterministic corpus and runner contract tests", "outcome": "approved", "notes": "The tests independently exercise hidden injection, path scope, checkpoint completion/interruption, manifest hashes, public fixture failure, and reference repair success. They do not pre-judge the future paired treatment outcome."},
+  "supporting_artifacts": [
+    {"id": "skill", "kind": "evaluation_transcript", "path": "SKILL.md", "sha256": "2d0a7c91b872a189df0a1cf0fc68390ce68dba5c13d07f571d8f3faab83fdd92", "summary": "Normative Skill with the front-loaded Causal Repair Card."},
+    {"id": "skill-test", "kind": "test_output", "path": "tests/test_skill_contract.py", "sha256": "5c40ab57aa7a68a25575f177620f9645b668670b8d66e84ce7df0bb18f6b5213", "summary": "Skill contract tests including card placement and owner-first requirements."},
+    {"id": "generator", "kind": "evaluation_transcript", "path": "scripts/materialize_effect_corpus_v6.py", "sha256": "8fdaa7d113de8ec9504b7bd348a6daf636774acc566b78963f88af7b4603c575", "summary": "Deterministic 20-task multi-file causal corpus generator."},
+    {"id": "corpus-test", "kind": "test_output", "path": "tests/test_effect_corpus_v6.py", "sha256": "cc1095bd5cc1e6bfd38621a074864653d8213afec22ad372d910efc64d3f6599", "summary": "Hash-linked corpus test proving each buggy public suite fails and each reference suite passes."},
+    {"id": "runner", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment_v6.py", "sha256": "4d64ff00c6babb48c10363dfe46d9757efddc4adbc7933032da4c9d74475252e", "summary": "Checkpointed paired runner with explicit multi-file scope."},
+    {"id": "runner-test", "kind": "test_output", "path": "tests/test_effect_runner_v6.py", "sha256": "50fd61f35c767eb6d050ce20f42fe525af2a8a5060588b2848bcf04c111fc5a6", "summary": "Runner tests for hidden-copy isolation, randomized order, completed checkpoints, and interruption ineligibility."},
+    {"id": "scorer", "kind": "evaluation_transcript", "path": "scripts/score_effect_workspace_v6.py", "sha256": "2e3a1c507c1dec023fe58ff7cb11f84d0b845df44ee305fa8e6768250285a4e9", "summary": "Generic scorer that injects hidden tests only into a temporary post-exit copy."},
+    {"id": "manifest", "kind": "evaluation_transcript", "path": "examples/effect-corpus-v6/manifest.json", "sha256": "98511463f3ed59e502bd8ca68ef4ee4ec543282e7e44d1306cbaccf42db2ef85", "summary": "Frozen 20-task manifest with public/hidden tree digests and explicit edit scopes."},
+    {"id": "preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v6/preregistration.json", "sha256": "201442df9f4c8166989f069e61e5e3fab2fa02fad96bb61c2105ee80e1c33c73", "summary": "Pre-run v6 effect envelope with no trials and complete protocol hashes."}
+  ],
+  "remaining_risks": [
+    "No v6 Agent condition has run yet; this artifact cannot support a Skill-effect claim.",
+    "Native Codex workspace isolation is protocol isolation rather than a filesystem/container security boundary.",
+    "Upstream model-service interruption can still make a complete paired run ineligible; the checkpoint preserves the evidence but cannot create a valid statistic."
+  ]
+}

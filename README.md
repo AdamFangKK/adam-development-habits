@@ -197,6 +197,8 @@ v4 是首个 metadata 有效、完整采样的 20-task QuixBugs paired run：40/
 
 v5 的首次收集在全部 44 个条件工件都已落盘后遭遇模型服务限流（10 个 `503`、2 个 `429`）：这 12 次 Agent 均未成功结束，其中两次虽已写出候选补丁也不能计为成功。运行器因此没有生成最终 trial bundle，按固定规则这次收集是 `interrupted`，不能把未完成调用作为失败样本、不能排除它们后分析，也不能产生 Skill 效果结论。完整原始记录、条件清单与可执行一致性检查在 [`effect-experiment-v5`](./examples/effect-experiment-v5)；下一次正式尝试必须使用新的、未用于调参的 held-out corpus 和新预注册。
 
+为检验真正的上游状态/决策 owner，v6 增加了独立的多文件工作区协议：[`materialize_effect_corpus_v6.py`](./scripts/materialize_effect_corpus_v6.py) 生成 20 个跨 `single-module`、`cross-module`、`integration` 的新因果夹具；[`run_effect_experiment_v6.py`](./scripts/run_effect_experiment_v6.py) 逐对随机化执行并在每对完成后原子检查点化；[`score_effect_workspace_v6.py`](./scripts/score_effect_workspace_v6.py) 只在 Agent 退出后的临时评分副本注入隐藏测试。公开夹具失败、参考修复通过和所有路径/目录哈希均由 [`test_effect_corpus_v6.py`](./tests/test_effect_corpus_v6.py) 锁定。v6 的预注册完成分析若未报告 `improved`，只能说明没有在该固定模型、Harness、语料和隐藏契约范围内证明提升，不能外推到模型整体因果能力。
+
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \
   examples/skill-effect-preregistration.json

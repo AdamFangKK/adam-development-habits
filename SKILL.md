@@ -21,6 +21,16 @@ Apply the lightest level that preserves confidence:
 
 Do not downgrade a change to avoid evidence. If uncertain, use the higher level.
 
+## Causal Repair Card
+
+When Causal Lite or Causal Full applies, complete this short card before proposing a repair. Keep it in the task record; it is deliberately front-loaded so an Agent can use the decision sequence before reading the detailed policy below.
+
+1. Separate the observed **symptom** from the violated **invariant**.
+2. Trace `trigger -> decision or state owner -> side effect -> symptom`; name the earliest candidate owner that can violate the invariant.
+3. State one primary hypothesis and one plausible alternative. Run the lowest-risk discriminating probe that could reject the primary hypothesis.
+4. Change the responsible decision or state owner, not the nearest downstream consumer, display, alert, or test expectation. Preserve a downstream guard only as an explicitly labeled mitigation.
+5. Calibrate the conclusion to the evidence: an unrun, read-only, or in-memory-only counterfactual remains `Causal conclusion: unknown`.
+
 ## Budget-Aware Repair Gate
 
 Activate this gate for any repair whose existing test command enforces a timeout, deadline, memory limit, query/call budget, or other resource bound, and for any algorithm whose work scales with a caller-controlled numeric dimension (capacity, range, recursion depth, input length, or number of states). A passing visible case proves only the observed inputs; it does not prove the implementation is safe at the declared boundary.

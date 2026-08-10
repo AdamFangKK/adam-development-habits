@@ -168,7 +168,7 @@
       "id": "effect-protocol-reference",
       "kind": "evaluation_transcript",
       "path": "references/effect-evaluation.md",
-      "sha256": "75acff0f60ab31b039e07c1a69018356d4f86d632f715b87d3984df4b8dd974c",
+      "sha256": "51f0e8619b5fa8000067fdb5347470b515ccce03c5997b06586e29f00d774778",
       "summary": "Pre-registration, isolation, blind scoring, stopping, inference, interpretation, and retest procedure."
     },
     {
