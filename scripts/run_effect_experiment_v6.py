@@ -139,11 +139,18 @@ def load_json(path: Path) -> dict[str, object]:
 
 
 def copy_tree(source: Path, destination: Path) -> None:
-    _ = shutil.copytree(
-        source,
-        destination,
-        ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc"),
-    )
+    destination.mkdir(parents=True, exist_ok=True)
+    if any(destination.iterdir()):
+        raise RuntimeError(f"destination must be empty: {destination}")
+    ignore = shutil.ignore_patterns(".git", "__pycache__", "*.pyc")
+    for item in sorted(source.iterdir()):
+        if item.name in {".git", "__pycache__"} or item.suffix == ".pyc":
+            continue
+        target = destination / item.name
+        if item.is_dir():
+            _ = shutil.copytree(item, target, ignore=ignore)
+        else:
+            _ = shutil.copy2(item, target)
 
 
 def seed_workspace(task_root: Path, run_root: Path) -> str:

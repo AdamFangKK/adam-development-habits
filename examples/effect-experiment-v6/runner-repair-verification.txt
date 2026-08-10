@@ -1,0 +1,11 @@
+Command:
+PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_runner_v6.EffectRunnerV6Tests.test_execute_condition_seeds_an_existing_temp_directory -v
+
+Exit status: 0
+
+test_execute_condition_seeds_an_existing_temp_directory (tests.test_effect_runner_v6.EffectRunnerV6Tests) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.280s
+
+OK

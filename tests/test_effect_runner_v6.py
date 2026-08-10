@@ -21,6 +21,8 @@ from run_effect_experiment_v6 import (  # noqa: E402
     Arguments,
     TaskRecord,
     changed_paths,
+    copy_tree,
+    execute_condition,
     execute_task_pair,
     records_for_preregistration,
     seed_workspace,
@@ -30,6 +32,18 @@ from score_effect_workspace_v6 import score_workspace  # noqa: E402
 
 
 class EffectRunnerV6Tests(unittest.TestCase):
+    def test_copy_tree_rejects_a_nonempty_destination(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source"
+            destination = root / "destination"
+            source.mkdir()
+            destination.mkdir()
+            _ = (source / "service.py").write_text("value = 1\n", encoding="utf-8")
+            _ = (destination / "stale.py").write_text("value = 0\n", encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "destination must be empty"):
+                copy_tree(source, destination)
+
     def test_seed_workspace_copies_a_multi_file_public_workspace(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -45,6 +59,46 @@ class EffectRunnerV6Tests(unittest.TestCase):
             self.assertTrue((run / "tests" / "test_public.py").is_file())
             _ = (run / "service.py").write_text("value = 2\n", encoding="utf-8")
             self.assertEqual(changed_paths(run, seed), ["service.py"])
+
+    def test_execute_condition_seeds_an_existing_temp_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            corpus = root / "corpus"
+            task_root = corpus / "tasks" / "smoke"
+            hidden_root = corpus / "hidden" / "smoke"
+            (task_root / "tests").mkdir(parents=True)
+            (hidden_root / "tests").mkdir(parents=True)
+            _ = (task_root / "owner.py").write_text("value = 1\n", encoding="utf-8")
+            _ = (task_root / "tests" / "test_public.py").write_text("import unittest\nimport owner\n\nclass Public(unittest.TestCase):\n    def test_value(self):\n        self.assertEqual(owner.value, 1)\n", encoding="utf-8")
+            _ = (hidden_root / "tests" / "test_hidden.py").write_text("import unittest\nimport owner\n\nclass Hidden(unittest.TestCase):\n    def test_value(self):\n        self.assertEqual(owner.value, 1)\n", encoding="utf-8")
+            prompt = root / "prompt.txt"
+            _ = prompt.write_text("smoke", encoding="utf-8")
+            task = TaskRecord(
+                task_id="smoke",
+                stratum="single-module",
+                workspace_path="tasks/smoke",
+                hidden_root_path="hidden/smoke",
+                allowed_edit_paths=("owner.py",),
+                public_command=(sys.executable, "-m", "unittest", "discover", "-s", "tests"),
+                hidden_command=(sys.executable, "-m", "unittest", "discover", "-s", "tests"),
+            )
+            with patch("run_effect_experiment_v6.run_agent", return_value=(0, "", "")):
+                result = execute_condition(
+                    task=task,
+                    corpus=corpus,
+                    prompt_path=prompt,
+                    condition="baseline",
+                    skill_snapshot=root / "SKILL.md",
+                    raw_root=root / "raw",
+                    codex_path="unused",
+                    model_id="model",
+                    harness_id="harness",
+                    agent_timeout=1.0,
+                    test_timeout=5.0,
+                )
+            self.assertTrue(result["trial_complete"], result)
+            self.assertTrue(result["hidden_repair_pass"], result)
+            self.assertTrue(result["scope_ok"], result)
 
     def test_hidden_scorer_injects_only_into_a_temporary_copy(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

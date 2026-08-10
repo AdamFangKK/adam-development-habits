@@ -25,7 +25,7 @@
     {
       "id": "AC-2",
       "condition": "The v6 runner supports multi-file workspaces, explicit relative edit scope, hidden-test injection only after Agent exit, and an atomic checkpoint after each complete pair; an incomplete pair is marked ineligible without retry.",
-      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_runner_v6.py"
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_runner_v6.py tests/test_effect_experiment_v6_interruption.py"
     },
     {
       "id": "AC-3",
@@ -81,8 +81,8 @@
     "reproducibility": {"status": "applied", "rationale": "The manifest, source tree hashes, prompt hashes, generator/runner/scorer hashes, fixed seed, task strata, model, Harness, and statistical stopping rule are preregistered."}
   },
   "verification": [
-    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py tests/test_skill_contract.py", "status": "passed", "result": "20 tests passed, including 20/20 buggy public failures and 20/20 reference public+hidden passes."},
-    {"command": "PYTHONPATH=scripts basedpyright scripts/materialize_effect_corpus_v6.py scripts/run_effect_experiment_v6.py scripts/score_effect_workspace_v6.py tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py", "status": "passed", "result": "0 errors, 0 warnings, 0 notes."},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py tests/test_effect_experiment_v6_interruption.py tests/test_skill_contract.py", "status": "passed", "result": "24 tests passed, including 20/20 buggy public failures, 20/20 reference public+hidden passes, pre-created-directory and stale-destination runner regressions, and interruption archive consistency."},
+    {"command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright scripts/materialize_effect_corpus_v6.py scripts/run_effect_experiment_v6.py scripts/score_effect_workspace_v6.py tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py tests/test_effect_experiment_v6_interruption.py", "status": "passed", "result": "0 errors, 0 warnings, 0 notes."},
     {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v6/preregistration.json", "status": "passed", "result": "The frozen protocol is valid and reports not_run; no trial evidence or effect claim is present."},
     {"command": "git diff --check", "status": "passed", "result": "No whitespace errors."}
   ],
@@ -92,9 +92,10 @@
     {"id": "skill", "kind": "evaluation_transcript", "path": "SKILL.md", "sha256": "2d0a7c91b872a189df0a1cf0fc68390ce68dba5c13d07f571d8f3faab83fdd92", "summary": "Normative Skill with the front-loaded Causal Repair Card."},
     {"id": "skill-test", "kind": "test_output", "path": "tests/test_skill_contract.py", "sha256": "5c40ab57aa7a68a25575f177620f9645b668670b8d66e84ce7df0bb18f6b5213", "summary": "Skill contract tests including card placement and owner-first requirements."},
     {"id": "generator", "kind": "evaluation_transcript", "path": "scripts/materialize_effect_corpus_v6.py", "sha256": "8fdaa7d113de8ec9504b7bd348a6daf636774acc566b78963f88af7b4603c575", "summary": "Deterministic 20-task multi-file causal corpus generator."},
-    {"id": "corpus-test", "kind": "test_output", "path": "tests/test_effect_corpus_v6.py", "sha256": "cc1095bd5cc1e6bfd38621a074864653d8213afec22ad372d910efc64d3f6599", "summary": "Hash-linked corpus test proving each buggy public suite fails and each reference suite passes."},
-    {"id": "runner", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment_v6.py", "sha256": "4d64ff00c6babb48c10363dfe46d9757efddc4adbc7933032da4c9d74475252e", "summary": "Checkpointed paired runner with explicit multi-file scope."},
-    {"id": "runner-test", "kind": "test_output", "path": "tests/test_effect_runner_v6.py", "sha256": "50fd61f35c767eb6d050ce20f42fe525af2a8a5060588b2848bcf04c111fc5a6", "summary": "Runner tests for hidden-copy isolation, randomized order, completed checkpoints, and interruption ineligibility."},
+    {"id": "corpus-test", "kind": "test_output", "path": "tests/test_effect_corpus_v6.py", "sha256": "0ca3601955069e9b3ecfb0dd1e54e8d91c19083d145284cbd0159b3d2d3accfe", "summary": "Hash-linked corpus test proving each buggy public suite fails and each reference suite passes while preserving and separating the historical v6 runner digest."},
+    {"id": "runner", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment_v6.py", "sha256": "06b65db8695798a94c52993257cb9c4963af98ed9bd684e13ae1d795582ab97d", "summary": "Post-interruption corrected runner with explicit multi-file scope, empty-destination isolation, and the frozen v6 protocol digest retained in preregistration/result."},
+    {"id": "runner-test", "kind": "test_output", "path": "tests/test_effect_runner_v6.py", "sha256": "ed3dc874ec0259028561cc41549089ca8a62c2c8910a455f69c242501ba649db", "summary": "Runner tests for hidden-copy isolation, randomized order, completed checkpoints, interruption ineligibility, pre-created-directory seeding, and stale-destination rejection."},
+    {"id": "interruption-test", "kind": "test_output", "path": "tests/test_effect_experiment_v6_interruption.py", "sha256": "6217da958a670473e07e50d431a47ff9cf5563478c47978000f207f0912f463a", "summary": "Regression test tying the v6 interruption report to the retained raw tree and result bundle."},
     {"id": "scorer", "kind": "evaluation_transcript", "path": "scripts/score_effect_workspace_v6.py", "sha256": "2e3a1c507c1dec023fe58ff7cb11f84d0b845df44ee305fa8e6768250285a4e9", "summary": "Generic scorer that injects hidden tests only into a temporary post-exit copy."},
     {"id": "manifest", "kind": "evaluation_transcript", "path": "examples/effect-corpus-v6/manifest.json", "sha256": "98511463f3ed59e502bd8ca68ef4ee4ec543282e7e44d1306cbaccf42db2ef85", "summary": "Frozen 20-task manifest with public/hidden tree digests and explicit edit scopes."},
     {"id": "preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v6/preregistration.json", "sha256": "201442df9f4c8166989f069e61e5e3fab2fa02fad96bb61c2105ee80e1c33c73", "summary": "Pre-run v6 effect envelope with no trials and complete protocol hashes."}

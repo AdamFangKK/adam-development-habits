@@ -23,6 +23,7 @@ from materialize_effect_corpus_v6 import make_tasks, tree_digest, write_tree  # 
 
 CORPUS = ROOT / "examples" / "effect-corpus-v6"
 PREREGISTRATION = ROOT / "examples" / "effect-experiment-v6" / "preregistration.json"
+INTERRUPTION_RESULT = ROOT / "examples" / "effect-experiment-v6" / "result.json"
 COMMAND = ["python3", "-m", "unittest", "discover", "-s", "tests"]
 
 
@@ -45,7 +46,6 @@ class EffectCorpusV6Tests(unittest.TestCase):
         expected_hashes = {
             "corpus_manifest_sha256": CORPUS / "manifest.json",
             "generator_sha256": ROOT / "scripts" / "materialize_effect_corpus_v6.py",
-            "runner_sha256": ROOT / "scripts" / "run_effect_experiment_v6.py",
             "hidden_scorer_sha256": ROOT / "scripts" / "score_effect_workspace_v6.py",
             "baseline_prompt_sha256": ROOT / "examples" / "effect-experiment-v6" / "prompts" / "baseline.txt",
             "skill_prompt_sha256": ROOT / "examples" / "effect-experiment-v6" / "prompts" / "skill.txt",
@@ -53,6 +53,16 @@ class EffectCorpusV6Tests(unittest.TestCase):
         for field, path in expected_hashes.items():
             with self.subTest(field=field):
                 self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), protocol[field])
+        # The v6 run was interrupted before an Agent launched.  Its runner hash is
+        # historical evidence and must remain distinct from the post-interruption
+        # repair that is reserved for a future preregistered v7 run.
+        result = cast(dict[str, object], json.loads(INTERRUPTION_RESULT.read_text(encoding="utf-8")))
+        result_protocol = cast(dict[str, object], result["protocol"])
+        self.assertEqual(protocol["runner_sha256"], result_protocol["runner_sha256"])
+        self.assertNotEqual(
+            hashlib.sha256((ROOT / "scripts" / "run_effect_experiment_v6.py").read_bytes()).hexdigest(),
+            protocol["runner_sha256"],
+        )
         scope = cast(dict[str, object], preregistration["scope"])
         self.assertEqual(hashlib.sha256((ROOT / "SKILL.md").read_bytes()).hexdigest(), scope["skill_revision_sha256"])
         planned_tasks = cast(list[dict[str, object]], cast(dict[str, object], preregistration["task_plan"])["tasks"])

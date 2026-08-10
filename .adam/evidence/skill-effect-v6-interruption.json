@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-v6-interruption",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/run_effect_experiment_v6.py:copy_tree",
+    "scripts/run_effect_experiment_v6.py:execute_condition",
+    "examples/effect-experiment-v6/interruption.json"
+  ],
+  "affected_callers": [
+    "tests/test_effect_runner_v6.py",
+    "tests/test_effect_corpus_v6.py",
+    "tests/test_effect_experiment_v6_interruption.py",
+    "README.md"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The runner can seed the temporary directory that execute_condition has already created, then complete its public and hidden checks without a FileExistsError.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_runner_v6.EffectRunnerV6Tests.test_execute_condition_seeds_an_existing_temp_directory -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The retained v6 raw artifacts, interruption report, and result bundle agree that two pre-Agent conditions were interrupted and are ineligible for any partial effect statistic.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_experiment_v6_interruption.py -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The frozen v6 preregistration retains its original runner digest while the corrected live runner remains covered by its own regression test for a future v7 protocol.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py -v"
+    }
+  ],
+  "invariants": [
+    "The interrupted v6 collection remains ineligible and cannot be retried, partially analyzed, or presented as a model or Skill outcome.",
+    "The v6 preregistration and result retain the pre-interruption runner digest; the repaired runner is reserved for a new v7 preregistration and fresh held-out corpus.",
+    "The runner seeds a clean Git workspace even when its destination directory already exists."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "historical protocol freeze",
+      "status": "applied",
+      "rationale": "The original v6 envelope and result are preserved as immutable interrupted evidence; only the live runner implementation is corrected."
+    },
+    {
+      "name": "pre-created-directory regression",
+      "status": "applied",
+      "rationale": "The test exercises execute_condition end to end through public and hidden scoring with the same pre-created temporary-directory shape that exposed the defect."
+    },
+    {
+      "name": "raw-archive consistency check",
+      "status": "applied",
+      "rationale": "The archive test recomputes the raw tree digest and checks both recorded conditions, FileExistsError logs, and ineligible result semantics."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "copy_tree owns materializing a workspace into a caller-provided directory; execute_condition owns temporary-directory lifetime and the archive owns historical v6 classification."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "The repair uses existing Python standard-library shutil and unittest facilities; no dependency or lockfile changes."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No public extension point is introduced; the correction is local to the existing runner boundary."},
+    "data_ownership": {"status": "applied", "rationale": "The raw v6 tree and result are authoritative immutable collection evidence, while temporary execution workspaces are disposable and owned by execute_condition."},
+    "error_model": {"status": "applied", "rationale": "A pre-Agent FileExistsError is distinguished from Agent, public-test, hidden-test, scope, and timeout outcomes and remains an interrupted collection state."},
+    "contract_evolution": {"status": "applied", "rationale": "The v6 protocol is not rebound to repaired source; a new v7 envelope must carry the corrected runner digest and fresh corpus."},
+    "operational_budget": {"status": "applied", "rationale": "The existing agent and test timeouts remain unchanged; the regression completes public and hidden local checks within the declared five-second test budget."},
+    "threat_boundary": {"status": "applied", "rationale": "The regression retains post-exit hidden scoring and does not place hidden test content in the Agent prompt or mutable workspace input."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The runner repair, raw archive, regression tests, README clarification, and evidence ledger form one verified, reviewable Git change."},
+    "release_recovery": {"status": "not_applicable", "rationale": "This offline evaluation package has no user-facing rollout or production recovery action."},
+    "data_migration": {"status": "not_applicable", "rationale": "No application schema, persisted user data, or backfill behavior changes."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No runtime configuration, credential, or secret is added, changed, or archived."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No dependency, registry source, license surface, or lockfile changes."},
+    "operational_knowledge": {"status": "applied", "rationale": "README, interruption report, archived raw stderr, regression transcript, tests, and this ledger record diagnosis, recovery boundary, and the required v7 next step."},
+    "reproducibility": {"status": "applied", "rationale": "Committed raw artifacts, SHA-256 digests, a deterministic fixture, and exact unittest commands reproduce both the interruption classification and corrected seeding behavior."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_runner_v6.EffectRunnerV6Tests.test_execute_condition_seeds_an_existing_temp_directory -v", "status": "passed", "result": "1 targeted regression test passed after creating and seeding an existing temporary run directory, then completing public and hidden checks."},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_experiment_v6_interruption.py tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py tests/test_skill_contract.py -v", "status": "passed", "result": "24 tests passed, including raw v6 archive consistency, frozen-runner historical linkage, the repaired runner smoke and stale-destination guards, corpus contracts, and Skill contract checks."},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 /Library/Developer/CommandLineTools/usr/bin/python3 -m unittest discover -s tests -v", "status": "passed", "result": "131 package tests passed, including the external QuixBugs replay when run with the existing Command Line Tools Python that exposes the repository's installed pytest."},
+    {"command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright scripts/materialize_effect_corpus_v6.py scripts/run_effect_experiment_v6.py scripts/score_effect_workspace_v6.py tests/test_effect_corpus_v6.py tests/test_effect_runner_v6.py tests/test_effect_experiment_v6_interruption.py", "status": "passed", "result": "0 errors, 0 warnings, 0 notes."},
+    {"command": "git diff --check", "status": "passed", "result": "No whitespace errors before final evidence updates."}
+  ],
+  "rollback_or_compatibility": "Revert the live runner correction, its regression test, the frozen-protocol linkage adjustment, raw archive consistency test, README clarification, transcript, and this evidence ledger together; keep the historical v6 interruption report and raw tree intact.",
+  "independent_review": {"reviewer": "Codex native code-reviewer: v6_closure_review", "outcome": "approved", "notes": "The read-only re-review found no remaining correctness, isolation, evidence, or claim-boundary findings after the empty-destination guard was added. An earlier review service interruption was not treated as approval."},
+  "supporting_artifacts": [
+    {"id": "interruption-report", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v6/interruption.json", "sha256": "99cae6aec9af50f4db560b4878b9f84879bcceccb4248c9c050b78faa50447a1", "summary": "v6 archival report that records no Agent launch, two interrupted conditions, raw-tree digest, and ineligibility."},
+    {"id": "interrupted-result", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v6/result.json", "sha256": "4efee079496c3b3330f2459774fec5338547f5012645faedf9ca0e5ca34a9b89", "summary": "Frozen v6 runner result containing the preregistered protocol digest and two incomplete trial records."},
+    {"id": "runner", "kind": "diff", "path": "scripts/run_effect_experiment_v6.py", "sha256": "06b65db8695798a94c52993257cb9c4963af98ed9bd684e13ae1d795582ab97d", "summary": "Live post-interruption runner repair that copies task-tree contents into an empty existing destination and rejects stale files."},
+    {"id": "runner-test", "kind": "test_output", "path": "tests/test_effect_runner_v6.py", "sha256": "ed3dc874ec0259028561cc41549089ca8a62c2c8910a455f69c242501ba649db", "summary": "Runner test source containing the pre-created-directory success regression and non-empty-destination isolation guard."},
+    {"id": "archive-test", "kind": "test_output", "path": "tests/test_effect_experiment_v6_interruption.py", "sha256": "6217da958a670473e07e50d431a47ff9cf5563478c47978000f207f0912f463a", "summary": "Archive consistency test source for raw-tree digest, two FileExistsError artifacts, and ineligible result classification."},
+    {"id": "runner-repair-output", "kind": "test_output", "path": "examples/effect-experiment-v6/runner-repair-verification.txt", "sha256": "af63fb62c44fae15459583795b5c77a63274a777662422c5c544ad84c024a2e4", "summary": "Executed targeted runner-repair regression transcript."}
+  ],
+  "remaining_risks": [
+    "The corrected runner has not and must not be used to resume v6; any formal collection requires a new v7 preregistration, Skill revision, and held-out corpus.",
+    "The repair proves the local temporary-directory owner caused this interruption, not that the Skill improves repair success or that a model has general causal capability.",
+    "Native Codex workspace isolation remains protocol isolation rather than a container-security boundary."
+  ],
+  "execution_authority": "authorized code-changing worktree",
+  "counterfactual_status": "executed",
+  "causal": {
+    "mode": "full",
+    "symptom": "The first v6 pair stopped before either Agent launched because its temporary workspace could not be seeded, leaving the preregistered collection incomplete and ineligible.",
+    "evidence_artifacts": [
+      {"id": "raw-stderr", "kind": "command_output", "path": "examples/effect-experiment-v6/raw/tenant_cache_identity/skill/agent.stderr.log", "sha256": "b7192cefd71aeb039ba1ad8b4885a44c7b317859576fbcadb9eedc3d75e315c3", "summary": "Captured pre-Agent v6 stderr containing the FileExistsError from the skill condition."},
+      {"id": "interruption-report", "kind": "command_output", "path": "examples/effect-experiment-v6/interruption.json", "sha256": "99cae6aec9af50f4db560b4878b9f84879bcceccb4248c9c050b78faa50447a1", "summary": "Historical classification that both conditions had agent_launched=false and the collection is ineligible."},
+      {"id": "runner-repair-output", "kind": "test_output", "path": "examples/effect-experiment-v6/runner-repair-verification.txt", "sha256": "af63fb62c44fae15459583795b5c77a63274a777662422c5c544ad84c024a2e4", "summary": "Executed counterfactual regression with the repaired copy_tree behavior."},
+      {"id": "runner-source", "kind": "test_source", "path": "scripts/run_effect_experiment_v6.py", "sha256": "06b65db8695798a94c52993257cb9c4963af98ed9bd684e13ae1d795582ab97d", "summary": "The repaired owner that materializes each source child into an empty caller-provided destination and rejects stale contents."}
+    ],
+    "hypotheses": [
+      {"id": "H1", "claim": "copy_tree assumed that its destination did not exist even though execute_condition creates a TemporaryDirectory before seeding it.", "prediction": "A condition that reaches copy_tree with a pre-existing empty directory raises FileExistsError before run_agent; copying source children into that directory allows the condition to complete.", "status": "supported", "evidence_refs": ["raw-stderr", "runner-repair-output", "runner-source"]},
+      {"id": "H2", "claim": "A model-service or task-fixture failure prevented the v6 Agent calls.", "prediction": "The archived condition logs would show an Agent launch or service/task error after seeding rather than a local directory-copy failure.", "status": "rejected", "evidence_refs": ["raw-stderr", "interruption-report"]}
+    ],
+    "discriminating_check": "Run execute_condition on a fixture with the TemporaryDirectory shape it creates in production, mock only the Agent process, and require successful seed, public, hidden, and scope results; compare that outcome with the archived pre-Agent stderr.",
+    "upstream_path": "execute_condition creates TemporaryDirectory -> seed_workspace calls copy_tree -> copy_tree invokes copytree on the existing run root -> FileExistsError -> run_agent is never reached -> interrupted result",
+    "timeline_evidence": "The raw v6 artifact records two FileExistsError diagnostics and agent_launched=false before any candidate write. The post-interruption smoke regression then exercised the same pre-created-directory shape with the corrected owner and completed successfully.",
+    "causal_owner": "scripts/run_effect_experiment_v6.py:copy_tree",
+    "counterfactual": {
+      "intervention": "Materialize each source child into the already-created destination instead of invoking shutil.copytree with that destination as a required-nonexistent root, then run execute_condition against the same empty temporary-directory topology.",
+      "expected_outcome": "The condition seeds its Git workspace, calls the mocked successful Agent, and passes public, hidden, and edit-scope checks without FileExistsError.",
+      "observed_outcome": "The targeted regression completed with exit status 0; its result recorded trial_complete=true, hidden_repair_pass=true, and scope_ok=true.",
+      "controlled_factors": ["Same execute_condition temporary-directory lifecycle", "Same representative multi-file task layout", "Same public and hidden unittest command shape", "Mocked Agent exit fixed at zero"]
+    },
+    "evidence_types": ["reproduction", "intervention"],
+    "conclusion": "root_cause_fix",
+    "confidence": "high"
+  }
+}

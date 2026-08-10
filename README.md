@@ -199,6 +199,8 @@ v5 的首次收集在全部 44 个条件工件都已落盘后遭遇模型服务�
 
 为检验真正的上游状态/决策 owner，v6 增加了独立的多文件工作区协议：[`materialize_effect_corpus_v6.py`](./scripts/materialize_effect_corpus_v6.py) 生成 20 个跨 `single-module`、`cross-module`、`integration` 的新因果夹具；[`run_effect_experiment_v6.py`](./scripts/run_effect_experiment_v6.py) 逐对随机化执行并在每对完成后原子检查点化；[`score_effect_workspace_v6.py`](./scripts/score_effect_workspace_v6.py) 只在 Agent 退出后的临时评分副本注入隐藏测试。公开夹具失败、参考修复通过和所有路径/目录哈希均由 [`test_effect_corpus_v6.py`](./tests/test_effect_corpus_v6.py) 锁定。v6 的预注册完成分析若未报告 `improved`，只能说明没有在该固定模型、Harness、语料和隐藏契约范围内证明提升，不能外推到模型整体因果能力。
 
+v6 首次收集在 Agent 启动前因 runner 将任务树复制到已存在的临时目录而中断：2 个已落盘条件均为 `agent_launched=false`，因此结果是 `interrupted`、`analysis_eligibility=ineligible`，不能重试、补齐或当作修复失败参与统计。原始 stderr、条件工件和结果哈希保存在 [`examples/effect-experiment-v6`](./examples/effect-experiment-v6)，一致性由 [`test_effect_experiment_v6_interruption.py`](./tests/test_effect_experiment_v6_interruption.py) 校验；runner 已增加“预创建目录”回归测试，但下一次正式采样必须以新预注册、新 Skill revision 和全新 held-out corpus 开始（v7）。
+
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \
   examples/skill-effect-preregistration.json
