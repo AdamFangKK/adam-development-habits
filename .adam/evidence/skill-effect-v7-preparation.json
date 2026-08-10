@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-v7-preparation",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/materialize_effect_corpus_v7.py:materialize",
+    "scripts/run_effect_experiment_v7.py:main",
+    "scripts/score_effect_workspace_v7.py:main",
+    "examples/effect-experiment-v7/preregistration.json"
+  ],
+  "affected_callers": [
+    "tests/test_effect_corpus_v7.py",
+    "tests/test_effect_runner_v7.py",
+    "scripts/analyze_skill_effect.py",
+    "README.md"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The fresh v7 corpus contains exactly 20 new task IDs in the preregistered 6/8/6 strata; every buggy public suite fails and every reference public plus hidden suite passes.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_corpus_v7.py -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The versioned v7 runner and scorer preserve the post-exit hidden-scoring boundary, and running the v7 entry point restores all delegated v6 module bindings afterward.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_runner_v7.py -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The v7 envelope freezes model, Harness, Skill, prompts, corpus, generator, v7/v6 runner and scorer hashes, task plan, seed, strata, and statistical thresholds before any trial.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v7/preregistration.json"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The package remains regression-clean and statically typed after adding the v7 preparation protocol.",
+      "verification": "python3 -m unittest discover -s tests -v; PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright scripts/materialize_effect_corpus_v7.py scripts/run_effect_experiment_v7.py scripts/score_effect_workspace_v7.py tests/test_effect_corpus_v7.py tests/test_effect_runner_v7.py"
+    }
+  ],
+  "invariants": [
+    "v7 does not reuse v6 hidden task trees or prior candidate outputs.",
+    "The preregistration remains status planned with an empty trials list and therefore cannot support an effect claim.",
+    "A v7 entry-point call cannot leave v6 model, Harness, or scorer bindings patched in a long-lived process.",
+    "Hidden tests and reference repairs are scorer-only and never enter the repair Agent workspace before process exit.",
+    "An incomplete v7 condition remains interrupted and ineligible; it is never selectively dropped, retried, or analyzed."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "fresh held-out corpus",
+      "status": "applied",
+      "rationale": "The v7 generator materializes 20 new IDs and the tests assert that historical v6 naming families are absent."
+    },
+    {
+      "name": "blind post-exit hidden scoring",
+      "status": "applied",
+      "rationale": "The v7 scorer is a versioned entry point and the delegated scorer injects hidden tests only into a temporary copy after Agent exit."
+    },
+    {
+      "name": "protocol hash envelope",
+      "status": "applied",
+      "rationale": "The preregistration locks all outcome-affecting inputs and its protocol and immutable-envelope digests are checked before collection."
+    },
+    {
+      "name": "delegated binding restoration",
+      "status": "applied",
+      "rationale": "The v7 wrapper restores the v6 runner globals in a finally block; a dedicated in-process regression test catches cross-version contamination."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The generator owns fixture materialization, the v7 wrapper owns version selection and binding lifetime, the base runner owns execution/checkpoint state, and the scorer owns hidden-contract execution."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "No dependency, lockfile, or package manager change; the protocol uses existing Python standard-library and Codex CLI surfaces."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No application extension point or public adapter contract is introduced."},
+    "data_ownership": {"status": "applied", "rationale": "Public corpus files, hidden reference trees, preregistration, and future raw trial artifacts have distinct owners and lifecycle boundaries; hidden content is scorer-only."},
+    "error_model": {"status": "applied", "rationale": "Public failure, hidden failure, scope violation, timeout, nonzero Agent exit, binding contamination, and interrupted collection remain distinct outcomes."},
+    "contract_evolution": {"status": "applied", "rationale": "v7 is a new protocol envelope and held-out corpus; the historical v6 preregistration and interrupted result remain replayable and are not rebound to the corrected live wrapper."},
+    "operational_budget": {"status": "applied", "rationale": "The preregistered runner retains explicit Agent and scorer timeouts and fixed-pair stopping; the corpus tests execute all 20 public and reference hidden suites deterministically."},
+    "threat_boundary": {"status": "applied", "rationale": "The repair Agent receives only public task files and the optional Skill; hidden tests, references, prior outputs, and condition labels stay outside that input boundary. Native Codex isolation is protocol isolation, not a container security boundary."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The v7 corpus, wrappers, preregistration, tests, README note, and this evidence artifact are one atomic verified Git scope, committed only after checks and review."},
+    "release_recovery": {"status": "not_applicable", "rationale": "This is an offline evaluation protocol and performs no production release or rollout."},
+    "data_migration": {"status": "not_applicable", "rationale": "No application schema, persistence representation, backfill, or user data is changed."},
+    "configuration_secrets": {"status": "applied", "rationale": "Only non-secret model and Harness identifiers are preregistered; no credential, token, or secret is stored in source, prompts, or evidence."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No runtime or build dependency is added or updated."},
+    "operational_knowledge": {"status": "applied", "rationale": "README records v7's scope, interruption rule, isolation limitation, versioned entry points, and the exact not-run interpretation; the existing reference remains the hash-frozen general protocol."},
+    "reproducibility": {"status": "applied", "rationale": "The corpus manifest, source hashes, prompt hashes, v7/base runner and scorer hashes, analyzer hash, model, Harness, seed, task strata, and statistical stopping rule are frozen before collection."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_effect_corpus_v7.py tests/test_effect_runner_v7.py -v", "status": "passed", "result": "6 v7 tests passed, including 20/20 buggy public failures, 20/20 reference public+hidden passes, deterministic manifest generation, preregistration digest checks, and v6 binding restoration after delegation."},
+    {"command": "python3 -m unittest discover -s tests -v", "status": "passed", "result": "137 package tests passed, including the external QuixBugs replay under the repository's normal Python environment."},
+    {"command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright scripts/materialize_effect_corpus_v7.py scripts/run_effect_experiment_v7.py scripts/score_effect_workspace_v7.py tests/test_effect_corpus_v7.py tests/test_effect_runner_v7.py", "status": "passed", "result": "0 errors, 0 warnings, 0 notes."},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect.py examples/effect-experiment-v7/preregistration.json", "status": "passed", "result": "The frozen v7 protocol validates and reports status planned with conclusion not_run; no trial data or effect statistic is present."},
+    {"command": "git diff --check", "status": "passed", "result": "No whitespace errors."}
+  ],
+  "rollback_or_compatibility": "Revert the v7 generator, corpus, versioned runner/scorer wrappers, preregistration, tests, README note, and this evidence artifact together; retain the historical v6 interrupted protocol and result unchanged. Do not run or resume v6 with the repaired live wrapper.",
+  "independent_review": {"reviewer": "Codex native code-reviewer: v6_closure_review", "outcome": "approved", "notes": "The final read-only review found zero findings after the binding-restoration repair. It independently reran the v7 and full package tests, recomputed preregistration and supporting-artifact hashes, confirmed post-exit hidden scoring, and verified that no effect claim is made."},
+  "supporting_artifacts": [
+    {"id": "skill", "kind": "evaluation_transcript", "path": "SKILL.md", "sha256": "2d0a7c91b872a189df0a1cf0fc68390ce68dba5c13d07f571d8f3faab83fdd92", "summary": "Normative Skill revision frozen as the treatment input."},
+    {"id": "generator", "kind": "evaluation_transcript", "path": "scripts/materialize_effect_corpus_v7.py", "sha256": "94284dbecec79066bc047870a61d77813c2b05c0c5fcce9de8e8bd13d1dc0bd7", "summary": "Deterministic v7 generator for 20 held-out causal-repair tasks."},
+    {"id": "manifest", "kind": "evaluation_transcript", "path": "examples/effect-corpus-v7/manifest.json", "sha256": "b5301b5b34a3cadab2b1edc380a2ecf0caf8ab2cbbf688d2aa3fc8977c6d3dd7", "summary": "Frozen manifest with task strata, allowed edit paths, public/hidden tree hashes, and 20 task IDs."},
+    {"id": "runner-v7", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment_v7.py", "sha256": "7450cbd1e14ef3dd63060d3a235537328d53d730bdd0280790067a6ca28c0924", "summary": "Versioned v7 wrapper with scoped delegation and restoration of v6 bindings."},
+    {"id": "runner-v6", "kind": "evaluation_transcript", "path": "scripts/run_effect_experiment_v6.py", "sha256": "06b65db8695798a94c52993257cb9c4963af98ed9bd684e13ae1d795582ab97d", "summary": "Corrected v6 execution/checkpoint implementation retained as a separately hashed dependency."},
+    {"id": "scorer-v7", "kind": "evaluation_transcript", "path": "scripts/score_effect_workspace_v7.py", "sha256": "62a33669d9413a2df043e389bb1d297a44a534f4716d89c0f9e10a5c2d029926", "summary": "Versioned v7 hidden-scoring entry point."},
+    {"id": "scorer-v6", "kind": "evaluation_transcript", "path": "scripts/score_effect_workspace_v6.py", "sha256": "2e3a1c507c1dec023fe58ff7cb11f84d0b845df44ee305fa8e6768250285a4e9", "summary": "Underlying scorer implementation with post-exit hidden injection."},
+    {"id": "preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v7/preregistration.json", "sha256": "c726b5e74642e90f2df8b7a4759413b702de9fbf4725a81b146dcf50fcaad5f1", "summary": "Planned v7 paired envelope with no trial records and verified protocol/envelope digests."},
+    {"id": "corpus-test", "kind": "test_output", "path": "tests/test_effect_corpus_v7.py", "sha256": "101c69b2b7d6b4ad37c1130fd180faf5931d010d1d76533ce22b0f94c1e9ca8a", "summary": "Contract tests for fresh task count, public failure, hidden reference success, and deterministic manifests."},
+    {"id": "runner-test", "kind": "test_output", "path": "tests/test_effect_runner_v7.py", "sha256": "9a756d274353e83a540f27cbe86722d8feaa1c46841057f3876acbc5c2eab5b7", "summary": "Contract tests for version isolation, preregistration hashes, hidden boundary, and v6 binding restoration."},
+    {"id": "analyzer", "kind": "evaluation_transcript", "path": "scripts/analyze_skill_effect.py", "sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100", "summary": "Blind paired analyzer whose planned-protocol output is not_run until complete trials exist."}
+  ],
+  "remaining_risks": [
+    "No v7 Agent condition has run; no Skill repair-success or causal-quality improvement claim is supported.",
+    "The synthetic v7 corpus covers selected owner, identity, boundary, retry, and integration contracts and cannot represent every production causal failure.",
+    "Native Codex workspace isolation remains protocol isolation rather than filesystem or container security isolation.",
+    "The completed paired run remains dependent on model-service availability; any incomplete condition must remain ineligible under the fixed protocol."
+  ]
+}

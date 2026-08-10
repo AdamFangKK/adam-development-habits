@@ -1,0 +1,1 @@
+A state store accepts an older snapshot after a newer revision has been published.

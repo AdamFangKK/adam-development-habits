@@ -1,0 +1,1 @@
+A path containment check accepts a sibling directory with the same prefix.

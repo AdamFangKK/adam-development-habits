@@ -1,0 +1,1 @@
+A lease renewal extends a lock even when the caller is no longer its owner.

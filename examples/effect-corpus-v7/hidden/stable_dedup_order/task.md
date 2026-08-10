@@ -1,0 +1,1 @@
+A deduplication helper loses the source order required by the API.

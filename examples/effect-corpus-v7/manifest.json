@@ -1,0 +1,646 @@
+{
+  "corpus_id": "effect-corpus-v7",
+  "generated_by": "scripts/materialize_effect_corpus_v7.py",
+  "schema_version": 1,
+  "split": {
+    "hidden_tests_are_injected_after_agent_exit": true,
+    "public_workspace_excludes_hidden_tests": true,
+    "references_and_expected_repairs_are_scorer_only": true
+  },
+  "strata": {
+    "cross-module": 8,
+    "integration": 6,
+    "single-module": 6
+  },
+  "task_count": 20,
+  "tasks": [
+    {
+      "allowed_edit_paths": [
+        "pager.py"
+      ],
+      "causal_owner_candidates": [
+        "pager.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/cursor_exclusivity",
+      "hidden_tree_sha256": "04063cf3c04c091731665bb0e3a7a6a561a32921aded0866d1125ac409510fa7",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "cursor_exclusivity",
+      "workspace_path": "tasks/cursor_exclusivity",
+      "workspace_tree_sha256": "95bd75aee86ad739f3589bc8c79fb1fbbb17316081d1bc697a563c1d8442ace7"
+    },
+    {
+      "allowed_edit_paths": [
+        "settings.py"
+      ],
+      "causal_owner_candidates": [
+        "settings.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/config_false_default",
+      "hidden_tree_sha256": "fab6f52cd71ebb2b6259d21f12919bcf0b53d98a11266958fda4e6ba4f14d894",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "config_false_default",
+      "workspace_path": "tasks/config_false_default",
+      "workspace_tree_sha256": "54719caa770ba65decf81d1556cf4b2a7931d79e80e4a00c8610bf01da4fa216"
+    },
+    {
+      "allowed_edit_paths": [
+        "identity.py"
+      ],
+      "causal_owner_candidates": [
+        "identity.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/casefold_identity",
+      "hidden_tree_sha256": "9218868d2cf28745bb810ba0c38b87d770e4a40d978967bd4310ea0707520c30",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "casefold_identity",
+      "workspace_path": "tasks/casefold_identity",
+      "workspace_tree_sha256": "437b0cb9607d25a534067c532c2a3b958aa4dddae10494be64ee950ba1a718ee"
+    },
+    {
+      "allowed_edit_paths": [
+        "paths.py"
+      ],
+      "causal_owner_candidates": [
+        "paths.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/path_segment_escape",
+      "hidden_tree_sha256": "141fc0b60a04d45ec6e7be35dc621726f3edf6f6e6b84ab2db75517f915c9541",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "path_segment_escape",
+      "workspace_path": "tasks/path_segment_escape",
+      "workspace_tree_sha256": "77e68b1baba3591c931b5821061047927bc9d7b1c5db49038385050fd9ed8eb4"
+    },
+    {
+      "allowed_edit_paths": [
+        "rounding.py"
+      ],
+      "causal_owner_candidates": [
+        "rounding.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/round_half_even",
+      "hidden_tree_sha256": "a16a2cfec6769fe87c898ed78357a1b80e2f9dbe9c1d61dcd7bf84e872d0e38a",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "round_half_even",
+      "workspace_path": "tasks/round_half_even",
+      "workspace_tree_sha256": "12894bd2258f6ba98b6f301de81ce82afbd1e9822d3597037140dcea4bc364a4"
+    },
+    {
+      "allowed_edit_paths": [
+        "dedup.py"
+      ],
+      "causal_owner_candidates": [
+        "dedup.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/stable_dedup_order",
+      "hidden_tree_sha256": "640021edcd94564684f9daa68049a6f00fe02240700ddf66479f37e27be844b7",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "single-module",
+      "task_id": "stable_dedup_order",
+      "workspace_path": "tasks/stable_dedup_order",
+      "workspace_tree_sha256": "1c20b3df9b5b36314a9d32ba1e660b416f0f7af81467dab990a75b9c419a327f"
+    },
+    {
+      "allowed_edit_paths": [
+        "catalog.py",
+        "policy.py"
+      ],
+      "causal_owner_candidates": [
+        "catalog.py",
+        "policy.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/locale_cache_namespace",
+      "hidden_tree_sha256": "c2d48d3b934fcc012ea7896430c009e4191e1e7b38036de02f00f08ba239f43e",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "locale_cache_namespace",
+      "workspace_path": "tasks/locale_cache_namespace",
+      "workspace_tree_sha256": "1ed5596d047b635fb9c5ba664525747ce66dc818a3c84fe41ecba198bb3ce2c1"
+    },
+    {
+      "allowed_edit_paths": [
+        "audit.py",
+        "resolver.py"
+      ],
+      "causal_owner_candidates": [
+        "audit.py",
+        "resolver.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/canonical_audit_path",
+      "hidden_tree_sha256": "caddb18bc8735c578c77c95f8d5e7efcd6d0d05e6f2d794bc6e28eb8fb000aef",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "canonical_audit_path",
+      "workspace_path": "tasks/canonical_audit_path",
+      "workspace_tree_sha256": "7a4c564827d60162c9128c9b48da2deaa837ef7912d672696b78b292928ef14d"
+    },
+    {
+      "allowed_edit_paths": [
+        "assign.py",
+        "rules.py"
+      ],
+      "causal_owner_candidates": [
+        "assign.py",
+        "rules.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/feature_rollout_scope",
+      "hidden_tree_sha256": "6a8b8461ae80d927f35d88ab00ec1259bc795a03b37defc88809483fd1453ea6",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "feature_rollout_scope",
+      "workspace_path": "tasks/feature_rollout_scope",
+      "workspace_tree_sha256": "7252f5e8a786cb1770bdb0a031d5376f4f737e7971f866a1deba8ce40c90b751"
+    },
+    {
+      "allowed_edit_paths": [
+        "state.py",
+        "view.py"
+      ],
+      "causal_owner_candidates": [
+        "state.py",
+        "view.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/snapshot_revision_gate",
+      "hidden_tree_sha256": "dc855892f922bd1e7fc1e2d547e0b419c28b9ba8b2c42077c50e4ca821e08051",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "snapshot_revision_gate",
+      "workspace_path": "tasks/snapshot_revision_gate",
+      "workspace_tree_sha256": "5a95eab4835d8fd6e9d6274138b3f142998778176bf6c5f4962d95bb7ecf96a8"
+    },
+    {
+      "allowed_edit_paths": [
+        "config.py",
+        "loader.py"
+      ],
+      "causal_owner_candidates": [
+        "config.py",
+        "loader.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/header_precedence",
+      "hidden_tree_sha256": "7fc31d180401bca230320c181d86ecbed94b21fd695c759587d14cb78948bd4c",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "header_precedence",
+      "workspace_path": "tasks/header_precedence",
+      "workspace_tree_sha256": "10f8ade4c2fb9328560b85011a1593b0591a54ad0a99dbcee341581bd35b79e6"
+    },
+    {
+      "allowed_edit_paths": [
+        "filters.py",
+        "repository.py"
+      ],
+      "causal_owner_candidates": [
+        "filters.py",
+        "repository.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/filter_before_limit",
+      "hidden_tree_sha256": "1cf2baee761433ce81e20e1b4e518bab60b4ffe78caa44c61f957783b558773d",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "filter_before_limit",
+      "workspace_path": "tasks/filter_before_limit",
+      "workspace_tree_sha256": "15be200496055ae098e5e1562f1ec69cf183cf5b6dc71c10bae69701ad1df57a"
+    },
+    {
+      "allowed_edit_paths": [
+        "consumer.py",
+        "events.py"
+      ],
+      "causal_owner_candidates": [
+        "consumer.py",
+        "events.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/versioned_event_default",
+      "hidden_tree_sha256": "a8d5abf3fae4193814293991699f516b1254801189fe001a2ba3844e556e98ed",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "versioned_event_default",
+      "workspace_path": "tasks/versioned_event_default",
+      "workspace_tree_sha256": "09568645d3a002be2a4ce5b7b0947983f2efff13ffb778c9462c72259c9cf6c5"
+    },
+    {
+      "allowed_edit_paths": [
+        "cache.py",
+        "service.py"
+      ],
+      "causal_owner_candidates": [
+        "cache.py",
+        "service.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/cache_invalidation_scope",
+      "hidden_tree_sha256": "3bd69c0e199af2918f4b86f853b79be82f857142996c649a5e8eb11dc9f74590",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "cross-module",
+      "task_id": "cache_invalidation_scope",
+      "workspace_path": "tasks/cache_invalidation_scope",
+      "workspace_tree_sha256": "18b0d0a72b14d7cc3d78745d645f08c3d18fa6860978531989c0da3ce9ae789f"
+    },
+    {
+      "allowed_edit_paths": [
+        "store.py",
+        "worker.py"
+      ],
+      "causal_owner_candidates": [
+        "store.py",
+        "worker.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/outbox_acceptance",
+      "hidden_tree_sha256": "1380b42f2f46bc70f1516e08dba51184a87f17887780da7ed35f461f64c4f761",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "outbox_acceptance",
+      "workspace_path": "tasks/outbox_acceptance",
+      "workspace_tree_sha256": "b828787cd8bd36dfbdbec49128302906cfc9a483541ac930196ad57d59ad19e1"
+    },
+    {
+      "allowed_edit_paths": [
+        "clock.py",
+        "worker.py"
+      ],
+      "causal_owner_candidates": [
+        "clock.py",
+        "worker.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/retry_global_budget",
+      "hidden_tree_sha256": "b9abf24eaac9057112da26042d3ccec51384dde9486b81a14335c53112df52cd",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "retry_global_budget",
+      "workspace_path": "tasks/retry_global_budget",
+      "workspace_tree_sha256": "3bdc2931f71a66b0099d161dd72c6351e39b57aea0681d28f85b937efeb4aba8"
+    },
+    {
+      "allowed_edit_paths": [
+        "checkout.py",
+        "quota.py"
+      ],
+      "causal_owner_candidates": [
+        "checkout.py",
+        "quota.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/quota_failure_release",
+      "hidden_tree_sha256": "bd8374cbcd2ec19674d7f1e0ba73d92f863f933c2b80545abff9cb9936046120",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "quota_failure_release",
+      "workspace_path": "tasks/quota_failure_release",
+      "workspace_tree_sha256": "4df1a588e1b6dfb630a5f13ae8d6497c007b36e35749623158e086809acea823"
+    },
+    {
+      "allowed_edit_paths": [
+        "batch.py",
+        "ledger.py"
+      ],
+      "causal_owner_candidates": [
+        "batch.py",
+        "ledger.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/batch_payload_identity",
+      "hidden_tree_sha256": "949750b74be3dddb8f8827617ef6f3c6abc9898a01ce6691f64e86833e3e539c",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "batch_payload_identity",
+      "workspace_path": "tasks/batch_payload_identity",
+      "workspace_tree_sha256": "3feccbb097a8d847c3f468dcf05c8d1a79689ead887d95940a61bfffce576f3b"
+    },
+    {
+      "allowed_edit_paths": [
+        "consumer.py",
+        "store.py"
+      ],
+      "causal_owner_candidates": [
+        "consumer.py",
+        "store.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/monotonic_revision",
+      "hidden_tree_sha256": "5a817bcbde455ac88cec9689c175256146765439f0e6af05e1c183925e686fa4",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "monotonic_revision",
+      "workspace_path": "tasks/monotonic_revision",
+      "workspace_tree_sha256": "eed9ec8198df8ac30bc3b768fc4b9a404cdd2585573143e5814a97283d916f2e"
+    },
+    {
+      "allowed_edit_paths": [
+        "lease.py",
+        "worker.py"
+      ],
+      "causal_owner_candidates": [
+        "lease.py",
+        "worker.py"
+      ],
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_root_path": "hidden/lease_owner_expiry",
+      "hidden_tree_sha256": "b534881baaf9537aafbef36f993295fbdde43b8715963fede57363ca661befe2",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "stratum": "integration",
+      "task_id": "lease_owner_expiry",
+      "workspace_path": "tasks/lease_owner_expiry",
+      "workspace_tree_sha256": "3f9d1f4cacbdc9b9a55829548e6d02c902bf95e25ad0954738958422ac2ca0b5"
+    }
+  ]
+}

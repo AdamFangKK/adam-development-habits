@@ -201,6 +201,8 @@ v5 的首次收集在全部 44 个条件工件都已落盘后遭遇模型服务�
 
 v6 首次收集在 Agent 启动前因 runner 将任务树复制到已存在的临时目录而中断：2 个已落盘条件均为 `agent_launched=false`，因此结果是 `interrupted`、`analysis_eligibility=ineligible`，不能重试、补齐或当作修复失败参与统计。原始 stderr、条件工件和结果哈希保存在 [`examples/effect-experiment-v6`](./examples/effect-experiment-v6)，一致性由 [`test_effect_experiment_v6_interruption.py`](./tests/test_effect_experiment_v6_interruption.py) 校验；runner 已增加“预创建目录”回归测试，但下一次正式采样必须以新预注册、新 Skill revision 和全新 held-out corpus 开始（v7）。
 
+v7 已冻结为**尚未运行**的 20-task 预注册：[`materialize_effect_corpus_v7.py`](./scripts/materialize_effect_corpus_v7.py) 生成新的 6 个 `single-module`、8 个 `cross-module` 和 6 个 `integration` 夹具；[`run_effect_experiment_v7.py`](./scripts/run_effect_experiment_v7.py) 以版本化入口调用已修复的 v6 执行机制；[`score_effect_workspace_v7.py`](./scripts/score_effect_workspace_v7.py) 保持评分器与条件标签隔离。 [`preregistration.json`](./examples/effect-experiment-v7/preregistration.json) 在首次 trial 前锁定 Skill、提示词、生成器、v7/v6 runner 与 scorer、语料、统计门槛、随机种子和全部 task ID 的哈希。它只证明协议可复现，**不**证明 Skill 或模型能力已有提升；任一条件未完整结束时，收集必须归档为 `interrupted`，而不能部分分析或重跑 v7。
+
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \
   examples/skill-effect-preregistration.json

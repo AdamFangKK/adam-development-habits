@@ -1,0 +1,1 @@
+An event consumer treats a missing version as the newest schema and skips the compatibility parser.

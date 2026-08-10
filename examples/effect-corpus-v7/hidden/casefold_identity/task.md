@@ -1,0 +1,1 @@
+A case-insensitive identity check misses Unicode case folding equivalence.

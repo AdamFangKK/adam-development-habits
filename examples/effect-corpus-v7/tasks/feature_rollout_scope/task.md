@@ -1,0 +1,1 @@
+A feature assignment key ignores tenant scope and gives one tenant another tenant's rollout decision.

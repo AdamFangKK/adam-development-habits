@@ -1,0 +1,1 @@
+A repository applies pagination before filtering and drops matching records beyond the first page.

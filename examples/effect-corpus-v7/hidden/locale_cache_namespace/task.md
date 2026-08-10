@@ -1,0 +1,1 @@
+A localized catalog cache omits locale from its key and leaks one locale into another.

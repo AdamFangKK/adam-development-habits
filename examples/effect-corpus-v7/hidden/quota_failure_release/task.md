@@ -1,0 +1,1 @@
+A failed checkout leaves a reservation consumed instead of releasing it.

@@ -1,0 +1,1 @@
+A configuration reader replaces an explicit false value with the default.

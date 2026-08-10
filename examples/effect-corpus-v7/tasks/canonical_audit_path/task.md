@@ -1,0 +1,1 @@
+An audit record stores an alias instead of the canonical resource path used for authorization.

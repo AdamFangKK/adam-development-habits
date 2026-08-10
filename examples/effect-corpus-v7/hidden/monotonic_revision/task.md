@@ -1,0 +1,1 @@
+A consumer applies an out-of-order update and regresses the authoritative value.

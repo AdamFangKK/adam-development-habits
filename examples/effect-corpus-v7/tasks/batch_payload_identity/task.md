@@ -1,0 +1,1 @@
+A batch ledger deduplicates by event ID and reuses a result for a changed payload.

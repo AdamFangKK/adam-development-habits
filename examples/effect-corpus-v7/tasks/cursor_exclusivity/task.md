@@ -1,0 +1,1 @@
+A page endpoint treats its end cursor as inclusive and returns one extra item.

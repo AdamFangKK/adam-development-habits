@@ -1,0 +1,73 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "minimum_distinct_tasks": 20,
+    "minimum_effect": 0.05,
+    "permutation_resamples": 10000,
+    "random_seed": 20260811,
+    "stratum_weights": {
+      "cross-module": 0.4,
+      "integration": 0.4,
+      "single-module": 0.2
+    }
+  },
+  "experiment_id": "causal-skill-effect-v7",
+  "preregistration": {
+    "envelope_sha256": "d9cd38f1ac254c44ff3f59233afa1a5ebbfb38bb40409f2ab220f867203898f1",
+    "git_commit": "pending",
+    "protocol_sha256": "4f41acd39b0db444e4cabe708f8f49644dd6d611e596c989ba1b1a7fb1bc0b28",
+    "recorded_before_first_trial": true
+  },
+  "protocol": {
+    "analyzer_sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100",
+    "base_hidden_scorer_sha256": "2e3a1c507c1dec023fe58ff7cb11f84d0b845df44ee305fa8e6768250285a4e9",
+    "base_runner_sha256": "06b65db8695798a94c52993257cb9c4963af98ed9bd684e13ae1d795582ab97d",
+    "baseline_prompt_sha256": "2a92d7bfe5b7b56d352088c9b0e605ba8e247dc3c63f94f7af75969029de3fff",
+    "corpus_manifest_sha256": "b5301b5b34a3cadab2b1edc380a2ecf0caf8ab2cbbf688d2aa3fc8977c6d3dd7",
+    "generator_sha256": "94284dbecec79066bc047870a61d77813c2b05c0c5fcce9de8e8bd13d1dc0bd7",
+    "hidden_scorer_blind_to_condition": true,
+    "hidden_scorer_sha256": "62a33669d9413a2df043e389bb1d297a44a534f4716d89c0f9e10a5c2d029926",
+    "pairing": "same task, randomized condition order",
+    "runner_sha256": "7450cbd1e14ef3dd63060d3a235537328d53d730bdd0280790067a6ca28c0924",
+    "skill_prompt_sha256": "529fa8a8bfa6da3508b53edcdbcdfdfbba4b4e59d35ea7b15607887bcf7aad6c"
+  },
+  "schema_version": 1,
+  "scope": {
+    "claim": "For the fixed Codex model, Harness, Skill revision, v7 held-out multi-file causal-repair corpus, and blind hidden scorer declared here, enabling Adam's Development Habits improves hidden repair success by the preregistered practical margin.",
+    "harness_id": "codex-cli-0.147.0-alpha.1.2;exec;workspace-write;ephemeral;checkpointed-v7",
+    "model_id": "gpt-5.6-terra",
+    "skill_revision_sha256": "2d0a7c91b872a189df0a1cf0fc68390ce68dba5c13d07f571d8f3faab83fdd92"
+  },
+  "status": "planned",
+  "stopping_rule": {
+    "early_stop": "not allowed",
+    "kind": "fixed_complete_pairs",
+    "pairs_per_task": 1
+  },
+  "task_plan": {
+    "tasks": [
+      {"stratum": "single-module", "task_id": "cursor_exclusivity"},
+      {"stratum": "single-module", "task_id": "config_false_default"},
+      {"stratum": "single-module", "task_id": "casefold_identity"},
+      {"stratum": "single-module", "task_id": "path_segment_escape"},
+      {"stratum": "single-module", "task_id": "round_half_even"},
+      {"stratum": "single-module", "task_id": "stable_dedup_order"},
+      {"stratum": "cross-module", "task_id": "locale_cache_namespace"},
+      {"stratum": "cross-module", "task_id": "canonical_audit_path"},
+      {"stratum": "cross-module", "task_id": "feature_rollout_scope"},
+      {"stratum": "cross-module", "task_id": "snapshot_revision_gate"},
+      {"stratum": "cross-module", "task_id": "header_precedence"},
+      {"stratum": "cross-module", "task_id": "filter_before_limit"},
+      {"stratum": "cross-module", "task_id": "versioned_event_default"},
+      {"stratum": "cross-module", "task_id": "cache_invalidation_scope"},
+      {"stratum": "integration", "task_id": "outbox_acceptance"},
+      {"stratum": "integration", "task_id": "retry_global_budget"},
+      {"stratum": "integration", "task_id": "quota_failure_release"},
+      {"stratum": "integration", "task_id": "batch_payload_identity"},
+      {"stratum": "integration", "task_id": "monotonic_revision"},
+      {"stratum": "integration", "task_id": "lease_owner_expiry"}
+    ]
+  },
+  "trials": []
+}

@@ -1,0 +1,1 @@
+A worker acknowledges a provider write before recording the durable local outcome.

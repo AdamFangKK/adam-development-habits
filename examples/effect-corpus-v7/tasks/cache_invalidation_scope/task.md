@@ -1,0 +1,1 @@
+A cache invalidator clears an entity globally instead of only within the requested tenant.

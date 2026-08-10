@@ -1,0 +1,1 @@
+A monetary formatter rounds decimal text with half-up arithmetic instead of the declared half-even rule.

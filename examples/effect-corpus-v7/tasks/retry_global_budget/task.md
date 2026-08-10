@@ -1,0 +1,1 @@
+A worker resets its deadline for every dependency and exceeds the declared total budget.
