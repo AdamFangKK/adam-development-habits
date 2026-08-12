@@ -1,0 +1,26 @@
+V8 collection-integrity verification
+
+Focused V8 tests:
+  python3 -m unittest tests.test_effect_runner_v8 tests.test_effect_experiment_v8 tests.test_effect_corpus_v8 -v
+  result: 23 tests passed. Deliberate traps covered duplicate and abbreviated options, seed and timeout drift, stale input hashes, output reuse, direct and parent-directory output symlinks, corpus directory symlinks, archive symlinks, dirty and external worktree inputs, stale commits, a wrong Codex version, post-preflight live-input replacement, preflight no-runtime-load, and a hidden scorer that must reuse the staged runtime rather than reload live files.
+
+Full package tests:
+  python3 -m unittest discover -s tests -v
+  result: 163 tests passed in the repository's normal Python environment.
+
+Constrained-environment limitation:
+  PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v
+  result: 160 tests passed and 3 external QuixBugs replay tests failed because this Python cannot import pytest when user site-packages are disabled. The normal environment has pytest 8.3.4 installed. This is an undeclared test-environment dependency, not a V8 protocol failure; no claim relies on the constrained full-suite run.
+
+Static and package checks:
+  PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright scripts/analyze_skill_effect.py scripts/audit_effect_isolation_v8.py scripts/codex_v8_isolated.py scripts/materialize_effect_corpus_v8.py scripts/run_effect_experiment_v8.py scripts/score_effect_workspace_v8.py tests/test_effect_corpus_v8.py tests/test_effect_experiment_v8.py tests/test_effect_runner_v8.py
+  result: 0 errors, 0 warnings, 0 notes.
+  python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
+  result: Skill is valid.
+  python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json
+  result: status planned; conclusion not_run; no trial data or effect statistic.
+  git diff --check
+  result: no whitespace errors.
+
+Collection status:
+  Formal V8 collection has not started. The next required evidence is a --preflight from the clean, committed V8 worktree followed by the complete 20-task paired collection. This verification transcript validates only the protocol and its traps; it does not claim any repair-success or causal-capability uplift.

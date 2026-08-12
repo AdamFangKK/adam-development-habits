@@ -64,7 +64,15 @@ class EffectCorpusV6Tests(unittest.TestCase):
             protocol["runner_sha256"],
         )
         scope = cast(dict[str, object], preregistration["scope"])
-        self.assertEqual(hashlib.sha256((ROOT / "SKILL.md").read_bytes()).hexdigest(), scope["skill_revision_sha256"])
+        collection = cast(dict[str, object], result["preregistration"])
+        frozen_commit = cast(str, collection["git_commit"])
+        historical_skill = subprocess.run(
+            ["git", "show", f"{frozen_commit}:SKILL.md"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        ).stdout
+        self.assertEqual(hashlib.sha256(historical_skill).hexdigest(), scope["skill_revision_sha256"])
         planned_tasks = cast(list[dict[str, object]], cast(dict[str, object], preregistration["task_plan"])["tasks"])
         manifest_tasks = cast(list[dict[str, object]], cast(dict[str, object], json.loads((CORPUS / "manifest.json").read_text(encoding="utf-8")))["tasks"])
         self.assertEqual(planned_tasks, [{"task_id": task["task_id"], "stratum": task["stratum"]} for task in manifest_tasks])

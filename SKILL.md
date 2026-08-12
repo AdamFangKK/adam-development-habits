@@ -264,6 +264,14 @@ Before returning a compound Level 2 plan or evidence ledger, run a coverage pref
 - Change one coherent behavior at a time, verify it, and preserve a rollback path. Use a second independent perspective to attack assumptions, failure paths, ownership, compatibility, security, and performance rather than to repeat the first plan.
 - Leave a concise decision record in the ledger for non-obvious tradeoffs, rejected alternatives, and deletion conditions. When evidence cannot distinguish explanations, report unknown and add instrumentation, a reproducer, or a reversible guard.
 
+## Explainable Implementation and Chinese Maintenance Notes
+
+Apply this section to Level 1 and Level 2 code changes unless the repository requires another documentation language. Explain behavior first through focused module boundaries, explicit types, stable names, narrow functions, and visible error/state transitions. Do not use comments to compensate for unclear control flow, hidden mutation, or overloaded abstractions.
+
+Add concise Chinese comments where a competent maintainer cannot infer the **why**, constraint, ownership rule, or failure semantics from the code alone. Typical triggers are a non-obvious invariant, state transition, causal-owner repair, compatibility branch, concurrency/order rule, security boundary, external-service ambiguity, resource-complexity choice, or intentionally retained workaround. Write the comment immediately above the decision it explains; state the reason and consequence, not a mechanical translation of the next line. Keep identifiers, public API names, and language required by the repository unchanged.
+
+Do not add line-by-line narration, stale comments, duplicated prose, unsupported claims, personal data, secrets, or comments that conceal a known uncertainty. Delete or revise a comment whenever its decision changes. For Level 2, review changed explanatory comments against the corresponding invariant, test, ledger, and runtime evidence; record `Explainability: <comments added/updated or not applicable; review result>` in the final report. For Level 1, record the same line when an explanation-triggered decision was changed.
+
 ## Implementation, Tests, and Review
 
 State the behavioral invariant before implementation. Validate input, authorization, resource ownership, state transitions, and payload limits at system boundaries. Never swallow errors: classify them, return or raise a safe error, and log enough context to investigate.

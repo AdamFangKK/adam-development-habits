@@ -31,6 +31,7 @@ class SkillContractTests(unittest.TestCase):
             "## Delivery Lifecycle and Repository Hygiene",
             "## Compound Level 2 Gate",
             "## Evidence-Based AI Collaboration",
+            "## Explainable Implementation and Chinese Maintenance Notes",
         ):
             with self.subTest(heading=heading):
                 self.assertIn(heading, self.skill)
@@ -165,6 +166,21 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("Cluster repeated runs by task", self.skill)
         self.assertIn("completed analysis reports `improved`", self.skill)
         self.assertIn("Skill 效果的统计检验", self.readme)
+
+    def test_explainable_implementation_requires_maintainer_focused_chinese_notes(self) -> None:
+        for requirement in (
+            "Explain behavior first through focused module boundaries",
+            "concise Chinese comments",
+            "why**, constraint, ownership rule, or failure semantics",
+            "non-obvious invariant, state transition, causal-owner repair",
+            "not a mechanical translation",
+            "Do not add line-by-line narration",
+            "Explainability: <comments added/updated or not applicable; review result>",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.skill)
+        self.assertIn("### 可解释实现与中文维护注释", self.readme)
+        self.assertIn("中文注释只解释代码本身无法可靠表达的“为什么”", self.readme)
 
     def test_compound_level_two_gate_preserves_independent_delivery_decisions(self) -> None:
         self.assertIn("three or more triggered delivery rows", self.skill)

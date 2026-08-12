@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "change_id": "skill-effect-v8-timeout-freeze",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/run_effect_experiment_v8.py:score_candidate",
+    "scripts/run_effect_experiment_v8.py:main",
+    "examples/effect-experiment-v8/preregistration.json",
+    "references/effect-evaluation.md"
+  ],
+  "affected_callers": [
+    "tests/test_effect_runner_v8.py",
+    "tests/test_effect_experiment_v8.py",
+    "README.md"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "V8 preregisters one Agent timeout and one test timeout as immutable protocol inputs before any trial.",
+      "verification": "python3 -m unittest tests.test_effect_experiment_v8 -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The V8 runner rejects a requested timeout that differs from the frozen protocol before delegating any Agent execution.",
+      "verification": "python3 -m unittest tests.test_effect_runner_v8 -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The V8 planned envelope freezes the installed Harness version and rejects changed, external, symbolic-link, or live-runtime-substituted inputs before any Agent execution.",
+      "verification": "python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json"
+    }
+  ],
+  "invariants": [
+    "No V8 Agent trial begins before the timeout budget, Harness version, and implementation inputs are frozen in a committed preregistration.",
+    "Both paired conditions use identical registered Agent and test timeouts.",
+    "A timeout mismatch fails before the delegated V6 execution path can create Agent artifacts.",
+    "V8 remains planned with an empty trial list until the frozen protocol has been committed.",
+    "Formal collection uses only a clean Git worktree at the preregistration commit, rejects input or output symbolic links, and scores from the same staged runtime used for execution."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "immutable timeout budget and Harness",
+      "status": "applied",
+      "rationale": "The protocol hash-links explicit Agent and scorer timeout values, runner bytes, and the installed Codex release; the runner compares requested values before execution."
+    },
+    {
+      "name": "pre-execution integrity rejection",
+      "status": "applied",
+      "rationale": "A parameter, version, committed-byte, tree, symbolic-link, dirty-worktree, or external-input mismatch is rejected before V6 can spawn a Codex process."
+    },
+    {
+      "name": "condition parity and frozen runtime reuse",
+      "status": "applied",
+      "rationale": "The single registered budget applies equally to baseline and explicit-Skill treatment conditions; --preflight completes without loading the delegated runner, while hidden scoring reuses the staged runner and scorer rather than importing live files."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The V8 wrapper owns version-specific preregistration validation; the shared V6 runner retains paired execution mechanics."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "The change uses existing Python standard-library JSON parsing and adds no dependency or lockfile change."},
+    "extension_decision": {"status": "not_applicable", "rationale": "This tightens the existing V8 protocol rather than adding an application extension surface."},
+    "data_ownership": {"status": "applied", "rationale": "The preregistration is authoritative for budgets and frozen inputs; the collection record only reports matched values actually used."},
+    "error_model": {"status": "applied", "rationale": "Malformed, missing, non-numeric, mismatched, symlinked, dirty, external, or stale committed inputs are explicit preflight errors, distinct from Agent or hidden-test timeouts."},
+    "contract_evolution": {"status": "applied", "rationale": "V8 has no trials, so the planned envelope can be strengthened and recommitted before collection without rewriting completed evidence."},
+    "operational_budget": {"status": "applied", "rationale": "The Agent and hidden-test deadlines, plus the exact Codex release, become immutable limits instead of mutable collection choices."},
+    "threat_boundary": {"status": "applied", "rationale": "The offline protocol rejects common local input substitution paths but remains an evaluation boundary, not a security sandbox against a hostile user with filesystem control."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "Protocol, tests, documentation, evidence, verification, review, and the new preregistration commit remain one atomic scope before trials."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No production service or rollout is affected."},
+    "data_migration": {"status": "not_applicable", "rationale": "No schema, persistence format, or user data changes."},
+    "configuration_secrets": {"status": "applied", "rationale": "Timeouts and the Codex version are non-secret protocol configuration with one authoritative value; no credentials are recorded."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No dependency is added, removed, or updated."},
+    "operational_knowledge": {"status": "applied", "rationale": "README and the evaluation reference state the frozen limits, worktree gate, archive snapshot, and the reason an unregistered or substituted input cannot support a result."},
+    "reproducibility": {"status": "applied", "rationale": "A future collector can reproduce the exact deadlines, Codex release, inputs, and runner validation from the committed preregistration; the package-level QuixBugs replay additionally requires the documented pytest environment."}
+  },
+  "verification": [
+    {
+      "command": "python3 -m unittest tests.test_effect_runner_v8 tests.test_effect_experiment_v8 tests.test_effect_corpus_v8 -v",
+      "status": "passed",
+      "result": "23 focused V8 tests passed, including staged-runtime scorer reuse, parameter drift, stale hashes, input/output/archive symlink traps, post-preflight source replacement, dirty/external worktree inputs, version drift, and preflight no-runtime-load gates."
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "163 package tests passed in the repository's normal Python environment."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "status": "not_applicable",
+      "result": "This constrained package run is not a passing verification because its Python cannot import pytest; 160 tests passed and 3 external QuixBugs replay tests failed only for that unavailable undeclared dependency."
+    },
+    {
+      "command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright scripts/analyze_skill_effect.py scripts/audit_effect_isolation_v8.py scripts/codex_v8_isolated.py scripts/materialize_effect_corpus_v8.py scripts/run_effect_experiment_v8.py scripts/score_effect_workspace_v8.py tests/test_effect_corpus_v8.py tests/test_effect_experiment_v8.py tests/test_effect_runner_v8.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes."
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid."
+    },
+    {
+      "command": "python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json",
+      "status": "passed",
+      "result": "Planned protocol reports not_run and contains no trial data or effect statistic."
+    }
+  ],
+  "rollback_or_compatibility": "Revert this one protocol-tightening commit before any V8 trial. Do not use a result collected with a mismatched or unregistered timeout budget.",
+  "independent_review": {
+    "reviewer": "Codex native independent review: v8_final_protocol_review and v8_release_review",
+    "outcome": "approved",
+    "notes": "After the evidence refresh, separate current-byte protocol and release reviews both approved the staged-runtime fix, preregistration hashes, evidence chain, and release readiness."
+  },
+  "supporting_artifacts": [
+    {
+      "id": "v8-timeout-verification",
+      "kind": "command_output",
+      "path": ".adam/evidence/skill-effect-v8-timeout-freeze-verification.txt",
+      "sha256": "c490ee5792daef0ab9fe61866d5b9f3801a00220ae05b8edbe8fca970b04e773",
+      "summary": "Focused V8 traps, full suite, static analysis, Skill validation, and planned-state analyzer outputs."
+    }
+  ],
+  "remaining_risks": [
+    "No V8 paired Agent trial has run, so no Skill-effect claim is supported.",
+    "The future result remains scoped to the fixed model, Harness, held-out corpus, and blind scorer rather than all model behavior.",
+    "The package-level external QuixBugs replay requires pytest from the normal Python environment; its absence under PYTHONNOUSERSITE is documented rather than treated as V8 evidence."
+  ],
+  "execution_authority": "authorized code-changing worktree",
+  "counterfactual_status": "executed",
+  "causal": {
+    "mode": "full",
+    "symptom": "V8 could validate a mutable collection envelope while still allowing delayed live runtime imports, symbolic-link tree substitution, stale Harness identity, input replacement, or a staged executor that scored from the live worktree.",
+    "discriminating_check": "Regression tests deliberately supply mismatched budgets, a wrong Codex version, input and output symlinks, dirty worktrees, external paths, stale commit bytes, post-validation source replacement, a preflight runtime-import trap, and a scorer whose live reload raises; each invalid path must fail before an Agent is launched or before hidden scoring can consume a live file.",
+    "upstream_path": "command-line inputs -> V8 bootstrap -> frozen preregistration and worktree validation -> archive snapshot -> staged runtime import -> delegated paired execution and hidden scoring -> effect-analysis eligibility",
+    "timeline_evidence": "V7 was archived after incomplete pairs and baseline global-Skill reads; V8 was initially prepared with a stale Codex version and mutable preflight surface before these gates were added.",
+    "conclusion": "unknown",
+    "confidence": "high",
+    "evidence_types": ["observational", "reproduction", "intervention"],
+    "evidence_artifacts": [
+      {
+        "id": "v8-timeout-verification",
+        "kind": "command_output",
+        "path": ".adam/evidence/skill-effect-v8-timeout-freeze-verification.txt",
+        "sha256": "c490ee5792daef0ab9fe61866d5b9f3801a00220ae05b8edbe8fca970b04e773",
+        "summary": "Executed V8 trap tests, normal-environment package verification, static analysis, Skill validation, planned-state analysis, and the constrained-environment pytest limitation."
+      },
+      {
+        "id": "v8-runner-regression-source",
+        "kind": "test_source",
+        "path": "tests/test_effect_runner_v8.py",
+        "sha256": "3f1b6053a9256f9db562910bcc0f7f0785aec451fe3ae2745e5f0f5c0ceba2cb",
+        "summary": "Source for deterministic input-substitution, symbolic-link, and staged-runtime-no-live-reload counterfactual tests."
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "A mutable or substituted collection input makes the V8 effect envelope ineligible.",
+        "prediction": "Each registered preflight trap is rejected before the delegated runner can launch an Agent.",
+        "status": "supported",
+        "evidence_refs": ["v8-runner-regression-source"]
+      },
+      {
+        "id": "H2",
+        "claim": "The new execution gates prevent the tested protocol-drift paths during formal collection.",
+        "prediction": "A frozen worktree preflight will accept only the committed bytes and installed Harness version.",
+        "status": "unresolved",
+        "evidence_refs": ["v8-timeout-verification"]
+      }
+    ]
+  }
+}
