@@ -1,0 +1,53 @@
+Adam Development Habits concise-execution optimization verification
+Executed at: 2026-08-26T11:24:09Z
+Repository revision: 1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree
+
+Command: python3 -m unittest discover -s tests -v
+Exit code: 0
+Result: 184 tests passed, including the new truthful-execution, concise compound checklist, and Explainability contract tests.
+
+Command: python3 -m pytest -q
+Exit code: 0
+Result: 184 tests passed.
+
+Command: python3 scripts/validate_evidence.py .adam/evidence/*.json
+Exit code: 0
+Result: All 26 pre-existing evidence JSON artifacts validated before the new optimization artifact was created.
+
+Command: python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
+Exit code: 0
+Result: Skill is valid.
+
+Command: python3 -m compileall -q scripts tests
+Exit code: 0
+Result: Python scripts and tests compiled without errors.
+
+Command: PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_skill_contract.py tests/test_effect_runner_v8.py
+Exit code: 0
+Result: 0 errors, 0 warnings, 0 notes.
+
+Command: git diff --check
+Exit code: 0
+Result: No whitespace errors.
+
+Command: python3 scripts/score_composite_trap.py examples/composite-trap-v10-output.md
+Exit code: 0
+Result: Saved protocol-isolated output scored 15/15 with no critical misses.
+
+Command: python3 scripts/score_causal_calibration.py examples/causal-calibration-v10-output.md --require-unknown
+Exit code: 0
+Result: Read-only calibration passed with counterfactual_unrun=true and conclusion unknown.
+
+Command: deterministic concise-checklist replay through scripts/score_composite_trap.py
+Exit code: 0
+Result: A hand-authored response containing only the new minimum checklist scored 15/15. This is a contract replay, not model-effect evidence.
+
+Independent forward test:
+Result: One native follow-up reused an earlier concise transcript; a fresh native run reported the referenced scenario path unavailable and correctly marked the response blocked. No model-effect claim is made from these runs because native subagent filesystem isolation was not reproducible.
+
+Scope note: The optimization improves front-loaded execution honesty, context control, and compact Level 2 coverage. It does not establish aggregate Skill-effect uplift; V8 remains a preregistered not_run protocol for the previous Skill revision.
+
+Post-artifact validation: 2026-08-26T11:34:07Z
+Command: python3 scripts/validate_evidence.py .adam/evidence/*.json
+Exit code: 0
+Result: All 27 evidence JSON artifacts validated after the optimization artifact was created.

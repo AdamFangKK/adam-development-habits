@@ -62,6 +62,28 @@ class SkillContractTests(unittest.TestCase):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.skill[card:detailed_policy])
 
+    def test_truthful_execution_protocol_blocks_silent_completion_and_context_drift(self) -> None:
+        for requirement in (
+            "## Truthful Execution and Context Control",
+            "`planned`",
+            "`executed`",
+            "`verified`",
+            "`blocked`",
+            "Never claim a file was changed",
+            "compact task contract",
+            "bounded repair loop",
+            "three consecutive attempts",
+            "Do not hide a failing check",
+            "model capability and tool authority as boundaries",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.skill)
+
+    def test_final_report_shape_includes_explainability(self) -> None:
+        report = self.skill[self.skill.index("## Final Report Format") :]
+        self.assertIn("Explainability: <comments added/updated or not applicable; review result>", report)
+        self.assertIn("单列 `Explainability:`", self.readme)
+
     def test_completion_gate_and_ledger_capture_quality_decisions(self) -> None:
         for field in (
             "Design boundary:",
@@ -211,6 +233,33 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("explicitly reject force-merge of red CI", self.skill)
         self.assertIn("standalone `Operational knowledge:` and `Reproducibility:` lines", self.skill)
         self.assertIn("复合门槛", self.readme)
+
+    def test_compound_level_two_minimum_checklist_survives_concise_responses(self) -> None:
+        checklist = self.skill[self.skill.index("For a concise compound response") : self.skill.index("## Evidence-Based AI Collaboration")]
+        for requirement in (
+            "Change level: 2",
+            "Causal status:",
+            "Remote write: durable `pending`",
+            "Migration: `Expand-Migrate-Contract`",
+            "backfill stop condition with a concrete metric and threshold",
+            "replication lag, queue age, or error rate",
+            "feature flag disabled by default",
+            "disable the flag first before code rollback",
+            "required CI must be green",
+            "do not force-merge red CI",
+            "exclude unrelated dirty worktree changes",
+            "Secrets: rotate and redact",
+            "Supply chain:",
+            "Operational knowledge: ADR/runbook",
+            "Reproducibility: non-secret fixture",
+            "existing repository tools",
+            "Authority: no production action",
+            "Verification: exact command and observed result",
+            "not applicable",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, checklist)
+        self.assertIn("最小清单", self.readme)
 
 
 if __name__ == "__main__":

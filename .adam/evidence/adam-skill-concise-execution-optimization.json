@@ -1,0 +1,401 @@
+{
+  "schema_version": 2,
+  "change_id": "adam-skill-concise-execution-optimization",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md",
+    "README.md",
+    "tests/test_skill_contract.py"
+  ],
+  "affected_callers": [
+    "Codex Skill discovery and invocation",
+    "tests/test_skill_contract.py",
+    "scripts/score_composite_trap.py",
+    "scripts/score_causal_calibration.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The Skill distinguishes planned, executed, verified, and blocked states and forbids claims based only on patches, expected output, or model confidence.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "A concise Level 2 response retains the complete compound minimum checklist, including durable pending reconciliation, rollout and rollback order, repository hygiene, secret handling, supply chain, metrics, and recovery ownership.",
+      "verification": "python3 -m pytest -q"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The final report template includes an Explainability field and the README documents the updated execution and compact-checklist contracts.",
+      "verification": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    },
+    {
+      "id": "AC-4",
+      "condition": "The edited Python tests and evidence utilities compile and type-check without diagnostics.",
+      "verification": "python3 -m compileall -q scripts tests && PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_skill_contract.py tests/test_effect_runner_v8.py"
+    },
+    {
+      "id": "AC-5",
+      "condition": "The protocol-isolated composite trap and causal calibration checks pass, while the independent forward test remains explicitly unmeasured or blocked when its environment is unavailable.",
+      "verification": "python3 scripts/score_composite_trap.py examples/composite-trap-v10-output.md && python3 scripts/score_causal_calibration.py examples/causal-calibration-v10-output.md --require-unknown"
+    }
+  ],
+  "invariants": [
+    "A patch or generated output is never reported as executed without a command result.",
+    "Blocked work preserves the exact external blocker and has a bounded retry policy.",
+    "Level 2 responses include durable pending reconciliation and explicit rollout, rollback, and recovery ownership.",
+    "Secrets are redacted and never copied into evidence, fixtures, or logs.",
+    "Historical V8 preregistration and prior evidence artifacts remain frozen and are not rewritten.",
+    "Effect claims require a completed independent paired experiment; contract replay is not model-effect evidence."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [
+    {
+      "consumer": "Existing Skill invocations and historical evidence readers",
+      "removal_condition": "Remove only after all consumers accept the truthful execution states and schema v2 evidence envelope.",
+      "test": "python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "safeguards": [
+    {
+      "name": "truthful execution states",
+      "status": "applied",
+      "rationale": "The Skill now separates planned, executed, verified, and blocked and requires observable evidence for completion claims."
+    },
+    {
+      "name": "bounded repair loop",
+      "status": "applied",
+      "rationale": "The Skill limits retries, records the blocker, and marks repeated external blockage as blocked after three attempts."
+    },
+    {
+      "name": "compound Level 2 minimum checklist",
+      "status": "applied",
+      "rationale": "The compact checklist preserves durable pending, rollout, rollback, hygiene, secrets, supply chain, metrics, and recovery requirements under answer compression."
+    },
+    {
+      "name": "independent review",
+      "status": "applied",
+      "rationale": "A separate native code-reviewer reviewed the modified Skill, README, and contract tests with zero findings."
+    },
+    {
+      "name": "effect-claim boundary",
+      "status": "applied",
+      "rationale": "The evidence explicitly records the forward-test isolation blocker and keeps causal and aggregate effect conclusions unknown."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "SKILL.md owns agent behavior, README owns operator-facing summaries, and test_skill_contract.py owns regression assertions; the change does not alter runtime application code."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "No package, runtime, lockfile, or external SDK dependency was added or changed."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "No public plugin or application extension point is introduced; the existing Skill interface is preserved."
+    },
+    "data_ownership": {
+      "status": "applied",
+      "rationale": "Only Skill instructions, documentation, tests, and local evidence are changed; user data and production records are untouched."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "The execution protocol distinguishes incomplete execution, verification failure, and external blockage instead of silently converting them into success."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The compact checklist extends the existing Level 2 contract and adds regression tests without invalidating prior evidence schemas or historical records."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "Repair guidance uses a finite loop and requires stopping at a repeated external blocker, preventing unbounded agent retries."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The Skill states tool and model capability boundaries, excludes dirty-worktree noise, and requires secret redaction, access, expiry, and rotation controls."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The change follows edit, contract-test, independent-review, evidence, validation, and commit stages with the evidence artifact in the same atomic scope."
+    },
+    "release_recovery": {
+      "status": "applied",
+      "rationale": "Compound Level 2 guidance now requires feature flags disabled by default, staged rollout, disable-before-code-rollback ordering, and an owner-backed recovery runbook."
+    },
+    "data_migration": {
+      "status": "applied",
+      "rationale": "The checklist requires Expand-Migrate-Contract, concrete backfill metrics and stop thresholds, idempotency, and durable pending reconciliation when a change involves migration."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "The checklist requires rotation, redaction, access control, expiry, and non-secret fixtures while keeping this evidence free of credentials."
+    },
+    "dependency_supply_chain": {
+      "status": "applied",
+      "rationale": "The checklist requires advisory review, lockfile and compatibility checks, and a rollback path for dependency changes."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The Skill requires ADR/runbook updates, recovery ownership, exact verification results, and discovery of existing repository tools."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "Contract tests, saved score outputs, timestamped verification text, repository revision, and SHA-256-linked artifacts make this optimization reproducible."
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "184 tests passed, including truthful-execution, concise compound checklist, and Explainability contract tests.",
+      "evidence_refs": ["verification-unittest"]
+    },
+    {
+      "command": "python3 -m pytest -q",
+      "status": "passed",
+      "result": "184 pytest cases passed.",
+      "evidence_refs": ["verification-pytest"]
+    },
+    {
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "status": "passed",
+      "result": "All evidence JSON artifacts validated after the optimization artifact was created.",
+      "evidence_refs": ["verification-evidence"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid.",
+      "evidence_refs": ["verification-skill"]
+    },
+    {
+      "command": "python3 -m compileall -q scripts tests",
+      "status": "passed",
+      "result": "Python scripts and tests compiled without errors.",
+      "evidence_refs": ["verification-compile"]
+    },
+    {
+      "command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_skill_contract.py tests/test_effect_runner_v8.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes.",
+      "evidence_refs": ["verification-typecheck"]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors.",
+      "evidence_refs": ["verification-diff"]
+    },
+    {
+      "command": "python3 scripts/score_composite_trap.py examples/composite-trap-v10-output.md",
+      "status": "passed",
+      "result": "Protocol-isolated composite output scored 15/15 with no critical misses.",
+      "evidence_refs": ["verification-composite"]
+    },
+    {
+      "command": "python3 scripts/score_causal_calibration.py examples/causal-calibration-v10-output.md --require-unknown",
+      "status": "passed",
+      "result": "Causal calibration passed with counterfactual_unrun=true and conclusion unknown.",
+      "evidence_refs": ["verification-causal"]
+    }
+  ],
+  "rollback_or_compatibility": "Revert the optimization commit as one atomic scope to restore the previous SKILL.md, README.md, and contract-test behavior. Keep historical evidence and the V8 preregistration immutable; the temporary repair retro remains outside the Skill package at /tmp/adam-skill-repair-retro.md.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: adam_skill_review",
+    "outcome": "approved",
+    "notes": "Independent review found zero critical, high, medium, or low findings. It confirmed that truthful execution states, the compact Level 2 checklist, the shortened description, and Explainability reporting are consistent; residual risk is prompt-level enforcement and an unreproducible native forward-test filesystem boundary.",
+    "evidence_ref": "independent-review"
+  },
+  "supporting_artifacts": [
+    {
+      "id": "verification-run",
+      "kind": "test_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "Timestamped verification ledger covering the full regression suite, static checks, saved scores, causal calibration, and forward-test limitation."
+    },
+    {
+      "id": "verification-unittest",
+      "kind": "test_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "184 unittest cases passed."
+    },
+    {
+      "id": "verification-pytest",
+      "kind": "test_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "python3 -m pytest -q",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "184 pytest cases passed."
+    },
+    {
+      "id": "verification-evidence",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "The post-artifact evidence validation passed."
+    },
+    {
+      "id": "verification-skill",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "The Skill Creator validator reported a valid package."
+    },
+    {
+      "id": "verification-compile",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "python3 -m compileall -q scripts tests",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "Python scripts and tests compiled without errors."
+    },
+    {
+      "id": "verification-typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_skill_contract.py tests/test_effect_runner_v8.py",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "0 errors, 0 warnings, 0 notes."
+    },
+    {
+      "id": "verification-diff",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "No whitespace errors."
+    },
+    {
+      "id": "verification-composite",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "python3 scripts/score_composite_trap.py examples/composite-trap-v10-output.md",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "Protocol-isolated composite output scored 15/15."
+    },
+    {
+      "id": "verification-causal",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+      "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+      "command": "python3 scripts/score_causal_calibration.py examples/causal-calibration-v10-output.md --require-unknown",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T11:24:09Z",
+      "repository_revision": "1af2ec5fe15e8c1f6db499b0cf853ce15d424c28+worktree",
+      "summary": "Causal calibration passed with conclusion unknown."
+    },
+    {
+      "id": "optimization-diff",
+      "kind": "diff",
+      "path": "SKILL.md",
+      "sha256": "7874acfc0b35d95b3867f410863a850f460e882b0139a7822cc5f70d88c273a4",
+      "summary": "Updated Skill instructions with truthful execution, context control, bounded repair, and concise Level 2 minimum requirements."
+    },
+    {
+      "id": "optimization-readme",
+      "kind": "diff",
+      "path": "README.md",
+      "sha256": "309728518515413ef98ca37cd950ec6cd365a07a2ca696ec20bfa555187b4291",
+      "summary": "Updated operator-facing documentation for execution honesty, the compact checklist, and Explainability reporting."
+    },
+    {
+      "id": "contract-tests",
+      "kind": "diff",
+      "path": "tests/test_skill_contract.py",
+      "sha256": "5ae2dba58f8b22ef91f52a2af4b57f0f4ef9fdda10a165dcdd5f56432b683fa9",
+      "summary": "Regression source containing the three new contract tests for truthful execution, concise Level 2 coverage, and Explainability."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/adam-skill-concise-execution-optimization-review.txt",
+      "sha256": "4e3170d3d00b797cb7b32baa4bea2aca66c292e4cdd2568f72415ed85b067363",
+      "summary": "Independent native code-reviewer report with zero findings and explicit residual risks."
+    }
+  ],
+  "remaining_risks": [
+    "The independent native forward test could not reproduce the scenario file across the subagent filesystem boundary, so no model-level uplift claim is supported.",
+    "The V8 preregistered effect experiment remains planned/not_run for the prior Skill revision and supplies no aggregate effect statistic for this optimization.",
+    "Prompt-level controls depend on the invoking model following the Skill; they are not a hard runtime policy engine.",
+    "The deterministic concise-checklist replay scored 15/15 but is a hand-authored contract replay, not independent model-effect evidence."
+  ],
+  "execution_authority": "authorized Skill-repository worktree",
+  "counterfactual_status": "unrun",
+  "causal": {
+    "mode": "full",
+    "symptom": "An independent concise response omitted several high-risk Level 2 controls despite the Skill containing them, while prior contract and composite checks passed.",
+    "discriminating_check": "Run a fresh isolated paired forward evaluation with the revised Skill and the same held-out tasks; require complete artifacts before comparing treatment and control.",
+    "upstream_path": "Skill description and body length -> model context selection/compression -> concise response coverage -> operational safety claims",
+    "timeline_evidence": "The saved v10 composite score is 15/15 and the causal calibration is unknown; the fresh native forward run was blocked by an unavailable scenario path, so no before/after model observation exists.",
+    "conclusion": "unknown",
+    "confidence": "high",
+    "evidence_types": ["observational", "reproduction"],
+    "evidence_artifacts": [
+      {
+        "id": "optimization-verification-causal",
+        "kind": "command_output",
+        "path": ".adam/evidence/adam-skill-concise-execution-optimization-verification.txt",
+        "sha256": "01695553c323b09d2a9e94f0c0f18d982ef8846c7b78ba095bbf95a3ff51ade7",
+        "summary": "Saved checks show contract/composite success, causal unknown, and blocked native forward-test evidence."
+      },
+      {
+        "id": "optimization-contract-causal",
+        "kind": "test_source",
+        "path": "tests/test_skill_contract.py",
+        "sha256": "5ae2dba58f8b22ef91f52a2af4b57f0f4ef9fdda10a165dcdd5f56432b683fa9",
+        "summary": "Contract tests reproduce the intended minimum checklist and execution-state requirements."
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "The revised Skill improves compact-answer retention of the previously omitted Level 2 controls.",
+        "prediction": "A fresh isolated treatment response will retain the complete minimum checklist more often than the baseline response under the preregistered scoring rule.",
+        "status": "unresolved",
+        "evidence_refs": ["optimization-verification-causal"]
+      },
+      {
+        "id": "H2",
+        "claim": "The revised Skill preserves the existing contract and composite quality behavior.",
+        "prediction": "The full regression suite and saved v10 composite replay remain passing after the edit.",
+        "status": "supported",
+        "evidence_refs": ["optimization-verification-causal", "optimization-contract-causal"]
+      }
+    ]
+  }
+}

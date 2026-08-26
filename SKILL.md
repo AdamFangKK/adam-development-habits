@@ -1,6 +1,6 @@
 ---
 name: adam-development-habits
-description: "Enforce Adam's risk-scaled development habits for AI-assisted feature work, bug fixes, refactors, code optimization, reviews, integrations, configuration changes, and maintenance of this skill package. Trigger for requests to remove stale or dead code, prevent duplicate implementations, improve readability or maintainability, reduce coupling, define module boundaries or extension points, atomize state transitions, clarify failure semantics or data ownership, evolve API/schema/event contracts, strengthen test quality, set performance budgets or SLOs, improve security or observability, prepare atomic Git commits or PRs, plan releases, rollback or database migrations, change configuration, secrets or dependencies, write runbooks, or make development environments reproducible. 适用于代码优化、重构、可读性、可维护性、低耦合、原子化、错误语义、数据所有权、契约演进、测试、性能、安全、可观测性、Git 提交、PR、发布、迁移、配置、Secret、依赖、运行手册与可复现环境。"
+description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, tests, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、配置与证据门禁。"
 ---
 
 # Adam's Development Habits
@@ -20,6 +20,23 @@ Apply the lightest level that preserves confidence:
 | 2 | Public API, schema migration, authentication, money, privacy, concurrency, cross-service flow, architectural change, or broad refactor. | Level 1 plus a concise plan, rollback/compatibility strategy, failure-path tests, an independent review pass, and Causal Full for ambiguous failures or regressions. |
 
 Do not downgrade a change to avoid evidence. If uncertain, use the higher level.
+
+## Truthful Execution and Context Control
+
+Use an explicit status for every material claim so a plausible plan cannot masquerade as completed work:
+
+| Status | Meaning | Allowed claim |
+|---|---|---|
+| `planned` | Proposed approach or expected result; no command has run. | Say `计划` or `待执行`; never say fixed, tested, or passed. |
+| `executed` | The exact tool or command ran and returned output. | Report the command, exit code, and observed result. |
+| `verified` | The executed result was read and satisfies a named acceptance criterion. | Claim the criterion is verified, not that unrelated behavior is safe. |
+| `blocked` | Execution was attempted but prevented by a missing dependency, authority, timeout, or reproducible failure. | State the blocker, attempted alternative, and residual risk. |
+
+Never claim a file was changed, a test passed, a review happened, or a deployment completed from a patch, intention, expected output, or model confidence alone. Before editing, write a compact task contract: in-scope behavior, out-of-scope behavior, canonical owner, acceptance criteria, and authority boundary. At each phase boundary, reconcile the current diff and contract; if the request or repository context has drifted, stop and restate the active scope before continuing.
+
+When a check fails, use a bounded repair loop: read the actual failure, classify the earliest responsible owner, make the smallest owner-level change, rerun the narrow check, then rerun the required full checks. Keep the same change evidence while the logical change continues. Stop only after all required checks pass, or after three consecutive attempts show the same external blocker; in the latter case report `blocked` with the exact evidence and do not claim completion. Do not hide a failing check by weakening a test, suppressing output, or changing the acceptance criterion.
+
+Treat model capability and tool authority as boundaries. If the task depends on an unavailable API, visual inspection, production permission, hidden contract, or domain fact that was not verified, state the limitation and use `unknown` or `blocked`; do not fill the gap with a confident guess. Delegate or ask for an independent check when the missing capability materially affects safety or correctness.
 
 ## Causal Repair Card
 
@@ -259,6 +276,25 @@ For an ambiguous remote write, preserve pending state and reconcile before retry
 
 Before returning a compound Level 2 plan or evidence ledger, run a coverage preflight. State the Level 2 classification and a concrete `mitigate now`, `stage separately`, or `block pending evidence` decision for every triggered row. Confirm explicitly that an incident timeout remains a durable pending unknown until reconciled and is retried only after definitive absence or a retryable pre-acceptance rejection; every public migration uses `Expand-Migrate-Contract`, names consumers, and states a measurable backfill stop signal; the existing feature flag starts disabled, has staged exposure and a named monitoring window, and can be disabled before code rollback; required CI is green and neither bypass nor force-merge is allowed; unrelated dirty work is excluded; secret rotation names redaction plus an access or expiry control; and non-secret local reproduction plus an ADR/runbook and recovery owner are recorded. State that no production action occurs without authorization. Do not rely on a related paragraph elsewhere in the response to imply any of these decisions. A phrase such as `measurable stop signal`, `local path`, or `force-merge blocked` is not enough by itself: name a backfill metric and threshold or block that migration pending the owner-approved bound; name a non-secret fixture plus a clean worktree, container, or CI reproduction and the existing start/check/test tool surfaces to discover; and explicitly reject force-merge of red CI. In the returned ledger, include standalone `Operational knowledge:` and `Reproducibility:` lines that name the ADR/runbook/recovery owner and the fixture/clean environment/tool-discovery status; do not rely on implicit mentions elsewhere.
 
+For a concise compound response, emit this minimum checklist before adding detail. Each line is a decision or an explicit blocker, not a suggestion:
+
+```text
+Change level: 2
+Causal status: symptom, hypotheses, discriminating check, and `Causal conclusion: unknown` when the intervention is unrun
+Remote write: durable `pending`; reconcile the canonical identity; retry only after definitive absence or retryable pre-acceptance rejection
+Migration: `Expand-Migrate-Contract`; named consumers; backfill stop condition with a concrete metric and threshold (for example replication lag, queue age, or error rate), or block pending an owner-approved bound
+Release: feature flag disabled by default; staged rollout; monitoring window; disable the flag first before code rollback
+CI/Git: required CI must be green; bypass is not allowed; do not force-merge red CI; exclude unrelated dirty worktree changes
+Secrets: rotate and redact; name the owner plus access or expiry control
+Supply chain: advisory/vulnerability, lockfile, compatibility, rollback, and removal decision
+Operational knowledge: ADR/runbook with diagnosis, recovery, rollback, and owner
+Reproducibility: non-secret fixture plus clean worktree/container/CI; discover and reuse existing repository tools and start/check/test commands
+Authority: no production action without explicit authorization
+Verification: exact command and observed result, or `not run`/`blocked` with the reason
+```
+
+If a row is irrelevant, write `not applicable` with a reason; do not silently omit it. This checklist is a compression aid for compound responses, not a substitute for the detailed ledger or executed verification.
+
 ## Evidence-Based AI Collaboration
 
 - Separate observed facts, project constraints, hypotheses, and proposed changes. Read the owner, callers, tests, configuration, and runtime evidence before editing; do not promote generated explanation into a fact.
@@ -384,6 +420,7 @@ Removed or retained compatibility: ...
 Safeguards: ...
 Quality decisions: <design/dependency/extension; ownership/lifecycle; error/retry; contract; operational budget; threat boundary, or not applicable>
 Delivery decisions: <Git/PR; release/recovery; migration; configuration/secrets; supply chain; operational knowledge; reproducibility, or not applicable>
+Explainability: <comments added/updated or not applicable; review result>
 Verified: <command> - <result>
 Independent review: <result or not required>
 Evidence artifact: <path or enforcement mode not enabled>
