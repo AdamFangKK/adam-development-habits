@@ -37,6 +37,7 @@ jobs:
           python scripts/check_change_evidence.py
           --base "${{ steps.base.outputs.value }}"
           --require-for-code-change
+          --require-level-two-for-high-risk
       - name: Validate stored evidence
         run: python scripts/validate_evidence.py .adam/evidence/*.json
       - name: Run evidence-script tests

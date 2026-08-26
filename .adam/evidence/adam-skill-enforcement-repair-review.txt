@@ -1,0 +1,26 @@
+Independent final-diff review: adam_skill_review
+Outcome: APPROVE
+Findings: 0 critical, 0 high, 0 medium, 0 low.
+
+Confirmed controls:
+- .env, .env.production, config/.env, and secret.env trigger the behavior gate.
+- Schema v1 remains historically valid but cannot satisfy a new changed-evidence gate.
+- High-risk behavior requires schema v2 Level 2 evidence.
+- Obvious self-review labels are rejected.
+- Schema v2 execution evidence requires command, exit code, UTC timestamp, and repository revision.
+- A passed verification must reference successful output for the same command.
+- All-zero and unknown repository revisions are rejected when repository context is available.
+- The V8 regression test reads the frozen preregistration commit and separately rejects live Skill drift.
+
+Independent verification:
+- unittest: 181 passed.
+- stored evidence and causal examples: passed.
+- Skill quick validation: passed.
+- basedpyright error-level check: zero diagnostics.
+- Git diff, YAML, and Python compilation checks: passed.
+- Temporary-repository adversarial probes: passed.
+
+Residual risks:
+- Reviewer independence is heuristic; a label cannot prove organizational independence.
+- Hashes prove artifact identity, not the truth of a written summary.
+- V8 is prepared and validated but unrun, so no aggregate Skill-effect claim is supported.

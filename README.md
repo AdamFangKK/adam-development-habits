@@ -226,7 +226,9 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \
 
 证据文件记录唯一实现路径、验收条件、旧路径处理、保障措施、验证命令、兼容或回滚策略和独立复查结果。随附的标准库脚本会验证字段完整性，并可在 CI 中要求“代码改动必须同时包含证据工件”。
 
-按当前规范新建的工件，还应在 `quality_decisions` 中记录适用的设计边界、依赖与扩展决策、数据所有权、错误模型、契约演进、运行预算、威胁边界，以及 Git/PR、发布恢复、迁移、配置/Secret、依赖供应链、运行知识和可复现环境决策；每项都要说明已采用或不适用的理由。旧工件保持兼容，但不能据此跳过新改动的适用决策。前测或独立复查若支撑结论，应用 `supporting_artifacts` 记录本地报告或命令输出的相对路径与 SHA-256，避免“已测试”只有文字断言。
+按当前规范新建的工件必须使用 `schema_version: 2`，并在 `quality_decisions` 中记录适用的设计边界、依赖与扩展决策、数据所有权、错误模型、契约演进、运行预算、威胁边界，以及 Git/PR、发布恢复、迁移、配置/Secret、依赖供应链、运行知识和可复现环境决策；每项都要说明已采用或不适用的理由。每个 `passed` 验证项必须引用同一命令的哈希绑定输出，并记录退出码、UTC 执行时间和仓库版本；Level 2 必须由实现者之外的人或 Agent 独立复查，并引用哈希绑定的 review report。旧的 schema v1 工件仅作历史兼容，单独校验仍可通过，但不能满足新行为改动的 changed-evidence 门禁。
+
+普通 supporting artifact 的路径和 SHA-256 绑定当前工作树；历史工件若引用旧版本文件，可额外记录完整 `git_commit`，校验器会从该提交读取对应路径并核对原始哈希，避免把历史证据偷偷改绑到当前文件。哈希只能证明文件身份，不能证明摘要真实，因此真实测试与 CI 仍是最终事实来源。
 
 这不是用 JSON 替代测试。JSON 只说明应该验证什么和已经运行了什么；测试、静态检查、审查和 CI 仍然负责证明结论。
 
@@ -315,7 +317,7 @@ CI 应至少覆盖项目已有的格式化、静态检查、类型检查、测�
 
 当用户明确要求把规范变成自动化约束时，Skill 会读取 [执行适配参考](./references/enforcement.md)，先识别项目现有工具，再按需选择：JavaScript/TypeScript 的 `Knip`、多语言规则检查的 `Semgrep`、本地 Hook 的 `pre-commit`，或团队级质量门。它不会擅自安装任何依赖或接入外部服务。
 
-仓库启用机器可读证据模式时，可使用 [证据示例](./assets/evidence-ledger.example.json)、[字段校验器](./scripts/validate_evidence.py)、[行为改动门禁](./scripts/check_change_evidence.py) 和 [GitHub Actions 模板](./assets/github-actions/adam-evidence-gate.yml)。门禁同时覆盖源码与常见运行时配置（JSON、YAML、TOML、依赖清单、CI、API 合约），避免只改配置就绕过验证；文档、示例和测试夹具目录不会触发。证据文件须命名为 `.adam/evidence/<change-id>.json`，并与内容中的 `change_id` 一致。
+仓库启用机器可读证据模式时，可使用 [证据示例](./assets/evidence-ledger.example.json)、[字段校验器](./scripts/validate_evidence.py)、[行为改动门禁](./scripts/check_change_evidence.py) 和 [GitHub Actions 模板](./assets/github-actions/adam-evidence-gate.yml)。门禁同时覆盖后端源码、HTML/CSS/预处理器/模板与常见运行时配置（JSON、YAML、TOML、依赖清单、CI、API 合约），避免前端或配置改动绕过验证；文档、示例和测试夹具目录不会触发。模板同时开启 `--require-level-two-for-high-risk`，对明显的认证、权限、支付、迁移、Schema、Secret、部署、基础设施、队列和 Worker 路径强制至少一份 Level 2 工件。路径规则只是保守下限，仍需按真实语义升级风险。证据文件须命名为 `.adam/evidence/<change-id>.json`，并与内容中的 `change_id` 一致。
 
 ## 自我维护与当前状态
 
@@ -351,20 +353,23 @@ adam-development-habits/
 ├── SKILL.md             # Codex 实际执行的开发习惯规则
 ├── README.md            # 本说明文档
 ├── LICENSE              # MIT License
+├── pytest.ini           # 默认 pytest 只收集包级 tests，隔离故意失败的实验夹具
 ├── assets/
 │   ├── evidence-ledger.example.json
 │   └── github-actions/adam-evidence-gate.yml
 ├── .adam/
 │   └── evidence/
-│       └── self-application-maintenance.json
+│       └── *.json       # 当前与历史证据工件
 ├── .github/
 │   └── workflows/
 │       └── skill-quality.yml
 ├── scripts/
 │   ├── check_change_evidence.py
-│   └── validate_evidence.py
+│   ├── validate_evidence.py
+│   └── ...              # 因果回放与 Skill 效果实验工具
 ├── references/
-│   └── enforcement.md    # Hook、CI 与静态检查的选择和接入原则
+│   ├── enforcement.md    # Hook、CI 与静态检查的选择和接入原则
+│   └── effect-evaluation.md
 └── agents/
     └── openai.yaml      # Codex 界面显示与默认调用提示
 ```

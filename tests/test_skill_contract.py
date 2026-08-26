@@ -87,6 +87,25 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("Quality decisions:", self.skill)
         self.assertIn("Delivery decisions:", self.skill)
 
+    def test_machine_evidence_v2_binds_decisions_verification_and_review(self) -> None:
+        for requirement in (
+            "schema_version: 2",
+            "every passed verification to reference a hash-verified `command_output` or `test_output`",
+            "exit code, UTC execution timestamp, and repository revision",
+            "reviewer other than the implementer",
+            "reference a hash-verified `review_report`",
+            "Schema version 1 is read-only compatibility",
+            "cannot satisfy the changed-evidence gate",
+            "full lowercase `git_commit`",
+            "A hash link proves artifact identity, not that its summary is true",
+            "--require-level-two-for-high-risk",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.skill)
+
+        self.assertIn("schema_version: 2", self.readme)
+        self.assertIn("历史工件若引用旧版本文件", self.readme)
+
     def test_safeguard_matrix_covers_quality_and_operational_boundaries(self) -> None:
         for situation in (
             "| Mutable business or personal data |",

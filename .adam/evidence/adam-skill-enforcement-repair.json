@@ -1,0 +1,383 @@
+{
+  "schema_version": 2,
+  "change_id": "adam-skill-enforcement-repair",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md: Evidence Enforcement Mode and Self-Application",
+    "scripts/validate_evidence.py: validate_evidence",
+    "scripts/check_change_evidence.py: main"
+  ],
+  "affected_callers": [
+    ".github/workflows/skill-quality.yml",
+    "assets/github-actions/adam-evidence-gate.yml",
+    "tests/test_evidence_scripts.py",
+    "tests/test_effect_runner_v8.py",
+    "repositories copying scripts into .adam/scripts/"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Schema version 2 requires all normative quality decisions and execution-bound evidence for every passed verification.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Behavioral and high-risk configuration changes cannot bypass the evidence gate through schema v1, weak revisions, self-review labels, or non-executable evidence.",
+      "verification": "python3 -m pytest -q"
+    },
+    {
+      "id": "AC-3",
+      "condition": "Historical schema v1 evidence remains individually valid while the frozen V8 preregistration and its archived inputs reject live protocol drift.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The Skill package, Python sources, workflow YAML, and deterministic causal fixtures pass their respective validators.",
+      "verification": "python3 scripts/validate_evidence.py .adam/evidence/*.json"
+    },
+    {
+      "id": "AC-5",
+      "condition": "The repair does not claim aggregate Skill-effect uplift because V8 has no completed paired observations.",
+      "verification": "python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json"
+    }
+  ],
+  "invariants": [
+    "A passed changed-evidence check is bound to the same successful command, exit code, UTC execution time, and existing repository revision.",
+    "Schema v1 historical records are not rewritten or silently rebound to current bytes.",
+    "A high-risk behavioral change requires valid schema version 2 level 2 evidence.",
+    "The V8 experiment remains planned and cannot use live Skill bytes or mutable collection inputs as frozen protocol evidence."
+  ],
+  "replaced_paths": [
+    "scripts/check_change_evidence.py: schema-v1-only changed-evidence acceptance path",
+    "scripts/validate_evidence.py: unverifiable schema-v2 execution and review acceptance paths",
+    "tests/test_effect_runner_v8.py: live-runtime and mutable-input V8 collection paths"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "schema-v2 complete quality decisions",
+      "status": "applied",
+      "rationale": "The validator requires all 15 normative decisions with applied or not_applicable rationales."
+    },
+    {
+      "name": "hash-linked execution evidence",
+      "status": "applied",
+      "rationale": "Passed checks require a hash-verified command_output or test_output bound to the same command with exit code zero, UTC timestamp, and an existing revision."
+    },
+    {
+      "name": "high-risk and secret path gate",
+      "status": "applied",
+      "rationale": "Environment, secret, authentication, payment, schema, and other high-risk behavior paths are classified conservatively and require Level 2 evidence when enabled."
+    },
+    {
+      "name": "independent review evidence",
+      "status": "applied",
+      "rationale": "Level 2 records reject obvious self-review identities and require a hash-linked review_report."
+    },
+    {
+      "name": "frozen V8 protocol inputs",
+      "status": "applied",
+      "rationale": "The V8 runner validates the committed preregistration and archived runtime separately from the live Skill worktree."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "SKILL.md defines the evidence contract; validate_evidence.py owns artifact semantics; check_change_evidence.py owns changed-file enforcement."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "No runtime dependency or import edge was added; validators continue to use the Python standard library and repository tooling."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "This repair tightens existing validation boundaries and adds no extension point or adapter contract."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "The package records evidence metadata and hashes only; it does not own mutable business or personal data."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Invalid evidence produces stable validator errors, while unknown causal or experiment outcomes remain explicitly unknown rather than passing."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "Schema v1 remains readable for historical artifacts, while new behavioral work must use the stricter schema v2 contract covered by regression tests."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "V8 timeout and frozen-input constraints are validated before collection, and the Skill effect analyzer refuses incomplete or unrun trials."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "Secret and configuration paths are treated as behavioral or high-risk so they cannot evade review through file naming or extension tricks."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The Skill, validators, tests, templates, workflow, historical evidence refresh, and this evidence artifact are delivered as one reviewable commit."
+    },
+    "release_recovery": {
+      "status": "applied",
+      "rationale": "The repair is reversible by reverting one atomic commit; V8 collection remains blocked until its frozen protocol is explicitly run and analyzed."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No application or persisted business data schema is changed."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "The changed-file classifier explicitly covers .env variants and secret/configuration behavior, with no secret values copied into evidence."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No package, lockfile, external action, or third-party dependency is added or updated."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "SKILL.md, README, enforcement references, tests, and the review artifact document the new evidence and V8 boundaries for future maintainers."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The exact commands, UTC execution timestamp, repository revision, hashes, Python checks, YAML parse, and planned V8 analyzer result are recorded."
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "181 tests passed, including V8 preflight and enforcement regressions.",
+      "evidence_refs": ["verification-unittest"]
+    },
+    {
+      "command": "python3 -m pytest -q",
+      "status": "passed",
+      "result": "181 pytest tests passed.",
+      "evidence_refs": ["verification-pytest"]
+    },
+    {
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "status": "passed",
+      "result": "All evidence JSON artifacts validated.",
+      "evidence_refs": ["verification-evidence"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed.",
+      "evidence_refs": ["verification-skill"]
+    },
+    {
+      "command": "python3 -m compileall -q scripts tests",
+      "status": "passed",
+      "result": "All Python scripts and tests compiled without errors.",
+      "evidence_refs": ["verification-compile"]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors.",
+      "evidence_refs": ["verification-diff"]
+    },
+    {
+      "command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_evidence_scripts.py tests/test_effect_runner_v8.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes at the error diagnostic level.",
+      "evidence_refs": ["verification-typecheck"]
+    },
+    {
+      "command": "ruby -e 'require \"yaml\"; ARGV.each { |path| YAML.load_file(path) }' .github/workflows/skill-quality.yml assets/github-actions/adam-evidence-gate.yml",
+      "status": "passed",
+      "result": "Both workflow YAML files parsed successfully.",
+      "evidence_refs": ["verification-yaml"]
+    },
+    {
+      "command": "python3 examples/causal-execution-experiment.py --report && python3 examples/causal-notification-experiment.py --report",
+      "status": "passed",
+      "result": "Deterministic causal replays passed 2 and 13 tests and reproduced their saved reports.",
+      "evidence_refs": ["verification-causal"]
+    },
+    {
+      "command": "python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json",
+      "status": "passed",
+      "result": "V8 remains planned with conclusion not_run, zero paired observations, and no effect statistic.",
+      "evidence_refs": ["verification-v8"]
+    }
+  ],
+  "rollback_or_compatibility": "Revert this atomic repair commit to restore the previous enforcement behavior; preserve historical evidence and do not rewrite the frozen V8 preregistration or its archived input hashes.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: adam_skill_review",
+    "outcome": "approved",
+    "notes": "Independent final-diff review found zero critical, high, medium, or low findings and confirmed the adversarial gates, historical evidence handling, and V8 freeze checks.",
+    "evidence_ref": "independent-review"
+  },
+  "supporting_artifacts": [
+    {
+      "id": "verification-unittest",
+      "kind": "test_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "181 unittest cases passed, including the enforcement and V8 regression suites."
+    },
+    {
+      "id": "verification-pytest",
+      "kind": "test_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "python3 -m pytest -q",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "181 pytest cases passed."
+    },
+    {
+      "id": "verification-evidence",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "The pre-existing evidence set validated before this new artifact was created; a post-artifact validation is run before commit."
+    },
+    {
+      "id": "verification-skill",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "The Skill Creator quick validator reported a valid package."
+    },
+    {
+      "id": "verification-compile",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "python3 -m compileall -q scripts tests",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "Python source compilation completed without errors."
+    },
+    {
+      "id": "verification-diff",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "The repair diff had no whitespace errors."
+    },
+    {
+      "id": "verification-typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_evidence_scripts.py tests/test_effect_runner_v8.py",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "Basedpyright reported zero diagnostics at the error level."
+    },
+    {
+      "id": "verification-yaml",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "ruby -e 'require \"yaml\"; ARGV.each { |path| YAML.load_file(path) }' .github/workflows/skill-quality.yml assets/github-actions/adam-evidence-gate.yml",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "The active workflow YAML files parsed successfully."
+    },
+    {
+      "id": "verification-causal",
+      "kind": "test_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "python3 examples/causal-execution-experiment.py --report && python3 examples/causal-notification-experiment.py --report",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "The deterministic causal fixtures passed 2 and 13 tests."
+    },
+    {
+      "id": "verification-v8",
+      "kind": "command_output",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+      "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+      "command": "python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json",
+      "exit_code": 0,
+      "executed_at": "2026-08-26T08:36:02Z",
+      "repository_revision": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree",
+      "summary": "The analyzer reports V8 planned and not_run with no effect statistic."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/adam-skill-enforcement-repair-review.txt",
+      "sha256": "74d969adabe8542f4525beee59e15de6ec57bac1270718f6d5b18d4a0dee374b",
+      "summary": "Independent native code-reviewer pass approved the complete repair with zero findings."
+    }
+  ],
+  "remaining_risks": [
+    "Reviewer independence is enforced heuristically by label and cannot prove organizational independence.",
+    "Evidence hashes prove artifact identity, not the truthfulness of a written summary.",
+    "V8 remains a prepared and validated protocol with no paired trials, so no aggregate Skill-effect uplift is supported.",
+    "The changed-file classifier is conservative and may require explicit not_applicable evidence for future non-runtime artifacts."
+  ],
+  "execution_authority": "authorized code-changing worktree",
+  "counterfactual_status": "executed",
+  "causal": {
+    "mode": "full",
+    "symptom": "The pre-repair enforcement surface could accept unverifiable changed evidence and the V8 collection surface could be exposed to mutable runtime or input drift.",
+    "discriminating_check": "Adversarial tests exercise schema-v1 bypasses, incomplete quality decisions, self-review labels, invalid revisions, same-command binding, environment and secret paths, symbolic links, stale commits, post-preflight source replacement, live reload, and V8 timeout/version drift.",
+    "upstream_path": "changed files -> evidence classifier -> evidence validator -> review and execution artifact binding; V8 CLI inputs -> frozen preregistration and archive -> staged runtime -> paired execution and analysis",
+    "timeline_evidence": "The repair follows the frozen V8 commit 3c838583 and refreshes historical evidence hashes without rewriting their original Git-bound provenance.",
+    "conclusion": "unknown",
+    "confidence": "high",
+    "evidence_types": ["observational", "reproduction", "intervention"],
+    "evidence_artifacts": [
+      {
+        "id": "repair-verification",
+        "kind": "command_output",
+        "path": ".adam/evidence/adam-skill-enforcement-repair-verification.txt",
+        "sha256": "e10b75ba0740f851d610622907d3c961e01ddd88df635185e45cc40fcc9501ac",
+        "summary": "Executed package, validator, static-analysis, causal-replay, and V8 planned-state checks."
+      },
+      {
+        "id": "v8-regression-source",
+        "kind": "test_source",
+        "path": "tests/test_effect_runner_v8.py",
+        "sha256": "f9f15ed1a5040572c50e418be7ab72462057752ae41b4964888f9e864d6ef9b0",
+        "summary": "Deterministic V8 regression tests for frozen inputs, staged runtime, and live-drift rejection."
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "The enforcement defects were at the validator and changed-file gate owners.",
+        "prediction": "The adversarial enforcement tests reject each bypass while valid historical artifacts remain readable.",
+        "status": "supported",
+        "evidence_refs": ["repair-verification"]
+      },
+      {
+        "id": "H2",
+        "claim": "A completed V8 paired trial could demonstrate a scoped Skill-effect uplift after the protocol repair.",
+        "prediction": "The preregistered analyzer would report improved only after all frozen pairs and thresholds pass.",
+        "status": "unresolved",
+        "evidence_refs": ["repair-verification", "v8-regression-source"]
+      }
+    ]
+  }
+}

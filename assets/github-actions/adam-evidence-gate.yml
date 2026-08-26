@@ -21,3 +21,4 @@ jobs:
           python .adam/scripts/check_change_evidence.py
           --base "${{ github.event.pull_request.base.sha }}"
           --require-for-code-change
+          --require-level-two-for-high-risk

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "change_id": "order-api-migration",
   "level": 2,
   "canonical_owner": [
@@ -111,19 +111,57 @@
     {
       "command": "pnpm test -- order legacy-order-route",
       "status": "passed",
-      "result": "Order creation, retry, and legacy compatibility tests passed."
+      "result": "Order creation, retry, and legacy compatibility tests passed.",
+      "evidence_refs": [
+        "order-tests"
+      ]
     },
     {
       "command": "pnpm typecheck",
       "status": "passed",
-      "result": "No type errors."
+      "result": "No type errors.",
+      "evidence_refs": [
+        "order-typecheck"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "order-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/order-api-migration-tests.txt",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "command": "pnpm test -- order legacy-order-route",
+      "exit_code": 0,
+      "executed_at": "2026-01-15T10:30:00Z",
+      "repository_revision": "1111111111111111111111111111111111111111+worktree",
+      "summary": "Replace the digest and repository revision with the captured test output evidence."
+    },
+    {
+      "id": "order-typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/order-api-migration-typecheck.txt",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "command": "pnpm typecheck",
+      "exit_code": 0,
+      "executed_at": "2026-01-15T10:31:00Z",
+      "repository_revision": "1111111111111111111111111111111111111111+worktree",
+      "summary": "Replace the digest and repository revision with the captured type-check output evidence."
+    },
+    {
+      "id": "order-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/order-api-migration-review.txt",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "summary": "Replace this digest with the independent final-diff review digest."
     }
   ],
   "rollback_or_compatibility": "Use the feature flag to route requests through the compatibility shim while investigating a regression.",
   "independent_review": {
     "reviewer": "independent reviewer",
     "outcome": "approved",
-    "notes": "Confirmed only one order-write path remains and idempotency is tested."
+    "notes": "Confirmed only one order-write path remains and idempotency is tested.",
+    "evidence_ref": "order-review"
   },
   "remaining_risks": [
     "The compatibility endpoint must be removed after the migration window."

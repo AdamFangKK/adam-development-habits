@@ -6,14 +6,28 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 SAFEGUARD_STATUSES = {"applied", "not_applicable"}
 VERIFICATION_STATUSES = {"passed", "not_applicable"}
 REVIEW_OUTCOMES = {"approved"}
+NON_INDEPENDENT_REVIEWERS = {
+    "author",
+    "automated contract tests",
+    "code author",
+    "executor",
+    "implementation agent",
+    "implementer",
+    "same agent",
+    "self",
+    "self review",
+}
+SUPPORTED_SCHEMA_VERSIONS = {1, 2}
 CAUSAL_MODES = {"lite", "full"}
 CAUSAL_HYPOTHESIS_STATUSES = {"supported", "rejected", "unresolved"}
 CAUSAL_EVIDENCE_TYPES = {"observational", "reproduction", "intervention"}
@@ -39,9 +53,10 @@ QUALITY_DECISION_FIELDS = (
     "reproducibility",
 )
 SUPPORTING_ARTIFACT_KINDS = {"command_output", "diff", "evaluation_transcript", "review_report", "test_output"}
+VERIFICATION_ARTIFACT_KINDS = {"command_output", "test_output"}
 
 
-def is_nonempty_string(value: Any) -> bool:
+def is_nonempty_string(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
@@ -59,60 +74,109 @@ def require_string_list(data: dict[str, Any], field: str, errors: list[str], *, 
         errors.append(f"{field} must contain only non-empty strings")
 
 
-def is_sha256(value: Any) -> bool:
+def is_sha256(value: object) -> bool:
     return isinstance(value, str) and len(value) == 64 and all(character in "0123456789abcdef" for character in value)
 
 
-def validate_causal_artifact_path(artifact: dict[str, Any], artifact_root: Path, errors: list[str], index: int) -> None:
+def is_execution_timestamp(value: object) -> bool:
+    if not isinstance(value, str) or "T" not in value or not value.endswith("Z"):
+        return False
+    try:
+        parsed = datetime.fromisoformat(value[:-1] + "+00:00")
+    except ValueError:
+        return False
+    return parsed.utcoffset() == timedelta(0)
+
+
+def is_repository_revision(value: object) -> bool:
+    if not isinstance(value, str):
+        return False
+    commit = value.removesuffix("+worktree")
+    return commit != "0" * 40 and len(commit) == 40 and all(character in "0123456789abcdef" for character in commit)
+
+
+def repository_revision_exists(value: str, artifact_root: Path) -> bool:
+    commit = value.removesuffix("+worktree")
+    result = subprocess.run(
+        ["git", "-C", str(artifact_root.resolve()), "cat-file", "-e", f"{commit}^{{commit}}"],
+        check=False,
+        capture_output=True,
+    )
+    return result.returncode == 0
+
+
+def normalized_reviewer(value: str) -> str:
+    return " ".join(value.casefold().replace("-", " ").replace("_", " ").split())
+
+
+def read_artifact_bytes(
+    artifact: dict[str, Any],
+    artifact_root: Path,
+    errors: list[str],
+    label: str,
+) -> bytes | None:
     path_value = artifact.get("path")
     if not is_nonempty_string(path_value):
-        return
+        return None
 
-    path = Path(path_value)
+    path = Path(cast(str, path_value))
     if path.is_absolute() or ".." in path.parts:
-        errors.append(f"causal.evidence_artifacts[{index}].path must stay inside the artifact root")
-        return
+        errors.append(f"{label}.path must stay inside the artifact root")
+        return None
 
     root = artifact_root.resolve()
     resolved = (root / path).resolve()
     try:
         resolved.relative_to(root)
     except ValueError:
-        errors.append(f"causal.evidence_artifacts[{index}].path must stay inside the artifact root")
-        return
+        errors.append(f"{label}.path must stay inside the artifact root")
+        return None
+
+    git_commit = artifact.get("git_commit")
+    if git_commit is not None:
+        if not isinstance(git_commit, str) or len(git_commit) != 40 or not all(
+            character in "0123456789abcdef" for character in git_commit
+        ):
+            errors.append(f"{label}.git_commit must be a full lowercase Git commit SHA")
+            return None
+        commit_check = subprocess.run(
+            ["git", "-C", str(root), "cat-file", "-e", f"{git_commit}^{{commit}}"],
+            check=False,
+            capture_output=True,
+        )
+        if commit_check.returncode != 0:
+            errors.append(f"{label}.git_commit does not reference a commit in the artifact repository")
+            return None
+        blob = subprocess.run(
+            ["git", "-C", str(root), "show", f"{git_commit}:{path.as_posix()}"],
+            check=False,
+            capture_output=True,
+        )
+        if blob.returncode != 0:
+            errors.append(f"{label}.path does not reference a file at git_commit")
+            return None
+        return blob.stdout
 
     if not resolved.is_file():
-        errors.append(f"causal.evidence_artifacts[{index}].path does not reference a file")
-        return
+        errors.append(f"{label}.path does not reference a file")
+        return None
+    return resolved.read_bytes()
 
-    digest = hashlib.sha256(resolved.read_bytes()).hexdigest()
+
+def validate_causal_artifact_path(artifact: dict[str, Any], artifact_root: Path, errors: list[str], index: int) -> None:
+    content = read_artifact_bytes(artifact, artifact_root, errors, f"causal.evidence_artifacts[{index}]")
+    if content is None:
+        return
+    digest = hashlib.sha256(content).hexdigest()
     if digest != artifact.get("sha256"):
         errors.append(f"causal.evidence_artifacts[{index}].sha256 does not match the referenced file")
 
 
 def validate_supporting_artifact_path(artifact: dict[str, Any], artifact_root: Path, errors: list[str], index: int) -> None:
-    path_value = artifact.get("path")
-    if not is_nonempty_string(path_value):
+    content = read_artifact_bytes(artifact, artifact_root, errors, f"supporting_artifacts[{index}]")
+    if content is None:
         return
-
-    path = Path(path_value)
-    if path.is_absolute() or ".." in path.parts:
-        errors.append(f"supporting_artifacts[{index}].path must stay inside the artifact root")
-        return
-
-    root = artifact_root.resolve()
-    resolved = (root / path).resolve()
-    try:
-        resolved.relative_to(root)
-    except ValueError:
-        errors.append(f"supporting_artifacts[{index}].path must stay inside the artifact root")
-        return
-
-    if not resolved.is_file():
-        errors.append(f"supporting_artifacts[{index}].path does not reference a file")
-        return
-
-    digest = hashlib.sha256(resolved.read_bytes()).hexdigest()
+    digest = hashlib.sha256(content).hexdigest()
     if digest != artifact.get("sha256"):
         errors.append(f"supporting_artifacts[{index}].sha256 does not match the referenced file")
 
@@ -136,7 +200,13 @@ def validate_quality_decisions(quality_decisions: Any, errors: list[str]) -> Non
         require_string(decision, "rationale", errors)
 
 
-def validate_supporting_artifacts(supporting_artifacts: Any, errors: list[str], *, artifact_root: Path | None = None) -> None:
+def validate_supporting_artifacts(
+    supporting_artifacts: Any,
+    errors: list[str],
+    *,
+    artifact_root: Path | None = None,
+    require_execution_metadata: bool = False,
+) -> None:
     if not isinstance(supporting_artifacts, list) or not supporting_artifacts:
         errors.append("supporting_artifacts must be a non-empty list")
         return
@@ -152,8 +222,9 @@ def validate_supporting_artifacts(supporting_artifacts: Any, errors: list[str], 
         elif artifact_id in artifact_ids:
             errors.append(f"supporting_artifacts[{index}].id must be unique")
         else:
-            artifact_ids.add(artifact_id)
-        if artifact.get("kind") not in SUPPORTING_ARTIFACT_KINDS:
+            artifact_ids.add(cast(str, artifact_id))
+        kind = artifact.get("kind")
+        if kind not in SUPPORTING_ARTIFACT_KINDS:
             errors.append(
                 f"supporting_artifacts[{index}].kind must be command_output, diff, evaluation_transcript, review_report, or test_output"
             )
@@ -161,6 +232,20 @@ def validate_supporting_artifacts(supporting_artifacts: Any, errors: list[str], 
         if not is_sha256(artifact.get("sha256")):
             errors.append(f"supporting_artifacts[{index}].sha256 must be a lowercase SHA-256 digest")
         require_string(artifact, "summary", errors)
+        if require_execution_metadata and kind in VERIFICATION_ARTIFACT_KINDS:
+            require_string(artifact, "command", errors)
+            exit_code = artifact.get("exit_code")
+            if not isinstance(exit_code, int) or isinstance(exit_code, bool):
+                errors.append(f"supporting_artifacts[{index}].exit_code must be an integer")
+            if not is_execution_timestamp(artifact.get("executed_at")):
+                errors.append(f"supporting_artifacts[{index}].executed_at must be an RFC 3339 UTC timestamp")
+            repository_revision = artifact.get("repository_revision")
+            if not is_repository_revision(repository_revision):
+                errors.append(
+                    f"supporting_artifacts[{index}].repository_revision must be a full lowercase Git commit SHA, optionally suffixed with +worktree"
+                )
+            elif artifact_root is not None and not repository_revision_exists(cast(str, repository_revision), artifact_root):
+                errors.append(f"supporting_artifacts[{index}].repository_revision must reference a commit in the artifact repository")
         if artifact_root is not None:
             validate_supporting_artifact_path(artifact, artifact_root, errors, index)
 
@@ -215,9 +300,10 @@ def validate_causal_evidence(causal: Any, errors: list[str], *, artifact_root: P
             elif artifact_id in artifact_ids:
                 errors.append(f"causal.evidence_artifacts[{index}].id must be unique")
             else:
-                artifact_ids.add(artifact_id)
+                artifact_id_string = cast(str, artifact_id)
+                artifact_ids.add(artifact_id_string)
                 if isinstance(artifact.get("kind"), str):
-                    artifact_kinds[artifact_id] = artifact["kind"]
+                    artifact_kinds[artifact_id_string] = artifact["kind"]
             if artifact.get("kind") not in CAUSAL_ARTIFACT_KINDS:
                 errors.append(
                     f"causal.evidence_artifacts[{index}].kind must be command_output, diff, test_output, test_source, or trace_export"
@@ -283,8 +369,9 @@ def validate_evidence(
     if not isinstance(data, dict):
         return ["root value must be an object"]
 
-    if data.get("schema_version") != 1:
-        errors.append("schema_version must be 1")
+    schema_version = data.get("schema_version")
+    if schema_version not in SUPPORTED_SCHEMA_VERSIONS:
+        errors.append("schema_version must be 1 or 2")
     require_string(data, "change_id", errors)
     if expected_change_id is not None and data.get("change_id") != expected_change_id:
         errors.append("change_id must match the evidence artifact filename")
@@ -336,6 +423,26 @@ def validate_evidence(
                 errors.append(f"safeguards[{index}].status must be applied or not_applicable")
             require_string(safeguard, "rationale", errors)
 
+    supporting_artifacts = data.get("supporting_artifacts")
+    supporting_artifact_kinds: dict[str, str] = {}
+    supporting_artifact_commands: dict[str, str] = {}
+    supporting_artifact_exit_codes: dict[str, int] = {}
+    if isinstance(supporting_artifacts, list):
+        for artifact in supporting_artifacts:
+            if not isinstance(artifact, dict):
+                continue
+            artifact_id = artifact.get("id")
+            artifact_kind = artifact.get("kind")
+            if not isinstance(artifact_id, str) or not isinstance(artifact_kind, str):
+                continue
+            supporting_artifact_kinds[artifact_id] = artifact_kind
+            command = artifact.get("command")
+            exit_code = artifact.get("exit_code")
+            if isinstance(command, str):
+                supporting_artifact_commands[artifact_id] = command
+            if isinstance(exit_code, int) and not isinstance(exit_code, bool):
+                supporting_artifact_exit_codes[artifact_id] = exit_code
+
     verification = data.get("verification")
     if not isinstance(verification, list) or not verification:
         errors.append("verification must be a non-empty list")
@@ -348,6 +455,30 @@ def validate_evidence(
             if item.get("status") not in VERIFICATION_STATUSES:
                 errors.append(f"verification[{index}].status must be passed or not_applicable")
             require_string(item, "result", errors)
+            if schema_version == 2 and item.get("status") == "passed":
+                references_value = item.get("evidence_refs")
+                if not isinstance(references_value, list) or not references_value or any(
+                    not is_nonempty_string(reference) for reference in references_value
+                ):
+                    errors.append(f"verification[{index}].evidence_refs must be a non-empty list for passed schema_version 2 checks")
+                else:
+                    references = cast(list[str], references_value)
+                    unknown_references = set(references).difference(supporting_artifact_kinds)
+                    if unknown_references:
+                        errors.append(f"verification[{index}].evidence_refs must name declared supporting artifacts")
+                    elif not any(
+                        supporting_artifact_kinds[reference] in VERIFICATION_ARTIFACT_KINDS for reference in references
+                    ):
+                        errors.append(f"verification[{index}].evidence_refs must include command_output or test_output evidence")
+                    elif not any(
+                        supporting_artifact_kinds[reference] in VERIFICATION_ARTIFACT_KINDS
+                        and supporting_artifact_commands.get(reference) == item.get("command")
+                        and supporting_artifact_exit_codes.get(reference) == 0
+                        for reference in references
+                    ):
+                        errors.append(
+                            f"verification[{index}].evidence_refs must include successful output bound to the same command"
+                        )
         if not any(item.get("status") == "passed" for item in verification if isinstance(item, dict)):
             errors.append("verification must contain at least one passed result")
 
@@ -358,15 +489,33 @@ def validate_evidence(
             errors.append("independent_review must be an object for level 2")
         else:
             require_string(review, "reviewer", errors)
+            reviewer = review.get("reviewer")
+            if isinstance(reviewer, str) and normalized_reviewer(reviewer) in NON_INDEPENDENT_REVIEWERS:
+                errors.append("independent_review.reviewer must identify a reviewer independent from the implementer")
             if review.get("outcome") not in REVIEW_OUTCOMES:
                 errors.append("independent_review.outcome must be approved")
             require_string(review, "notes", errors)
+            if schema_version == 2:
+                review_reference = review.get("evidence_ref")
+                if not is_nonempty_string(review_reference):
+                    errors.append("independent_review.evidence_ref must be a non-empty string for schema_version 2")
+                elif supporting_artifact_kinds.get(cast(str, review_reference)) != "review_report":
+                    errors.append("independent_review.evidence_ref must name a review_report supporting artifact")
 
+    if schema_version == 2 and "quality_decisions" not in data:
+        errors.append("quality_decisions is required for schema_version 2")
     if "quality_decisions" in data:
         validate_quality_decisions(data["quality_decisions"], errors)
 
+    if schema_version == 2 and "supporting_artifacts" not in data:
+        errors.append("supporting_artifacts is required for schema_version 2")
     if "supporting_artifacts" in data:
-        validate_supporting_artifacts(data["supporting_artifacts"], errors, artifact_root=artifact_root)
+        validate_supporting_artifacts(
+            data["supporting_artifacts"],
+            errors,
+            artifact_root=artifact_root,
+            require_execution_metadata=bool(schema_version == 2),
+        )
 
     if "causal" in data:
         validate_causal_evidence(data["causal"], errors, artifact_root=artifact_root)

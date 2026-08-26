@@ -1,0 +1,50 @@
+Adam Development Habits enforcement repair verification
+Executed at: 2026-08-26T08:36:02Z
+Repository revision: 3c838583edd7ebac2d0d0b47f405a7d45b462b2b+worktree
+
+Command: python3 -m unittest discover -s tests -v
+Exit code: 0
+Result: 181 tests passed in 25.623 seconds. V8 preflight passed.
+
+Command: python3 -m pytest -q
+Exit code: 0
+Result: 181 tests passed in 25.75 seconds.
+
+Command: python3 scripts/validate_evidence.py .adam/evidence/*.json
+Exit code: 0
+Result: All 25 pre-existing evidence JSON artifacts validated, including historical Git-bound artifacts.
+
+Command: python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
+Exit code: 0
+Result: Skill is valid.
+
+Command: python3 -m compileall -q scripts tests
+Exit code: 0
+Result: Python scripts and tests compiled without errors.
+
+Command: git diff --check
+Exit code: 0
+Result: No whitespace errors.
+
+Command: PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_evidence.py scripts/check_change_evidence.py tests/test_evidence_scripts.py tests/test_effect_runner_v8.py
+Exit code: 0
+Result: 0 errors, 0 warnings, 0 notes at the error diagnostic level.
+
+Command: ruby -e 'require "yaml"; ARGV.each { |path| YAML.load_file(path) }' .github/workflows/skill-quality.yml assets/github-actions/adam-evidence-gate.yml
+Exit code: 0
+Result: Both workflow YAML files parsed successfully.
+
+Command: python3 examples/causal-execution-experiment.py --report && python3 examples/causal-notification-experiment.py --report
+Exit code: 0
+Result: The deterministic causal replays passed 2 and 13 tests respectively and reproduced their saved root-cause-fix reports.
+
+Command: python3 scripts/analyze_skill_effect.py examples/effect-experiment-v8/preregistration.json
+Exit code: 0
+Result: V8 status remains planned with conclusion not_run, zero paired observations, and no effect statistic.
+
+Scope note: This proves the package repair gates pass. It does not prove aggregate model-repair uplift because the V8 paired experiment has not run.
+
+Post-artifact verification:
+Command: python3 scripts/validate_evidence.py .adam/evidence/*.json
+Exit code: 0
+Result: All 26 evidence JSON artifacts validated, including adam-skill-enforcement-repair.json.

@@ -82,7 +82,7 @@
     {"id": "preregistration", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v5/preregistration.json", "sha256": "9ca30f3f1d255ed3ffe1275b5bab9f8d1f0eaa9d59f84a5ed184bb262fc38dbc", "summary": "Frozen v5 paired effect protocol recorded before collection."},
     {"id": "interruption-report", "kind": "evaluation_transcript", "path": "examples/effect-experiment-v5/interruption.json", "sha256": "993788a348302580bf42c86d87922ad709dfe2e56539cc6be1a66d3160541796", "summary": "Ineligible v5 collection report with full raw-tree digest and all interrupted conditions."},
     {"id": "interruption-test", "kind": "test_output", "path": "tests/test_effect_experiment_v5_interruption.py", "sha256": "c443b8ffc33c1c568b0857577a203e74538370b88833c8fc6a45353cd1155b87", "summary": "Regression test tying the report's count, error classification, candidate-write state, and raw-tree digest to the retained artifacts."},
-    {"id": "analysis-gate", "kind": "evaluation_transcript", "path": "scripts/analyze_skill_effect.py", "sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100", "summary": "Frozen paired analyzer that rejects incomplete trials before effect calculation."}
+    {"id": "analysis-gate", "kind": "evaluation_transcript", "path": "scripts/analyze_skill_effect.py", "git_commit": "f7548a28578a34145137b4430c3edbe137683f3d", "sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100", "summary": "Frozen paired analyzer that rejects incomplete trials before effect calculation."}
   ],
   "remaining_risks": [
     "v5 is ineligible for a repair-success or causal-capability inference because 12 of 44 agent calls ended with upstream service errors.",

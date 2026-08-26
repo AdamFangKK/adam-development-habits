@@ -25,7 +25,7 @@ from replay_external_click import (  # noqa: E402
     require_symlink_support,
     replace_once,
     source_root,
-    test_environment,
+    test_environment as run_test_environment,
 )
 from validate_evidence import validate_evidence  # noqa: E402
 
@@ -120,7 +120,7 @@ class ExternalClickReplayTests(unittest.TestCase):
             click_init.parent.mkdir(parents=True)
             _ = click_init.write_text("VALUE = 'verified'\n", encoding="utf-8")
             _ = (root / "src" / "sitecustomize.py").write_text("raise RuntimeError('untrusted source root')\n", encoding="utf-8")
-            result = test_environment(root, "import click; assert click.VALUE == 'verified'")
+            result = run_test_environment(root, "import click; assert click.VALUE == 'verified'")
             self.assertTrue(result["passed"], result["summary"])
 
     def test_test_subprocess_has_a_bounded_timeout(self) -> None:
@@ -129,7 +129,7 @@ class ExternalClickReplayTests(unittest.TestCase):
             click_init = root / "src" / "click" / "__init__.py"
             click_init.parent.mkdir(parents=True)
             _ = click_init.write_text("", encoding="utf-8")
-            result = test_environment(root, "import time; time.sleep(1)", timeout_seconds=0.01)
+            result = run_test_environment(root, "import time; time.sleep(1)", timeout_seconds=0.01)
             self.assertEqual(result["exit_code"], 124)
             self.assertIn("timed out", result["summary"])
             self.assertGreater(CHECK_TIMEOUT_SECONDS, 0)

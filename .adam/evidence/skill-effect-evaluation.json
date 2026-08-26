@@ -154,6 +154,7 @@
       "id": "effect-analyzer",
       "kind": "evaluation_transcript",
       "path": "scripts/analyze_skill_effect.py",
+      "git_commit": "f7548a28578a34145137b4430c3edbe137683f3d",
       "sha256": "d96e4e861ff3c9538caccfcc307b4c936c1380cbf5b9b951c9040e271a8b1100",
       "summary": "Standard-library parser, immutable-envelope validation, task-plan/order checks, clustered bootstrap, paired randomization, and scoped decision output."
     },
@@ -168,6 +169,7 @@
       "id": "effect-protocol-reference",
       "kind": "evaluation_transcript",
       "path": "references/effect-evaluation.md",
+      "git_commit": "062f7f47290612e8969d10235ba7a1dcb2db7602",
       "sha256": "51f0e8619b5fa8000067fdb5347470b515ccce03c5997b06586e29f00d774778",
       "summary": "Pre-registration, isolation, blind scoring, stopping, inference, interpretation, and retest procedure."
     },

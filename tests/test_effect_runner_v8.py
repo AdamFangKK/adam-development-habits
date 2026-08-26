@@ -19,6 +19,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
+V8_PREREGISTRATION_COMMIT = "3c838583edd7ebac2d0d0b47f405a7d45b462b2b"
 sys.path.insert(0, str(SCRIPTS))
 
 import audit_effect_isolation_v8 as audit  # noqa: E402
@@ -111,18 +112,26 @@ class EffectRunnerV8Tests(unittest.TestCase):
         preregistration = cast(dict[str, object], json.loads(preregistration_path.read_text(encoding="utf-8")))
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            frozen = root / "frozen"
+            frozen.mkdir()
+            v8.copy_frozen_archive(ROOT, V8_PREREGISTRATION_COMMIT, frozen)
             raw = root / "raw"
             output = root / "result.json"
             arguments = [
-                "--corpus", str(ROOT / "examples" / "effect-corpus-v8"),
-                "--prompts", str(ROOT / "examples" / "effect-experiment-v7" / "prompts"),
-                "--skill", str(ROOT),
-                "--codex", str(SCRIPTS / "codex_v8_isolated.py"),
+                "--corpus", str(frozen / "examples" / "effect-corpus-v8"),
+                "--prompts", str(frozen / "examples" / "effect-experiment-v7" / "prompts"),
+                "--skill", str(frozen),
+                "--codex", str(frozen / "scripts" / "codex_v8_isolated.py"),
                 "--raw-output", str(raw),
                 "--output", str(output),
             ]
             v8.validate_bound_inputs(preregistration, arguments)
             v8.validate_empty_collection_outputs(arguments)
+
+            live_skill = list(arguments)
+            live_skill[live_skill.index("--skill") + 1] = str(ROOT)
+            with self.assertRaisesRegex(ValueError, "Skill source differs"):
+                v8.validate_bound_inputs(preregistration, live_skill)
 
             raw.mkdir()
             _ = (raw / "old-artifact").write_text("old\n", encoding="utf-8")
@@ -135,7 +144,7 @@ class EffectRunnerV8Tests(unittest.TestCase):
                 v8.validate_empty_collection_outputs(arguments)
 
             changed = list(arguments)
-            changed[changed.index("--prompts") + 1] = str(ROOT / "examples" / "effect-experiment-v8")
+            changed[changed.index("--prompts") + 1] = str(frozen / "examples" / "effect-experiment-v8")
             with self.assertRaisesRegex(ValueError, "baseline prompt"):
                 v8.validate_bound_inputs(preregistration, changed)
 

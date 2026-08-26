@@ -15,7 +15,7 @@ CODE_SUFFIXES = {
     ".c", ".cc", ".cjs", ".cpp", ".cs", ".cts", ".dart", ".ex", ".exs", ".fs", ".fsx",
     ".go", ".h", ".hpp", ".java", ".js", ".jsx", ".kt", ".kts", ".lua", ".mjs", ".mts",
     ".php", ".pl", ".ps1", ".py", ".r", ".rb", ".rs", ".scala", ".sh", ".sql", ".swift",
-    ".ts", ".tsx", ".vue", ".zig",
+    ".css", ".gradle", ".hbs", ".html", ".less", ".mdx", ".scss", ".ts", ".tsx", ".vue", ".xml", ".zig",
 }
 
 # These formats commonly define runtime behavior, public contracts, dependencies, or CI.
@@ -31,6 +31,16 @@ BEHAVIORAL_CONFIG_NAMES = {
     "go.mod", "go.sum", "package.json", "poetry.lock", "pom.xml", "pyproject.toml", "requirements.txt",
 }
 BEHAVIORAL_SCRIPT_DIRECTORIES = {"bin", "deploy", "ops", "script", "scripts", "tool", "tools"}
+HIGH_RISK_DIRECTORIES = {
+    "auth", "authorization", "billing", "config", "deploy", "infra", "migration", "migrations",
+    "money", "oauth", "payment", "payments", "permission", "permissions", "queue", "rbac",
+    "release", "schema", "secret", "secrets", "security", "terraform", "worker", "workers",
+}
+HIGH_RISK_SUFFIXES = {".bicep", ".env", ".hcl", ".proto", ".tf", ".tfvars"}
+HIGH_RISK_NAMES = {
+    ".env", "dockerfile", "docker-compose.yml", "docker-compose.yaml", "openapi.yaml", "openapi.yml",
+    "schema.graphql", "schema.gql", "secrets.yaml", "secrets.yml",
+}
 NON_RUNTIME_DIRECTORIES = {
     "doc", "docs", "documentation", "example", "examples", "fixture", "fixtures", "sample", "samples",
     "test-data", "testdata",
@@ -79,6 +89,19 @@ def requires_evidence(path: Path, base: str) -> bool:
         or is_extensionless_script(path, base)
         or path.suffix.lower() in BEHAVIORAL_CONFIG_SUFFIXES
         or path.name in BEHAVIORAL_CONFIG_NAMES
+        or requires_level_two(path)
+    )
+
+
+def requires_level_two(path: Path) -> bool:
+    """Conservatively upgrade paths whose names imply irreversible or privileged behavior."""
+    parts = {part.lower() for part in path.parts}
+    name = path.name.lower()
+    return (
+        bool(parts.intersection(HIGH_RISK_DIRECTORIES))
+        or path.suffix.lower() in HIGH_RISK_SUFFIXES
+        or name in HIGH_RISK_NAMES
+        or name.startswith(".env.")
     )
 
 
@@ -106,6 +129,11 @@ def main() -> int:
     parser.add_argument("--base", required=True, help="Git base revision for comparison")
     parser.add_argument("--evidence-dir", type=Path, default=Path(".adam/evidence"))
     parser.add_argument("--require-for-code-change", action="store_true")
+    parser.add_argument(
+        "--require-level-two-for-high-risk",
+        action="store_true",
+        help="Require at least one changed evidence artifact at level 2 for high-risk paths.",
+    )
     args = parser.parse_args()
 
     try:
@@ -132,9 +160,18 @@ def main() -> int:
         return 1
 
     failed = False
+    schema_v2_artifact_levels: list[int] = []
     for artifact in artifacts:
         try:
-            errors = validate_evidence(load_json(artifact), expected_change_id=artifact.stem, artifact_root=root)
+            payload = load_json(artifact)
+            errors = validate_evidence(payload, expected_change_id=artifact.stem, artifact_root=root)
+            if (
+                not errors
+                and isinstance(payload, dict)
+                and payload.get("schema_version") == 2
+                and isinstance(payload.get("level"), int)
+            ):
+                schema_v2_artifact_levels.append(payload["level"])
         except Exception as error:  # Report invalid artifacts without a stack trace in CI.
             errors = [str(error)]
         if errors:
@@ -143,6 +180,22 @@ def main() -> int:
                 print(f"{artifact}: {error}", file=sys.stderr)
         else:
             print(f"valid changed evidence: {artifact}")
+
+    if args.require_for_code_change and behavior_changes and not schema_v2_artifact_levels:
+        failed = True
+        print(
+            "behavioral changes require at least one valid changed schema_version 2 evidence artifact",
+            file=sys.stderr,
+        )
+
+    high_risk_changes = [path for path in behavior_changes if requires_level_two(path)]
+    if args.require_level_two_for_high_risk and high_risk_changes and 2 not in schema_v2_artifact_levels:
+        failed = True
+        names = ", ".join(path.as_posix() for path in high_risk_changes)
+        print(
+            "high-risk behavioral changes require at least one schema_version 2 level 2 evidence artifact: " + names,
+            file=sys.stderr,
+        )
 
     if not behavior_changes:
         print("no behavior-changing files changed")

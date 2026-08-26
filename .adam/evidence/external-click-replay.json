@@ -146,6 +146,7 @@
       "id": "click-tests",
       "kind": "evaluation_transcript",
       "path": "tests/test_external_click_replay.py",
+      "git_commit": "3c838583edd7ebac2d0d0b47f405a7d45b462b2b",
       "sha256": "84e8bccf5654d677796a5e2e991a60e2c9357b82596f7fbcbbf79b24ce1a56d6",
       "summary": "Regression tests for provenance, variant outcomes, patch ambiguity, isolation, timeout, claim limits, and evidence validation."
     },
