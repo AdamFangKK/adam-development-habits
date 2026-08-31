@@ -1,0 +1,22 @@
+Independent final review
+
+Reviewer: Codex native reviewer /root/goal_audit
+Outcome: approved for the substantive filesystem diff, excluding the final evidence ledger and this review-report binding.
+
+Findings: No non-record defects found.
+
+Reviewed controls:
+- The v10 cleanup test materializes 40 deterministic multi-file tasks across split-owner, dynamic-retain, semantic-duplicate, and release-drift traps; it rejects shallow policy-only repairs and proves actual JSON-registry adapter loading.
+- API-key authentication uses only the non-secret status prefix. Remote connectivity runs before raw trial or result paths are created, returns a generic failure, and does not retain remote stdout/stderr.
+- The probe contract is intentionally process-success connectivity, not a response-content assertion; its prompt and success-path test agree with that contract.
+- API-key-like sk- values are redacted from candidate diffs, agent output/logs, public JSON, and hidden score JSON.
+- The v10 corpus is temporary and does not mutate frozen V9 inputs. Existing cleanup/scorer coverage remains in the full regression suite.
+
+Observed verification:
+- Full suite: 236 passed.
+- Typecheck: 0 errors, 0 warnings, 0 notes.
+- Skill validation and git diff --check passed.
+- The authorized remote probe stopped before trials with the generic connectivity failure and left no temporary or result artifacts.
+
+Residual risk:
+Remote API-key connectivity remains unavailable, so no formal Skill-effect collection or model-capability claim is approved.

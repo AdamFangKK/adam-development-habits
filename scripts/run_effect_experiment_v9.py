@@ -8,6 +8,7 @@ import copy
 import hashlib
 import json
 import os
+import re
 import signal
 import shutil
 import subprocess
@@ -28,7 +29,12 @@ DEFAULT_HARNESS_ID = "codex-cli-0.149.0-alpha.4.1;exec-json;workspace-write;ephe
 DEFAULT_CODEX = str(Path(__file__).with_name("codex_v9_isolated.py").resolve())
 REAL_CODEX = Path("/Applications/ChatGPT.app/Contents/Resources/codex")
 CODEX_VERSION = "0.149.0-alpha.4.1"
-CODEX_AUTH_STATUS = "Logged in using ChatGPT"
+CODEX_AUTH_STATUS_PREFIX = {
+    "api-key": "Logged in using an API key",
+    "chatgpt": "Logged in using ChatGPT",
+}
+CONNECTIVITY_PROBE_TIMEOUT_SECONDS = 60.0
+API_KEY_PATTERN = re.compile(r"\bsk-[^\s]+")
 
 
 @dataclass(frozen=True)
@@ -67,6 +73,20 @@ def text_output(value: str | bytes | None) -> str:
     if value is None:
         return ""
     return value.decode("utf-8", errors="replace") if isinstance(value, bytes) else value
+
+
+def redact_sensitive_text(value: str) -> str:
+    return API_KEY_PATTERN.sub("[REDACTED_API_KEY]", value)
+
+
+def redact_sensitive_value(value: object) -> object:
+    if isinstance(value, str):
+        return redact_sensitive_text(value)
+    if isinstance(value, list):
+        return [redact_sensitive_value(item) for item in value]
+    if isinstance(value, dict):
+        return {key: redact_sensitive_value(item) for key, item in value.items()}
+    return value
 
 
 def environment() -> dict[str, str]:
@@ -349,7 +369,24 @@ def validate_frozen_worktree(arguments: Arguments, preregistration: Mapping[str,
     return root
 
 
-def validate_codex_version() -> None:
+def validated_auth_mode(value: object) -> str:
+    if not isinstance(value, str) or value not in CODEX_AUTH_STATUS_PREFIX:
+        raise ValueError("Codex authentication mode differs from the frozen V9 runtime")
+    return value
+
+
+def authenticated_status_matches(auth_mode: str, status: str) -> bool:
+    expected = CODEX_AUTH_STATUS_PREFIX[auth_mode]
+    normalized = status.strip()
+    return normalized.startswith(expected) if auth_mode == "api-key" else normalized == expected
+
+
+def authentication_status(auth: subprocess.CompletedProcess[str]) -> str:
+    return auth.stdout if auth.stdout.strip() else auth.stderr
+
+
+def validate_codex_version(auth_mode: str) -> None:
+    auth_mode = validated_auth_mode(auth_mode)
     if not REAL_CODEX.is_file() or REAL_CODEX.is_symlink():
         raise ValueError(f"frozen Codex binary is missing or unsafe: {REAL_CODEX}")
     result = subprocess.run([str(REAL_CODEX), "--version"], capture_output=True, text=True, check=False)
@@ -361,8 +398,37 @@ def validate_codex_version() -> None:
         text=True,
         check=False,
     )
-    if auth.returncode != 0 or auth.stdout.strip() != CODEX_AUTH_STATUS:
+    if auth.returncode != 0 or not authenticated_status_matches(auth_mode, authentication_status(auth)):
         raise ValueError("Codex authentication mode differs from the frozen V9 runtime")
+
+
+def validate_agent_connectivity(arguments: Arguments) -> None:
+    with tempfile.TemporaryDirectory(prefix="adam-effect-v9-connectivity-", dir="/tmp") as directory:
+        workspace = Path(directory)
+        command = [
+            arguments.codex,
+            "exec",
+            "-C",
+            str(workspace),
+            "-m",
+            arguments.model,
+            "-s",
+            "workspace-write",
+            "--ephemeral",
+            "--skip-git-repo-check",
+            "--ignore-user-config",
+            "--json",
+            "-o",
+            str(workspace / "connectivity-output.md"),
+            "Confirm remote Codex connectivity. Do not make changes.",
+        ]
+        agent_exit, _, _ = run_agent(
+            command,
+            cwd=workspace,
+            timeout=min(arguments.agent_timeout, CONNECTIVITY_PROBE_TIMEOUT_SECONDS),
+        )
+    if agent_exit != 0:
+        raise ValueError("Codex agent connectivity probe failed")
 
 
 def validate_corpus_trees(corpus_root: Path, manifest: Mapping[str, object]) -> None:
@@ -524,7 +590,7 @@ def execute_condition(
         if run_root.exists():
             if seed_commit:
                 diff = run_checked(["git", "diff", seed_commit], cwd=run_root, timeout=10)
-                _ = (artifact_root / "candidate.diff").write_text(diff.stdout, encoding="utf-8")
+                _ = (artifact_root / "candidate.diff").write_text(redact_sensitive_text(diff.stdout), encoding="utf-8")
             elif not (artifact_root / "candidate.diff").exists():
                 _ = (artifact_root / "candidate.diff").write_text("", encoding="utf-8")
             _ = shutil.rmtree(run_root)
@@ -532,9 +598,14 @@ def execute_condition(
     if not scope_ok:
         hidden["passed"] = False
         hidden["scope_violation"] = paths
-    agent_output_present = (artifact_root / "agent-output.md").is_file()
-    if not agent_output_present:
-        _ = (artifact_root / "agent-output.md").write_text("", encoding="utf-8")
+    agent_output = artifact_root / "agent-output.md"
+    agent_output_present = agent_output.is_file()
+    output_text = agent_output.read_text(encoding="utf-8") if agent_output_present else ""
+    _ = agent_output.write_text(redact_sensitive_text(output_text), encoding="utf-8")
+    agent_stdout = redact_sensitive_text(agent_stdout)
+    agent_stderr = redact_sensitive_text(agent_stderr)
+    public = cast(dict[str, object], redact_sensitive_value(public))
+    hidden = cast(dict[str, object], redact_sensitive_value(hidden))
     _ = (artifact_root / "agent.stdout.log").write_text(agent_stdout, encoding="utf-8")
     _ = (artifact_root / "agent.stderr.log").write_text(agent_stderr, encoding="utf-8")
     _ = (artifact_root / "public.json").write_text(json.dumps(public, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -693,12 +764,13 @@ def validate_preregistration(preregistration: dict[str, object], arguments: Argu
         raise ValueError("random seed differs from preregistration")
     if protocol.get("agent_timeout_seconds") != arguments.agent_timeout or protocol.get("test_timeout_seconds") != arguments.test_timeout:
         raise ValueError("timeouts differ from preregistration")
+    if protocol.get("connectivity_probe_timeout_seconds") != CONNECTIVITY_PROBE_TIMEOUT_SECONDS:
+        raise ValueError("connectivity probe timeout differs from preregistration")
     if protocol.get("conditions") != list(CONDITIONS):
         raise ValueError("conditions differ from preregistration")
     if protocol.get("codex_cli_version") != f"codex-cli {CODEX_VERSION}":
         raise ValueError("Codex CLI version differs from preregistration")
-    if protocol.get("codex_auth_mode") != "chatgpt":
-        raise ValueError("Codex authentication mode differs from preregistration")
+    _ = validated_auth_mode(protocol.get("codex_auth_mode"))
     expected = {
         "old_skill_sha256": sha256(skill_file(arguments.old_skill)),
         "new_skill_sha256": sha256(skill_file(arguments.new_skill)),
@@ -777,7 +849,9 @@ def main() -> int:
     validate_corpus_trees(arguments.corpus, corpus)
     tasks = records_for_preregistration(corpus, preregistration)
     _ = validate_frozen_worktree(arguments, preregistration)
-    validate_codex_version()
+    protocol = cast(dict[str, object], preregistration["protocol"])
+    validate_codex_version(validated_auth_mode(protocol.get("codex_auth_mode")))
+    validate_agent_connectivity(arguments)
     if arguments.preflight:
         print("V9 preflight passed")
         return 0

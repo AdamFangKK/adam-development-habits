@@ -194,6 +194,9 @@ class SkillContractTests(unittest.TestCase):
 
         self.assertIn("$adam-development-habits", self.metadata)
         self.assertIn("boundaries", self.metadata)
+        self.assertIn("stale paths, comments, docs, and metadata", self.metadata)
+        self.assertIn("废弃说明残留", self.readme)
+        self.assertIn("stale explanatory surfaces", self.skill)
 
     def test_complex_package_changes_require_an_isolated_composite_forward_test(self) -> None:
         self.assertIn("changes three or more of causal diagnosis, design boundaries, data/contracts", self.skill)

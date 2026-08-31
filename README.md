@@ -23,7 +23,7 @@
 | 交付生命周期与仓库卫生 | 用原子 Git 提交、PR、发布回滚、迁移、配置/Secret、依赖、运行手册与可复现环境约束交付质量。 |
 | 机器可读证据模式 | 仓库显式启用后，用 JSON 工件记录改动事实，并由本地脚本和 CI 校验。 |
 | 企业级横切保障 | 按场景检查 `traceId`、结构化日志、超时、重试、幂等、限流、鉴权、审计和健康检查。 |
-| 自动退役与漂移清理 | Level 1/2 正常开发默认检查被替换实现、重复路径、测试/类型/配置/遥测、注释和文档；先复用已有 owner，再按证据删除、保留或标记未知，不需要用户额外提出“清理”。 |
+| 自动退役与漂移清理 | Level 1/2 正常开发默认检查被替换实现、重复路径、测试/类型/配置/遥测、注释、README/API 文本、版本说明和 metadata；先复用已有 owner，再按证据删除、保留或标记未知，不需要用户额外提出“清理”。 |
 | 分层埋点与开发证据 | 有运行时状态、外部边界、性能/可靠性预算或多阶段流程时，在责任决策点和失败路径复用现有日志/指标/追踪；同时记录 owner、清理分类和验证检查点。Level 0 不新增埋点，Level 1 轻量，Level 2 覆盖完整生命周期。 |
 | 验证门槛 | 要求实际运行相关的格式化、lint、类型检查、测试、构建和静态分析。 |
 | 真实完成报告 | 以已运行命令及结果作为证据，不允许用“应该可以”代替验证。 |
@@ -41,6 +41,7 @@
 - **无法运营的上线风险**：没有性能预算、可行动告警、资源上限和威胁边界，问题只能靠事故暴露。
 - **未验证即完成**：AI 用“应该可以”结束任务，却没有实际运行测试、类型检查、构建或静态分析。
 - **上下文持续劣化**：废弃代码、旧配置和过时说明留在仓库里，使后续 AI 基于错误信息继续开发。
+- **废弃说明残留**：旧注释、旧 README/API 文本、旧版本说明和旧 metadata 还在讲述已经被替代的契约，导致后续改动沿着过时语义继续扩散。
 
 ## 工作方式
 
@@ -97,6 +98,8 @@ Delivery lifecycle: <atomic commit/PR、发布恢复、迁移、配置/Secret、
 ### 自动退役与漂移清理
 
 这是正常开发的默认动作，不需要用户额外说“清理垃圾代码”。范围只限于本次逻辑改动触及、替换或使其失去唯一负责人的路径，不是全仓库无关大扫除。
+
+这里的“废弃”不只指代码文件，还包括仍在讲旧契约的注释、README/API 段落、版本说明、示例和 metadata。只要它们不再描述当前唯一真实契约，就应在同一逻辑改动中更新或删除。
 
 | 触发条件 | Level 0 | Level 1（轻量） | Level 2（完整） | 证据 |
 |---|---|---|---|---|
@@ -250,7 +253,9 @@ V9 是当前的能力检验协议：[`materialize_effect_corpus_v9.py`](./script
 
 针对自动退役与漂移清理，另有固定的 [`effect-corpus-v9-cleanup`](./examples/effect-corpus-v9-cleanup) 语料。它包含 40 个任务、20 个 `decision-retention` 和 20 个 `repair`，隐藏测试分别检查当前行为、重复/废弃路径删除、真实动态消费者保留，以及注释/契约描述同步；任务同时包含实现、README、docs、配置/注册或兼容文件，允许隐藏契约检验跨文件清理与合法删除，公开测试故意允许部分浅层修改通过。生成命令是 `python3 scripts/materialize_effect_corpus_v9.py --profile cleanup --corpus examples/effect-corpus-v9-cleanup`，生成后必须保持 manifest 和目录 hash 不变。该语料的工程契约由 [`test_cleanup_effect_corpus.py`](./tests/test_cleanup_effect_corpus.py) 锁定；它证明夹具和评分边界有效，不等于已经证明模型效果提升。
 
-cleanup profile 的当前正式预注册入口是 [`cleanup-preregistration-v13.json`](./examples/effect-experiment-v9/cleanup-preregistration-v13.json)，它绑定 old/new Skill 快照、cleanup manifest、prompt、runner、scorer 和 analyzer 的 hash。预注册状态为 `planned`，分析结果必须保持 `not_run`/`unknown`，直到干净 worktree 中所有三条件 paired trials 完成；[`cleanup-preregistration-v12-superseded.json`](./examples/effect-experiment-v9/cleanup-preregistration-v12-superseded.json) 保留原始字节，仅作未运行历史。
+[`test_cleanup_effect_corpus_v10.py`](./tests/test_cleanup_effect_corpus_v10.py) 进一步用 40 个临时 materialize 的复合陷阱回归开发规范：跨模块 owner 迁移后遗留模块、真正由 JSON registry 动态加载的 adapter、不同命名的语义重复实现，以及 changelog/version/runbook 的旧契约。每个夹具都要求“仅修 `policy.py`”失败、完整参考修复通过；动态 adapter 则必须保留并在隐藏测试中实际加载。这证明清理检查的测试能识别复杂残留和误删风险，但不替代对模型 Skill 效果的预注册盲评。
+
+[`cleanup-preregistration-v13.json`](./examples/effect-experiment-v9/cleanup-preregistration-v13.json) 是未运行的 ChatGPT-auth 历史预注册，必须保持原始字节。未来 API-key 实验只能在同一冻结 worktree 中生成独立预注册，绑定 old/new Skill 快照、cleanup manifest、prompt、runner、scorer 和 analyzer 的 hash；它只冻结认证模式名，绝不记录认证输出或密钥。远端连通性预检未通过时，不得创建任何 trial 工件或结果记录；分析必须保持 `not_run`/`unknown`，直到干净 worktree 中所有三条件 paired trials 完成；[`cleanup-preregistration-v12-superseded.json`](./examples/effect-experiment-v9/cleanup-preregistration-v12-superseded.json) 保留原始字节，仅作未运行历史。
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \

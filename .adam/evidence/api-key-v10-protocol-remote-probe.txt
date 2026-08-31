@@ -1,0 +1,6 @@
+Execution authority: authorized API-key remote connectivity probe.
+Command: run_effect_experiment_v9.validate_agent_connectivity with agent_timeout=60.0.
+Exit code: 1
+Observed result: ValueError: Codex agent connectivity probe failed
+Postcondition: no /tmp/adam-effect-v9-connectivity-* directory, raw trial directory, or result JSON was retained.
+Protocol outcome: blocked before any formal trial; no model-effect outcome is claimed.

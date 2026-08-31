@@ -13,7 +13,9 @@ from analyze_skill_effect_v9 import balanced_condition_order
 
 
 CODEX_CLI_VERSION = "codex-cli 0.149.0-alpha.4.1"
-CODEX_AUTH_MODE = "chatgpt"
+DEFAULT_CODEX_AUTH_MODE = "chatgpt"
+SUPPORTED_CODEX_AUTH_MODES = frozenset({"api-key", "chatgpt"})
+CONNECTIVITY_PROBE_TIMEOUT_SECONDS = 60.0
 DEFAULT_HARNESS_ID = "codex-cli-0.149.0-alpha.4.1;exec-json;workspace-write;ephemeral;skill-search-disabled;absolute-output;condition-checkpointed-v9"
 
 
@@ -33,6 +35,12 @@ def load_object(path: Path) -> dict[str, object]:
     return cast(dict[str, object], value)
 
 
+def validated_auth_mode(value: str) -> str:
+    if value not in SUPPORTED_CODEX_AUTH_MODES:
+        raise ValueError(f"unsupported Codex authentication mode: {value}")
+    return value
+
+
 def create(
     *,
     corpus: Path,
@@ -49,7 +57,9 @@ def create(
     git_commit: str,
     model: str,
     harness: str,
+    auth_mode: str = DEFAULT_CODEX_AUTH_MODE,
 ) -> dict[str, object]:
+    auth_mode = validated_auth_mode(auth_mode)
     if output.exists() or output.is_symlink():
         raise FileExistsError(f"refusing to overwrite preregistration: {output}")
     manifest = load_object(corpus / "manifest.json")
@@ -74,10 +84,11 @@ def create(
     protocol = {
         "agent_timeout_seconds": 420.0,
         "test_timeout_seconds": 30.0,
+        "connectivity_probe_timeout_seconds": CONNECTIVITY_PROBE_TIMEOUT_SECONDS,
         "pairing": "same task, randomized three-condition order",
         "conditions": ["no_skill", "old_skill", "new_skill"],
         "codex_cli_version": CODEX_CLI_VERSION,
-        "codex_auth_mode": CODEX_AUTH_MODE,
+        "codex_auth_mode": auth_mode,
         "skill_search_disabled_for_all_conditions": True,
         "treatment_requires_snapshot_read_evidence": True,
         "hidden_scorer_blind_to_condition": True,
@@ -160,6 +171,7 @@ def main() -> int:
     _ = parser.add_argument("--git-commit", required=True)
     _ = parser.add_argument("--model", default="gpt-5.6-terra")
     _ = parser.add_argument("--harness", default=DEFAULT_HARNESS_ID)
+    _ = parser.add_argument("--auth-mode", choices=sorted(SUPPORTED_CODEX_AUTH_MODES), default=DEFAULT_CODEX_AUTH_MODE)
     arguments = parser.parse_args()
     _ = create(**vars(arguments))
     return 0

@@ -38,6 +38,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
     def test_policy_is_implicit_but_risk_scaled(self) -> None:
         self.assertIn("implicit even when the user does not request it explicitly", self.skill)
         self.assertIn("must not wait for the user to ask for cleanup explicitly", self.policy)
+        self.assertIn("stale explanatory surfaces", self.policy)
         self.assertIn("Level 0 never triggers a full sweep", self.policy)
         self.assertIn("Level 1", self.policy)
         self.assertIn("Level 2", self.policy)
@@ -185,6 +186,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
 
     def test_readme_exposes_automatic_behavior_and_evidence_boundary(self) -> None:
         self.assertIn("不需要用户额外说“清理垃圾代码”", self.readme)
+        self.assertIn("旧注释、旧 README/API 文本、旧版本说明和旧 metadata", self.readme)
         self.assertIn("Level 1（轻量）", self.readme)
         self.assertIn("Level 2（完整）", self.readme)
         self.assertIn("零直接引用", self.readme)

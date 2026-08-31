@@ -1,0 +1,327 @@
+{
+  "schema_version": 2,
+  "change_id": "api-key-v10-protocol",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/run_effect_experiment_v9.py:validate_agent_connectivity",
+    "scripts/create_effect_preregistration_v9.py:create",
+    "scripts/materialize_effect_corpus_v9.py:materialize_cleanup_v10",
+    "SKILL.md:Measuring Skill Effect"
+  ],
+  "affected_callers": [
+    "future frozen API-key effect-experiment worktrees",
+    "the V9 runner preflight path",
+    "cleanup-v10 regression tests",
+    "README and effect-evaluation guidance"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "An API-key collection accepts only the explicit non-secret login-status mode, checks remote connectivity before creating trial or result artifacts, and reports failure without retaining remote output.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The API-key-like redaction and the process-success connectivity contract are regression-tested without treating the returned content as trusted evidence.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The temporary cleanup-v10 corpus deterministically covers cross-owner retirement, dynamic retention, semantic duplicates, and release-documentation drift; shallow repairs fail its hidden contract.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_cleanup_effect_corpus_v10 -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The Skill package, static analysis, and final diff remain valid without adding dependencies or changing frozen V9 historical inputs.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    }
+  ],
+  "invariants": [
+    "A failed API-key connectivity preflight creates neither raw trial output nor a result JSON.",
+    "Remote probe stdout and stderr are neither disclosed nor persisted; only a generic success or failure is retained.",
+    "An API-key-like value is redacted at every retained trial artifact boundary.",
+    "A dynamic registry consumer is retained only after a real runtime import test, not a zero-reference guess.",
+    "The deterministic v10 regression proves a cleanup-contract harness, not aggregate model capability or a successful Skill-effect experiment.",
+    "Historical frozen V9 inputs remain intact; a future API-key collection requires a fresh preregistration from a successful frozen-worktree preflight."
+  ],
+  "replaced_paths": [
+    ".adam/evidence/skill-effect-v9-experiment.json",
+    "the previous ChatGPT-only V9 authentication assumption",
+    "the previous connectivity prompt that implied an unverified exact response contract"
+  ],
+  "retained_compatibility": [
+    {
+      "consumer": "historical V9 cleanup audit",
+      "removal_condition": "Remove or archive cleanup-preregistration-v13.json only through a separate history-retention decision.",
+      "test": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q"
+    }
+  ],
+  "retirement_sweep": {
+    "remove": [
+      ".adam/evidence/skill-effect-v9-experiment.json because its runner and scorer hashes are not reachable from the recorded Git history and it has no live consumer",
+      "README reference to the nonexistent cleanup-preregistration-v14-api-key.json",
+      "the misleading exact-OK connectivity-response instruction"
+    ],
+    "retain": [
+      {
+        "path": "examples/effect-experiment-v9/cleanup-preregistration-v13.json",
+        "consumer": "historical frozen V9 cleanup protocol",
+        "removal_condition": "A separate history-retention decision must preserve or archive the immutable historical envelope first.",
+        "observability": "Frozen historical filename and full package regression coverage.",
+        "test": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q"
+      },
+      {
+        "path": "temporary cleanup-v10 dynamic adapter fixtures",
+        "consumer": "JSON runtime registry loaded by the v10 hidden contract",
+        "removal_condition": "Replace only with a separately verified dynamic-retention regression profile.",
+        "observability": "test_dynamic_registry_is_a_real_retention_constraint",
+        "test": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_cleanup_effect_corpus_v10 -v"
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "The full suite covers the existing frozen V9 protocol and cleanup corpus.",
+      "The v10 focused regression dynamically imports the retained registry adapter, rejects shallow repairs, and accepts the complete reference repair.",
+      "The README/reference search returned no stale cleanup-preregistration-v14-api-key path.",
+      "git diff --check reported no whitespace error."
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "SKILL.md",
+      "README.md",
+      "agents/openai.yaml",
+      "references/effect-evaluation.md"
+    ],
+    "deleted": [
+      "README reference to cleanup-preregistration-v14-api-key.json"
+    ],
+    "confirmed_current": [
+      "scripts/run_effect_experiment_v9.py",
+      "scripts/create_effect_preregistration_v9.py",
+      "tests/test_effect_runner_v9.py",
+      "tests/test_cleanup_effect_corpus_v10.py"
+    ],
+    "evidence": "The focused v10 test, full suite, final diff check, and independent review agree that documentation, protocol, and test behavior describe the same blocked-until-connectivity contract."
+  },
+  "instrumentation": {
+    "status": "not_applicable",
+    "reason": "This is an offline Skill package and experiment-protocol update. The connectivity gate deliberately retains no remote output before a trial; application telemetry is not introduced. Structured experiment artifacts remain the existing observability surface after a successful preflight."
+  },
+  "safeguards": [
+    {
+      "name": "API-key output containment",
+      "status": "applied",
+      "rationale": "The preflight uses a temporary workspace, discards remote stdout and stderr, raises a generic failure, and runs before output paths are created."
+    },
+    {
+      "name": "artifact redaction",
+      "status": "applied",
+      "rationale": "API-key-like strings are redacted from retained agent output, logs, diffs, and JSON result artifacts."
+    },
+    {
+      "name": "bounded preflight",
+      "status": "applied",
+      "rationale": "The preregistration freezes a 60-second connectivity-probe timeout, preventing an unreachable remote service from starting partial collection."
+    },
+    {
+      "name": "adversarial retirement regression",
+      "status": "applied",
+      "rationale": "The v10 corpus tests cleanup across implementation, dynamic runtime registry, duplicate logic, and release knowledge, including shallow-repair traps."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The runner owns authentication and connectivity gating, the preregistration generator freezes the protocol value, and the materializer owns deterministic trap construction."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "No dependency or new import edge was added; the existing standard-library subprocess, tempfile, JSON, and unittest boundaries are reused."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "The work extends existing runner and corpus owners instead of adding a general extension point."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "Only deterministic fixtures and evidence records change; no mutable production data is owned."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Authentication mismatch and connectivity failure stop collection with generic errors before trial state exists; unavailable remote connectivity is recorded as blocked."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The explicit api-key mode is added alongside the frozen chatgpt mode, while any future API-key collection must use a fresh preregistration."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "The connectivity gate uses a frozen 60-second timeout and the regression suite exercises deterministic corpus generation within existing test budgets."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "Credential-like output is redacted or discarded, login failure remains generic, and temporary probe files are removed before return."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "This is one atomic package update with full regression, static checks, independent review, evidence binding, and a Lore-formatted commit."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployable service or release configuration changed."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No schema, backfill, or persisted production format changed."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "The protocol selects API-key mode without storing credentials, status suffixes, remote probe output, or key-like artifact content."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No package manifest, lockfile, third-party dependency, or external tool version changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README and evaluation guidance now state the fresh-preregistration and successful-connectivity prerequisites without pointing at nonexistent artifacts."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The v10 materializer is deterministic, the full unittest command is repository-local, and preregistration freezes non-secret protocol parameters."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q",
+      "status": "passed",
+      "result": "236 tests passed, including prior V9 regression coverage and the new API-key and cleanup-v10 tests.",
+      "evidence_refs": ["full-suite"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_cleanup_effect_corpus_v10 -v",
+      "status": "passed",
+      "result": "Three v10 corpus tests passed: deterministic coverage, shallow-repair rejection/reference success, and actual dynamic-registry retention.",
+      "evidence_refs": ["v10-tests"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts basedpyright --level error scripts/materialize_effect_corpus_v9.py scripts/create_effect_preregistration_v9.py scripts/run_effect_experiment_v9.py tests/test_cleanup_effect_corpus.py tests/test_cleanup_effect_corpus_v10.py tests/test_effect_preregistration_v9.py tests/test_effect_runner_v9.py",
+      "status": "passed",
+      "result": "Static analysis returned zero errors, warnings, and notes.",
+      "evidence_refs": ["typecheck"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed.",
+      "evidence_refs": ["skill-validation"]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported.",
+      "evidence_refs": ["diff-check"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/api-key-v10-protocol.json --artifact-root .",
+      "status": "passed",
+      "result": "The schema-v2 evidence artifact and its bound supporting-artifact hashes validated.",
+      "evidence_refs": ["evidence-validation"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "full-suite",
+      "kind": "test_output",
+      "path": ".adam/evidence/api-key-v10-protocol-full-tests.txt",
+      "sha256": "91a69368aa0f5711462ae5b04ee94c0091d6cded991b24c7856ab8b8f6324e3a",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T11:15:01Z",
+      "repository_revision": "b192991d107826345d9e6a98f2a6f4e404555955+worktree",
+      "summary": "Full package regression passed with 236 tests."
+    },
+    {
+      "id": "v10-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/api-key-v10-protocol-v10-tests.txt",
+      "sha256": "4ac54849f4f61868ca4b1bab5cd7fa17456533260ed036301aaa7ff0f0e2f053",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_cleanup_effect_corpus_v10 -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T11:09:38Z",
+      "repository_revision": "b192991d107826345d9e6a98f2a6f4e404555955+worktree",
+      "summary": "The three deterministic v10 regression tests passed."
+    },
+    {
+      "id": "typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/api-key-v10-protocol-typecheck.txt",
+      "sha256": "a09fa64c31590a6b416d0b9ba2426dcbf428664f5302454863d1b5d41ff1236d",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts basedpyright --level error scripts/materialize_effect_corpus_v9.py scripts/create_effect_preregistration_v9.py scripts/run_effect_experiment_v9.py tests/test_cleanup_effect_corpus.py tests/test_cleanup_effect_corpus_v10.py tests/test_effect_preregistration_v9.py tests/test_effect_runner_v9.py",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T11:15:30Z",
+      "repository_revision": "b192991d107826345d9e6a98f2a6f4e404555955+worktree",
+      "summary": "basedpyright produced no diagnostics."
+    },
+    {
+      "id": "skill-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/api-key-v10-protocol-skill-validation.txt",
+      "sha256": "ffe82694eaa7894d4edbae491b27fa03290e4e6f44570144bc95421d9ddbf507",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T11:15:30Z",
+      "repository_revision": "b192991d107826345d9e6a98f2a6f4e404555955+worktree",
+      "summary": "The Skill structure and metadata are valid."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/api-key-v10-protocol-diff-check.txt",
+      "sha256": "13f6997f56fb8c3304cb1bd839eb28b1837904075b3cd94f0cb3e4586246ea55",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T11:15:30Z",
+      "repository_revision": "b192991d107826345d9e6a98f2a6f4e404555955+worktree",
+      "summary": "The final diff had no whitespace errors."
+    },
+    {
+      "id": "evidence-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/api-key-v10-protocol-evidence-validation.txt",
+      "sha256": "be79ad584985e19d7e53f537cb6bf13004cc2877b32dd1636bf3cedce8fc7271",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/api-key-v10-protocol.json --artifact-root .",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T11:17:56Z",
+      "repository_revision": "b192991d107826345d9e6a98f2a6f4e404555955+worktree",
+      "summary": "The schema-v2 evidence ledger and linked artifacts validated."
+    },
+    {
+      "id": "remote-probe",
+      "kind": "evaluation_transcript",
+      "path": ".adam/evidence/api-key-v10-protocol-remote-probe.txt",
+      "sha256": "22386a22eac9300defcfc9fff5db6a31e61f5afd0db85c20ef161fe4771fb526",
+      "summary": "The authorized API-key remote probe failed generically before any trial artifact was created; no model-effect result is available."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/api-key-v10-protocol-review.txt",
+      "sha256": "a7919819c0c62576b24dcbc98bacdc77260810e42bb49b0957f47ec32f40b623",
+      "summary": "Independent final review approved the substantive diff and explicitly retained the blocked remote-collection limitation."
+    }
+  ],
+  "rollback_or_compatibility": "The update is one reversible Git commit. Existing frozen ChatGPT-auth historical envelopes remain unchanged; a failed API-key preflight produces no collection state, so recovery is to repair remote authentication and create a new preregistration rather than reuse partial artifacts.",
+  "independent_review": {
+    "reviewer": "Codex native reviewer /root/goal_audit",
+    "outcome": "approved",
+    "notes": "The substantive API-key protocol, v10 adversarial cleanup regression, redaction boundary, and test coverage were approved. The reviewer explicitly found that remote connectivity remains blocked and that no model-effect claim is supported.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "The real API-key remote connectivity probe failed, so formal paired collection has not started and the Skill's effect on repair success or causal reasoning remains unknown.",
+    "The redaction pattern targets sk- API-key-like values; future providers with different secret shapes require a separate threat-model update.",
+    "Dynamic external consumers in target repositories still require project-specific runtime or registration evidence before deletion."
+  ]
+}

@@ -544,14 +544,202 @@ def materialize_cleanup(corpus: Path) -> dict[str, object]:
     return manifest
 
 
+@dataclass(frozen=True)
+class CleanupV10Spec:
+    task_id: str
+    cohort: str
+    stratum: str
+    kind: str
+    description: str
+
+
+def cleanup_v10_tasks() -> list[CleanupV10Spec]:
+    """Create adversarial multi-file retirement cases without changing frozen V9 inputs."""
+    strata = ("single-module",) * 6 + ("cross-module",) * 8 + ("integration",) * 6
+    kinds = ("split_owner", "dynamic_retain", "semantic_duplicate", "release_drift")
+    descriptions = {
+        "split_owner": "Move normalization to its canonical owner and retire the replaced module and every stale contract surface.",
+        "dynamic_retain": "Update a canonical policy while preserving the adapter selected by a runtime registry.",
+        "semantic_duplicate": "Reuse the canonical normalizer and remove the differently named semantic duplicate.",
+        "release_drift": "Keep the current implementation while synchronizing release, version, and recovery documentation.",
+    }
+    return [
+        CleanupV10Spec(
+            task_id=f"cleanup_v10_{('decision_retention' if index < 20 else 'repair')}_{kinds[index % len(kinds)]}_{index + 1:02d}",
+            cohort="decision-retention" if index < 20 else "repair",
+            stratum=strata[index % len(strata)],
+            kind=kinds[index % len(kinds)],
+            description=descriptions[kinds[index % len(kinds)]] + "\n",
+        )
+        for index in range(40)
+    ]
+
+
+def cleanup_v10_source(task: CleanupV10Spec, *, fixed: bool) -> dict[str, str]:
+    """Render one complete source/documentation surface for a V10 retirement task."""
+    marker_old = f"legacy_contract_{task.task_id}"
+    marker_new = f"canonical_contract_{task.task_id}"
+    buggy_logic = "value.lower()" if task.cohort == "repair" else "value.strip().lower()"
+    fixed_logic = "value.strip().lower()"
+    common = {
+        "task.md": task.description,
+        "tests/test_public.py": (
+            "import unittest\n\n"
+            "from policy import evaluate\n\n"
+            "class PublicContract(unittest.TestCase):\n"
+            "    def test_visible_behavior(self):\n"
+            "        self.assertEqual(evaluate('User'), 'user')\n"
+        ),
+        "README.md": f"# {marker_new if fixed else marker_old}\nCurrent owners use the canonical normalizer.\n",
+        f"docs/{task.task_id}.md": f"{marker_new if fixed else marker_old}: policy contract.\n",
+    }
+    if task.kind == "split_owner":
+        if fixed:
+            return common | {
+                "policy.py": f'"""{marker_new}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
+                "release-notes.md": f"{marker_new}: legacy module retired.\n",
+                "package-metadata.json": json.dumps({"contract": marker_new}, sort_keys=True) + "\n",
+            }
+        return common | {
+            "policy.py": f'"""{marker_old}."""\n\nfrom legacy.{task.task_id} import legacy_normalize\n\ndef evaluate(value):\n    return legacy_normalize(value)\n',
+            f"legacy/{task.task_id}.py": f"def legacy_normalize(value):\n    return {buggy_logic}\n",
+            "release-notes.md": f"{marker_old}: legacy module remains supported.\n",
+            "package-metadata.json": json.dumps({"contract": marker_old}, sort_keys=True) + "\n",
+        }
+    if task.kind == "dynamic_retain":
+        adapter = f"plugins.{task.task_id}_adapter"
+        return common | {
+            "policy.py": f'"""{marker_new if fixed else marker_old}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
+            f"plugins/{task.task_id}_adapter.py": f"def normalize(value):\n    return {fixed_logic}\n",
+            f"runtime/{task.task_id}.json": json.dumps({"adapter": adapter}, sort_keys=True) + "\n",
+            "runbook.md": f"{marker_new if fixed else marker_old}: runtime adapter stays registered.\n",
+        }
+    if task.kind == "semantic_duplicate":
+        helper = f"helpers/{task.task_id}_alias.py"
+        if fixed:
+            return common | {
+                "policy.py": f'"""{marker_new}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
+                "release-notes.md": f"{marker_new}: duplicate helper removed.\n",
+            }
+        return common | {
+            "policy.py": f'"""{marker_old}."""\n\nfrom helpers.{task.task_id}_alias import normalize_alias\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return normalize_alias(value)\n',
+            helper: f"def normalize_alias(value):\n    return {buggy_logic}\n",
+            "release-notes.md": f"{marker_old}: alternate helper remains canonical.\n",
+        }
+    return common | {
+        "policy.py": f'"""{marker_new if fixed else marker_old}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    # {marker_new if fixed else marker_old}\n    return canonical_normalize(value)\n',
+        "CHANGELOG.md": f"{marker_new if fixed else marker_old}: request normalization behavior.\n",
+        "VERSION.md": f"{marker_new if fixed else marker_old}: supported contract description.\n",
+        "runbook.md": f"{marker_new if fixed else marker_old}: diagnose and recover this path.\n",
+    }
+
+
+def cleanup_v10_hidden_test(task: CleanupV10Spec) -> str:
+    marker_old = f"legacy_contract_{task.task_id}"
+    marker_new = f"canonical_contract_{task.task_id}"
+    files = {
+        "split_owner": ["policy.py", "README.md", f"docs/{task.task_id}.md", "release-notes.md", "package-metadata.json"],
+        "dynamic_retain": ["policy.py", "README.md", f"docs/{task.task_id}.md", "runbook.md"],
+        "semantic_duplicate": ["policy.py", "README.md", f"docs/{task.task_id}.md", "release-notes.md"],
+        "release_drift": ["policy.py", "README.md", f"docs/{task.task_id}.md", "CHANGELOG.md", "VERSION.md", "runbook.md"],
+    }[task.kind]
+    hygiene = "\n".join(
+        f"        self.assertNotIn({marker_old!r}, Path({relative!r}).read_text(encoding='utf-8'))\n"
+        f"        self.assertIn({marker_new!r}, Path({relative!r}).read_text(encoding='utf-8'))"
+        for relative in files
+    )
+    special = {
+        "split_owner": (
+            f"        self.assertFalse(Path('legacy/{task.task_id}.py').exists())\n"
+            "        self.assertNotIn('legacy_normalize', Path('policy.py').read_text(encoding='utf-8'))"
+        ),
+        "dynamic_retain": (
+            "        registry = json.loads(Path('runtime/" + task.task_id + ".json').read_text(encoding='utf-8'))\n"
+            "        adapter = importlib.import_module(registry['adapter'])\n"
+            "        self.assertEqual(adapter.normalize(' User '), 'user')"
+        ),
+        "semantic_duplicate": (
+            f"        self.assertFalse(Path('helpers/{task.task_id}_alias.py').exists())\n"
+            "        self.assertNotIn('normalize_alias', Path('policy.py').read_text(encoding='utf-8'))"
+        ),
+        "release_drift": "        self.assertNotIn('legacy_contract', Path('policy.py').read_text(encoding='utf-8'))",
+    }[task.kind]
+    return (
+        "import importlib\nimport json\nfrom pathlib import Path\nimport unittest\n\n"
+        "from policy import evaluate\n\n"
+        "class HiddenContract(unittest.TestCase):\n"
+        "    def test_hidden_behavior(self):\n"
+        "        self.assertEqual(evaluate(' User '), 'user')\n\n"
+        "    def test_complete_retirement_or_retention(self):\n"
+        f"{hygiene}\n"
+        f"{special}\n"
+    )
+
+
+def materialize_cleanup_v10(corpus: Path) -> dict[str, object]:
+    """Materialize deeper cleanup traps with dynamic loading and release-knowledge drift."""
+    tasks = cleanup_v10_tasks()
+    if corpus.exists():
+        raise FileExistsError(f"refusing to overwrite existing corpus: {corpus}")
+    manifest_tasks: list[dict[str, object]] = []
+    for task in tasks:
+        public_root = corpus / "tasks" / task.task_id
+        hidden_root = corpus / "hidden-tests" / task.task_id
+        reference_root = corpus / "references" / task.task_id
+        public_files = cleanup_v10_source(task, fixed=False)
+        reference_files = cleanup_v10_source(task, fixed=True)
+        hidden_test = cleanup_v10_hidden_test(task)
+        write_tree(public_root, public_files)
+        write_tree(hidden_root, {"tests/test_hidden.py": hidden_test})
+        write_tree(reference_root, reference_files | {"tests/test_hidden.py": hidden_test})
+        allowed = sorted(relative for relative in set(public_files).union(reference_files) if relative not in {"task.md", "tests/test_public.py"})
+        manifest_tasks.append({
+            "task_id": task.task_id,
+            "cohort": task.cohort,
+            "stratum": task.stratum,
+            "kind": task.kind,
+            "workspace_path": f"tasks/{task.task_id}",
+            "hidden_tests_path": f"hidden-tests/{task.task_id}",
+            "reference_path": f"references/{task.task_id}",
+            "allowed_edit_paths": allowed,
+            "public_command": PUBLIC_COMMAND,
+            "hidden_command": PUBLIC_COMMAND,
+            "workspace_tree_sha256": tree_digest(public_root),
+            "hidden_tests_tree_sha256": tree_digest(hidden_root),
+            "reference_tree_sha256": tree_digest(reference_root),
+        })
+    manifest = cast(dict[str, object], {
+        "schema_version": 2,
+        "corpus_id": "effect-corpus-v10-cleanup",
+        "profile": "cleanup-v10",
+        "generated_by": "scripts/materialize_effect_corpus_v9.py --profile cleanup-v10",
+        "task_count": len(tasks),
+        "cohorts": EXPECTED_COHORTS,
+        "strata_per_cohort": EXPECTED_STRATA,
+        "conditions": CONDITIONS,
+        "cleanup_contract": {
+            "kinds": ["split_owner", "dynamic_retain", "semantic_duplicate", "release_drift"],
+            "hidden_checks": ["current_behavior", "cross_file_retirement", "dynamic_runtime_retention", "release_knowledge_sync"],
+            "multi_file_surfaces": True,
+            "reference_implementation_is_not_available_to_agent": True,
+        },
+        "tasks": manifest_tasks,
+    })
+    corpus.mkdir(parents=True, exist_ok=True)
+    _ = (corpus / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return manifest
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     _ = parser.add_argument("--corpus", type=Path, required=True)
-    _ = parser.add_argument("--profile", choices=("v9", "cleanup"), default="v9")
+    _ = parser.add_argument("--profile", choices=("v9", "cleanup", "cleanup-v10"), default="v9")
     arguments = cast(dict[str, object], vars(parser.parse_args()))
     corpus = cast(Path, arguments["corpus"])
     if arguments["profile"] == "cleanup":
         _ = materialize_cleanup(corpus)
+    elif arguments["profile"] == "cleanup-v10":
+        _ = materialize_cleanup_v10(corpus)
     else:
         _ = materialize(corpus)
     return 0

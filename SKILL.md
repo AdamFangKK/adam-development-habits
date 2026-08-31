@@ -1,11 +1,11 @@
 ---
 name: adam-development-habits
-description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, retirement of obsolete or duplicate paths, synchronized documentation, evidence-oriented instrumentation, tests, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、清理废弃路径、同步说明、合理埋点与证据门禁。"
+description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, retirement of obsolete or duplicate paths, synchronized documentation, stale-comment and metadata cleanup, evidence-oriented instrumentation, tests, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、清理废弃路径与过时说明、合理埋点与证据门禁。"
 ---
 
 # Adam's Development Habits
 
-Apply this workflow to every code change. Follow stricter repository instructions first. Keep changes focused and reversible. Do not add dependencies, abstractions, compatibility layers, or unrelated refactors without a concrete requirement. For Level 1 and Level 2 behavior changes, retirement and drift cleanup is implicit even when the user does not request it explicitly.
+Apply this workflow to every code change. Follow stricter repository instructions first. Keep changes focused and reversible. Do not add dependencies, abstractions, compatibility layers, or unrelated refactors without a concrete requirement. For Level 1 and Level 2 behavior changes, retirement and drift cleanup is implicit even when the user does not request it explicitly. If a replacement leaves behind a stale comment, README/API paragraph, release note, version string, or package metadata that still teaches the old contract, treat that text as part of the retired surface and update or delete it in the same logical change.
 
 ## Operating Model
 
@@ -183,6 +183,8 @@ Use narrow searches to establish the ledger. Check imports, exports, registratio
 ## Automatic Retirement and Drift Cleanup
 
 This is the default maintenance behavior for normal development. The Agent performs it as an internal checkpoint; it must not wait for the user to ask for cleanup explicitly. It is scoped to the paths touched, replaced, or made non-canonical by the current logical change; it is not permission for an unrelated repository-wide cleanup.
+
+Treat stale explanatory surfaces the same way you treat stale code. A comment, README paragraph, API description, changelog entry, version note, example, or package metadata item that still describes the retired contract is obsolete once the canonical owner changes. It must be updated or deleted in the same logical change unless a real consumer or compatibility obligation is proven.
 
 | Practice | Trigger | Level 0 | Level 1 | Level 2 | Evidence |
 |---|---|---|---|---|---|

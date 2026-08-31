@@ -8,6 +8,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from typing import cast
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -62,7 +63,7 @@ class CleanupEffectCorpusTests(unittest.TestCase):
                 hashlib.sha256((second / "manifest.json").read_bytes()).hexdigest(),
             )
             self.assertEqual(first_manifest, second_manifest)
-            tasks = first_manifest["tasks"]
+            tasks = cast(list[dict[str, object]], first_manifest["tasks"])
             self.assertEqual(len(tasks), 40)
             self.assertEqual(
                 {str(task["kind"]) for task in tasks},
@@ -76,21 +77,23 @@ class CleanupEffectCorpusTests(unittest.TestCase):
                     EXPECTED_STRATA,
                 )
             self.assertEqual(first_manifest["profile"], "cleanup")
-            self.assertTrue(first_manifest["cleanup_contract"]["reference_implementation_is_not_available_to_agent"])
-            self.assertTrue(first_manifest["cleanup_contract"]["multi_file_surfaces"])
+            cleanup_contract = cast(dict[str, object], first_manifest["cleanup_contract"])
+            self.assertTrue(cleanup_contract["reference_implementation_is_not_available_to_agent"])
+            self.assertTrue(cleanup_contract["multi_file_surfaces"])
             for task in tasks:
                 hidden = first / str(task["hidden_tests_path"])
                 reference = first / str(task["reference_path"])
+                allowed_paths = cast(list[str], task["allowed_edit_paths"])
                 self.assertEqual(tree_digest(hidden), task["hidden_tests_tree_sha256"])
                 self.assertEqual(tree_digest(reference), task["reference_tree_sha256"])
                 self.assertFalse((hidden / "policy.py").exists())
-                self.assertIn("policy.py", task["allowed_edit_paths"])
-                self.assertIn("README.md", task["allowed_edit_paths"])
-                self.assertIn(f"docs/{task['task_id']}.md", task["allowed_edit_paths"])
+                self.assertIn("policy.py", allowed_paths)
+                self.assertIn("README.md", allowed_paths)
+                self.assertIn(f"docs/{task['task_id']}.md", allowed_paths)
 
             deletion_tasks = [task for task in tasks if task["kind"] in {"replace", "duplicate"}]
-            self.assertTrue(any("legacy/" in path for task in deletion_tasks for path in task["allowed_edit_paths"]))
-            self.assertTrue(any("helpers/" in path for task in deletion_tasks for path in task["allowed_edit_paths"]))
+            self.assertTrue(any("legacy/" in path for task in deletion_tasks for path in cast(list[str], task["allowed_edit_paths"])))
+            self.assertTrue(any("helpers/" in path for task in deletion_tasks for path in cast(list[str], task["allowed_edit_paths"])))
 
     def test_public_tests_deliberately_miss_retirement_but_hidden_contract_catches_it(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
