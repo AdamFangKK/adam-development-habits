@@ -1,0 +1,320 @@
+{
+  "schema_version": 2,
+  "change_id": "native-cleanup-v4",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/materialize_native_cleanup_effect_v4.py:materialize_native_cleanup_effect_v4",
+    "scripts/native_cleanup_effect_runner_v4.py:prepare_condition",
+    "scripts/native_cleanup_effect_runner_v4.py:score_condition",
+    "scripts/analyze_native_cleanup_effect_v4.py:analyze",
+    "scripts/create_native_cleanup_effect_preregistration_v4.py:create",
+    "pyrightconfig.json:executionEnvironments"
+  ],
+  "affected_callers": [
+    "Codex native subagents running V4 no_skill, old_skill, and new_skill conditions",
+    "The parent Harness recording native-agent provenance and invoking blind scoring",
+    "The V4 analyzer that reconstructs and replays every candidate diff",
+    "Maintainers running the repository-local V4 verification commands"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "V4 deterministically materializes the preregistered 10-task corpus with all four cleanup trap strata and both repair/decision-retention cohorts.",
+      "verification": "python3 -m unittest discover -s tests -p 'test_native_cleanup_effect*.py' -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The runner and analyzer reject score forgery, candidate-diff changes, sequence violations, extra/retry artifacts, replay mismatches, and invalid native-agent provenance.",
+      "verification": "python3 -m unittest discover -s tests -p 'test_native_cleanup_effect*.py' -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "All package regression tests, pytest, compilation, static analysis, Skill structure validation, and whitespace checks remain green with no PYTHONPATH requirement for the V4 typecheck.",
+      "verification": "python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The experiment is hash-bound before its first trial and explicitly scopes its trusted-parent, shared-filesystem isolation limit.",
+      "verification": "python3 scripts/create_native_cleanup_effect_preregistration_v4.py --output examples/effect-experiment-native-v4/preregistration.json"
+    }
+  ],
+  "invariants": [
+    "Each task has exactly three preregistered conditions in a fixed per-task order; a later condition cannot be prepared before all predecessors receive blind scores.",
+    "The repair agent receives only its condition workspace and applicable frozen Skill snapshot; hidden tests, references, scoring rubric, prior output, and condition outcome remain unavailable.",
+    "A collected result is eligible only when frozen corpus replay, candidate-diff replay, hidden scoring, scorer provenance, sequence credentials, and agent provenance all agree.",
+    "The parent Harness is trusted for native identity and transcript recording; this is protocol isolation on a shared filesystem, not container isolation or cryptographic attestation.",
+    "The frozen protocol establishes a future bounded effect experiment only; it does not establish an improvement in model-wide causal ability, general repair success, or production reliability before collection and analysis complete."
+  ],
+  "replaced_paths": [
+    "Environment-variable-dependent V4 typecheck invocation",
+    "Unbound native-agent completion records without V4 prompt, workspace-handoff, transcript, and condition-input provenance",
+    "Trust in stored score pass/fail booleans without independent candidate-diff replay",
+    "V3 partial-collection practice as a source of effect claims"
+  ],
+  "retained_compatibility": [],
+  "retirement_sweep": {
+    "remove": [
+      "The need to set PYTHONPATH=scripts for the V4 bare basedpyright command"
+    ],
+    "retain": [],
+    "unknown": [],
+    "evidence": [
+      "pyrightconfig.json makes the project-local scripts directory discoverable and disables only the script-style implicit-relative-import diagnostic.",
+      "README records the V4 protocol and its trusted-parent limitation without presenting it as stronger isolation."
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "README.md"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "examples/effect-experiment-native-v4/preregistration.json",
+      "scripts/materialize_native_cleanup_effect_v4.py",
+      "scripts/native_cleanup_effect_runner_v4.py",
+      "scripts/analyze_native_cleanup_effect_v4.py",
+      "scripts/create_native_cleanup_effect_preregistration_v4.py",
+      "pyrightconfig.json"
+    ],
+    "evidence": "The independent review parsed the JSON and checked the README, protocol scope, and typecheck configuration."
+  },
+  "safeguards": [
+    {
+      "name": "frozen preregistration",
+      "status": "applied",
+      "rationale": "The preregistration records task IDs, order, frozen inputs, model/Harness scope, stopping rule, and immutable envelope hashes before collection."
+    },
+    {
+      "name": "predecessor-score chain",
+      "status": "applied",
+      "rationale": "Preparation is blocked until each earlier condition is blind-scored, and the next condition records predecessor score hashes."
+    },
+    {
+      "name": "hidden-test timing",
+      "status": "applied",
+      "rationale": "Only the public workspace reaches the agent; the scoring copy receives hidden tests after the agent exits."
+    },
+    {
+      "name": "replayed scoring",
+      "status": "applied",
+      "rationale": "The analyzer rematerializes the frozen corpus, reapplies candidate.diff, and compares rerun public/hidden output against the canonical score."
+    },
+    {
+      "name": "independent review",
+      "status": "applied",
+      "rationale": "A read-only native reviewer retested the bare typecheck, focused suite, JSON parsing, scope statements, and declared threat boundary."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "Materialization, collection/score sequencing, preregistration, and analysis remain separate deterministic modules."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The update uses only the Python standard library, existing Git, existing tests, existing basedpyright, and the existing Skill validator."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "No production extension point or new public runtime abstraction was added."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "The change creates deterministic test fixtures and local evidence, not mutable business or personal data."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Missing, stale, extra, forged, replay-divergent, or out-of-order artifacts make the collection ineligible instead of silently accepting partial evidence."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "V4 defines a new, fresh task set and protocol without reinterpreting the frozen V10 corpus or prior invalid collections."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "The V4 focused suite completed in 28.299 seconds; the full unittest suite in 72.806 seconds; pytest in 75.96 seconds; agent trials are capped at 300 seconds and scoring at 20 seconds by preregistration."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The protocol detects local score/diff/replay inconsistencies but explicitly leaves parent-Harness trust and non-cryptographic transcript provenance outside its threat model."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The frozen change has verification outputs, hash-linked evidence, independent review, and an atomic Lore commit pending publication."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployable service, feature flag, or production release changed."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No production persistence format, schema, backfill, or migration changed."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "The new pyright configuration contains only static-analysis paths and diagnostics; it contains no secret, runtime credential, or environment value."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No dependency manifest, lockfile, package version, or third-party runtime dependency changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README and the preregistration record the execution boundary, trap coverage, and limitations necessary to run or interpret V4."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "V4 inputs are hash-bound, the corpus is rematerialized during analysis, and the V4 bare typecheck is configured in pyrightconfig.json rather than an ambient environment variable."
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_native_cleanup_effect*.py' -v",
+      "status": "passed",
+      "result": "55 native cleanup-effect protocol regression tests passed.",
+      "evidence_refs": ["focused-tests"]
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "304 package unittest tests passed.",
+      "evidence_refs": ["unittest"]
+    },
+    {
+      "command": "pytest -q",
+      "status": "passed",
+      "result": "304 pytest tests passed in 75.96 seconds.",
+      "evidence_refs": ["pytest"]
+    },
+    {
+      "command": "basedpyright --level error scripts/materialize_native_cleanup_effect_v4.py scripts/native_cleanup_effect_runner_v4.py scripts/create_native_cleanup_effect_preregistration_v4.py scripts/analyze_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_runner_v4.py tests/test_native_cleanup_effect_protocol_v4.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes without PYTHONPATH.",
+      "evidence_refs": ["typecheck"]
+    },
+    {
+      "command": "python3 -m compileall -q scripts/materialize_native_cleanup_effect_v4.py scripts/native_cleanup_effect_runner_v4.py scripts/create_native_cleanup_effect_preregistration_v4.py scripts/analyze_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_runner_v4.py tests/test_native_cleanup_effect_protocol_v4.py",
+      "status": "passed",
+      "result": "All V4 scripts and regression tests compiled successfully.",
+      "evidence_refs": ["compileall"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill validator reported that the package is valid.",
+      "evidence_refs": ["skill-validator"]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported.",
+      "evidence_refs": ["diff-check"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "preregistration",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-experiment-native-v4/preregistration.json",
+      "sha256": "1c6505f483ec86ff8edd636dd4decded2c941625c1427d7dfc6898aee9a55260",
+      "summary": "Hash-bound V4 preregistration generated before any native trial."
+    },
+    {
+      "id": "focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v4-protocol-tests.txt",
+      "sha256": "63a73a38553f8de227aac8d26d75ffda684a22c846b62b0b625db505b943e923",
+      "command": "python3 -m unittest discover -s tests -p 'test_native_cleanup_effect*.py' -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T20:40:00Z",
+      "repository_revision": "dd7adfb26ef4faec4da1856ff7be0d89cfff7271+worktree",
+      "summary": "Native cleanup-effect protocol regression suite passed 55 tests."
+    },
+    {
+      "id": "unittest",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v4-unittest.txt",
+      "sha256": "c2d10509f2dae7efb8fd189b1bd98708dde2179a742638c1ff89caae9d83e8f0",
+      "command": "python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T20:40:00Z",
+      "repository_revision": "dd7adfb26ef4faec4da1856ff7be0d89cfff7271+worktree",
+      "summary": "Complete package unittest regression passed 304 tests."
+    },
+    {
+      "id": "pytest",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v4-pytest.txt",
+      "sha256": "37520ef44c5775b1e37544473a82f71aeaa68119c6b9e072eb94c236cb6ca0fe",
+      "command": "pytest -q",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T20:41:00Z",
+      "repository_revision": "dd7adfb26ef4faec4da1856ff7be0d89cfff7271+worktree",
+      "summary": "Project pytest regression passed 304 tests."
+    },
+    {
+      "id": "typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v4-typecheck.txt",
+      "sha256": "56882e01cb80173ef053c4096e4ee43e3123a15f5c0a06715f96988d48fbd91c",
+      "command": "basedpyright --level error scripts/materialize_native_cleanup_effect_v4.py scripts/native_cleanup_effect_runner_v4.py scripts/create_native_cleanup_effect_preregistration_v4.py scripts/analyze_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_runner_v4.py tests/test_native_cleanup_effect_protocol_v4.py",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T20:40:00Z",
+      "repository_revision": "dd7adfb26ef4faec4da1856ff7be0d89cfff7271+worktree",
+      "summary": "Bare basedpyright returned zero errors, warnings, and notes."
+    },
+    {
+      "id": "compileall",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v4-compileall.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "python3 -m compileall -q scripts/materialize_native_cleanup_effect_v4.py scripts/native_cleanup_effect_runner_v4.py scripts/create_native_cleanup_effect_preregistration_v4.py scripts/analyze_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_runner_v4.py tests/test_native_cleanup_effect_protocol_v4.py",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T20:40:00Z",
+      "repository_revision": "dd7adfb26ef4faec4da1856ff7be0d89cfff7271+worktree",
+      "summary": "V4 Python sources compiled without errors."
+    },
+    {
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v4-skill-validator.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T20:40:00Z",
+      "repository_revision": "dd7adfb26ef4faec4da1856ff7be0d89cfff7271+worktree",
+      "summary": "The Skill structure validator reported Skill is valid."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v4-diff-check.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T20:40:00Z",
+      "repository_revision": "dd7adfb26ef4faec4da1856ff7be0d89cfff7271+worktree",
+      "summary": "Git whitespace validation completed without output."
+    },
+    {
+      "id": "review-report",
+      "kind": "review_report",
+      "path": ".adam/evidence/native-cleanup-v4-independent-review.txt",
+      "sha256": "fbc7ce01a26fb7ff9f56b0c7dc199d479a03efee080871041fa66993b927c43a",
+      "summary": "Independent read-only review approved the final V4 freeze state and documents the trusted-parent provenance limitation."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the V4 scripts, corpus manifest, frozen snapshots, tests, README paragraph, pyrightconfig.json, and evidence record together if a separately verified experiment supersedes them. Do not turn a partial or ineligible V4 collection into an effect claim; retain its raw artifacts and mark it ineligible.",
+  "independent_review": {
+    "reviewer": "Codex native independent_review read-only reviewer",
+    "outcome": "approved",
+    "notes": "The independent reviewer reran the bare typecheck and focused tests, parsed the configuration and preregistration, and confirmed that README plus preregistration accurately limit the claim to trusted-parent shared-filesystem protocol isolation.",
+    "evidence_ref": "review-report"
+  },
+  "remaining_risks": [
+    "No V4 trial has run yet, so this artifact proves protocol readiness rather than a Skill-effect result.",
+    "A local party able to rewrite every raw artifact and recompute its hash chain can alter transcript provenance under the declared trusted-parent model; external append-only attestations or container isolation would be required for a stronger claim.",
+    "Thirty task-condition runs provide only a bounded comparison for the fixed model, Harness, Skill snapshots, corpus, and scorer; they cannot prove model-wide causal ability or production repair success.",
+    "A failed, interrupted, incomplete, or protocol-invalid collection must remain ineligible with no selective retry."
+  ]
+}

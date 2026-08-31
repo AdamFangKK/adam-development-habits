@@ -1,0 +1,95 @@
+Independent V4 Review
+=====================
+
+Review scope
+------------
+
+Re-reviewed only the final Native V4 freeze state and the pyright reproducibility fix.
+Owned write path: .adam/evidence/native-cleanup-v4-independent-review.txt.
+No other files were modified by this review.
+
+Files reviewed
+--------------
+
+- pyrightconfig.json
+- README.md
+- examples/effect-experiment-native-v4/preregistration.json
+- scripts/analyze_native_cleanup_effect_v4.py
+- scripts/native_cleanup_effect_runner_v4.py
+- tests/test_native_cleanup_effect_v4.py
+- tests/test_native_cleanup_effect_protocol_v4.py
+- tests/test_native_cleanup_effect_runner_v4.py
+
+Verification commands
+---------------------
+
+1. git status --short && git diff --stat && git diff -- pyrightconfig.json README.md examples/effect-experiment-native-v4/preregistration.json scripts/analyze_native_cleanup_effect_v4.py scripts/native_cleanup_effect_runner_v4.py
+
+Observed result:
+- V4 files and evidence artifacts remain untracked/new except README.md, which has the V4 summary addition.
+- pyrightconfig.json is present as an untracked file.
+- README.md diff contains only the V4 protocol description block.
+
+2. basedpyright --level error scripts/materialize_native_cleanup_effect_v4.py scripts/native_cleanup_effect_runner_v4.py scripts/analyze_native_cleanup_effect_v4.py scripts/create_native_cleanup_effect_preregistration_v4.py tests/test_native_cleanup_effect_protocol_v4.py tests/test_native_cleanup_effect_runner_v4.py tests/test_native_cleanup_effect_v4.py
+
+Observed result:
+- 0 errors, 0 warnings, 0 notes
+
+3. JSON parse check for pyrightconfig.json and examples/effect-experiment-native-v4/preregistration.json
+
+Observed result:
+- pyrightconfig.json: json ok
+- examples/effect-experiment-native-v4/preregistration.json: json ok
+
+4. rg -n "shared filesystem|protocol isolation|cryptographic|container|trusted|Harness|transcript|agent identity|model-wide|production" examples/effect-experiment-native-v4/preregistration.json README.md scripts/analyze_native_cleanup_effect_v4.py scripts/native_cleanup_effect_runner_v4.py
+
+Observed result:
+- README.md:275 states that V4 is shared-filesystem protocol isolation, parent Harness records native identity/transcript, and it is not cryptographic or container isolation.
+- preregistration.json:64 scopes the claim to fixed native Codex subagent model, shared-filesystem Harness, frozen Skill snapshots, V4 corpus, and blind scorer.
+- preregistration.json:66 states the same isolation limit and trusted-parent assumption.
+- analyze_native_cleanup_effect_v4.py:467-468 states protocol isolation and no model-wide/production-reliability claim.
+
+5. python3 -m pytest tests/test_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_protocol_v4.py tests/test_native_cleanup_effect_runner_v4.py -q && python3 -m py_compile scripts/materialize_native_cleanup_effect_v4.py scripts/native_cleanup_effect_runner_v4.py scripts/analyze_native_cleanup_effect_v4.py scripts/create_native_cleanup_effect_preregistration_v4.py tests/test_native_cleanup_effect_protocol_v4.py tests/test_native_cleanup_effect_runner_v4.py tests/test_native_cleanup_effect_v4.py && git diff --check -- pyrightconfig.json scripts/native_cleanup_effect_runner_v4.py scripts/analyze_native_cleanup_effect_v4.py tests/test_native_cleanup_effect_protocol_v4.py tests/test_native_cleanup_effect_runner_v4.py tests/test_native_cleanup_effect_v4.py README.md examples/effect-experiment-native-v4/preregistration.json
+
+Observed result:
+- 15 passed in 9.22s
+- py_compile passed
+- git diff --check passed
+
+Spec compliance
+---------------
+
+PASS. The pyright reproducibility gap is addressed for the requested bare command by adding a minimal pyrightconfig.json:
+
+- executionEnvironments[0].extraPaths includes "scripts", which allows tests and scripts to resolve the package-local script modules.
+- reportImplicitRelativeImport is set to "none", which matches the script-style execution pattern already used in the repository and makes the previously failing implicit-relative-import diagnostics non-blocking.
+
+The fix does not add runtime dependencies, does not alter V4 experiment semantics, and is limited to local typecheck configuration.
+
+Trusted-parent transcript limitation
+------------------------------------
+
+PASS for the stated threat model. The V4 protocol remains audit-provenance-based rather than tamper-proof. README.md and preregistration.json accurately bound this:
+
+- The parent Harness is trusted to record the actual native-agent identity and transcript.
+- The protocol is explicitly shared-filesystem protocol isolation.
+- It is explicitly not container isolation or cryptographic agent attestation.
+- Results are scoped to the fixed model, Harness, Skill snapshots, corpus, and scorer, not model-wide causal capability or production reliability.
+
+Residual risk:
+- A party able to rewrite local raw artifacts and restamp the local hash chain can rewrite transcript provenance without changing replayed pass/fail results. This is not a blocking issue under the declared trusted-parent Harness model, but it would be insufficient for an adversarial or cryptographic provenance threat model.
+
+Issues
+------
+
+CRITICAL: 0
+HIGH: 0
+MEDIUM: 0
+LOW: 0
+
+Recommendation
+--------------
+
+APPROVE.
+
+The previous blocking typecheck issue is resolved in the local environment with the bare V4 basedpyright command. The trusted-parent transcript limitation is accurately disclosed in both README and preregistration, so it is a documented scope boundary rather than an undisclosed protocol claim.
