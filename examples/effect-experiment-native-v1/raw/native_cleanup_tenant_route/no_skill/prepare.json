@@ -1,0 +1,1 @@
+{"allowed_edit_paths": ["README.md", "consumers/native_cleanup_tenant_route_consumer.py", "docs/native_cleanup_tenant_route.md", "legacy/native_cleanup_tenant_route.py", "package-metadata.json", "policy.py", "runbook.md"], "seed_commit": "88cd608cb62cc206f3b4a4f1a374ed8d750164dd", "task_id": "native_cleanup_tenant_route"}

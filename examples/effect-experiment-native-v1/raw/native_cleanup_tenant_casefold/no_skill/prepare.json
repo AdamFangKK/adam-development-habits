@@ -1,0 +1,1 @@
+{"allowed_edit_paths": ["README.md", "docs/native_cleanup_tenant_casefold.md", "legacy/native_cleanup_tenant_casefold.py", "package-metadata.json", "policy.py", "runbook.md"], "seed_commit": "dc606d8013137f52e9a1c9843519028bc6e341d3", "task_id": "native_cleanup_tenant_casefold"}

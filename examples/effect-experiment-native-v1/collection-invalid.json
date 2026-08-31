@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "experiment_id": "adam-native-cleanup-effect-v1",
+  "status": "ineligible",
+  "analysis_eligibility": "ineligible",
+  "frozen_preparation_commit": "aa81d1b8a8f01820f2b956e5b6bf6ab59fdef012",
+  "preregistration_path": "examples/effect-experiment-native-v1/preregistration.json",
+  "preregistration_sha256": "2e6cc7279f44efccb584ab092fca5fbd43d51c726734d09ef17ef0156a7052b4",
+  "collection": {
+    "planned_trials": 30,
+    "completed_trials": 30,
+    "trial_order_complete": true,
+    "all_implementation_integrity_passed": true,
+    "all_public_suites_passed": true,
+    "all_hidden_tests_injected_after_agent_exit": true,
+    "trial_workspaces_with_hidden_or_reference_directories": 0,
+    "trial_workspace_symlinks": 0,
+    "isolation_classification": "protocol-isolated shared filesystem",
+    "isolation_limit": "The native subagents shared a filesystem. Their supplied workspaces excluded hidden/reference trees, but this was not OS or container isolation."
+  },
+  "raw_artifacts": {
+    "root": "examples/effect-experiment-native-v1/raw",
+    "per_trial": ["prepare.json", "seed.txt", "candidate.diff", "score.json"],
+    "count": 30
+  },
+  "observed_hidden_passes": {
+    "no_skill": {"passed": 0, "total": 10},
+    "old_skill": {"passed": 2, "total": 10},
+    "new_skill": {"passed": 3, "total": 10}
+  },
+  "invalidation": {
+    "kind": "task-contract-versus-hidden-contract contradiction",
+    "reason": "Every public task says to preserve current public behavior while routing through policy.canonical_normalize. The public legacy behavior for an input with internal whitespace is 'user name', but the hidden/reference contract requires 'user-name'. The requested semantic change is neither specified by the task nor covered by the visible suite.",
+    "evidence": [
+      "The public source defines legacy_normalize as value.strip().casefold() and canonical_normalize as '-'.join(value.strip().casefold().split()).",
+      "24 hidden-score outputs include the concrete mismatch 'user name' != 'user-name'.",
+      "All 30 public suites passed, so the contradiction cannot be resolved from the Agent-visible acceptance criteria."
+    ],
+    "effect_on_interpretation": "The hidden pass counts conflate Skill behavior with an unannounced semantic rewrite. They are preserved as diagnostic observations only and must not be analyzed as repair-success or causal-capability evidence."
+  },
+  "next_protocol_requirement": "A successor corpus must state the canonical whitespace semantics explicitly in every public task and visible test before collection begins, use fresh task identifiers and a new preregistration, and retain this V1 record unchanged.",
+  "causal_conclusion": "unknown"
+}

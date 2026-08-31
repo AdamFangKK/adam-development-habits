@@ -1,0 +1,45 @@
+diff --git a/README.md b/README.md
+index 07dccc9..5890795 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1 @@
+-legacy_contract_native_cleanup_sync_label: legacy helper remains canonical.
++policy.canonical_normalize: policy helper remains canonical.
+diff --git a/docs/native_cleanup_sync_label.md b/docs/native_cleanup_sync_label.md
+index 188b72a..0d2d544 100644
+--- a/docs/native_cleanup_sync_label.md
++++ b/docs/native_cleanup_sync_label.md
+@@ -1 +1 @@
+-legacy_contract_native_cleanup_sync_label: current normalization owner.
++policy.canonical_normalize: current normalization owner.
+diff --git a/package-metadata.json b/package-metadata.json
+index 47e0d4b..1418d2a 100644
+--- a/package-metadata.json
++++ b/package-metadata.json
+@@ -1 +1 @@
+-{"normalization_contract": "legacy_contract_native_cleanup_sync_label"}
++{"normalization_contract": "policy.canonical_normalize"}
+diff --git a/policy.py b/policy.py
+index ab5ea52..73f0ef3 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,10 +1,8 @@
+-"""legacy_contract_native_cleanup_sync_label: policy normalization contract."""
+-
+-from legacy.native_cleanup_sync_label import legacy_normalize
++"""policy.canonical_normalize: policy normalization contract."""
+ 
+ def canonical_normalize(value):
+     return "-".join(value.strip().casefold().split())
+ 
+ 
+ def evaluate(value):
+-    return legacy_normalize(value)
++    return canonical_normalize(value)
+diff --git a/runbook.md b/runbook.md
+index c267510..9497fdc 100644
+--- a/runbook.md
++++ b/runbook.md
+@@ -1 +1 @@
+-legacy_contract_native_cleanup_sync_label: recovery uses the documented normalization owner.
++policy.canonical_normalize: recovery uses the documented normalization owner.

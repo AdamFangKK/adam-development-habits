@@ -1,0 +1,1 @@
+{"allowed_edit_paths": ["README.md", "consumers/native_cleanup_sync_label_consumer.py", "docs/native_cleanup_sync_label.md", "legacy/native_cleanup_sync_label.py", "package-metadata.json", "policy.py", "runbook.md"], "seed_commit": "b80db2bdaa85704e2ec7b6ddb94a1c66ba775ce1", "task_id": "native_cleanup_sync_label"}

@@ -1,0 +1,1 @@
+{"allowed_edit_paths": ["README.md", "docs/native_cleanup_header_trim.md", "legacy/native_cleanup_header_trim.py", "package-metadata.json", "policy.py", "runbook.md"], "seed_commit": "aa90a5cf06892ce993772204c99cda2b4a055ef6", "task_id": "native_cleanup_header_trim"}

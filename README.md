@@ -266,7 +266,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \
 
 原生 Codex 子代理共享文件系统时仅能称为协议隔离；要让该结论更强，需要独立 worktree 或容器、独立保存的 prompt/output 和与条件标签隔离的评分器。即使满足这些条件，结论也只适用于预注册范围，不能外推到所有模型、仓库或生产系统。
 
-当远端 API-key 采集不可用时，可使用已预注册的 [`effect-experiment-native-v1`](./examples/effect-experiment-native-v1)：它让原生 Codex 子代理在每题独立的公开工作区完成 `no_skill`、冻结 old Skill、冻结 new Skill 三个条件，并在 Agent 退出后才把只含测试的隐藏契约注入一次性评分副本。10 个新夹具分别覆盖单模块、跨模块与动态注册集成边界，以及决策保留和端到端修复两类任务；公开区不含 reference 或 hidden tree。运行器和回归测试位于 [`native_cleanup_effect_runner_v1.py`](./scripts/native_cleanup_effect_runner_v1.py)、[`materialize_native_cleanup_effect_v1.py`](./scripts/materialize_native_cleanup_effect_v1.py) 与相应 `test_native_cleanup_effect*_v1.py`。该路径的共享文件系统限制已写入预注册；结果即使通过统计门槛，也只能支持其固定模型、Harness、Skill 快照、语料和隐藏评分器范围内的结论。
+远端 API-key 采集不可用时，曾使用 [`effect-experiment-native-v1`](./examples/effect-experiment-native-v1) 运行原生 Codex 子代理的三条件协议：每题在独立公开工作区执行 `no_skill`、冻结 old Skill、冻结 new Skill，Agent 退出后才把只含测试的隐藏契约注入一次性评分副本。它覆盖单模块、跨模块与动态注册集成边界，以及决策保留和端到端修复两类任务；运行器和回归测试位于 [`native_cleanup_effect_runner_v1.py`](./scripts/native_cleanup_effect_runner_v1.py)、[`materialize_native_cleanup_effect_v1.py`](./scripts/materialize_native_cleanup_effect_v1.py) 与相应 `test_native_cleanup_effect*_v1.py`。V1 的 30 条 raw diff/评分已完整保留，但其任务说明要求“保留当前公开行为”，hidden/reference 却要求未声明的内部空白到连字符语义变更，因此 [`collection-invalid.json`](./examples/effect-experiment-native-v1/collection-invalid.json) 将它标记为不可分析，不能用于任何 Skill 效果结论。后续试验必须用新 task ID 与在公开任务中明确写出的行为契约重新预注册；即使通过统计门槛，结论也只能支持固定模型、Harness、Skill 快照、语料和隐藏评分器范围内的结论。
 
 ### 多模块因果探针
 

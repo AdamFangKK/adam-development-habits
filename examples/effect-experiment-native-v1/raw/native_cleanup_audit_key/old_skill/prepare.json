@@ -1,0 +1,1 @@
+{"allowed_edit_paths": ["README.md", "docs/native_cleanup_audit_key.md", "legacy/native_cleanup_audit_key.py", "package-metadata.json", "plugins/native_cleanup_audit_key_adapter.py", "policy.py", "runbook.md", "runtime/native_cleanup_audit_key.json", "runtime_loader.py"], "seed_commit": "7222db5d1786e8a8b31c15dc5b6e550a5acd015f", "task_id": "native_cleanup_audit_key"}
