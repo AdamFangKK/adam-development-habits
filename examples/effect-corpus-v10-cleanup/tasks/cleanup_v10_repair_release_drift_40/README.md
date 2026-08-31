@@ -1,0 +1,2 @@
+# legacy_contract_cleanup_v10_repair_release_drift_40
+Current owners use the canonical normalizer.

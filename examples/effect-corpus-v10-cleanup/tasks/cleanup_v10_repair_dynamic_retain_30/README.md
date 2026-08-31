@@ -1,0 +1,2 @@
+# legacy_contract_cleanup_v10_repair_dynamic_retain_30
+Current owners use the canonical normalizer.

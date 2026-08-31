@@ -1,0 +1,2 @@
+# canonical_contract_cleanup_v10_decision_retention_split_owner_05
+Current owners use the canonical normalizer.

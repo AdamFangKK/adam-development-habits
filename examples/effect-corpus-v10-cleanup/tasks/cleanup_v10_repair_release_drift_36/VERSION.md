@@ -1,0 +1,1 @@
+legacy_contract_cleanup_v10_repair_release_drift_36: supported contract description.

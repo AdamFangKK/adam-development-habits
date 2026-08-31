@@ -1,0 +1,2 @@
+# legacy_contract_cleanup_v10_repair_semantic_duplicate_27
+Current owners use the canonical normalizer.

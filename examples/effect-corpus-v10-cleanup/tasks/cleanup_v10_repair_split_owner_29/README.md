@@ -1,0 +1,2 @@
+# legacy_contract_cleanup_v10_repair_split_owner_29
+Current owners use the canonical normalizer.

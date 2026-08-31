@@ -1,0 +1,2 @@
+# legacy_contract_cleanup_v10_decision_retention_release_drift_12
+Current owners use the canonical normalizer.

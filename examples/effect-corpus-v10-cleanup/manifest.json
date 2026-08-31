@@ -1,0 +1,1479 @@
+{
+  "cleanup_contract": {
+    "hidden_checks": [
+      "current_behavior",
+      "cross_file_retirement",
+      "dynamic_runtime_retention",
+      "release_knowledge_sync"
+    ],
+    "kinds": [
+      "split_owner",
+      "dynamic_retain",
+      "semantic_duplicate",
+      "release_drift"
+    ],
+    "multi_file_surfaces": true,
+    "reference_implementation_is_not_available_to_agent": true
+  },
+  "cohorts": {
+    "decision-retention": 20,
+    "repair": 20
+  },
+  "conditions": [
+    "no_skill",
+    "old_skill",
+    "new_skill"
+  ],
+  "corpus_id": "effect-corpus-v10-cleanup",
+  "generated_by": "scripts/materialize_effect_corpus_v9.py --profile cleanup-v10",
+  "profile": "cleanup-v10",
+  "schema_version": 2,
+  "strata_per_cohort": {
+    "cross-module": 8,
+    "integration": 6,
+    "single-module": 6
+  },
+  "task_count": 40,
+  "tasks": [
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_split_owner_01.md",
+        "legacy/cleanup_v10_decision_retention_split_owner_01.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_split_owner_01",
+      "hidden_tests_tree_sha256": "d64d675dd85db30bce43ad9351f73d46f6991d17ab1460ac9e38cc4e5098e60f",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_split_owner_01",
+      "reference_tree_sha256": "dd942d5c5e396d59b6906b2e8500e35454cfb9563c9a39175fbcc0e07126b70b",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_split_owner_01",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_split_owner_01",
+      "workspace_tree_sha256": "04bbb18662a6d14c161a77de081fe0c79d3f2c032decfd2c7d0d03c91f2936b7"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_dynamic_retain_02.md",
+        "plugins/cleanup_v10_decision_retention_dynamic_retain_02_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_decision_retention_dynamic_retain_02.json"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_dynamic_retain_02",
+      "hidden_tests_tree_sha256": "56ee8e1e7086d76d81e2d91e198892a00da54d5ca7eb4710d3939ba654ec4d6d",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_dynamic_retain_02",
+      "reference_tree_sha256": "a3010d45a9c60fa23687e44d8c21343445330ae4e7c81012f7a0761f5bd800fc",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_dynamic_retain_02",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_dynamic_retain_02",
+      "workspace_tree_sha256": "a0cec9d10348707eba8be0c4936a4232dfd45e7eadcc2d777e607e91d81cf319"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_decision_retention_semantic_duplicate_03.md",
+        "helpers/cleanup_v10_decision_retention_semantic_duplicate_03_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_semantic_duplicate_03",
+      "hidden_tests_tree_sha256": "20f4a835d0efda3235d1fcb2263dfde2f6a33ef599bd27bf22b2d2a1ee520524",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_semantic_duplicate_03",
+      "reference_tree_sha256": "4340976cf9bb781666abff39ccd11e860e0322af2c9c12fe1188d696a264e178",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_semantic_duplicate_03",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_semantic_duplicate_03",
+      "workspace_tree_sha256": "11cd410629461bbef4c898e985f0255c5b20261dea248d063065f8bcf3ed5995"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_decision_retention_release_drift_04.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_release_drift_04",
+      "hidden_tests_tree_sha256": "3a0508d6f0a3cb03fa2854219cc19d6985a5947c47a5fb0aadd38e5ea1b9a445",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_release_drift_04",
+      "reference_tree_sha256": "a36c31d9c7f71b2b465428af3dcac6c3500a5e359f8dbebd57bab0d1bc23bb39",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_release_drift_04",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_release_drift_04",
+      "workspace_tree_sha256": "1daaba05d05e21c40a1ce238476805d599799f937a9544a68721c8cef1d8281f"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_split_owner_05.md",
+        "legacy/cleanup_v10_decision_retention_split_owner_05.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_split_owner_05",
+      "hidden_tests_tree_sha256": "6f2403c6726262c99fbbae80505d236194afd5baae5526a95af615a113e81ec1",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_split_owner_05",
+      "reference_tree_sha256": "cce9c2eb731b856d79170b0af25191f3ca0feb8dc1b07efeb60f0e7c40730fc9",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_split_owner_05",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_split_owner_05",
+      "workspace_tree_sha256": "fb6125395c57c92ff7df3664c52b945ab90d406508c8cd5041162405a07bcd63"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_dynamic_retain_06.md",
+        "plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_decision_retention_dynamic_retain_06.json"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_dynamic_retain_06",
+      "hidden_tests_tree_sha256": "c4e698f1a1fda8e5b179b5e27548afc20695b09a34207a49bbe712a05903f404",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_dynamic_retain_06",
+      "reference_tree_sha256": "ea065f9839f398c9ed9b6386878589f0e99eeede1f1080e1ec61dac343d5c249",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_dynamic_retain_06",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_dynamic_retain_06",
+      "workspace_tree_sha256": "7c285d0a7614bf733f3d91c1333edaa822f4f6aa5ba966c0d3331d7c9a5239ba"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_decision_retention_semantic_duplicate_07.md",
+        "helpers/cleanup_v10_decision_retention_semantic_duplicate_07_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_semantic_duplicate_07",
+      "hidden_tests_tree_sha256": "bcaa6fbbb40dd8d66fd26f3df6871a376f93a9e3e3a3f198cbbacf1f85ba2545",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_semantic_duplicate_07",
+      "reference_tree_sha256": "f4e749eac2fca6ae197b15e3d318c26683b6557deeddb42bd9b00a7a2dfa0f7f",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_decision_retention_semantic_duplicate_07",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_semantic_duplicate_07",
+      "workspace_tree_sha256": "e5930b19e7b727b7e3a073cc0f62d8fdc1eb41409501e56df05d2f66750e6675"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_decision_retention_release_drift_08.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_release_drift_08",
+      "hidden_tests_tree_sha256": "9eee4249e38d8336b59d85fec88faeb9dd8af07479638d49b7b20e144a5cac91",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_release_drift_08",
+      "reference_tree_sha256": "fa62e9077923de4bb2c0abe192d236321e1895a262a3d5c91eabb3ec2eba024b",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_decision_retention_release_drift_08",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_release_drift_08",
+      "workspace_tree_sha256": "14f3c4d14f80f7becaa7c001b0321b20d11d6d7ab24644981aa2a2c9ed16fd35"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_split_owner_09.md",
+        "legacy/cleanup_v10_decision_retention_split_owner_09.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_split_owner_09",
+      "hidden_tests_tree_sha256": "59e4caa1236585a9aad8f06e50ec96b8416bda4c8bc27a31af6dede8a3f23a52",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_split_owner_09",
+      "reference_tree_sha256": "3f0aebdb6c693fd8606ad558373b3bc4d2be6283f28991e7a2518e4a55214425",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_decision_retention_split_owner_09",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_split_owner_09",
+      "workspace_tree_sha256": "f8a35fd3d5b88462e16da93519849d53266f3cc7b47df5d766ed19c8c957b8c1"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_dynamic_retain_10.md",
+        "plugins/cleanup_v10_decision_retention_dynamic_retain_10_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_decision_retention_dynamic_retain_10.json"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_dynamic_retain_10",
+      "hidden_tests_tree_sha256": "42c1c44f98f4262842568c82bed900ae9694c394fe2c6b504139cc92a02c4cee",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_dynamic_retain_10",
+      "reference_tree_sha256": "affca506ebeee1c617d5a5dcac5e9e234af5a93f5c038d1ee2e8b982e6584185",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_decision_retention_dynamic_retain_10",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_dynamic_retain_10",
+      "workspace_tree_sha256": "6fe72c773620d9fcdbede788cdafe5509bdaa78fb2495c2d6801b4e84285c9fc"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_decision_retention_semantic_duplicate_11.md",
+        "helpers/cleanup_v10_decision_retention_semantic_duplicate_11_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_semantic_duplicate_11",
+      "hidden_tests_tree_sha256": "a640a4dbb124619beda2adee797170ea80e3ca77b677326a5f0891f7c778d2e8",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_semantic_duplicate_11",
+      "reference_tree_sha256": "7ecb7c13ed0280c47e03fe248c7e24a210a1fdbce61e3d1ec1c696c1fb4a3db6",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_decision_retention_semantic_duplicate_11",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_semantic_duplicate_11",
+      "workspace_tree_sha256": "921c3dac91b20657edac97c5edb40975ba091d185643b6dc4c10d949280da424"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_decision_retention_release_drift_12.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_release_drift_12",
+      "hidden_tests_tree_sha256": "6475713e5a17c80eb21ab1272aa445e0cd0b03e197aa42f8e4b6a5d2ae38db20",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_release_drift_12",
+      "reference_tree_sha256": "9423bdee0db5883a9a14ec35fd810b1c82046db8300a58cca622e74c476e9f58",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_decision_retention_release_drift_12",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_release_drift_12",
+      "workspace_tree_sha256": "7ea25d5c92edb0f2110e2ec6e03aed43e30f9ceb7d7c30870d81c268416810e2"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_split_owner_13.md",
+        "legacy/cleanup_v10_decision_retention_split_owner_13.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_split_owner_13",
+      "hidden_tests_tree_sha256": "3a10d72554fc2be254b0b081aa526888d300e4b73e80f60660df9fc0d2c96bac",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_split_owner_13",
+      "reference_tree_sha256": "1661dc04b0cfbccfe73e1bab138bcef3a19978026c0a2bf610118c6dc04f2ed9",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_decision_retention_split_owner_13",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_split_owner_13",
+      "workspace_tree_sha256": "7832349c06c51c4adfad08e04086902a952993e3514efb3585ff73699b2c2f57"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_dynamic_retain_14.md",
+        "plugins/cleanup_v10_decision_retention_dynamic_retain_14_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_decision_retention_dynamic_retain_14.json"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_dynamic_retain_14",
+      "hidden_tests_tree_sha256": "0f38fbc0fd5a170a9fea058a1e5660f605e54c926d61f4904aff21bd141acd05",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_dynamic_retain_14",
+      "reference_tree_sha256": "897c0af2869156ee0031de33f6ba8b465042a049c412fe319d7b41e6948edb1a",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_decision_retention_dynamic_retain_14",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_dynamic_retain_14",
+      "workspace_tree_sha256": "204435d3dd63818d59765b531fa69b979b60498e308ebe8d71cea077f2cc05cc"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_decision_retention_semantic_duplicate_15.md",
+        "helpers/cleanup_v10_decision_retention_semantic_duplicate_15_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_semantic_duplicate_15",
+      "hidden_tests_tree_sha256": "83e1ec7a717a4be59edbe779b5ac2a71845018b164b7dbe5c23f6b1e35b57b5f",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_semantic_duplicate_15",
+      "reference_tree_sha256": "8becd76c2fa6d71484a770447eb8e8747012b9ab4aae8d97739246ebdc26b2c4",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_decision_retention_semantic_duplicate_15",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_semantic_duplicate_15",
+      "workspace_tree_sha256": "2e77c90566ae6b25973e9459ad45444ea2c11dc91511b9eeb930638379d8f92c"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_decision_retention_release_drift_16.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_release_drift_16",
+      "hidden_tests_tree_sha256": "f68ee66349d5674da752c383ab6b4caaa05549dd860d2ca286db783d723471f0",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_release_drift_16",
+      "reference_tree_sha256": "753be5766e1a4322e665def560b4052d91531de58e0139814d8bd5a577cd8197",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_decision_retention_release_drift_16",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_release_drift_16",
+      "workspace_tree_sha256": "ba1a49b13c556922688b312e500ea7c66d84ad06cbb8a9f88cbea2713ca8d5d5"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_split_owner_17.md",
+        "legacy/cleanup_v10_decision_retention_split_owner_17.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_split_owner_17",
+      "hidden_tests_tree_sha256": "b1b13229406ab57bb53b98bbcbf03580ab5105cf4318f48609e5ba4b77cd9580",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_split_owner_17",
+      "reference_tree_sha256": "55b9f54c13eadfb714715cb20eb43165e9cde4482e0e4400eb9ca0d68d68cb87",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_decision_retention_split_owner_17",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_split_owner_17",
+      "workspace_tree_sha256": "74a9f6723588aa8e732172faf12a8f137d4aeb19ec8548ddb0c475080801d289"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_decision_retention_dynamic_retain_18.md",
+        "plugins/cleanup_v10_decision_retention_dynamic_retain_18_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_decision_retention_dynamic_retain_18.json"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_dynamic_retain_18",
+      "hidden_tests_tree_sha256": "49819862fb4c82619de51f4d84d31afeb26778b1f200aa5f41fb6ab2afe468ef",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_dynamic_retain_18",
+      "reference_tree_sha256": "45f42834c3371ee83eb94d1843da593abd23ed2e413d59212f701da32025f9a1",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_decision_retention_dynamic_retain_18",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_dynamic_retain_18",
+      "workspace_tree_sha256": "fd2b096967f81d0a2a9aacbb770b46e25c8fa421f0d6458f64086c402882d571"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_decision_retention_semantic_duplicate_19.md",
+        "helpers/cleanup_v10_decision_retention_semantic_duplicate_19_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_semantic_duplicate_19",
+      "hidden_tests_tree_sha256": "59414c743715c8b42685ecc62d56cb874bd7f3dc8ba9d941487007a9f62e8968",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_semantic_duplicate_19",
+      "reference_tree_sha256": "ba43c03a9b54e24dfe178a7644c268344bf42d41cb4eb82713b611765da9a447",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_decision_retention_semantic_duplicate_19",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_semantic_duplicate_19",
+      "workspace_tree_sha256": "55345c4a8c1f69d697f8034f12a14f585a4361294b3066ad9e616a8ae4ea979d"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_decision_retention_release_drift_20.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_release_drift_20",
+      "hidden_tests_tree_sha256": "d8bbcb7ee81b38fa04ce3a7c6eb31b6c42bfaa2b11074bfdc02643a8494cdff5",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_decision_retention_release_drift_20",
+      "reference_tree_sha256": "47d6345305e98808abc4de0e12a9a82a9be10f9217dc00e492510c2c0cd83a34",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_decision_retention_release_drift_20",
+      "workspace_path": "tasks/cleanup_v10_decision_retention_release_drift_20",
+      "workspace_tree_sha256": "26345a0f6fc00166ee624d3bd2d34e1605868dcc4edc3c8e08aa2736dddbc7d5"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_split_owner_21.md",
+        "legacy/cleanup_v10_repair_split_owner_21.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_split_owner_21",
+      "hidden_tests_tree_sha256": "1480c0c16812e894bf11ae2d18ea984dd9c18b37aa33f549ec53593b13013302",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_split_owner_21",
+      "reference_tree_sha256": "71bd13b543e3b3da17ec9800559dfc8e8db2640065cad31c3368cab98304b8ae",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_repair_split_owner_21",
+      "workspace_path": "tasks/cleanup_v10_repair_split_owner_21",
+      "workspace_tree_sha256": "b8fd4f7db6dbcfa4814217843fa735facf03ac431b0fc9d14829a431f9a577ae"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_dynamic_retain_22.md",
+        "plugins/cleanup_v10_repair_dynamic_retain_22_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_repair_dynamic_retain_22.json"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_dynamic_retain_22",
+      "hidden_tests_tree_sha256": "118fce66e509e7b466ef1d0f879f5e8d9c73a58bba2b76e293148fff5523404a",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_dynamic_retain_22",
+      "reference_tree_sha256": "eeffa7e9f5dd74955f62f4f58dec113b57ab6decbbddaf9ae563bf4889e70542",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_repair_dynamic_retain_22",
+      "workspace_path": "tasks/cleanup_v10_repair_dynamic_retain_22",
+      "workspace_tree_sha256": "28d7a6aefe0b5418fc33d49b4dbf628d41d41cfbce872322e1214d1f5e412dd1"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_repair_semantic_duplicate_23.md",
+        "helpers/cleanup_v10_repair_semantic_duplicate_23_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_semantic_duplicate_23",
+      "hidden_tests_tree_sha256": "79cfbd6cbf9c11211c7663fdd0fd9066922a23e0de359a066b3a52138db0b1dd",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_semantic_duplicate_23",
+      "reference_tree_sha256": "a7cadba17bdb580d89800b041ff2f7567fe3fb9eb2dccf4c7864567d244e28e0",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_repair_semantic_duplicate_23",
+      "workspace_path": "tasks/cleanup_v10_repair_semantic_duplicate_23",
+      "workspace_tree_sha256": "714e663cec7e6fa21b07e430935e0cb39a0e9623b98ab575bf305fe16b4324e2"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_repair_release_drift_24.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_release_drift_24",
+      "hidden_tests_tree_sha256": "e710b1b980e3f3901465a37b8573da5c23f37d529d6082d96ac0976196a49e31",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_release_drift_24",
+      "reference_tree_sha256": "2a504f749b17f8f0b1c6a46ad5f7248df34ae5e9cf4c33aeb88452f3ca8b8671",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_repair_release_drift_24",
+      "workspace_path": "tasks/cleanup_v10_repair_release_drift_24",
+      "workspace_tree_sha256": "f98da6b1daeee87c2bd074ffff566e077aa287a0c45336fec8981ba2b210f144"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_split_owner_25.md",
+        "legacy/cleanup_v10_repair_split_owner_25.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_split_owner_25",
+      "hidden_tests_tree_sha256": "306fcd61d7b9232e274b5d651d44d93d080b34f4f165549636de3c2c2c65a846",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_split_owner_25",
+      "reference_tree_sha256": "6a5bcee3dffd075d29c5fa26b55eef2e9225e561126a86a84916bcb86d6c6366",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_repair_split_owner_25",
+      "workspace_path": "tasks/cleanup_v10_repair_split_owner_25",
+      "workspace_tree_sha256": "e719fe9497041108d6e466f9adac573bc69386caca32eb4531b6e8be22823b51"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_dynamic_retain_26.md",
+        "plugins/cleanup_v10_repair_dynamic_retain_26_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_repair_dynamic_retain_26.json"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_dynamic_retain_26",
+      "hidden_tests_tree_sha256": "d3c8506a2910c907628bc499ef9c1da17906e3aa25b388c2d7c1dab2edc2b3ec",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_dynamic_retain_26",
+      "reference_tree_sha256": "6c0f6cd0c9c2bc2778bcc7650cec14b164b6dd67d574f367ee2b7bc6c23815ff",
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_repair_dynamic_retain_26",
+      "workspace_path": "tasks/cleanup_v10_repair_dynamic_retain_26",
+      "workspace_tree_sha256": "a4610e5c61c278e30ca695b9db488623fcf56ff1185b378bb6cce1f6886cb66e"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_repair_semantic_duplicate_27.md",
+        "helpers/cleanup_v10_repair_semantic_duplicate_27_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_semantic_duplicate_27",
+      "hidden_tests_tree_sha256": "80b6559f296eb7cd6ed834e478429259a1d8354ba708368d209d1e4870927607",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_semantic_duplicate_27",
+      "reference_tree_sha256": "cf72b84953f065b1f6e7ce1b2162ee7f7a6a17ff8542ffb4c20e6a90c8910ab9",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_repair_semantic_duplicate_27",
+      "workspace_path": "tasks/cleanup_v10_repair_semantic_duplicate_27",
+      "workspace_tree_sha256": "b0dbc28d7b53814beec2eb7304b5f0d8eab960d3dc99bbfcf93283ac34bc4a29"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_repair_release_drift_28.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_release_drift_28",
+      "hidden_tests_tree_sha256": "f778e14a5652ad31cd5faf3e282bf1cb4bcbeaf741411247c67bfe10846e4663",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_release_drift_28",
+      "reference_tree_sha256": "286c510d60bcdb59d70db266588c9a6fff2ea4367d0487d79af0a5982b656b8d",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_repair_release_drift_28",
+      "workspace_path": "tasks/cleanup_v10_repair_release_drift_28",
+      "workspace_tree_sha256": "6cd52a1d8827f4f5cf92426c987bdb64963292c7cc22301792b9d63320c159d9"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_split_owner_29.md",
+        "legacy/cleanup_v10_repair_split_owner_29.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_split_owner_29",
+      "hidden_tests_tree_sha256": "f2b19f4cd1e185fa5de47813ca88a5b8d759ea158c7b68fb917a3b6dfea8ec22",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_split_owner_29",
+      "reference_tree_sha256": "7067364336c78c68964b767973d4a8c58100c682f3bced24f0f5ded0ee7ac56e",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_repair_split_owner_29",
+      "workspace_path": "tasks/cleanup_v10_repair_split_owner_29",
+      "workspace_tree_sha256": "41bc0230ec7becbee8e311cf504f7a01237c693e6eecbe17df8bccb6b78a6532"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_dynamic_retain_30.md",
+        "plugins/cleanup_v10_repair_dynamic_retain_30_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_repair_dynamic_retain_30.json"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_dynamic_retain_30",
+      "hidden_tests_tree_sha256": "9476ea99607fbf21ef18cdd93edd9bda3ffe16d4d7c7e4eb3a6fd8c7f080ce8d",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_dynamic_retain_30",
+      "reference_tree_sha256": "da5158c12dc89d38d862872eb231bfbc7d6bc7fe52bdfcc96b5a0315893790d0",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_repair_dynamic_retain_30",
+      "workspace_path": "tasks/cleanup_v10_repair_dynamic_retain_30",
+      "workspace_tree_sha256": "aa83fbac924f5abe8949584a91379668725d92534160f7da5947afe15815312e"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_repair_semantic_duplicate_31.md",
+        "helpers/cleanup_v10_repair_semantic_duplicate_31_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_semantic_duplicate_31",
+      "hidden_tests_tree_sha256": "b65cfb94d0d3ee07a8cd2e5082d6919239950c6346df3f43e12acd78aa68ffc6",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_semantic_duplicate_31",
+      "reference_tree_sha256": "1de57a00719cd24d771cc18f617ba04786f88880488d164583c8b18cac576db5",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_repair_semantic_duplicate_31",
+      "workspace_path": "tasks/cleanup_v10_repair_semantic_duplicate_31",
+      "workspace_tree_sha256": "684a10aa34a24d7b87f0410f4bc11e8a310ebe377900f487bd1454fe58507e50"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_repair_release_drift_32.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_release_drift_32",
+      "hidden_tests_tree_sha256": "091ac35c9df4a880559d739acd1fd8a4890496dbc32cf0dcb1dcdc910e3d0ffa",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_release_drift_32",
+      "reference_tree_sha256": "1cc98c622421293c7aef7fd231596cb7c01f6561e33837f838c6ae02721cff7d",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_repair_release_drift_32",
+      "workspace_path": "tasks/cleanup_v10_repair_release_drift_32",
+      "workspace_tree_sha256": "f54dad71a17d94ec2085efba1703d89a70638453078359665a653ba4a4dec94d"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_split_owner_33.md",
+        "legacy/cleanup_v10_repair_split_owner_33.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_split_owner_33",
+      "hidden_tests_tree_sha256": "ede63d246b87da2b9e0454e059fc21d84906052126bcf32e895602a59c88b9b3",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_split_owner_33",
+      "reference_tree_sha256": "72e071d24497c8a988485ea05e336b391fd57f8a03be35b17f2c2216f39731cb",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_repair_split_owner_33",
+      "workspace_path": "tasks/cleanup_v10_repair_split_owner_33",
+      "workspace_tree_sha256": "affb87656db5d35b8666c8b127353acf111fd52231bb95fd307eaaf3941032c4"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_dynamic_retain_34.md",
+        "plugins/cleanup_v10_repair_dynamic_retain_34_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_repair_dynamic_retain_34.json"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_dynamic_retain_34",
+      "hidden_tests_tree_sha256": "ee87f79ee19fdd2feb01b70efdec776388f86956e1a71c3f1b086aa9febe6140",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_dynamic_retain_34",
+      "reference_tree_sha256": "5a740e6b46bb0524fffc2eff11b88c356ca1f2e5b1ba6b838af1c432a7b62694",
+      "stratum": "cross-module",
+      "task_id": "cleanup_v10_repair_dynamic_retain_34",
+      "workspace_path": "tasks/cleanup_v10_repair_dynamic_retain_34",
+      "workspace_tree_sha256": "cc7c9f1cd32a12efa68ec327eed4a7620105d42c54096d4d188a84ac1558cdea"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_repair_semantic_duplicate_35.md",
+        "helpers/cleanup_v10_repair_semantic_duplicate_35_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_semantic_duplicate_35",
+      "hidden_tests_tree_sha256": "65a6cd1d2812ecd7055f87d2e27e697aa39940854e1e25596d4c863ba0704273",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_semantic_duplicate_35",
+      "reference_tree_sha256": "17496af232d49a66f298fa4a9e1f7a58196bcf58a077523c4e2bc488ddb6addb",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_repair_semantic_duplicate_35",
+      "workspace_path": "tasks/cleanup_v10_repair_semantic_duplicate_35",
+      "workspace_tree_sha256": "cd2dce1bbadd16ca817aada77170178374fbc08885f98251b4a38f4069f5735b"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_repair_release_drift_36.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_release_drift_36",
+      "hidden_tests_tree_sha256": "df1c705004e86532a80ebcc6f3b486f94255c726879efdf669417e86e5bf5172",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_release_drift_36",
+      "reference_tree_sha256": "a8a0113288f65789b172ef4737f806aae16bad8c8369bf67c591b35c66ba02ed",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_repair_release_drift_36",
+      "workspace_path": "tasks/cleanup_v10_repair_release_drift_36",
+      "workspace_tree_sha256": "600672cb5534edf5f0c95f6b398d7c5dcd686c083e9cc6f71871418efac3c798"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_split_owner_37.md",
+        "legacy/cleanup_v10_repair_split_owner_37.py",
+        "package-metadata.json",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_split_owner_37",
+      "hidden_tests_tree_sha256": "f2dfa38ac650439c1f4d6fb0d3d8bdb47d111140030a801d5bc797290b462e7f",
+      "kind": "split_owner",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_split_owner_37",
+      "reference_tree_sha256": "82d96b87b0f3d739412a36046042fb28e1fcd6845ebc3441b47ade71273c36b4",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_repair_split_owner_37",
+      "workspace_path": "tasks/cleanup_v10_repair_split_owner_37",
+      "workspace_tree_sha256": "ea637e3b9e511ac12a46e483273f31faddc4f35a009ba0b487ef60507e4415a0"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_v10_repair_dynamic_retain_38.md",
+        "plugins/cleanup_v10_repair_dynamic_retain_38_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/cleanup_v10_repair_dynamic_retain_38.json"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_dynamic_retain_38",
+      "hidden_tests_tree_sha256": "09c07ac41f191e907b29b01a74119e266380748746ab23fefec241ba3a53297f",
+      "kind": "dynamic_retain",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_dynamic_retain_38",
+      "reference_tree_sha256": "5507cc629df26b07d18e4d7e1e0903b4d657a5292ae742003b7d88e4052eca3d",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_repair_dynamic_retain_38",
+      "workspace_path": "tasks/cleanup_v10_repair_dynamic_retain_38",
+      "workspace_tree_sha256": "02aa94b76774cad22a888450a034104ebc94efabbef5c0544aa0cded7e7043a9"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "compat/legacy_wrapper.py",
+        "docs/cleanup_v10_repair_semantic_duplicate_39.md",
+        "helpers/cleanup_v10_repair_semantic_duplicate_39_alias.py",
+        "policy.py",
+        "release-notes.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_semantic_duplicate_39",
+      "hidden_tests_tree_sha256": "6463ff7b5baeb589c7b98af554f7d6ffc9bcfcd2abe08fe5405ae854a5141d43",
+      "kind": "semantic_duplicate",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_semantic_duplicate_39",
+      "reference_tree_sha256": "7eaaff7c1b9f9e1825de3184c80653e44cb350f25b0028c1218dd4867e7cf528",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_repair_semantic_duplicate_39",
+      "workspace_path": "tasks/cleanup_v10_repair_semantic_duplicate_39",
+      "workspace_tree_sha256": "dd5122c01a385df4094cd78a27d1ceeb2cf79f52f05de031eeaafa7f72c1fd3e"
+    },
+    {
+      "allowed_edit_paths": [
+        "CHANGELOG.md",
+        "README.md",
+        "VERSION.md",
+        "docs/cleanup_v10_repair_release_drift_40.md",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/cleanup_v10_repair_release_drift_40",
+      "hidden_tests_tree_sha256": "456450fdac08e70725f0c8b5d6792962051128baba434e54581030029e437cde",
+      "kind": "release_drift",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/cleanup_v10_repair_release_drift_40",
+      "reference_tree_sha256": "e6512b0b1f7d8486a6e0c4202844c3c54b6dff0f0d24dde355b109d40f0717a1",
+      "stratum": "integration",
+      "task_id": "cleanup_v10_repair_release_drift_40",
+      "workspace_path": "tasks/cleanup_v10_repair_release_drift_40",
+      "workspace_tree_sha256": "a358cdc3b6d838e77d0a8004eb35c37facd2494bec86fee5c24afebd491b9a5e"
+    }
+  ]
+}

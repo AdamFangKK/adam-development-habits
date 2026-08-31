@@ -1,0 +1,2 @@
+# legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06
+Current owners use the canonical normalizer.

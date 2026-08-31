@@ -1,0 +1,1 @@
+legacy_contract_cleanup_v10_repair_dynamic_retain_38: runtime adapter stays registered.
