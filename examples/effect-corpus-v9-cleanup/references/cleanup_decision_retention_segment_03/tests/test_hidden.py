@@ -15,6 +15,8 @@ class HiddenContract(unittest.TestCase):
         source = Path('policy.py').read_text(encoding='utf-8')
         self.assertNotIn('old contract cleanup_decision_retention_segment_03', source)
         self.assertIn('Current contract cleanup_decision_retention_segment_03', source)
+        self.assertNotIn('old contract cleanup_decision_retention_segment_03', Path('README.md').read_text(encoding='utf-8'))
+        self.assertIn('Current contract cleanup_decision_retention_segment_03', Path('docs/cleanup_decision_retention_segment_03.md').read_text(encoding='utf-8'))
 
 
 if __name__ == '__main__':

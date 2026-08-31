@@ -155,18 +155,30 @@ def cleanup_hidden_test(task_id: str, kind: str, hidden_cases: tuple[Case, ...])
             f"        self.assertIn('external_adapter_{task_id}', source)\n"
             "        self.assertIn('EXTERNAL_REGISTRY', source)\n"
             f"        self.assertNotIn('stale compatibility note {task_id}', source)\n"
+            f"        self.assertTrue(Path('adapters/{task_id}.py').is_file())\n"
+            f"        self.assertTrue(Path('runtime/{task_id}.json').is_file())\n"
+            f"        self.assertNotIn('old contract {task_id}', Path('README.md').read_text(encoding='utf-8'))\n"
         )
     elif kind == "duplicate":
-        hygiene = f"        self.assertNotIn('{duplicate_name}', source)\n"
+        hygiene = (
+            f"        self.assertNotIn('{duplicate_name}', source)\n"
+            f"        self.assertFalse(Path('helpers/{task_id}_duplicate.py').exists())\n"
+            f"        self.assertNotIn('old contract {task_id}', Path('README.md').read_text(encoding='utf-8'))\n"
+        )
     elif kind == "docs":
         hygiene = (
             f"        self.assertNotIn('old contract {task_id}', source)\n"
             f"        self.assertIn('Current contract {task_id}', source)\n"
+            f"        self.assertNotIn('old contract {task_id}', Path('README.md').read_text(encoding='utf-8'))\n"
+            f"        self.assertIn('Current contract {task_id}', Path('docs/{task_id}.md').read_text(encoding='utf-8'))\n"
         )
     else:
         hygiene = (
             f"        self.assertNotIn('{legacy_name}', source)\n"
             "        self.assertNotIn('Legacy path retained', source)\n"
+            f"        self.assertFalse(Path('legacy/{task_id}.py').exists())\n"
+            f"        self.assertFalse(Path('config/{task_id}.toml').exists())\n"
+            f"        self.assertNotIn('old contract {task_id}', Path('README.md').read_text(encoding='utf-8'))\n"
         )
     return (
         "from pathlib import Path\n"
@@ -309,6 +321,29 @@ def evaluate({signature}):
     return buggy, fixed
 
 
+def cleanup_supporting_files(task_id: str, kind: str, *, fixed: bool) -> dict[str, str]:
+    """Add non-code contract surfaces that a real retirement sweep must reconcile."""
+    current_readme = f"# Current contract {task_id}\nThe canonical policy is evaluate.\n"
+    stale_readme = f"# Current contract {task_id}\nold contract {task_id}: legacy path remains supported.\n"
+    current_docs = f"Current contract {task_id}: callers use the canonical policy.\n"
+    stale_docs = f"old contract {task_id}: callers use the legacy policy.\n"
+    files = {
+        "README.md": current_readme if fixed else stale_readme,
+        f"docs/{task_id}.md": current_docs if fixed else stale_docs,
+    }
+    if kind == "replace":
+        if not fixed:
+            files[f"legacy/{task_id}.py"] = "def legacy_handler(value):\n    return value\n"
+            files[f"config/{task_id}.toml"] = f"legacy_flag = \"{task_id}\"\n"
+    elif kind == "duplicate":
+        if not fixed:
+            files[f"helpers/{task_id}_duplicate.py"] = "def duplicate_handler(value):\n    return value\n"
+    elif kind == "retain":
+        files[f"adapters/{task_id}.py"] = f"def external_adapter_{task_id}(value):\n    return value\n"
+        files[f"runtime/{task_id}.json"] = f'{{"EXTERNAL_REGISTRY": "external_adapter_{task_id}"}}\n'
+    return files
+
+
 def cleanup_tasks() -> list[CleanupSpec]:
     strata = ("single-module",) * 6 + ("cross-module",) * 8 + ("integration",) * 6
     logic_rows = (
@@ -443,9 +478,27 @@ def materialize_cleanup(corpus: Path) -> dict[str, object]:
         reference_root = corpus / "references" / task.task_id
         public_test = test_source(task.public_cases, "PublicContract")
         hidden_test = cleanup_hidden_test(task.task_id, task.kind, task.hidden_cases)
-        write_tree(public_root, {"policy.py": task.buggy_source, "task.md": task.description, "tests/test_public.py": public_test})
+        public_files = {
+            "policy.py": task.buggy_source,
+            "task.md": task.description,
+            "tests/test_public.py": public_test,
+            **cleanup_supporting_files(task.task_id, task.kind, fixed=False),
+        }
+        reference_files = {
+            "policy.py": task.fixed_source,
+            "task.md": task.description,
+            "tests/test_public.py": public_test,
+            "tests/test_hidden.py": hidden_test,
+            **cleanup_supporting_files(task.task_id, task.kind, fixed=True),
+        }
+        write_tree(public_root, public_files)
         write_tree(hidden_root, {"tests/test_hidden.py": hidden_test})
-        write_tree(reference_root, {"policy.py": task.fixed_source, "task.md": task.description, "tests/test_public.py": public_test, "tests/test_hidden.py": hidden_test})
+        write_tree(reference_root, reference_files)
+        allowed_edit_paths = sorted(
+            path
+            for path in set(public_files).union(reference_files)
+            if not path.startswith("tests/") and path != "task.md"
+        )
         manifest_tasks.append({
             "task_id": task.task_id,
             "cohort": task.cohort,
@@ -454,7 +507,7 @@ def materialize_cleanup(corpus: Path) -> dict[str, object]:
             "workspace_path": f"tasks/{task.task_id}",
             "hidden_tests_path": f"hidden-tests/{task.task_id}",
             "reference_path": f"references/{task.task_id}",
-            "allowed_edit_paths": ["policy.py"],
+            "allowed_edit_paths": allowed_edit_paths,
             "public_command": PUBLIC_COMMAND,
             "hidden_command": PUBLIC_COMMAND,
             "workspace_tree_sha256": tree_digest(public_root),
@@ -480,6 +533,8 @@ def materialize_cleanup(corpus: Path) -> dict[str, object]:
         "cleanup_contract": {
             "kinds": ["replace", "duplicate", "retain", "docs"],
             "hidden_checks": ["current_behavior", "retirement_hygiene"],
+            "multi_file_surfaces": True,
+            "deletion_is_scoped_and_hash_safe": True,
             "reference_implementation_is_not_available_to_agent": True,
         },
         "tasks": manifest_tasks,

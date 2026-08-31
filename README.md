@@ -102,9 +102,9 @@ Delivery lifecycle: <atomic commit/PR、发布恢复、迁移、配置/Secret、
 |---|---|---|---|---|
 | 功能替换、Bug 修复、重构、优化、重命名，或契约/配置/Flag/依赖变更导致旧路径不再是 canonical owner | 不触发全面清理；只修正本次直接编辑且不改变行为的文字 | 检查实现、调用方、测试、类型/导出、依赖、路由/注册、配置/Flag、遥测、文档/示例、注释和版本/metadata；每项标记 `remove`、`retain` 或 `unknown` | 额外检查动态加载/注册、任务/队列、生成入口、兼容 shim、迁移状态、API/ADR/runbook，并由独立复查确认；保留项必须有真实消费者、删除条件、可观测信号和覆盖测试 | `rg`/导入或调用图、注册/配置查找、静态分析或依赖扫描、最终 diff、测试/CI、迁移/回滚演练、文档审查、证据台账和完成报告 |
 
-`reuse_existing_owner` 表示已有 owner 的契约能够承接需求，不能另起第三套规则；`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、删除条件、可观测性和测试；`unknown` 遇到动态、生成或外部引用时不得猜删，先做针对性运行时/注册检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。清理检查点必须在最终验证和提交前完成，未解析的 `unknown` 不得被静默带过。
+`reuse_existing_owner` 表示已有 owner 的契约能够承接需求，不能另起第三套规则；`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、删除条件、可观测性和测试；`unknown` 遇到动态、生成或外部引用时不得猜删，先做针对性运行时/注册检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。先建立 `path | role | owner | consumers | lookup kind | evidence | classification | removal condition` 退休清单，再允许删除；删除后必须做孤儿引用扫描，并确认删除路径属于本次范围。清理检查点必须在最终验证和提交前完成，未解析的 `unknown` 不得被静默带过。
 
-检查顺序固定为：实现前先找并复用已有 owner；实现后、最终验证和提交前扫描重复/废弃路径；随后同步旧符号、旧行为描述、注释、版本说明和 metadata；动态或外部引用没有证据时停止完成门禁并报告 `unknown`/`blocked`。
+检查顺序固定为：实现前先找并复用已有 owner；实现后、最终验证和提交前扫描重复/废弃路径；随后同步旧符号、旧行为描述、注释、版本说明和 metadata；删除后再做一次跨文件孤儿扫描，覆盖导入/导出、注册表、配置、遥测和文档；动态或外部引用没有证据时停止完成门禁并报告 `unknown`/`blocked`。版本、状态和发布说明以当前 Git/CI 证据为准，不能留下无法验证的手工描述。
 
 ### 分层埋点与开发过程数据
 
@@ -248,9 +248,9 @@ V8 现仅保留为失效历史协议，不得引用其 hidden success 作为能�
 
 V9 是当前的能力检验协议：[`materialize_effect_corpus_v9.py`](./scripts/materialize_effect_corpus_v9.py) 把 Agent 可见的 `tasks/`、只含测试的 `hidden-tests/` 与仅用于语料校验的 `references/` 物理分离；[`score_effect_workspace_v9.py`](./scripts/score_effect_workspace_v9.py) 不接受参考实现路径，只注入测试，并在注入前后校验候选实现 SHA-256 未变化。实验对同一题执行 `no_skill`、冻结 old Skill 和冻结 new Skill 三个条件，主对比为 `new_skill - old_skill`，`new_skill - no_skill` 仅作次要锚点；20 个决策保留题与 20 个端到端修复题分别按 `6/8/6` 分层分析。所有非敏感 prompt、输出、stdout/stderr、diff、公开/隐藏结果、审计和哈希 manifest 永久保留；中断、遗漏、隔离失败或关键安全回退会阻断分析，不能选择性重试或删样本。V9 只有在预注册完整采集及统计门槛实际通过后，才能支持固定模型、Harness、Skill 快照、语料和评分器范围内的提升结论。预注册文件不是手工维护的版本说明：正式采集前必须用 [`create_effect_preregistration_v9.py`](./scripts/create_effect_preregistration_v9.py) 在冻结提交上生成 `examples/effect-experiment-v9/preregistration.json`；在生成前该路径不存在是预期状态，不得把未生成的分析命令当作已执行证据。
 
-针对自动退役与漂移清理，另有固定的 [`effect-corpus-v9-cleanup`](./examples/effect-corpus-v9-cleanup) 语料。它包含 40 个任务、20 个 `decision-retention` 和 20 个 `repair`，隐藏测试分别检查当前行为、重复/废弃路径删除、真实动态消费者保留，以及注释/契约描述同步；公开测试故意允许部分浅层修改通过。生成命令是 `python3 scripts/materialize_effect_corpus_v9.py --profile cleanup --corpus examples/effect-corpus-v9-cleanup`，生成后必须保持 manifest 和目录 hash 不变。该语料的工程契约由 [`test_cleanup_effect_corpus.py`](./tests/test_cleanup_effect_corpus.py) 锁定；它证明夹具和评分边界有效，不等于已经证明模型效果提升。
+针对自动退役与漂移清理，另有固定的 [`effect-corpus-v9-cleanup`](./examples/effect-corpus-v9-cleanup) 语料。它包含 40 个任务、20 个 `decision-retention` 和 20 个 `repair`，隐藏测试分别检查当前行为、重复/废弃路径删除、真实动态消费者保留，以及注释/契约描述同步；任务同时包含实现、README、docs、配置/注册或兼容文件，允许隐藏契约检验跨文件清理与合法删除，公开测试故意允许部分浅层修改通过。生成命令是 `python3 scripts/materialize_effect_corpus_v9.py --profile cleanup --corpus examples/effect-corpus-v9-cleanup`，生成后必须保持 manifest 和目录 hash 不变。该语料的工程契约由 [`test_cleanup_effect_corpus.py`](./tests/test_cleanup_effect_corpus.py) 锁定；它证明夹具和评分边界有效，不等于已经证明模型效果提升。
 
-cleanup profile 的正式预注册入口是 [`cleanup-preregistration.json`](./examples/effect-experiment-v9/cleanup-preregistration.json)，它绑定 old/new Skill 快照、cleanup manifest、prompt、runner、scorer 和 analyzer 的 hash。预注册状态为 `planned`，分析结果必须保持 `not_run`/`unknown`，直到干净 worktree 中所有三条件 paired trials 完成。
+cleanup profile 的当前正式预注册入口是 [`cleanup-preregistration-v13.json`](./examples/effect-experiment-v9/cleanup-preregistration-v13.json)，它绑定 old/new Skill 快照、cleanup manifest、prompt、runner、scorer 和 analyzer 的 hash。预注册状态为 `planned`，分析结果必须保持 `not_run`/`unknown`，直到干净 worktree 中所有三条件 paired trials 完成；[`cleanup-preregistration-v12-superseded.json`](./examples/effect-experiment-v9/cleanup-preregistration-v12-superseded.json) 保留原始字节，仅作未运行历史。
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \

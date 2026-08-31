@@ -77,12 +77,20 @@ class CleanupEffectCorpusTests(unittest.TestCase):
                 )
             self.assertEqual(first_manifest["profile"], "cleanup")
             self.assertTrue(first_manifest["cleanup_contract"]["reference_implementation_is_not_available_to_agent"])
+            self.assertTrue(first_manifest["cleanup_contract"]["multi_file_surfaces"])
             for task in tasks:
                 hidden = first / str(task["hidden_tests_path"])
                 reference = first / str(task["reference_path"])
                 self.assertEqual(tree_digest(hidden), task["hidden_tests_tree_sha256"])
                 self.assertEqual(tree_digest(reference), task["reference_tree_sha256"])
                 self.assertFalse((hidden / "policy.py").exists())
+                self.assertIn("policy.py", task["allowed_edit_paths"])
+                self.assertIn("README.md", task["allowed_edit_paths"])
+                self.assertIn(f"docs/{task['task_id']}.md", task["allowed_edit_paths"])
+
+            deletion_tasks = [task for task in tasks if task["kind"] in {"replace", "duplicate"}]
+            self.assertTrue(any("legacy/" in path for task in deletion_tasks for path in task["allowed_edit_paths"]))
+            self.assertTrue(any("helpers/" in path for task in deletion_tasks for path in task["allowed_edit_paths"]))
 
     def test_public_tests_deliberately_miss_retirement_but_hidden_contract_catches_it(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -106,6 +114,27 @@ class CleanupEffectCorpusTests(unittest.TestCase):
                     )
                     hidden = run_suite(candidate)
                     self.assertNotEqual(hidden.returncode, 0, task.task_id)
+
+    def test_policy_only_near_miss_fails_the_multifile_hidden_contract(self) -> None:
+        """A behavior-only patch must not pass while cleanup surfaces remain stale."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "corpus"
+            materialize_cleanup(root)
+            for task in cleanup_tasks():
+                with self.subTest(task=task.task_id):
+                    candidate = Path(directory) / "candidates" / task.task_id
+                    candidate.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copytree(root / "tasks" / task.task_id, candidate)
+                    _ = shutil.copy2(
+                        root / "references" / task.task_id / "policy.py",
+                        candidate / "policy.py",
+                    )
+                    _ = shutil.copy2(
+                        root / "hidden-tests" / task.task_id / "tests" / "test_hidden.py",
+                        candidate / "tests" / "test_hidden.py",
+                    )
+                    result = run_suite(candidate)
+                    self.assertNotEqual(result.returncode, 0, task.task_id)
 
     def test_all_reference_fixes_pass_public_and_hidden_contracts(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -56,8 +56,13 @@ def implementation_hashes(root: Path, allowed_paths: tuple[str, ...]) -> dict[st
     hashes: dict[str, str] = {}
     for relative in allowed_paths:
         path = root / relative
-        if path.is_symlink() or not path.is_file():
-            raise ValueError(f"allowed implementation path is missing or unsafe: {relative}")
+        if path.is_symlink():
+            raise ValueError(f"allowed implementation path is a symbolic link: {relative}")
+        if not path.exists():
+            hashes[relative] = "<missing>"
+            continue
+        if not path.is_file():
+            raise ValueError(f"allowed implementation path is not a regular file: {relative}")
         hashes[relative] = sha256(path)
     return hashes
 

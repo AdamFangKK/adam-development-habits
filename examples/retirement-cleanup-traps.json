@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "scenarios": [
     {
       "id": "replacement_leaves_old_impl",
@@ -56,6 +56,20 @@
       "trap": "The source and tests are current, but a changelog entry and package version description still teach the retired contract.",
       "expected": "remove",
       "required_evidence": ["old behavior phrase search", "changelog", "version metadata", "final diff"]
+    },
+    {
+      "id": "cross_file_orphan_scan",
+      "trigger": "A canonical owner replaces an implementation across source and support files.",
+      "trap": "The function is fixed, but a legacy module, registration key, README sentence, or telemetry label remains in another allowed file.",
+      "expected": "remove",
+      "required_evidence": ["retirement inventory", "cross-file orphan scan", "registration/configuration lookup", "final diff"]
+    },
+    {
+      "id": "deletion_scope_integrity",
+      "trigger": "A replacement makes an obsolete file safe to delete.",
+      "trap": "The agent either keeps the orphan forever or deletes an out-of-scope path without proving callers and generated references are absent.",
+      "expected": "remove",
+      "required_evidence": ["allowed change scope", "consumer search", "post-retirement test", "clean checkout"]
     }
   ]
 }

@@ -1,0 +1,2 @@
+# Current contract cleanup_decision_retention_casefold_11
+old contract cleanup_decision_retention_casefold_11: legacy path remains supported.

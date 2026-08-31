@@ -1,5 +1,6 @@
 {
   "cleanup_contract": {
+    "deletion_is_scoped_and_hash_safe": true,
     "hidden_checks": [
       "current_behavior",
       "retirement_hygiene"
@@ -10,6 +11,7 @@
       "retain",
       "docs"
     ],
+    "multi_file_surfaces": true,
     "reference_implementation_is_not_available_to_agent": true
   },
   "cohorts": {
@@ -40,6 +42,9 @@
   "tasks": [
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_casefold_01.md",
+        "helpers/cleanup_decision_retention_casefold_01_duplicate.py",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -52,7 +57,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_casefold_01",
-      "hidden_tests_tree_sha256": "4555e7e90c21873f4ee30c85e7e7d1e1a957e03511367ac74ff4c9b04832cc56",
+      "hidden_tests_tree_sha256": "73c57e1a54e40726f0ca6721ef7dd7cb88ab163e54c580ccd4e0f1c3176ce97f",
       "kind": "duplicate",
       "public_command": [
         "python3",
@@ -63,15 +68,19 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_casefold_01",
-      "reference_tree_sha256": "0780689a60ac9921d796a2a38b2db4ba7d27662a60ee82e5350a07e9e7eaf166",
+      "reference_tree_sha256": "171f694b5f98d4d3efc7eb2662d3d25fb48b80a17b899d3f0e08b15fe1bea19c",
       "stratum": "single-module",
       "task_id": "cleanup_decision_retention_casefold_01",
       "workspace_path": "tasks/cleanup_decision_retention_casefold_01",
-      "workspace_tree_sha256": "2d1b448d7756202f3bc0a8e770f0ec752575034c3d9ef9fd0d7ca2bcbc8f9c87"
+      "workspace_tree_sha256": "22e8fa6eb271e549955fb356a55802d6752301b906acd00c6a1bbf95c8691185"
     },
     {
       "allowed_edit_paths": [
-        "policy.py"
+        "README.md",
+        "adapters/cleanup_decision_retention_trim_02.py",
+        "docs/cleanup_decision_retention_trim_02.md",
+        "policy.py",
+        "runtime/cleanup_decision_retention_trim_02.json"
       ],
       "cohort": "decision-retention",
       "hidden_command": [
@@ -83,7 +92,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_trim_02",
-      "hidden_tests_tree_sha256": "a1ec100c433840c9d31875d29fe08c67883ccbb872bf40ea1502643c76cf4c62",
+      "hidden_tests_tree_sha256": "973a5da01de4f21b940e68a2aba9ed8ac2ddc40141df8fcc9fd0f37eae1f8002",
       "kind": "retain",
       "public_command": [
         "python3",
@@ -94,14 +103,16 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_trim_02",
-      "reference_tree_sha256": "ac8aa0608436ee75b23cb22069ed2a9d39018a887a1084323f5a987f2ebe7a36",
+      "reference_tree_sha256": "a9396f05ed778c0fce55fa426862be198ec7ec6acf0090986f4a2af85c01f3bd",
       "stratum": "single-module",
       "task_id": "cleanup_decision_retention_trim_02",
       "workspace_path": "tasks/cleanup_decision_retention_trim_02",
-      "workspace_tree_sha256": "b9c48f6b0d51688030b29aadfc593c382aa83cfa7c4addb2f81656b63e4cb9ed"
+      "workspace_tree_sha256": "8071bf9b9ff0b7084582d0cc7eec95ababfe90cf40bdc80b44902d13f60b4e47"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_segment_03.md",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -114,7 +125,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_segment_03",
-      "hidden_tests_tree_sha256": "4bcb85315771d9b091af47186ac398a5e1ff3777ade697648f77eb3499881f6b",
+      "hidden_tests_tree_sha256": "ee425c264478717188c4d1b62c372b7f0b4990a7cfc9cf4b024fcf0900745a63",
       "kind": "docs",
       "public_command": [
         "python3",
@@ -125,14 +136,17 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_segment_03",
-      "reference_tree_sha256": "810cd265b10511547d078a81fe0dcae045a12e4701207cecaa587d97051af205",
+      "reference_tree_sha256": "c6f866fe438678020de412c4e7766bac77e0d795208c3297afaed1841c8ae541",
       "stratum": "single-module",
       "task_id": "cleanup_decision_retention_segment_03",
       "workspace_path": "tasks/cleanup_decision_retention_segment_03",
-      "workspace_tree_sha256": "1bee310995bdec41893d772be2bcfd9cf3c7158d768e06d244cbd7f2e42a44e3"
+      "workspace_tree_sha256": "33100bccb56c9354fe58266b8910739af464bb9cbeb5f5ad9213badd30519425"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_scale_04.md",
+        "helpers/cleanup_decision_retention_scale_04_duplicate.py",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -145,7 +159,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_scale_04",
-      "hidden_tests_tree_sha256": "604ab987b321f8438c52b070f3031f70e420dae561dcb8545da8133c6fb7150f",
+      "hidden_tests_tree_sha256": "1e6b8970544448347a173a5c4c5f4148a5dff93103430ad372357f4ca5fa1bad",
       "kind": "duplicate",
       "public_command": [
         "python3",
@@ -156,15 +170,19 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_scale_04",
-      "reference_tree_sha256": "44fca55b0a5a982dc88454d6f4e2c21921c835f8103b2f9bd1b83af470ecf384",
+      "reference_tree_sha256": "ba7588717f4f351fdc0a4d196811be61002e81898c3e7150f3fb3bb9e6ea96fd",
       "stratum": "single-module",
       "task_id": "cleanup_decision_retention_scale_04",
       "workspace_path": "tasks/cleanup_decision_retention_scale_04",
-      "workspace_tree_sha256": "98d38f6ea9aafd87113cdf2d03b2d8d6c61e5090bca63af066bb79032cdcbd03"
+      "workspace_tree_sha256": "3a9a7d660ed022dafe26b8b30de8ac9ad910f069e8a02773a97713950940e1e2"
     },
     {
       "allowed_edit_paths": [
-        "policy.py"
+        "README.md",
+        "adapters/cleanup_decision_retention_order_05.py",
+        "docs/cleanup_decision_retention_order_05.md",
+        "policy.py",
+        "runtime/cleanup_decision_retention_order_05.json"
       ],
       "cohort": "decision-retention",
       "hidden_command": [
@@ -176,7 +194,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_order_05",
-      "hidden_tests_tree_sha256": "3f827d4cbc7a906224daf1fe09505b1903399cd4c00e04e5091b321056d53702",
+      "hidden_tests_tree_sha256": "1b9d01ab07a5f417622c09ff451750643e605340053fae556adeeac1100fbf6e",
       "kind": "retain",
       "public_command": [
         "python3",
@@ -187,14 +205,16 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_order_05",
-      "reference_tree_sha256": "af2531d2a17f3cb0ab07f0446c4c4ffba2394f6e99005742d20561f0440ce996",
+      "reference_tree_sha256": "a6406561c9c4f7f687872b8c366cb15a67102f644d001c1110b28fe3030a760f",
       "stratum": "single-module",
       "task_id": "cleanup_decision_retention_order_05",
       "workspace_path": "tasks/cleanup_decision_retention_order_05",
-      "workspace_tree_sha256": "c5564a2ac6684e89b3bab66e43ede06912e09d88719c7337e0b0ecad53699362"
+      "workspace_tree_sha256": "b9b7d8fd4506798814acd3a6005e793bdb759ceec9e29596c974a07b0ce8252f"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_casefold_06.md",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -207,7 +227,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_casefold_06",
-      "hidden_tests_tree_sha256": "13c3ce1fa5eef28be1d901fb4b6371262e847542c0f081942a508837c40341b9",
+      "hidden_tests_tree_sha256": "8dacc0aea4397404d0d260a5f8ebe4f49fd617a0eb551934e772348186e49c07",
       "kind": "docs",
       "public_command": [
         "python3",
@@ -218,14 +238,17 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_casefold_06",
-      "reference_tree_sha256": "151baab21ca51224b9aa6cb0f7ecc81d8067c0e43d101908a5f1508f3585c72e",
+      "reference_tree_sha256": "aa4c90aef4eb9015be6dcd883f0df7911e89228449d9a349ce952ad52231c116",
       "stratum": "single-module",
       "task_id": "cleanup_decision_retention_casefold_06",
       "workspace_path": "tasks/cleanup_decision_retention_casefold_06",
-      "workspace_tree_sha256": "6b9f12787fab9cf9de1498e40474f74721e699408d24f028ce14ce167b82556f"
+      "workspace_tree_sha256": "483b6e5a9936c93ba69184af5231bcb2797ed1a3468de1e5d80757bb4f88986d"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_trim_07.md",
+        "helpers/cleanup_decision_retention_trim_07_duplicate.py",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -238,7 +261,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_trim_07",
-      "hidden_tests_tree_sha256": "a4abf5e9e1d47a11378e9185e08349e78e615e2dcac39ef22e826ee24776162f",
+      "hidden_tests_tree_sha256": "fd285bda551e0fed73efe3b5720ef7ade753814b8e2e2b329d4b62cf6d7d234e",
       "kind": "duplicate",
       "public_command": [
         "python3",
@@ -249,15 +272,19 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_trim_07",
-      "reference_tree_sha256": "bf1f22cf275c9cb878adc231808b52a551bbd75dc09764c8d9c45941afe7fb15",
+      "reference_tree_sha256": "574078cdcc7d29884d64328c37effe1d276cd10aa76013b7cb07e4c2096b47cb",
       "stratum": "cross-module",
       "task_id": "cleanup_decision_retention_trim_07",
       "workspace_path": "tasks/cleanup_decision_retention_trim_07",
-      "workspace_tree_sha256": "34b0ffca162d1da3e39a5d2388e7bc0d09fb8b5ac04f051608503a83950ef5f3"
+      "workspace_tree_sha256": "8120fc904dd0ac2dcb0a16873364e8b664d520b5ccfb47ee644dee3fdcbf3493"
     },
     {
       "allowed_edit_paths": [
-        "policy.py"
+        "README.md",
+        "adapters/cleanup_decision_retention_segment_08.py",
+        "docs/cleanup_decision_retention_segment_08.md",
+        "policy.py",
+        "runtime/cleanup_decision_retention_segment_08.json"
       ],
       "cohort": "decision-retention",
       "hidden_command": [
@@ -269,7 +296,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_segment_08",
-      "hidden_tests_tree_sha256": "a1fe520d258f2cd040260824347a963cdbc259941ed9c95eed2417b35556d21f",
+      "hidden_tests_tree_sha256": "2965b94a7597ebb139a3a609c25f807ef53193e786d1f4e2d17ec43b6abff390",
       "kind": "retain",
       "public_command": [
         "python3",
@@ -280,14 +307,16 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_segment_08",
-      "reference_tree_sha256": "4902a4b10b6428f6a0754b60384955ce9a1c15a3617e7fdf357fc7cdfeb0fb2b",
+      "reference_tree_sha256": "8d9f23355fe48b682f4e3b84453c6a441da1f5b8a77c880a2ee8f51edd2f246e",
       "stratum": "cross-module",
       "task_id": "cleanup_decision_retention_segment_08",
       "workspace_path": "tasks/cleanup_decision_retention_segment_08",
-      "workspace_tree_sha256": "5e2a379f6596e113f572b3d8ee3f6a769815fd470e424f7a465cfedba234785e"
+      "workspace_tree_sha256": "3da6fa767d2f19fceca42d935422c7cc23ee2e7e541780b8c2f6b26d479f32e1"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_scale_09.md",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -300,7 +329,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_scale_09",
-      "hidden_tests_tree_sha256": "d6e556dae2be8db55de3e7578ae7a982b25a74a89032862656a46e42a6fa467c",
+      "hidden_tests_tree_sha256": "9bd9f4f34ec3512b396bf765ea72bcb959cfca2e863987c8497f7ca8b0a67d55",
       "kind": "docs",
       "public_command": [
         "python3",
@@ -311,14 +340,17 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_scale_09",
-      "reference_tree_sha256": "8b98b8dad617dbbd42ee21544476bab0839f905f528e45228f16295e75b952a2",
+      "reference_tree_sha256": "04fad5e96a14530e34a9307dff9828823fb0da883ebcf6e1ef67819c59f42d79",
       "stratum": "cross-module",
       "task_id": "cleanup_decision_retention_scale_09",
       "workspace_path": "tasks/cleanup_decision_retention_scale_09",
-      "workspace_tree_sha256": "b66c1da70579220112393c884078b1b5c1dbb3aa0ca7c541534753f7b7b243e8"
+      "workspace_tree_sha256": "f9b65bc237239a7cba02983e3809bf26910f7b578907b9b5c6c165c5d94e3bb2"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_order_10.md",
+        "helpers/cleanup_decision_retention_order_10_duplicate.py",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -331,7 +363,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_order_10",
-      "hidden_tests_tree_sha256": "8ced0da847fd43cd2f823847f4f2b85882e7e26c467fc59fc589abfa6cf28c48",
+      "hidden_tests_tree_sha256": "ed2d5c4b983f8b462256c70a5af5893a2681629b7ccc82bdd092b8b140f94c6b",
       "kind": "duplicate",
       "public_command": [
         "python3",
@@ -342,15 +374,19 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_order_10",
-      "reference_tree_sha256": "c7d87cc0f5bf1b34c2defc37edb4b856f976e821acdb8ad67de56bd9315260b2",
+      "reference_tree_sha256": "6227a1d06e221e3d9dd39f08a43f6f35c41ebba386c8b8e59decad2c06f78603",
       "stratum": "cross-module",
       "task_id": "cleanup_decision_retention_order_10",
       "workspace_path": "tasks/cleanup_decision_retention_order_10",
-      "workspace_tree_sha256": "c31651df20b86cf2d1477674d878218d6489445ef506b6d82b71c0cb955529e9"
+      "workspace_tree_sha256": "8c3740dac1b6e9c21370c02fd2fbb50ce6eb60b63762055f2ddd85e2438da6b9"
     },
     {
       "allowed_edit_paths": [
-        "policy.py"
+        "README.md",
+        "adapters/cleanup_decision_retention_casefold_11.py",
+        "docs/cleanup_decision_retention_casefold_11.md",
+        "policy.py",
+        "runtime/cleanup_decision_retention_casefold_11.json"
       ],
       "cohort": "decision-retention",
       "hidden_command": [
@@ -362,7 +398,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_casefold_11",
-      "hidden_tests_tree_sha256": "14d03c0334a38844a64d2240aa51ce60194fd0bc43182a0472f73f8924d5f7fc",
+      "hidden_tests_tree_sha256": "45cb05e99eb5a0691450cdcd242eeb3c67102945b7690088e8036ff1ee3849b2",
       "kind": "retain",
       "public_command": [
         "python3",
@@ -373,14 +409,16 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_casefold_11",
-      "reference_tree_sha256": "fa0ee54fcb2389a23278ca94093ecfae82769810d752cd5caa4fb67609801f50",
+      "reference_tree_sha256": "279803d71ccc9e1e9d8b29e0b624e3bb952316cfaac088d216fb534abb84b411",
       "stratum": "cross-module",
       "task_id": "cleanup_decision_retention_casefold_11",
       "workspace_path": "tasks/cleanup_decision_retention_casefold_11",
-      "workspace_tree_sha256": "af7a399183788d99d15c5f146c84bc7051699bb86a527af8ebd11a13ed0ba6dc"
+      "workspace_tree_sha256": "1ebe3eb95fc4084b3ebd6f2b151223c3b47d6d4eccfe3f5a2a34a613f09b4681"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_trim_12.md",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -393,7 +431,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_trim_12",
-      "hidden_tests_tree_sha256": "c22b812aa07fa0229033f994c2706aaf981dd4063b1c52a6c3d8e2d30fa06db8",
+      "hidden_tests_tree_sha256": "1263c91cc1aff72b86cf3938893f86e076edf21538698ab95b9d1665975512da",
       "kind": "docs",
       "public_command": [
         "python3",
@@ -404,14 +442,17 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_trim_12",
-      "reference_tree_sha256": "83dfd0d29a3af82a1712bafed65aedb32e946dc22c59214b2ceb4868392d2782",
+      "reference_tree_sha256": "a4ea30351c7c9a333a5da47526de7d05856897ddd7b5932471079715b1a2c28d",
       "stratum": "cross-module",
       "task_id": "cleanup_decision_retention_trim_12",
       "workspace_path": "tasks/cleanup_decision_retention_trim_12",
-      "workspace_tree_sha256": "8ce57aef52d78124ce6d3cf1d5797a2221d7873115202ecd8934d91d1ce949eb"
+      "workspace_tree_sha256": "2f93a3c76ce7d206c1c23a2f345463d1415570878b844699b792ad820a2663f5"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_segment_13.md",
+        "helpers/cleanup_decision_retention_segment_13_duplicate.py",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -424,7 +465,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_segment_13",
-      "hidden_tests_tree_sha256": "d6c412e483843ef77f0d611918d62f477615db3a247eed919da29cfe11839411",
+      "hidden_tests_tree_sha256": "c5e8beeeeae83e31253fc892b5799e3ef15dab6a42f8d2276dae8e385598df20",
       "kind": "duplicate",
       "public_command": [
         "python3",
@@ -435,15 +476,19 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_segment_13",
-      "reference_tree_sha256": "adf03fa2c15ad80a3eda7589cd50c8dffcfb7e77efb5312fcf5b214f84554f74",
+      "reference_tree_sha256": "3ef999924f3d3e53733550f63dafc4eba436f711b99ffed8ee994ea0dd91eeb3",
       "stratum": "cross-module",
       "task_id": "cleanup_decision_retention_segment_13",
       "workspace_path": "tasks/cleanup_decision_retention_segment_13",
-      "workspace_tree_sha256": "d0d1453197bac041dbc611274160fda79b32728cff9f79b480c8a3a12ce3ca6f"
+      "workspace_tree_sha256": "4fec9aa4f47e3f40c698ae58f1b0dad4c9c1bc84da77a2a96dd94695d3332566"
     },
     {
       "allowed_edit_paths": [
-        "policy.py"
+        "README.md",
+        "adapters/cleanup_decision_retention_scale_14.py",
+        "docs/cleanup_decision_retention_scale_14.md",
+        "policy.py",
+        "runtime/cleanup_decision_retention_scale_14.json"
       ],
       "cohort": "decision-retention",
       "hidden_command": [
@@ -455,7 +500,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_scale_14",
-      "hidden_tests_tree_sha256": "721677054cfcd1d82709515d3a8e64ba7ebea9c6f3e79c627dddb1f181e2546d",
+      "hidden_tests_tree_sha256": "21d656df76199419133da7eab35d15a88c0066ec99a76372895a3049ff629944",
       "kind": "retain",
       "public_command": [
         "python3",
@@ -466,14 +511,16 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_scale_14",
-      "reference_tree_sha256": "dc455f289378246a041bf6f5cb1b103b2e503cc1fcd4f443faf6abc8a31f7903",
+      "reference_tree_sha256": "46e8d30470b811190d8b03cf79a940366440bf6b8793dafd7122ae6c920a864b",
       "stratum": "cross-module",
       "task_id": "cleanup_decision_retention_scale_14",
       "workspace_path": "tasks/cleanup_decision_retention_scale_14",
-      "workspace_tree_sha256": "93cf9f49e097a9d5fd558b673560cd4d105baa42804b0a577b87c5a418ef3f12"
+      "workspace_tree_sha256": "aa36e9021ced5197a80e24b9558f817f4fdfc2165783c21f88029ba29eceb2c4"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_order_15.md",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -486,7 +533,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_order_15",
-      "hidden_tests_tree_sha256": "2f12395aac62d982a2e5abcb0f05a3052cedb1510b2d62e5dd73eabef14a96d9",
+      "hidden_tests_tree_sha256": "9eb4aa454ec925cacdc2217323d50300633feb112eb078e79703de6ca93798c7",
       "kind": "docs",
       "public_command": [
         "python3",
@@ -497,14 +544,17 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_order_15",
-      "reference_tree_sha256": "f98bcc9bb43d47ce3548b7b424c6397ce6339614ac9b21832e5bb85ed8261943",
+      "reference_tree_sha256": "1b7c184d21642bd456f4c0fb9842336110050ddbc22a14913dfef42264ea03f2",
       "stratum": "integration",
       "task_id": "cleanup_decision_retention_order_15",
       "workspace_path": "tasks/cleanup_decision_retention_order_15",
-      "workspace_tree_sha256": "f7a179d18b7d56a785286c5f5f132ccf9cc7a531e073ee62da7d6a7cc4c28cf7"
+      "workspace_tree_sha256": "2b67a4977af2627250b3ce10e3839076cf0af0d4a5b3f9eb7e85832fdc622d99"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_casefold_16.md",
+        "helpers/cleanup_decision_retention_casefold_16_duplicate.py",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -517,7 +567,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_casefold_16",
-      "hidden_tests_tree_sha256": "1074ff21f7e7f81cbf9f57a43ccbb9475cb41ff0873cb41188b653b6c2df2ca3",
+      "hidden_tests_tree_sha256": "3d396620ba277e685b599bbc21871b492ce97efacc58d07761c541c7c7267feb",
       "kind": "duplicate",
       "public_command": [
         "python3",
@@ -528,15 +578,19 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_casefold_16",
-      "reference_tree_sha256": "5092cec968139d9a71c7ad301b287d2ce6334a84017c0673fe6a4e9bef2a4739",
+      "reference_tree_sha256": "06a812ef4fa6590c411cbd3c40a921e0899900650cb429b0031379c0dcd0452a",
       "stratum": "integration",
       "task_id": "cleanup_decision_retention_casefold_16",
       "workspace_path": "tasks/cleanup_decision_retention_casefold_16",
-      "workspace_tree_sha256": "12e28462ff6a77c2d0b3f8896cb2f1cea01385838269c3ec465d41fb49fe281f"
+      "workspace_tree_sha256": "dc86609516af35baa522dd64c19959d66d5c5320ae3d32215d79f213eae2e829"
     },
     {
       "allowed_edit_paths": [
-        "policy.py"
+        "README.md",
+        "adapters/cleanup_decision_retention_trim_17.py",
+        "docs/cleanup_decision_retention_trim_17.md",
+        "policy.py",
+        "runtime/cleanup_decision_retention_trim_17.json"
       ],
       "cohort": "decision-retention",
       "hidden_command": [
@@ -548,7 +602,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_trim_17",
-      "hidden_tests_tree_sha256": "b3455d414034269c2842e1acca8db8839b91f3c3b779bdcc4332dad43d01f491",
+      "hidden_tests_tree_sha256": "06b2b390b1c90143a594841eb4e47c8c5059bf2a7ce22aa5ec89eccf83506ba9",
       "kind": "retain",
       "public_command": [
         "python3",
@@ -559,14 +613,16 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_trim_17",
-      "reference_tree_sha256": "f39c5540cc61bfa6dedd088acc10103dcf6b1a2ae5f6a08716e8e6b9985bf101",
+      "reference_tree_sha256": "578e3f155b06cf055b1d01041c4808debcfc538827e85d17a9f5db0211cacf4f",
       "stratum": "integration",
       "task_id": "cleanup_decision_retention_trim_17",
       "workspace_path": "tasks/cleanup_decision_retention_trim_17",
-      "workspace_tree_sha256": "6e9dcb46bddd9a25973c776467def67bee246f0c4ce483a725a7e96314655a96"
+      "workspace_tree_sha256": "b830935b3f913bdb3207fe819d02653809a3eb9ab957a308e0d45c30b8ed1658"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_segment_18.md",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -579,7 +635,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_segment_18",
-      "hidden_tests_tree_sha256": "87257bab4806f5bdf58c206ced25ed29c2900f752fa76ae4146751ddacf5940d",
+      "hidden_tests_tree_sha256": "25b79ecd3be2bbc7911e42828a7ede248994b7b5740e726d55915dd684963301",
       "kind": "docs",
       "public_command": [
         "python3",
@@ -590,14 +646,17 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_segment_18",
-      "reference_tree_sha256": "0d45e0e24526c27a13475981bae370aa4bd58ef70f5da7c6fde0f1bf331c062d",
+      "reference_tree_sha256": "fbeff857f7346f1ed485a2e8245169c4aa4f1ce621dde39124eb6f36f31da4df",
       "stratum": "integration",
       "task_id": "cleanup_decision_retention_segment_18",
       "workspace_path": "tasks/cleanup_decision_retention_segment_18",
-      "workspace_tree_sha256": "1d99753620e9b0b8b15a92059dd7704a2d0ae8afcba8e69063c55d85ac391e33"
+      "workspace_tree_sha256": "5c19b53b7f1aea345fa0031fda034516c38574a518111923b8e8ff77aa640f35"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "docs/cleanup_decision_retention_scale_19.md",
+        "helpers/cleanup_decision_retention_scale_19_duplicate.py",
         "policy.py"
       ],
       "cohort": "decision-retention",
@@ -610,7 +669,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_scale_19",
-      "hidden_tests_tree_sha256": "9537a349c581828bbb52028f97b4d96b17d16f41ec916a3bc94e9d0b11b464d8",
+      "hidden_tests_tree_sha256": "36ad58008af75392835e5497557e6a13b76795c536fcb3e4affd2f4a930360a6",
       "kind": "duplicate",
       "public_command": [
         "python3",
@@ -621,15 +680,19 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_scale_19",
-      "reference_tree_sha256": "50784bf2fb7a690bb7cfd86c8a9f8013ee97a87798add152f406e63bb1d50762",
+      "reference_tree_sha256": "6dae405e5b922592bd74c5b438cacf727ab49eb191f909daf152a886b045a88c",
       "stratum": "integration",
       "task_id": "cleanup_decision_retention_scale_19",
       "workspace_path": "tasks/cleanup_decision_retention_scale_19",
-      "workspace_tree_sha256": "d8ca35eb6da4d46a342113b0ef3d4174f236f7993a38641b61f63fe761a8a70a"
+      "workspace_tree_sha256": "a5ee01dce0b0736c8b175907e9bdaaa4f0b190d98385a1a0cde9d8969b8fa1f8"
     },
     {
       "allowed_edit_paths": [
-        "policy.py"
+        "README.md",
+        "adapters/cleanup_decision_retention_order_20.py",
+        "docs/cleanup_decision_retention_order_20.md",
+        "policy.py",
+        "runtime/cleanup_decision_retention_order_20.json"
       ],
       "cohort": "decision-retention",
       "hidden_command": [
@@ -641,7 +704,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_decision_retention_order_20",
-      "hidden_tests_tree_sha256": "cd72cba365d82aac5bafa42a8d6baf0911741fe9d329670b10746db5b1460a1b",
+      "hidden_tests_tree_sha256": "44238fa1505c35ad88af6bec30f71816ddcd32ace7c61cdd2a4fe8041a925d7d",
       "kind": "retain",
       "public_command": [
         "python3",
@@ -652,14 +715,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_decision_retention_order_20",
-      "reference_tree_sha256": "fbcfd291953eb0309c159742851a39217af002c0b76d345531409288bd5c8412",
+      "reference_tree_sha256": "76508d9f92ee9b303ee1e0609fc3c9cca5d7fe3caa55ae4f087c74f1bdcc9213",
       "stratum": "integration",
       "task_id": "cleanup_decision_retention_order_20",
       "workspace_path": "tasks/cleanup_decision_retention_order_20",
-      "workspace_tree_sha256": "e74c151be13a040a8e8138f1140803a917620454f7cd29b6a9f1abd6ec624e39"
+      "workspace_tree_sha256": "6a237d0b8460cb7346bc692ca715438eccfe0de90574808ebab1c9c6c687d0fe"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_casefold_21.toml",
+        "docs/cleanup_repair_casefold_21.md",
+        "legacy/cleanup_repair_casefold_21.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -672,7 +739,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_casefold_21",
-      "hidden_tests_tree_sha256": "1cb10d60d97439c2b698f1b1916e501f7470f7e1403931e67fd7f467d8710cc2",
+      "hidden_tests_tree_sha256": "d4ba7c1f03456b60cf3304873178149d2309e6c2025751cea87ddf55bf34d00e",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -683,14 +750,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_casefold_21",
-      "reference_tree_sha256": "e60834230722f8a1203416a58b7b1cb029a0766b8a378dc7d8ddaf38f13ef477",
+      "reference_tree_sha256": "7493a1f3f05fe83fa533989d4ff6973f3839adc6e11cfd0a15678ebd88d9a443",
       "stratum": "single-module",
       "task_id": "cleanup_repair_casefold_21",
       "workspace_path": "tasks/cleanup_repair_casefold_21",
-      "workspace_tree_sha256": "c6c3c3b64cae77916e0fcfc96ba842ed9ce066c411808c655cf1ae88a44f6cab"
+      "workspace_tree_sha256": "8946554765c282d42582c14a31773437dde7da0f2c6c370f43b8ea5121dd7b56"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_trim_22.toml",
+        "docs/cleanup_repair_trim_22.md",
+        "legacy/cleanup_repair_trim_22.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -703,7 +774,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_trim_22",
-      "hidden_tests_tree_sha256": "bc41723f46860c36227092e5def9b6417e18de9dab32b7c1d2f01775b2032206",
+      "hidden_tests_tree_sha256": "02398dee620188cc262ee02fc2cddc89188c3a58f798a817846de8de88392f8e",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -714,14 +785,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_trim_22",
-      "reference_tree_sha256": "3ce6905c5bc160067bcc5d84561c4743fa395c482d0e4750145da934049605e0",
+      "reference_tree_sha256": "737eab3b854d573116747bbaff6090daf489a5ae0abe3cef90b95bd1b979b811",
       "stratum": "single-module",
       "task_id": "cleanup_repair_trim_22",
       "workspace_path": "tasks/cleanup_repair_trim_22",
-      "workspace_tree_sha256": "af33ace74bf73e76ba1a6f0a71fa846e3780a492ee9da95252b3281bfe692863"
+      "workspace_tree_sha256": "bdc15d96d647a2e8e95941d6affb6aaaf5878e863e6018fe5dd077e91c36ca7e"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_segment_23.toml",
+        "docs/cleanup_repair_segment_23.md",
+        "legacy/cleanup_repair_segment_23.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -734,7 +809,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_segment_23",
-      "hidden_tests_tree_sha256": "38bbfbe1ed98b69223bc87512fd4b5475716726999e68846879002a4792117cb",
+      "hidden_tests_tree_sha256": "a16ef2b6316520edb54c25dc8da541d39b238a318226ad9f7bb0b3f2d1fae4bd",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -745,14 +820,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_segment_23",
-      "reference_tree_sha256": "c69b8dd7c2eebce4a6776fa3cf41aa7487eb3c58f9590f60a5b44db1edaff95e",
+      "reference_tree_sha256": "9e74291f323f96249666d4e2b3f688dfc66af50cf6f6a86f350a10d71c063f65",
       "stratum": "single-module",
       "task_id": "cleanup_repair_segment_23",
       "workspace_path": "tasks/cleanup_repair_segment_23",
-      "workspace_tree_sha256": "2a33816798a55987bbbdaed590d6627e610047a7db50f073250488b3b82cb86d"
+      "workspace_tree_sha256": "54f23ba20158ef10c02c59f2ce0c87cb33cb76b021f6414220cfd7a8b997ab1f"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_scale_24.toml",
+        "docs/cleanup_repair_scale_24.md",
+        "legacy/cleanup_repair_scale_24.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -765,7 +844,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_scale_24",
-      "hidden_tests_tree_sha256": "e864b0dbfd21792842606e8fed674b68e435d2291d435fb9b76ea6b6789db426",
+      "hidden_tests_tree_sha256": "ce22e54d05b772e4d697d674ae2892b1eaeeaff3dd047afc25e9ccd82c134236",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -776,14 +855,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_scale_24",
-      "reference_tree_sha256": "9809ca25b88d3e03db4dec6e9bcdcf0244c0a36c0b2ccda4fe08d16266c5cca4",
+      "reference_tree_sha256": "c95f76f1bf3c5daa8d200b2aa7e036ad5099f683f1aca61459aa8055cec989a6",
       "stratum": "single-module",
       "task_id": "cleanup_repair_scale_24",
       "workspace_path": "tasks/cleanup_repair_scale_24",
-      "workspace_tree_sha256": "97301f840c2930e88bb2fff4e3745113671e615febd0a57e4d9149302a466d4c"
+      "workspace_tree_sha256": "622e4e83b5ad603fb07100b951391caaa44506d0f0996d7faaac31077cebb281"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_order_25.toml",
+        "docs/cleanup_repair_order_25.md",
+        "legacy/cleanup_repair_order_25.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -796,7 +879,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_order_25",
-      "hidden_tests_tree_sha256": "81d7b5d9bcc33a8bced726ed5472f5f19b2625abfd8307114ef4be812ebf35ba",
+      "hidden_tests_tree_sha256": "411ebd985b8b855df4f53b2536cf4d6e9e94dd14a4d4475e317315070bd401e7",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -807,14 +890,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_order_25",
-      "reference_tree_sha256": "230e7fa548d9e858d0090baae873350d43bd1da4d7515e81d3a51b1dd8153b96",
+      "reference_tree_sha256": "8303fcc9b333436c2bc5ef3b33a733df7e65218cb5bfab1334ac92f9f86845be",
       "stratum": "single-module",
       "task_id": "cleanup_repair_order_25",
       "workspace_path": "tasks/cleanup_repair_order_25",
-      "workspace_tree_sha256": "68abb8058fad5bbd079110a954bad66155c42b01d07a8103a380ce332987ad1d"
+      "workspace_tree_sha256": "49e4f9df59156853a95ad43c81fa78889633e407f7961074f0a0642de68c0fd0"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_casefold_26.toml",
+        "docs/cleanup_repair_casefold_26.md",
+        "legacy/cleanup_repair_casefold_26.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -827,7 +914,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_casefold_26",
-      "hidden_tests_tree_sha256": "e3735631ce764dc6c69fa26737a12a8b2086e598f92bb5193499649e05f2778e",
+      "hidden_tests_tree_sha256": "7dfe0ff1ff4bddb869ab874ca18128df1960743dc681fca7292c1fc8f5141660",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -838,14 +925,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_casefold_26",
-      "reference_tree_sha256": "3bb15c7cdd8a886ed4320617a16d67af6de201bcb69f1833d45e35a29e9b4c5d",
+      "reference_tree_sha256": "bb2d8e8c05ca6c8d5c51bf396a2eec1a1ee41fdd15c90e2fd5c7caef0386754f",
       "stratum": "single-module",
       "task_id": "cleanup_repair_casefold_26",
       "workspace_path": "tasks/cleanup_repair_casefold_26",
-      "workspace_tree_sha256": "8f6b0869914f86736babee77edd02816d2b5445b34625f986859c66903dc6109"
+      "workspace_tree_sha256": "b2fc30c715e183dbeca25d771c45214cd7f8af0ba79c454d44af52a0f83f006f"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_trim_27.toml",
+        "docs/cleanup_repair_trim_27.md",
+        "legacy/cleanup_repair_trim_27.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -858,7 +949,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_trim_27",
-      "hidden_tests_tree_sha256": "6eb6269378a20388609ed3bfc84f474fdc746035e3ef95e8bf2357915de3ff9d",
+      "hidden_tests_tree_sha256": "b46a8c58aee28068629c9a34d6e24af51b32e543d71ccf7ad0724e9d953b8946",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -869,14 +960,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_trim_27",
-      "reference_tree_sha256": "bdaeb5ace00511d49cad2dee93a70f725eec5fbe0f06a7b370314fe56562b563",
+      "reference_tree_sha256": "2a0af6b6c8de959d17dde61dea349bd7c3e656d0eb0261fab82f73a298fe5841",
       "stratum": "cross-module",
       "task_id": "cleanup_repair_trim_27",
       "workspace_path": "tasks/cleanup_repair_trim_27",
-      "workspace_tree_sha256": "2a9610a30d55e9dfbd9f3a388798d7dff729034392f2164c1d351b4be47246bf"
+      "workspace_tree_sha256": "c9628202ac54b26813e2c3eb10220ffc3b0c1a342b82d28c180deff28630d118"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_segment_28.toml",
+        "docs/cleanup_repair_segment_28.md",
+        "legacy/cleanup_repair_segment_28.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -889,7 +984,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_segment_28",
-      "hidden_tests_tree_sha256": "abbbbf533b32daed1b771f01571ac59e0192c38efcbb6f791e1a230b4f8d9e9f",
+      "hidden_tests_tree_sha256": "84bc1c1ccc85380d727d3f2b0cd644bc949c682924343055dd1430fd12d99470",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -900,14 +995,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_segment_28",
-      "reference_tree_sha256": "a58c2389fe07de09eb68eaa13f5a3dac1b8f404dc16abf87b51703c38833a076",
+      "reference_tree_sha256": "d529c3ddaef07db17fdf916e8fdccc7a19c6e37c3bf506101b3df063fe7fd5c7",
       "stratum": "cross-module",
       "task_id": "cleanup_repair_segment_28",
       "workspace_path": "tasks/cleanup_repair_segment_28",
-      "workspace_tree_sha256": "0e14eada538a50e04b75cad0c41103d7cf6a885f8408fd1319cf3fd17460275b"
+      "workspace_tree_sha256": "24085fd892f1809de886abcafd9ecce7f496dbf10eeaa4a15807d868deb2e70f"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_scale_29.toml",
+        "docs/cleanup_repair_scale_29.md",
+        "legacy/cleanup_repair_scale_29.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -920,7 +1019,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_scale_29",
-      "hidden_tests_tree_sha256": "2ca42a8f9e1faa9897f3007ec57f98b87a5ddc30ae78e8bfcd56a0b2e96b76a4",
+      "hidden_tests_tree_sha256": "3cef7727fb7b8fc06ef0003082960bdb0ba6f4a6ef5da35708521a9295a3ed41",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -931,14 +1030,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_scale_29",
-      "reference_tree_sha256": "5434f393bf6fcbd2cc51c76a252ae3a5bdc33003bf774fdb38fd3dba752e4ae0",
+      "reference_tree_sha256": "43f638ba0ca90aaa80573eb157b69b483b0dba1cd3b92e2245b62aee2c6e60ff",
       "stratum": "cross-module",
       "task_id": "cleanup_repair_scale_29",
       "workspace_path": "tasks/cleanup_repair_scale_29",
-      "workspace_tree_sha256": "e62482f6b292dcb3df290ca7f2a98d31a387b0a27bc6ac4163076d9f6ed2d75d"
+      "workspace_tree_sha256": "cac0dc9690e8383a1adadb25fb011818e2f7fac3853214ff696337ec925fdea1"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_order_30.toml",
+        "docs/cleanup_repair_order_30.md",
+        "legacy/cleanup_repair_order_30.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -951,7 +1054,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_order_30",
-      "hidden_tests_tree_sha256": "ec3fc6d758380a54aa96d513f946173b21b0f87fdc6f7d81366afb9ee8d36499",
+      "hidden_tests_tree_sha256": "bc6b1bc7f6b8802854eafa10fa0f2844a5568b265087a82901116a5e0e49e179",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -962,14 +1065,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_order_30",
-      "reference_tree_sha256": "bb10812aa1a4d10f4ce1d702e3e29002c7ca49206d12add753b6189639e096d3",
+      "reference_tree_sha256": "f064f79c6cf3d3e0574daccbefaf489e044a5685f77c68eee910ebba046e2aed",
       "stratum": "cross-module",
       "task_id": "cleanup_repair_order_30",
       "workspace_path": "tasks/cleanup_repair_order_30",
-      "workspace_tree_sha256": "24c84e7cfdeb248fa1570456b77b3dafd9cdc625bee83f0755b61c46742b7cda"
+      "workspace_tree_sha256": "1a0f16606c036f77f3e1482f132975da4180884a3de2b1f867c388bebd6c1ad7"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_casefold_31.toml",
+        "docs/cleanup_repair_casefold_31.md",
+        "legacy/cleanup_repair_casefold_31.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -982,7 +1089,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_casefold_31",
-      "hidden_tests_tree_sha256": "f1ffa8de656b22b36ce29dd457dbcecdd9f42caed495890306fb091773c78300",
+      "hidden_tests_tree_sha256": "d914623f39798b8b0e7ca8ac83164c9c031637586d160533b52223183fb5a576",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -993,14 +1100,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_casefold_31",
-      "reference_tree_sha256": "3500434da7add9e37c00c8a27629c03e40fdb78c5ed03c1a3f0f437390e21098",
+      "reference_tree_sha256": "7ca67368107ef5bd63aa964798bf66433002818108219814c1fc6ef756f41025",
       "stratum": "cross-module",
       "task_id": "cleanup_repair_casefold_31",
       "workspace_path": "tasks/cleanup_repair_casefold_31",
-      "workspace_tree_sha256": "2d5c6ae252143212673445372ffee3f701f98121cf06a3b99b2edda6f54a53a7"
+      "workspace_tree_sha256": "cf3f06eda7949f8d90545aaa8bab7345cc97c46f380994a2780883ff6145adbf"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_trim_32.toml",
+        "docs/cleanup_repair_trim_32.md",
+        "legacy/cleanup_repair_trim_32.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1013,7 +1124,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_trim_32",
-      "hidden_tests_tree_sha256": "b7dcbd335a4bc07d260a84d9df873bd61e62533067b219e4cc7789250edb642c",
+      "hidden_tests_tree_sha256": "dc6cbc6984b72eba215e6e654db2d920526905f20f321cea4f434ee5b8f6daba",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1024,14 +1135,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_trim_32",
-      "reference_tree_sha256": "c4049fbb1c60c0cfea66cd331e7c002f5576b8b1356ce8f71e0f52225991a7ac",
+      "reference_tree_sha256": "ddfbc8e941b130d384c70de41d1db734cb0ca98ca5e428232c9ca5aee1cf65c6",
       "stratum": "cross-module",
       "task_id": "cleanup_repair_trim_32",
       "workspace_path": "tasks/cleanup_repair_trim_32",
-      "workspace_tree_sha256": "47019479e0b590b24ab1131c8b64454b2038b8818ccb53364d0aaad1b43807b3"
+      "workspace_tree_sha256": "e551dc07140b18d147d141b7fe05aeece6678efdf46c31976315422efe851ce5"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_segment_33.toml",
+        "docs/cleanup_repair_segment_33.md",
+        "legacy/cleanup_repair_segment_33.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1044,7 +1159,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_segment_33",
-      "hidden_tests_tree_sha256": "53cd868749035ef9488ad5577e59e5584b8889e54ce720aab6f5f06676aef703",
+      "hidden_tests_tree_sha256": "bf90748b1c6ff61e979ad2486ea531648978d6cc4fb6c1026ba49a19e06c8ac5",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1055,14 +1170,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_segment_33",
-      "reference_tree_sha256": "db221c9ce94c901e0635ec365b9eb63221d6a7076ecb1af1c28e29ee52fa1972",
+      "reference_tree_sha256": "c4826657b0f5958dee921be24f2dfd50533f9ca6b8bc3e056fabf0ff539f9823",
       "stratum": "cross-module",
       "task_id": "cleanup_repair_segment_33",
       "workspace_path": "tasks/cleanup_repair_segment_33",
-      "workspace_tree_sha256": "e21e447ad924527751096f3aa2cf460b0c39a65a7b5975b345f31014e3a158f8"
+      "workspace_tree_sha256": "ef2a30792398b30885e2209f7aae42720befaeb542361be78452586aba6e6565"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_scale_34.toml",
+        "docs/cleanup_repair_scale_34.md",
+        "legacy/cleanup_repair_scale_34.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1075,7 +1194,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_scale_34",
-      "hidden_tests_tree_sha256": "e434861341e67b49a03f75579ecd0b19c21accba33a8b0a4758fafaeb52c2af7",
+      "hidden_tests_tree_sha256": "bb44ac931e0b2969fcaaf8b39a0ebc007a899892e7de95d1539572fef8d1db63",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1086,14 +1205,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_scale_34",
-      "reference_tree_sha256": "4399c74cd114c8d1407ac17edf2ae0b5989faa74a5f6e6ceca2625a8de348173",
+      "reference_tree_sha256": "f1701a557a653894855211b74f78cc0291df1bf7310c034bac6a446e8fc4e450",
       "stratum": "cross-module",
       "task_id": "cleanup_repair_scale_34",
       "workspace_path": "tasks/cleanup_repair_scale_34",
-      "workspace_tree_sha256": "d8d83e77dbc9d50b5621b20f65929fd3877ad26dd074713a88cdfa0ebab6296f"
+      "workspace_tree_sha256": "50b5cc38f0a185d6a846da208a55b91398eda4cc231028d369fc3768c3b1f8ec"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_order_35.toml",
+        "docs/cleanup_repair_order_35.md",
+        "legacy/cleanup_repair_order_35.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1106,7 +1229,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_order_35",
-      "hidden_tests_tree_sha256": "b16d08322f1b8f29fc85ebb59145ee019e421c636ce26d1a2b5231227fcc3850",
+      "hidden_tests_tree_sha256": "4fc2d16722c2c37bcbfcf3306f8c5fc6e218c0f653850dd780b1d651f37130d8",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1117,14 +1240,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_order_35",
-      "reference_tree_sha256": "126f45089b69e62d9659bf12a2ee0c906b23376bee5f72afdd29bcd0f416d40a",
+      "reference_tree_sha256": "3a3b1e73001dadebade261b8feaaf8e3638d90669148d2b1e4ce78f67fd027ff",
       "stratum": "integration",
       "task_id": "cleanup_repair_order_35",
       "workspace_path": "tasks/cleanup_repair_order_35",
-      "workspace_tree_sha256": "e52277847a1ddac64e04152fb73f09734bd48a596dc3ecb7e4802491ef9b1a81"
+      "workspace_tree_sha256": "7f8dcc3d5e70540af4acdfde7ee9ff7479dbef9f7f9106438ed7312534622214"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_casefold_36.toml",
+        "docs/cleanup_repair_casefold_36.md",
+        "legacy/cleanup_repair_casefold_36.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1137,7 +1264,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_casefold_36",
-      "hidden_tests_tree_sha256": "ab7c6fae0778cab0ce45b0cbdb55f7607f398f2f98fcc6503808b3f8b4bb5ce5",
+      "hidden_tests_tree_sha256": "652c0b2ffec6b2f211316612197e50f1014a5cb82688f953f352e3dfbcfa7595",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1148,14 +1275,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_casefold_36",
-      "reference_tree_sha256": "ef01dbcedcfa4f85b3bc4f169ab435efa11cd8203b925d9490707c81576ec518",
+      "reference_tree_sha256": "e466a5b3abee5dbf4e76069d71c5e1f60955d35806320eb8ccee4a0f3ca68c0b",
       "stratum": "integration",
       "task_id": "cleanup_repair_casefold_36",
       "workspace_path": "tasks/cleanup_repair_casefold_36",
-      "workspace_tree_sha256": "67650eab548da87cb050fb88dc502b9c8629a44535eddbef55e3d0f09de07d51"
+      "workspace_tree_sha256": "d19cb1de71ed75d526629aa7c290e5ac604bd91eb587360949a668ea21acbd99"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_trim_37.toml",
+        "docs/cleanup_repair_trim_37.md",
+        "legacy/cleanup_repair_trim_37.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1168,7 +1299,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_trim_37",
-      "hidden_tests_tree_sha256": "cfb8fb79c35ebd29e122abc26111cbde0434b9e8f1bbd1445462e7dcf35ae4dd",
+      "hidden_tests_tree_sha256": "154dd42765b762891efe3217a4453f31bd3a9e48f6e02f22ef5284a36a63ab92",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1179,14 +1310,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_trim_37",
-      "reference_tree_sha256": "6f37d2ab6220284ddf7449afd8f7181049ba52a60ef0f9cde63a36d14b3d4ffe",
+      "reference_tree_sha256": "3de2e606359986ba870ddf1bb444507c58f9dbb00695648c940454a901d5ebe0",
       "stratum": "integration",
       "task_id": "cleanup_repair_trim_37",
       "workspace_path": "tasks/cleanup_repair_trim_37",
-      "workspace_tree_sha256": "d92df34fb75ecfd69e2f2681f7a28eaf116f807632b92b032ef8c73ebde18595"
+      "workspace_tree_sha256": "c620c448623fe9ae7b253541c7dcfcada34bc2d45cc66f6a7cf2fb78650971f9"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_segment_38.toml",
+        "docs/cleanup_repair_segment_38.md",
+        "legacy/cleanup_repair_segment_38.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1199,7 +1334,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_segment_38",
-      "hidden_tests_tree_sha256": "264a539d38a2032019140c1a209269614d936cb67f3251deab94f3504bc59777",
+      "hidden_tests_tree_sha256": "573f80068f954f328df1165844d00d3cff111d60d189ed7ca39dfc89a66bcedf",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1210,14 +1345,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_segment_38",
-      "reference_tree_sha256": "b82dc241221cfc58973f19dbdb6e3f4ed6dbfd92b860885cd4d2d1a50256c7cc",
+      "reference_tree_sha256": "6d44e3878995dfb5085d6831291e94eef5508e455b0c304f9d80168d3ae20ec4",
       "stratum": "integration",
       "task_id": "cleanup_repair_segment_38",
       "workspace_path": "tasks/cleanup_repair_segment_38",
-      "workspace_tree_sha256": "868b43dbd4d28a7b02e4a489d4e074820c034c18002d86482710bcdf91d8b046"
+      "workspace_tree_sha256": "a0f05150abc74fece76df6f3e07a32a382e94c017f0bd2e718028145babeb7d8"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_scale_39.toml",
+        "docs/cleanup_repair_scale_39.md",
+        "legacy/cleanup_repair_scale_39.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1230,7 +1369,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_scale_39",
-      "hidden_tests_tree_sha256": "1410c44efb9460a0ab3b99bce80f1f7269685e2ed26012327189fd38602fc2f6",
+      "hidden_tests_tree_sha256": "d784c04e3bbf08b5e6c64af9e8ec53473bb958d09e81096bca92a8a9b8967357",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1241,14 +1380,18 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_scale_39",
-      "reference_tree_sha256": "7a6dc79e4c8c04bf170b4a26b092396a17a3757bb8c45b4df813ba60fd315600",
+      "reference_tree_sha256": "5efc9f929892a8844c90221010123fac7f69705b2e8555cf251719dd9c3696d8",
       "stratum": "integration",
       "task_id": "cleanup_repair_scale_39",
       "workspace_path": "tasks/cleanup_repair_scale_39",
-      "workspace_tree_sha256": "fc49b1eb143bfc7b0d0b7763b70f1adc79abbc6a80034bb6c598eb037849d45a"
+      "workspace_tree_sha256": "252e906292d2be1caa5b89fdfb62f17446a093b253dfeab910d9a04a1a0277d0"
     },
     {
       "allowed_edit_paths": [
+        "README.md",
+        "config/cleanup_repair_order_40.toml",
+        "docs/cleanup_repair_order_40.md",
+        "legacy/cleanup_repair_order_40.py",
         "policy.py"
       ],
       "cohort": "repair",
@@ -1261,7 +1404,7 @@
         "tests"
       ],
       "hidden_tests_path": "hidden-tests/cleanup_repair_order_40",
-      "hidden_tests_tree_sha256": "4c748052909759e740c5c7b43ed788f7b755f52791474422413a436f86003635",
+      "hidden_tests_tree_sha256": "7cf803215d967ddaf1160beb20a0e5f2fbbb1349e1cca17c2039376437ee10c8",
       "kind": "replace",
       "public_command": [
         "python3",
@@ -1272,11 +1415,11 @@
         "tests"
       ],
       "reference_path": "references/cleanup_repair_order_40",
-      "reference_tree_sha256": "024bba7b88ea959d3660e2268f4e3c9fae0330008ffc67f3d6f0fbc9b83209f0",
+      "reference_tree_sha256": "5645cefeab41d29dac14d23fe94f3d8793c118133572fc167a57edb816705fd5",
       "stratum": "integration",
       "task_id": "cleanup_repair_order_40",
       "workspace_path": "tasks/cleanup_repair_order_40",
-      "workspace_tree_sha256": "59927e803f7ca5d6e2675ba166a399837220574bc6d2fd218ecf78f1d267a83d"
+      "workspace_tree_sha256": "0a0dfdbbe56c66b03f8837454e09a2d509fb23911351a3006e7597d0c77cc9b5"
     }
   ]
 }

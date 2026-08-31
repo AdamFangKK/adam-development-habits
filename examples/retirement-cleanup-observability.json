@@ -46,6 +46,21 @@
       "required_paths": ["decision", "failure_or_timeout", "verification"]
     },
     {
+      "id": "multifile_retirement_level_1",
+      "trigger": "replacement spans source, documentation, configuration, or registration files",
+      "level": 1,
+      "required_events": [
+        "owner_located",
+        "retirement_classified",
+        "verification_completed"
+      ],
+      "required_evidence": [
+        "retirement inventory",
+        "post-retirement orphan scan",
+        "documentation synchronization"
+      ]
+    },
+    {
       "id": "remote_lifecycle_level_2",
       "trigger": "external write with retries and recovery",
       "level": 2,

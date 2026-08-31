@@ -1,0 +1,1 @@
+old contract cleanup_decision_retention_trim_17: callers use the legacy policy.

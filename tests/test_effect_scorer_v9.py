@@ -70,6 +70,21 @@ class EffectScorerV9Tests(unittest.TestCase):
             self.assertTrue(report["implementation_integrity_passed"], report)
             self.assertEqual(report["injected_hidden_tests"], ["tests/test_hidden.py"])
 
+    def test_deleted_allowed_path_is_a_valid_candidate_change(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            workspace = self.make_workspace(root, 42)
+            obsolete = workspace / "obsolete.py"
+            _ = obsolete.write_text("unused = True\n", encoding="utf-8")
+            hidden = self.make_hidden(root)
+            _ = obsolete.unlink()
+
+            report = score_workspace(workspace, hidden, ("owner.py", "obsolete.py"), COMMAND, timeout=5)
+
+            self.assertTrue(report["passed"], report)
+            self.assertTrue(report["implementation_integrity_passed"], report)
+            self.assertEqual(report["implementation_sha256"]["obsolete.py"], "<missing>")
+
     def test_hidden_root_rejects_source_files_and_collisions(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

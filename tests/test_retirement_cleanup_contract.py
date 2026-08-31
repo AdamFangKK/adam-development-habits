@@ -53,6 +53,10 @@ class RetirementCleanupContractTests(unittest.TestCase):
             "normalized control flow",
             "Synchronize descriptions in the same change",
             "old behavior phrases",
+            "Write a retirement inventory before deleting anything",
+            "post-retirement orphan scan",
+            "current source/contract as the authority",
+            "A file deletion is valid only when the deleted path is listed in the change scope",
             "Stop the completion gate when evidence is unresolved",
             "Do not silently retain an unknown path",
         ):
@@ -63,8 +67,8 @@ class RetirementCleanupContractTests(unittest.TestCase):
         scenarios_value = self.corpus["scenarios"]
         self.assertIsInstance(scenarios_value, list)
         scenarios = cast(list[dict[str, object]], scenarios_value)
-        self.assertEqual(self.corpus["schema_version"], 1)
-        self.assertEqual(len(scenarios), 8)
+        self.assertEqual(self.corpus["schema_version"], 2)
+        self.assertEqual(len(scenarios), 10)
         self.assertEqual(
             {cast(str, scenario["expected"]) for scenario in scenarios},
             {"remove", "retain", "unknown", "reuse_existing_owner"},
@@ -122,7 +126,10 @@ class RetirementCleanupContractTests(unittest.TestCase):
             with self.subTest(surface=surface):
                 self.assertIn(surface, self.policy)
         self.assertIn("A comment or version note that describes the old decision is stale code in another form", self.policy)
+        self.assertIn("generated files and convention-based loaders", self.policy)
         self.assertIn("same logical change", self.policy)
+        self.assertIn("退休清单", self.readme)
+        self.assertIn("跨文件孤儿扫描", self.readme)
         self.assertIn("Retirement sweep:", self.skill)
         self.assertIn("Documentation synchronization:", self.skill)
         self.assertIn("Cleanup audit:", self.skill)
@@ -162,6 +169,11 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.assertEqual(
             set(cast(list[str], level_one["required_events"])),
             {"owner_located", "retirement_classified", "verification_completed"},
+        )
+        multifile = next(item for item in scenarios if item["id"] == "multifile_retirement_level_1")
+        self.assertEqual(
+            cast(list[str], multifile["required_evidence"]),
+            ["retirement inventory", "post-retirement orphan scan", "documentation synchronization"],
         )
         level_two = next(item for item in scenarios if item["id"] == "remote_lifecycle_level_2")
         self.assertEqual(

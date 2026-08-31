@@ -1,0 +1,2 @@
+# Current contract cleanup_decision_retention_segment_08
+old contract cleanup_decision_retention_segment_08: legacy path remains supported.

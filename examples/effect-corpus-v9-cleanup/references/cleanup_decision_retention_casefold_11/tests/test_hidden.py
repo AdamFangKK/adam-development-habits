@@ -16,6 +16,9 @@ class HiddenContract(unittest.TestCase):
         self.assertIn('external_adapter_cleanup_decision_retention_casefold_11', source)
         self.assertIn('EXTERNAL_REGISTRY', source)
         self.assertNotIn('stale compatibility note cleanup_decision_retention_casefold_11', source)
+        self.assertTrue(Path('adapters/cleanup_decision_retention_casefold_11.py').is_file())
+        self.assertTrue(Path('runtime/cleanup_decision_retention_casefold_11.json').is_file())
+        self.assertNotIn('old contract cleanup_decision_retention_casefold_11', Path('README.md').read_text(encoding='utf-8'))
 
 
 if __name__ == '__main__':
