@@ -1,0 +1,18 @@
+{
+  "retained_strengths": [
+    {
+      "strength": "Three-condition causal contrast",
+      "how_preserved": "Both cohorts use the same no/old/new Skill conditions and primary old-to-new contrast."
+    },
+    {
+      "strength": "Complete evidence retention",
+      "how_preserved": "Every condition-level artifact and interrupted result remains append-only and hash-linked."
+    }
+  ],
+  "tradeoffs": [
+    {
+      "cost": "Two cohorts require more tasks and model calls.",
+      "why_acceptable": "They separate mechanism sensitivity from real repair outcomes and prevent a misleading single-metric conclusion."
+    }
+  ]
+}

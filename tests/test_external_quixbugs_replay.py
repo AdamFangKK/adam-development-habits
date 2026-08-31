@@ -60,8 +60,21 @@ def require_text(value: object, name: str) -> str:
 
 def run_public_tests(root: Path) -> subprocess.CompletedProcess[str]:
     environment = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+    # The repository test command may disable user-site packages for isolation,
+    # while this optional replay uses the already-installed pytest CLI.
+    environment.pop("PYTHONNOUSERSITE", None)
+    pytest = shutil.which("pytest")
+    command = [pytest, "-p", "no:cacheprovider", "-q", "python_testcases/test_shortest_paths.py"] if pytest else [
+        sys.executable,
+        "-m",
+        "pytest",
+        "-p",
+        "no:cacheprovider",
+        "-q",
+        "python_testcases/test_shortest_paths.py",
+    ]
     return subprocess.run(
-        [sys.executable, "-m", "pytest", "-p", "no:cacheprovider", "-q", "python_testcases/test_shortest_paths.py"],
+        command,
         cwd=root,
         capture_output=True,
         text=True,

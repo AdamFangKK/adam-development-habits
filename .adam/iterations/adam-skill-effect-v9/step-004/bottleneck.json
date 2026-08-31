@@ -1,0 +1,7 @@
+{
+  "bottleneck_id": "B002",
+  "statement": "The inherited hidden scorer can overwrite candidate implementations with reference files, making repair success invalid.",
+  "why_primary": "A contaminated scorer can report success for an unchanged failing candidate, invalidating every downstream statistic regardless of isolation or sample size.",
+  "blocked_upside": "Physical split boundaries and implementation-integrity hashes make hidden task success an observable candidate outcome.",
+  "do_not_expand_scope": true
+}

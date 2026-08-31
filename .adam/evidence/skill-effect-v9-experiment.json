@@ -1,0 +1,398 @@
+{
+  "schema_version": 2,
+  "change_id": "skill-effect-v9-experiment",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/run_effect_experiment_v9.py:main",
+    "scripts/audit_effect_isolation_v9.py:audit_collection",
+    "scripts/create_effect_preregistration_v9.py:create",
+    "scripts/analyze_skill_effect_v9.py:main"
+  ],
+  "affected_callers": [
+    "tests/test_effect_runner_v9.py",
+    "tests/test_effect_isolation_v9.py",
+    "tests/test_effect_preregistration_v9.py",
+    "examples/effect-experiment-v9/preregistration.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The V9 runner rejects mutable or mismatched inputs, persists every interruption, and never selectively retries a planned trial.",
+      "verification": "python3 -m unittest tests.test_effect_runner_v9 -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Isolation audit requires real frozen-Skill read commands, rejects no-skill contamination, and binds raw hidden results to trial fields.",
+      "verification": "python3 -m unittest tests.test_effect_isolation_v9 -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "All 40 buggy public workspaces fail while all 40 references pass public and hidden contracts, with deterministic corpus hashes.",
+      "verification": "python3 -m unittest tests.test_effect_corpus_v9 tests.test_effect_scorer_v9 -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "A neutral real-Codex smoke and a clean detached-worktree preflight pass before formal collection.",
+      "verification": "recorded V9 smoke and preflight commands"
+    },
+    {
+      "id": "AC-5",
+      "condition": "Exactly 120 preregistered trials are retained and analyzed only after the final isolation audit passes.",
+      "verification": "V9 isolation audit, artifact manifest, and analyzer outputs"
+    }
+  ],
+  "invariants": [
+    "V8 remains historical and is never cited as capability evidence.",
+    "References and hidden tests are unavailable to repair agents; the scorer injects tests only and never reference implementations.",
+    "The primary contrast is new_skill minus old_skill and both preregistered cohorts must independently pass every gate.",
+    "Interrupted or excluded trials remain recorded and make collection ineligible; no selective retry is allowed.",
+    "All non-secret prompts, outputs, logs, diffs, scores, audits, results, and hashes are retained."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "immutable preregistration",
+      "status": "applied",
+      "rationale": "Model, Harness, Skill snapshots, prompts, corpus, executable scripts, timeouts, order, and thresholds are hash-bound before collection."
+    },
+    {
+      "name": "condition isolation",
+      "status": "applied",
+      "rationale": "Automatic Skill search is disabled, no_skill receives no Skill path, and treatment conditions must show an actual read command for the correct frozen snapshot."
+    },
+    {
+      "name": "append-only evidence",
+      "status": "applied",
+      "rationale": "Every planned trial has a unique output directory; existing paths are rejected and interruption is terminal for the collection."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The runner owns execution and checkpointing, the scorer owns hidden tests, the auditor owns eligibility, and the analyzer owns statistical conclusions."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "The V9 protocol adds no dependency and uses repository Python plus the frozen Codex binary."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "V9 is a versioned experiment surface rather than a shared application extension point."
+    },
+    "data_ownership": {
+      "status": "applied",
+      "rationale": "Agent-visible workspaces, hidden tests, references, raw artifacts, collection records, and analysis outputs have separate owners and lifecycle boundaries."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Agent timeout, nonzero exit, runner exception, public failure, hidden failure, scope violation, integrity failure, and isolation failure remain distinct persisted outcomes."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "V9 is a new schema-v2 protocol; historical V5 through V8 records remain unchanged and non-evidentiary where documented."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "Formal collection has fixed 420-second Agent and 30-second test timeouts, 40 tasks, three conditions, and no early stopping."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The protocol rejects symlinks, hash drift, reference injection, unexpected edits, automatic Skill search, and mismatched Skill sources; this is protocol isolation, not a security sandbox."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "V9 code and corpus are frozen first, preregistration is committed second, and collection runs only from a clean detached worktree."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "This is an offline local evaluation and performs no production rollout."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No application schema or user data is migrated."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "Only non-secret runtime identifiers and hashes are retained; user configuration is disabled and secret values are excluded from artifacts."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No package, lockfile, or external service dependency is added or changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "references/effect-evaluation.md documents the protocol, evidence limits, failure handling, and interpretation owner."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "Corpus, prompts, snapshots, scripts, model, CLI version, order, seed, timeouts, clean worktree, and every artifact digest are retained."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_effect_runner_v9 tests.test_effect_isolation_v9 tests.test_effect_preregistration_v9 tests.test_effect_corpus_v9 tests.test_effect_scorer_v9 tests.test_effect_analyzer_v9 tests.test_effect_artifact_manifest_v9",
+      "status": "passed",
+      "result": "22 focused V9 runner, isolation, preregistration, corpus, scorer, analyzer, and artifact-manifest tests passed.",
+      "evidence_refs": [
+        "v9-focused-tests"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests",
+      "status": "passed",
+      "result": "206 package regression tests passed.",
+      "evidence_refs": [
+        "v9-full-tests"
+      ]
+    },
+    {
+      "command": "PYTHONPATH=scripts basedpyright --level error scripts/analyze_skill_effect_v9.py scripts/audit_effect_isolation_v9.py scripts/codex_v9_isolated.py scripts/create_effect_preregistration_v9.py scripts/generate_effect_artifact_manifest_v9.py scripts/materialize_effect_corpus_v9.py scripts/run_effect_experiment_v9.py scripts/score_effect_workspace_v9.py tests/test_effect_analyzer_v9.py tests/test_effect_artifact_manifest_v9.py tests/test_effect_corpus_v9.py tests/test_effect_isolation_v9.py tests/test_effect_preregistration_v9.py tests/test_effect_runner_v9.py tests/test_effect_scorer_v9.py",
+      "status": "passed",
+      "result": "Static analysis reported 0 errors, 0 warnings, and 0 notes.",
+      "evidence_refs": [
+        "v9-typecheck"
+      ]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation reported Skill is valid.",
+      "evidence_refs": [
+        "v9-skill-validation"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported.",
+      "evidence_refs": [
+        "v9-diff-check"
+      ]
+    },
+    {
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/skill-effect-v9-experiment.json",
+      "status": "passed",
+      "result": "The schema-v2 Level 2 record passed evidence validation.",
+      "evidence_refs": [
+        "v9-evidence-validation"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "v9-focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/skill-effect-v9-precollection-verification.txt",
+      "sha256": "070e22a41a2ccbba72c36cef0376b0f63318f50e12c7162c09d7a513abc31c12",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_effect_runner_v9 tests.test_effect_isolation_v9 tests.test_effect_preregistration_v9 tests.test_effect_corpus_v9 tests.test_effect_scorer_v9 tests.test_effect_analyzer_v9 tests.test_effect_artifact_manifest_v9",
+      "exit_code": 0,
+      "executed_at": "2026-08-27T04:35:29Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Focused V9 protocol test output with the observed count and duration."
+    },
+    {
+      "id": "v9-full-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/skill-effect-v9-precollection-verification.txt",
+      "sha256": "070e22a41a2ccbba72c36cef0376b0f63318f50e12c7162c09d7a513abc31c12",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests",
+      "exit_code": 0,
+      "executed_at": "2026-08-27T04:35:29Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Full package regression output with the observed count and duration."
+    },
+    {
+      "id": "v9-typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/skill-effect-v9-precollection-verification.txt",
+      "sha256": "070e22a41a2ccbba72c36cef0376b0f63318f50e12c7162c09d7a513abc31c12",
+      "command": "PYTHONPATH=scripts basedpyright --level error scripts/analyze_skill_effect_v9.py scripts/audit_effect_isolation_v9.py scripts/codex_v9_isolated.py scripts/create_effect_preregistration_v9.py scripts/generate_effect_artifact_manifest_v9.py scripts/materialize_effect_corpus_v9.py scripts/run_effect_experiment_v9.py scripts/score_effect_workspace_v9.py tests/test_effect_analyzer_v9.py tests/test_effect_artifact_manifest_v9.py tests/test_effect_corpus_v9.py tests/test_effect_isolation_v9.py tests/test_effect_preregistration_v9.py tests/test_effect_runner_v9.py tests/test_effect_scorer_v9.py",
+      "exit_code": 0,
+      "executed_at": "2026-08-27T04:35:29Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Static-analysis output for the V9 implementation and tests."
+    },
+    {
+      "id": "v9-skill-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/skill-effect-v9-precollection-verification.txt",
+      "sha256": "070e22a41a2ccbba72c36cef0376b0f63318f50e12c7162c09d7a513abc31c12",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-27T04:35:29Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Skill package quick-validation output."
+    },
+    {
+      "id": "v9-diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/skill-effect-v9-precollection-verification.txt",
+      "sha256": "070e22a41a2ccbba72c36cef0376b0f63318f50e12c7162c09d7a513abc31c12",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-08-27T04:35:29Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Whitespace-check output for the complete pre-collection worktree."
+    },
+    {
+      "id": "v9-evidence-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/skill-effect-v9-precollection-verification.txt",
+      "sha256": "070e22a41a2ccbba72c36cef0376b0f63318f50e12c7162c09d7a513abc31c12",
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/skill-effect-v9-experiment.json",
+      "exit_code": 0,
+      "executed_at": "2026-08-27T04:35:29Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Schema-v2 validation output for the V9 Level 2 evidence record."
+    },
+    {
+      "id": "v9-precollection-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/skill-effect-v9-precollection-review.txt",
+      "sha256": "e49a53c782cbd90e09f6d49439644c56563a7a8f8077b72f53ad0a3cdabbb85f",
+      "summary": "Independent review approving the reviewed V9 surface for commit-freeze and preflight."
+    },
+    {
+      "id": "v9-smoke-verification",
+      "kind": "evaluation_transcript",
+      "path": ".adam/evidence/skill-effect-v9-smoke-verification.txt",
+      "sha256": "9c25a79542548c0aefd00fed923b8095123786b07e07ccaf2f7d2c534a2f43c8",
+      "summary": "Redacted classification of smoke-001 and smoke-002 with the unresolved authentication gate."
+    },
+    {
+      "id": "v9-smoke-001-result",
+      "kind": "evaluation_transcript",
+      "path": ".adam/iterations/adam-skill-effect-v9/smoke-001/result.json",
+      "sha256": "bc2c350603c7487ffe482ca2009e197b16e499e56f35b0cec449833ab28cc33a",
+      "summary": "Append-only smoke-001 result retaining all three interrupted conditions."
+    },
+    {
+      "id": "v9-smoke-001-audit",
+      "kind": "evaluation_transcript",
+      "path": ".adam/iterations/adam-skill-effect-v9/smoke-001/isolation-audit.json",
+      "sha256": "57b63a59a3a5e6788cd1cd36a0660196cd45df8d9ceba13fe2cf35d4ab44e619",
+      "summary": "Failed isolation audit for smoke-001, retained rather than overwritten."
+    },
+    {
+      "id": "v9-smoke-002-result",
+      "kind": "evaluation_transcript",
+      "path": ".adam/iterations/adam-skill-effect-v9/smoke-002/result.json",
+      "sha256": "90722780d62376a3915797e74f73adf579452be0497273720a7317c44895d51d",
+      "summary": "Append-only smoke-002 result retaining all three authentication failures."
+    },
+    {
+      "id": "v9-smoke-002-audit",
+      "kind": "evaluation_transcript",
+      "path": ".adam/iterations/adam-skill-effect-v9/smoke-002/isolation-audit.json",
+      "sha256": "d600b348424a8f80158489806e56efa6df76e695da45493190bdc049594a652f",
+      "summary": "Failed isolation audit for smoke-002, retained rather than overwritten."
+    },
+    {
+      "id": "v9-corpus-manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-corpus-v9/manifest.json",
+      "sha256": "3b48b4fd3b05bf494d5f68d336fa493195c91cc46f07a88c4a8a84398874aecb",
+      "summary": "Deterministic manifest for the two 20-task held-out cohorts."
+    },
+    {
+      "id": "v9-runner",
+      "kind": "evaluation_transcript",
+      "path": "scripts/run_effect_experiment_v9.py",
+      "sha256": "ee31585e6be8bc28adbefff022ed2fbe5fe88e51946eef9648b85262056e7f7b",
+      "summary": "Schema-v2 three-condition runner with immutable preflight and checkpointing."
+    },
+    {
+      "id": "v9-isolation-auditor",
+      "kind": "evaluation_transcript",
+      "path": "scripts/audit_effect_isolation_v9.py",
+      "sha256": "325764c668403e2220b33141e2a23505f7c15e20a63de21aee332c91f6279471",
+      "summary": "Isolation auditor requiring exact complete frozen-Skill reads."
+    },
+    {
+      "id": "v9-scorer",
+      "kind": "evaluation_transcript",
+      "path": "scripts/score_effect_workspace_v9.py",
+      "sha256": "31b69bc0f65f7734d38b769612793877e3c513cf552d84543f68f42b99308062",
+      "summary": "Hidden scorer that injects tests only and verifies implementation integrity."
+    },
+    {
+      "id": "v9-analyzer",
+      "kind": "evaluation_transcript",
+      "path": "scripts/analyze_skill_effect_v9.py",
+      "sha256": "0348dd437eb10e428eb11cd202cae6e9d88e42effdd218211205346092c86115",
+      "summary": "Three-condition cohort analyzer with exact cohort and critical-safety gates."
+    },
+    {
+      "id": "v9-wrapper",
+      "kind": "evaluation_transcript",
+      "path": "scripts/codex_v9_isolated.py",
+      "sha256": "e086c67d926217241b0c9e36d7c871e90d91b3abbfbfe53bfa42c54d21b7062f",
+      "summary": "Executable isolation wrapper that disables automatic Skill discovery."
+    }
+  ],
+  "rollback_or_compatibility": "Before formal collection, revert the V9 preparation commits as one scope. After collection begins, preserve all artifacts and supersede only with a newly preregistered version and fresh held-out corpus.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer forward_behavior_audit_v2 (Hooke)",
+    "outcome": "approved",
+    "notes": "The reviewer found no remaining code-level blocker and approved the reviewed V9 surface for commit-freeze and preflight, subject to the clean-worktree, two-commit, authentication, and smoke gates.",
+    "evidence_ref": "v9-precollection-review"
+  },
+  "remaining_risks": [
+    "No formal V9 trial has run; causal conclusion remains unknown.",
+    "The current Codex CLI is authenticated through a rejected API-key mode; ChatGPT authentication is required before smoke-003 or formal preflight.",
+    "Native Codex and filesystem controls provide protocol isolation, not a hardened security sandbox.",
+    "The synthetic held-out corpus cannot establish model-wide or production-wide capability."
+  ],
+  "execution_authority": "authorized code-changing worktree and local fixed-cost experiment",
+  "counterfactual_status": "blocked",
+  "causal": {
+    "mode": "full",
+    "symptom": "V8 hidden scoring could replace candidate implementation files, and the current V9 runner tests do not yet match its schema-v2 and balanced-order contract.",
+    "discriminating_check": "Run the V9 runner, scorer, isolation, preregistration, corpus, and analyzer tests, followed by a real neutral smoke and clean detached preflight.",
+    "upstream_path": "frozen inputs -> isolated Agent invocation -> public check -> tests-only hidden scoring -> checkpoint -> isolation audit -> cohort analysis",
+    "timeline_evidence": "V8 historical files predate the V9 split layout; the first current runner test execution failed at missing envelope, seed, and old-order fixtures before formal collection.",
+    "conclusion": "unknown",
+    "confidence": "high",
+    "evidence_types": [
+      "observational",
+      "reproduction",
+      "intervention"
+    ],
+    "evidence_artifacts": [
+      {
+        "id": "v9-precollection-causal",
+        "kind": "test_output",
+        "path": ".adam/evidence/skill-effect-v9-precollection-verification.txt",
+        "sha256": "070e22a41a2ccbba72c36cef0376b0f63318f50e12c7162c09d7a513abc31c12",
+        "summary": "Executed focused and full tests after the V9 runner, isolation, scorer, and analyzer repairs."
+      },
+      {
+        "id": "v9-smoke-causal",
+        "kind": "command_output",
+        "path": ".adam/evidence/skill-effect-v9-smoke-verification.txt",
+        "sha256": "9c25a79542548c0aefd00fed923b8095123786b07e07ccaf2f7d2c534a2f43c8",
+        "summary": "Before/after smoke evidence showing the executable-bit repair advanced the wrapper to the separate authentication boundary."
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "H1",
+        "claim": "Updating the stale runner fixtures and closing interruption/read-proof gaps will make V9 infrastructure satisfy its preregistered protocol.",
+        "prediction": "All V9 infrastructure tests, the neutral smoke, and clean detached preflight pass without weakening any gate.",
+        "status": "unresolved",
+        "evidence_refs": [
+          "v9-precollection-causal",
+          "v9-smoke-causal"
+        ]
+      },
+      {
+        "id": "H2",
+        "claim": "The new Skill improves hidden repair success over the old Skill on both V9 cohorts.",
+        "prediction": "Both primary cohort contrasts have lower 95% bounds above 0.05 and one-sided paired p-values below 0.05 with no safety or isolation failure.",
+        "status": "unresolved",
+        "evidence_refs": []
+      }
+    ]
+  }
+}

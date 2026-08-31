@@ -33,6 +33,40 @@
       "test": "pnpm test -- legacy-order-route"
     }
   ],
+  "retirement_sweep": {
+    "remove": [
+      "src/orders/legacy_create_order.py"
+    ],
+    "retain": [
+      {
+        "path": "src/routes/legacy_orders.ts",
+        "consumer": "Mobile clients before version 5.2",
+        "removal_condition": "Remove after the 30-day client migration window.",
+        "observability": "legacy_order_route_total metric",
+        "test": "pnpm test -- legacy-order-route"
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "rg/import graph output",
+      "registration/configuration lookup",
+      "final diff and compatibility test"
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "docs/orders-api.md",
+      "README.md"
+    ],
+    "deleted": [
+      "docs/legacy-order-example.md"
+    ],
+    "confirmed_current": [
+      "ADR-014",
+      "order rollback runbook"
+    ],
+    "evidence": "Documentation review linked from the final report."
+  },
   "safeguards": [
     {
       "name": "idempotency",

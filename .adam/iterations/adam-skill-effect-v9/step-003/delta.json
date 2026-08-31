@@ -1,0 +1,19 @@
+{
+  "optimized_bottleneck": "B001",
+  "before": "One hidden-repair endpoint could not directly measure the concise Level 2 decision-retention behavior changed by the new Skill.",
+  "after": "V9 now separates an executable decision-retention cohort from an end-to-end repair cohort and requires separate analysis before any combined claim.",
+  "gain_type": "specificity",
+  "evidence": [
+    "Decision tasks use hidden behavioral branches instead of keyword matching",
+    "Low-risk negative controls measure over-escalation",
+    "Repair outcomes remain an independent cohort"
+  ],
+  "preserved": [
+    "three-condition randomized blocks",
+    "blind hidden scoring",
+    "append-only artifact retention"
+  ],
+  "not_improved": [
+    "The scorer file-layout boundary still requires implementation review before V9 can be trusted"
+  ]
+}

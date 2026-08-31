@@ -1,11 +1,11 @@
 ---
 name: adam-development-habits
-description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, tests, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、配置与证据门禁。"
+description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, retirement of obsolete or duplicate paths, synchronized documentation, tests, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、清理废弃路径、同步说明与证据门禁。"
 ---
 
 # Adam's Development Habits
 
-Apply this workflow to every code change. Follow stricter repository instructions first. Keep changes focused and reversible. Do not add dependencies, abstractions, compatibility layers, or unrelated refactors without a concrete requirement.
+Apply this workflow to every code change. Follow stricter repository instructions first. Keep changes focused and reversible. Do not add dependencies, abstractions, compatibility layers, or unrelated refactors without a concrete requirement. For Level 1 and Level 2 behavior changes, retirement and drift cleanup is implicit even when the user does not request it explicitly.
 
 ## Operating Model
 
@@ -130,6 +130,8 @@ Do not claim a code task is complete until all applicable items below have evide
 
 - the canonical implementation path and affected callers were identified before editing;
 - acceptance criteria and behavior-preserving invariants were defined;
+- the applicable retirement sweep classified touched or replaced paths as `remove`, `retain`, or `unknown`, with evidence for each decision;
+- changed behavior, tests, configuration, telemetry, comments, and documentation describe the same current contract;
 - when Maintainable Boundaries and Atomic Design applies, the owner, contract, error outcome, side effect or state transition, dependency direction, and extension decision are recorded and reviewed;
 - when mutable data, a public contract, operational behavior, performance, or security is material, ownership, lifecycle, failure semantics, compatibility, budget, and threat boundary are recorded and reviewed;
 - when Delivery Lifecycle and Repository Hygiene applies, the commit or PR scope, release/recovery, migration, configuration or secret, dependency, operational-knowledge, and reproducibility decisions are recorded and reviewed;
@@ -138,6 +140,7 @@ Do not claim a code task is complete until all applicable items below have evide
 - relevant safeguards were implemented or explicitly shown to be not applicable;
 - the exact verification commands were run and their outcome was read;
 - the final report records changed files, removed code, verification evidence, and remaining risks.
+- the final report records the retirement classification and documentation synchronization result for the changed boundary.
 
 Never use "should work", "likely", or an unrun command as completion evidence. A failed or unavailable required check is a blocker, not a passing result.
 
@@ -153,6 +156,8 @@ Acceptance criteria: <success, failure, and compatibility conditions>
 Invariant: <behavior that must remain true>
 Replaced paths: <what will be removed, or none>
 Retained compatibility: <consumer + removal condition + test, or none>
+Retirement sweep: <remove/retain/unknown decisions for touched or replaced paths + evidence>
+Documentation synchronization: <updated/deleted/confirmed-current README, API docs, ADR, runbook, examples, comments, version/metadata descriptions>
 Safeguards: <applicable items from the matrix>
 Verification: <commands run and actual results>
 Causal diagnosis: <not activated, or symptom + hypotheses + causal owner + counterfactual intervention + discriminating evidence + conclusion>
@@ -174,6 +179,26 @@ Reproducibility: <setup/tool-version/minimal-data/clean-run evidence, or not app
 
 Use narrow searches to establish the ledger. Check imports, exports, registrations, routes, configuration keys, message names, tests, and dynamic lookup conventions. Never infer that code is dead only because a direct reference search is empty.
 
+## Automatic Retirement and Drift Cleanup
+
+This is the default maintenance behavior for normal development. It is scoped to the paths touched, replaced, or made non-canonical by the current logical change; it is not permission for an unrelated repository-wide cleanup.
+
+| Practice | Trigger | Level 0 | Level 1 | Level 2 | Evidence |
+|---|---|---|---|---|---|
+| Automatic retirement and drift cleanup | A feature, bug fix, refactor, optimization, rename, contract/configuration/flag/dependency change, or any change that introduces a replacement or makes an earlier path non-canonical. Level 0 never triggers a full sweep. | No full sweep; only correct directly edited text when the requested no-behavior change requires it. | Run a light sweep over the changed boundary: implementation, callers, tests, types/exports, dependencies, routes/registrations, configuration/flags, telemetry, docs/examples, comments, and version/metadata descriptions. Classify candidates as `remove`, `retain`, or `unknown`; delete confirmed leftovers and update stale descriptions in the same change. | Run the complete sweep, including dynamic loading/registration, jobs/queues, generated entry points, compatibility shims, migration state, API/ADR/runbook references, and independent review. Retained paths require a real consumer, removal condition, observability, and coverage; unresolved dynamic paths stay `unknown` until checked. | Search/import or call-graph output, registration/config lookup, static-analysis or dependency scan, final diff, focused tests/CI, migration or rollback rehearsal when applicable, documentation review, and ledger/report entries. |
+
+Before editing, record the canonical owner, affected callers/consumers, and every path expected to be replaced. Search for an existing owner, utility, extension point, or adapter before adding another implementation. Reuse or extend the owner when its contract and boundary fit; do not create a third implementation to avoid reading the existing one.
+
+After editing, perform the retirement sweep and classify every candidate:
+
+- `remove`: the new owner handles the responsibility, no real consumer or compatibility obligation remains, and imports, registrations, dynamic lookup, configuration, tests, docs, and telemetry checks support deletion;
+- `retain`: a named consumer or compatibility obligation still exists. Record the consumer, expiry/removal condition, observable signal, and compatibility or integration test. A vague “might be used” is not evidence;
+- `unknown`: a dynamic, generated, external, or otherwise unresolved reference may exist. Do not delete it or call the change complete until a targeted runtime/registry/configuration check resolves it, or report the residual risk explicitly.
+
+Treat the whole contract as one implementation surface. When a path is removed or renamed, remove or update its tests, fixtures, types, exports, dependency entries, routes, jobs, queues, flags, environment keys, telemetry labels, README/API docs, ADRs, runbooks, examples, comments, version descriptions, and Skill/package metadata as applicable. A comment or version note that describes the old decision is stale code in another form and must be revised or deleted in the same logical change.
+
+Do not use a zero direct-reference result, a `deprecated` keyword search, or a green public test alone as proof of retirement. Do not preserve an unconsumed compatibility layer merely because deletion feels risky, and do not guess-delete a path whose dynamic usage is unresolved. If the sweep finds no candidate, record `none found after scoped search` and the commands or tools used.
+
 When Causal Execution Discipline is active, add the symptom, hypotheses, discriminating check, evidence strength, conclusion classification, confidence, and any stop reason to the ledger. For Causal Full, also record the upstream path, named causal owner, minimal counterfactual intervention with expected and actual outcomes, the relevant change, release, or runtime timeline, and any rejected or unresolved alternative. In machine-enforced evidence mode, declare each referenced local evidence artifact by ID, repository-relative path, SHA-256 digest, and summary; reference only declared IDs from hypotheses. A root-cause fix must reference a hash-verified execution artifact such as command output, test output, or a trace export; source code alone is insufficient. A causal conclusion must link to actual command output, test output, trace data, or an equivalent artifact; a narrative assertion is not evidence.
 
 ## Evidence Enforcement Mode
@@ -189,6 +214,8 @@ Author new machine-enforced evidence as `schema_version: 2`. Version 2 requires 
 By default, a supporting artifact path and SHA-256 bind to the current worktree. When an existing evidence record intentionally cites an older file revision, add its full lowercase `git_commit`; the validator then reads and hashes that path from the declared commit instead of silently rebinding history to current bytes. Do not add `git_commit` merely to make a stale artifact pass: first prove that the declared digest exists at that commit and still represents the recorded decision. A hash link proves artifact identity, not that its summary is true or that its command ran; retain executable project checks and CI as the factual authority.
 
 ## One Active Implementation
+
+Use [Automatic Retirement and Drift Cleanup](#automatic-retirement-and-drift-cleanup) for the trigger and evidence depth; this section states the implementation rule.
 
 1. Locate the existing owner of the behavior before adding code.
 2. Modify the canonical owner in place when possible.
@@ -421,6 +448,8 @@ Safeguards: ...
 Quality decisions: <design/dependency/extension; ownership/lifecycle; error/retry; contract; operational budget; threat boundary, or not applicable>
 Delivery decisions: <Git/PR; release/recovery; migration; configuration/secrets; supply chain; operational knowledge; reproducibility, or not applicable>
 Explainability: <comments added/updated or not applicable; review result>
+Cleanup audit: <scoped retirement sweep; removed paths, retained consumers/removal conditions, unresolved unknowns, and evidence>
+Documentation synchronization: <docs/comments/examples/version/metadata updated, deleted, or confirmed current; evidence>
 Verified: <command> - <result>
 Independent review: <result or not required>
 Evidence artifact: <path or enforcement mode not enabled>

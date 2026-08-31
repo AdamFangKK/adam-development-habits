@@ -1,0 +1,42 @@
+{
+  "task_id": "adam-skill-effect-v9",
+  "next_step": 6,
+  "expected_action": "critique",
+  "step_count": 5,
+  "version_count": 3,
+  "max_rounds": 3,
+  "latest_answer_step": "step-005",
+  "latest_critique_step": "step-004",
+  "history": [
+    {
+      "step": "step-001",
+      "action": "draft",
+      "version_index": 1,
+      "artifact_sha256": "95245803aa903810f01c7e991efae99b331ec35f44b4ee007e71753ec36e30bc"
+    },
+    {
+      "step": "step-002",
+      "action": "critique",
+      "version_index": null,
+      "artifact_sha256": "c2d5c0bf3524ee8ac78c04b0f9366e96d9b06faa12e5afbb941b1e0499b2ca36"
+    },
+    {
+      "step": "step-003",
+      "action": "revise",
+      "version_index": 2,
+      "artifact_sha256": "f1a8684bcffed2d82bfae91c57259b9e96ccc8f386215ab2ea2ef140ef5852bd"
+    },
+    {
+      "step": "step-004",
+      "action": "critique",
+      "version_index": null,
+      "artifact_sha256": "c999e58e9b9f6b0d29c7ec4ae02e7e9fb93b7c1d8434cc0cb49fd0029f80ca32"
+    },
+    {
+      "step": "step-005",
+      "action": "revise",
+      "version_index": 3,
+      "artifact_sha256": "58c77e1c2e534cf5d7f3c0620f2f2c586b239d14b8486d3bf07e25811909dbfe"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "bottleneck_id": "B001",
+  "statement": "The primary endpoint does not directly measure the concise Level 2 decision-retention behavior changed by commit 97d27dc.",
+  "why_primary": "A null hidden-repair result would not distinguish an ineffective optimization from an insensitive benchmark, while a checklist-only score would not establish engineering outcomes.",
+  "blocked_upside": "A dual-cohort design can test both the targeted mechanism and end-to-end repair value without conflating them.",
+  "do_not_expand_scope": true
+}

@@ -1,0 +1,22 @@
+{
+  "retained_strengths": [
+    {
+      "strength": "Targeted and outcome cohorts",
+      "how_preserved": "The scorer boundary applies identically to decision-retention and repair tasks without merging their analyses."
+    },
+    {
+      "strength": "Immutable causal contrast",
+      "how_preserved": "No/old/new Skill blocks, fixed order, and preregistered thresholds remain unchanged."
+    },
+    {
+      "strength": "Complete data retention",
+      "how_preserved": "Integrity failures and interrupted trials are stored rather than removed or repaired in place."
+    }
+  ],
+  "tradeoffs": [
+    {
+      "cost": "A separate reference tree duplicates fixture source and increases repository size.",
+      "why_acceptable": "The physical boundary prevents reference overwrite and makes the corpus validator and blind scorer independently auditable."
+    }
+  ]
+}

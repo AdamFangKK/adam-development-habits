@@ -1,0 +1,9 @@
+{
+  "action": "revise",
+  "allowed_prior_answer_step": "step-003",
+  "allowed_prior_critique_step": "step-004",
+  "copied_auxiliary_files": [
+    "delta.json",
+    "retained-value.json"
+  ]
+}

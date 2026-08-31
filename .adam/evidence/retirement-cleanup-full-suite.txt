@@ -1,0 +1,4 @@
+Command: PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v
+Exit code: 0
+Observed result: Ran 211 tests in 23.147s; OK.
+Coverage: package contract, causal probes, composite traps, evidence validators, external replays, V5-V9 corpus/runner/scorer checks, and retirement-cleanup tests.

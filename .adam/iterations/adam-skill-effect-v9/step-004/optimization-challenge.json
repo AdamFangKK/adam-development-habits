@@ -1,0 +1,16 @@
+{
+  "challenge_id": "OC-002",
+  "target_bottleneck": "B002",
+  "must_preserve": [
+    "dual decision and repair cohorts",
+    "three-condition randomized blocks",
+    "post-exit blind scoring",
+    "append-only raw artifacts"
+  ],
+  "optimization_constraint": "Separate reference and hidden-test trees, inject only allowlisted tests, and fail scoring if any candidate implementation hash changes during hidden injection.",
+  "forbidden_shortcuts": [
+    "copying the whole scorer-only tree",
+    "using reference implementations during candidate scoring",
+    "treating a public-only pass as hidden success"
+  ]
+}

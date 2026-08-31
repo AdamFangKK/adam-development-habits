@@ -324,6 +324,7 @@
       "kind": "diff",
       "path": "SKILL.md",
       "sha256": "7874acfc0b35d95b3867f410863a850f460e882b0139a7822cc5f70d88c273a4",
+      "git_commit": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01",
       "summary": "Updated Skill instructions with truthful execution, context control, bounded repair, and concise Level 2 minimum requirements."
     },
     {
@@ -331,6 +332,7 @@
       "kind": "diff",
       "path": "README.md",
       "sha256": "309728518515413ef98ca37cd950ec6cd365a07a2ca696ec20bfa555187b4291",
+      "git_commit": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01",
       "summary": "Updated operator-facing documentation for execution honesty, the compact checklist, and Explainability reporting."
     },
     {

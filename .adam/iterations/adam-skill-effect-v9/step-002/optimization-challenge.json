@@ -1,0 +1,15 @@
+{
+  "challenge_id": "OC-001",
+  "target_bottleneck": "B001",
+  "must_preserve": [
+    "three-condition randomized blocks",
+    "blind hidden repair scoring",
+    "append-only complete artifact retention"
+  ],
+  "optimization_constraint": "Add one separately analyzed held-out decision cohort whose semantic scorer measures relevant safe decisions and unsafe commitments under a fixed concise-output budget.",
+  "forbidden_shortcuts": [
+    "keyword-presence-only scoring",
+    "replacing end-to-end repair tasks",
+    "reusing a scenario used to optimize the Skill"
+  ]
+}

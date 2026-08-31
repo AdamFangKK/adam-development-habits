@@ -1,0 +1,20 @@
+{
+  "optimized_bottleneck": "B002",
+  "before": "The inherited scorer could overwrite a candidate with reference implementation files and report a false hidden success.",
+  "after": "V9 physically separates Agent tasks, hidden tests, and references; scoring injects only allowlisted test files and verifies implementation hashes before and after injection.",
+  "gain_type": "robustness",
+  "evidence": [
+    "The unchanged V8 ISO-week candidate failed public tests but passed the inherited hidden scorer",
+    "V9 scorer API excludes reference roots",
+    "Implementation-integrity hashes become a mandatory score result"
+  ],
+  "preserved": [
+    "dual cohorts",
+    "three-condition causal comparison",
+    "blind post-exit scoring",
+    "append-only evidence retention"
+  ],
+  "not_improved": [
+    "No formal V9 model trial exists until implementation, commit, and preflight complete"
+  ]
+}

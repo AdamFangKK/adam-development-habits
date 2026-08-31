@@ -1,0 +1,30 @@
+V9 pre-collection independent review
+
+Reviewer
+  Codex native code-reviewer: forward_behavior_audit_v2 (Hooke)
+
+Outcome
+  approved for the commit-freeze and preflight phase
+
+Reviewed boundaries
+  - completed JSON command events are required as frozen-Skill read evidence;
+  - treatment conditions must execute an exact full-file cat of their snapshot;
+  - truncated reads are rejected;
+  - no_skill contamination is rejected;
+  - hidden scoring injects tests only and preserves implementation hashes;
+  - runner interruption and checkpoint state are permanent;
+  - the analyzer requires exactly decision-retention and repair cohorts;
+  - critical safety IDs equal the full decision-retention cohort;
+  - authentication mode is frozen and checked before collection.
+
+Finding
+  No code-level blocker remained after the isolation and cohort gates were
+  tightened. Formal collection must not start from the current mutable worktree:
+  it requires a clean worktree, one protocol/corpus commit, one later
+  preregistration commit, and a passing runtime preflight.
+
+Residual prerequisites
+  - commit and freeze the reviewed protocol/corpus surface;
+  - generate and separately commit the preregistration against that commit;
+  - authenticate Codex using ChatGPT rather than the rejected API key;
+  - pass smoke-003 and clean detached-worktree preflight before 120-call collection.

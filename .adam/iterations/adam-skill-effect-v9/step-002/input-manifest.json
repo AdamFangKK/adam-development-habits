@@ -1,0 +1,9 @@
+{
+  "action": "critique",
+  "allowed_prior_answer_step": "step-001",
+  "allowed_prior_critique_step": null,
+  "copied_auxiliary_files": [
+    "bottleneck.json",
+    "optimization-challenge.json"
+  ]
+}

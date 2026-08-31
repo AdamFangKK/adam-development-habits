@@ -23,7 +23,7 @@
 | 交付生命周期与仓库卫生 | 用原子 Git 提交、PR、发布回滚、迁移、配置/Secret、依赖、运行手册与可复现环境约束交付质量。 |
 | 机器可读证据模式 | 仓库显式启用后，用 JSON 工件记录改动事实，并由本地脚本和 CI 校验。 |
 | 企业级横切保障 | 按场景检查 `traceId`、结构化日志、超时、重试、幂等、限流、鉴权、审计和健康检查。 |
-| 清理审计 | 在完成前检查未使用文件、导入、导出、类型、路由、任务、队列、配置和 Feature Flag。 |
+| 自动退役与漂移清理 | Level 1/2 正常开发默认检查被替换实现、重复路径、测试/类型/配置/遥测、注释和文档；按证据删除、保留或标记未知，不需要用户额外提出“清理”。 |
 | 验证门槛 | 要求实际运行相关的格式化、lint、类型检查、测试、构建和静态分析。 |
 | 真实完成报告 | 以已运行命令及结果作为证据，不允许用“应该可以”代替验证。 |
 
@@ -60,7 +60,7 @@ Skill 不是自动修改代码的脚本，而是一份会在 AI 执行开发任�
         ↓
 按场景补齐稳定性、可观测性与安全保护
         ↓
-删除被替换的实现及其残留引用
+自动识别并删除被替换的实现及其残留引用，同步说明
         ↓
 运行验证并审查最终 diff
         ↓
@@ -77,6 +77,8 @@ Affected callers/contracts: <受影响调用方或公开契约>
 Invariant: <必须保持为真的行为>
 Replaced paths: <需要删除的旧路径，或 none>
 Retained compatibility: <保留原因、消费者、删除条件与测试，或 none>
+Retirement sweep: <remove/retain/unknown 分类、范围与证据>
+Documentation synchronization: <README/API/ADR/runbook/示例/注释/版本描述/metadata 的同步结果>
 Safeguards: <适用的稳定性与可观测性措施>
 Verification: <已执行命令及实际结果>
 Causal diagnosis: <启用时记录症状、假设、区分性证据与结论>
@@ -87,7 +89,18 @@ Data ownership: <权威 owner、生命周期/隐私边界，或 not applicable>
 Error model: <稳定结果分类、重试/未知策略，或 not applicable>
 Contract evolution: <兼容、迁移/回滚、消费者测试，或 not applicable>
 Operational budget: <SLO/性能/资源/安全信号与响应，或 not applicable>
+Delivery lifecycle: <atomic commit/PR、发布恢复、迁移、配置/Secret、供应链、运行知识、可复现性，或 not applicable>
 ```
+
+### 自动退役与漂移清理
+
+这是正常开发的默认动作，不需要用户额外说“清理垃圾代码”。范围只限于本次逻辑改动触及、替换或使其失去唯一负责人的路径，不是全仓库无关大扫除。
+
+| 触发条件 | Level 0 | Level 1（轻量） | Level 2（完整） | 证据 |
+|---|---|---|---|---|
+| 功能替换、Bug 修复、重构、优化、重命名，或契约/配置/Flag/依赖变更导致旧路径不再是 canonical owner | 不触发全面清理；只修正本次直接编辑且不改变行为的文字 | 检查实现、调用方、测试、类型/导出、依赖、路由/注册、配置/Flag、遥测、文档/示例、注释和版本/metadata；每项标记 `remove`、`retain` 或 `unknown` | 额外检查动态加载/注册、任务/队列、生成入口、兼容 shim、迁移状态、API/ADR/runbook，并由独立复查确认；保留项必须有真实消费者、删除条件、可观测信号和覆盖测试 | `rg`/导入或调用图、注册/配置查找、静态分析或依赖扫描、最终 diff、测试/CI、迁移/回滚演练、文档审查、证据台账和完成报告 |
+
+`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、删除条件、可观测性和测试；`unknown` 遇到动态、生成或外部引用时不得猜删，先做针对性运行时/注册检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。
 
 ### 风险分级
 
@@ -215,11 +228,13 @@ v6 首次收集在 Agent 启动前因 runner 将任务树复制到已存在的�
 
 v7 的首次收集已归档为 `interrupted`：20 个预注册 task 的 40 个条件中只捕获 16 个，`canonical_audit_path/baseline` 在 180 秒 Agent 限时后未完整结束，因此固定完整配对规则已失效。更根本的是，6 个已捕获的 baseline stderr 日志读取了全局安装的 `adam-development-habits` Skill；这违背了“只有显式 Skill treatment 可读取冻结 Skill 快照”的条件差异约束。因此，哪怕已完成的配对也不能当作基线对照或部分效果统计。原始 trial、冻结的 [`preregistration.json`](./examples/effect-experiment-v7/preregistration.json)、[`result.json`](./examples/effect-experiment-v7/result.json)、归档判定 [`interruption.json`](./examples/effect-experiment-v7/interruption.json) 和一致性测试 [`test_effect_experiment_v7_interruption.py`](./tests/test_effect_experiment_v7_interruption.py) 均被保留。下一次正式采集必须使用全新 V8 语料与预注册；在此之前需先证明 Codex 的基线/处理组 Skill 隔离、使用绝对 `-o` 工件路径，并按新预注册提高超时预算。V7 不支持任何 Skill 效果、模型修复成功率或一般因果能力声明。
 
-V8 已冻结为尚未运行的协议：[`materialize_effect_corpus_v8.py`](./scripts/materialize_effect_corpus_v8.py) 与 [`effect-corpus-v8`](./examples/effect-corpus-v8) 固定了 20 个全新任务和 `6/8/6` 分层；[`run_effect_experiment_v8.py`](./scripts/run_effect_experiment_v8.py) 通过 [`codex_v8_isolated.py`](./scripts/codex_v8_isolated.py) 对两组统一注入 `--disable skill_search`，处理组只能显式读取临时 Skill 快照。预注册同时锁定配对随机化 seed `20260812`、每个 Agent `420` 秒和每个测试 `30` 秒预算，并冻结实际收集环境的 `codex-cli 0.147.0-alpha.6.5`。V8 运行器会在任何 Agent 启动前拒绝不匹配的参数、非冻结的 corpus/prompt/Skill/wrapper、未包含当前预注册文件的 commit、符号链接输入或输出，以及已有内容的输出目录；正式采集还必须从该 commit 的干净 Git worktree 运行，所有输入必须位于该 worktree 内。正式执行从该提交的 `git archive` 临时快照读取 V6 执行器、语料、提示、Skill 与 wrapper，因此预检通过后对实时工作区的替换不会改变已冻结的条件。它还支持 `--preflight`：使用与正式采集完全相同的参数执行所有冻结输入、实现哈希、Git 提交、worktree 和空输出路径校验，但不启动 Agent 或创建 trial。正式命令必须使用 hash 匹配的 [`effect-experiment-v7/prompts`](./examples/effect-experiment-v7/prompts) 目录；V8 没有独立 prompt 副本，避免产生第二个未经锁定的处理面。每个条件的绝对 `agent-output.md`、wrapper 标记和 treatment 的实际快照读取记录必须通过 [`audit_effect_isolation_v8.py`](./scripts/audit_effect_isolation_v8.py)；任一条件读取全局 Skill 都会失败。通过后，成功审计报告会持久化到结果的 `collection.isolation_audit_passed`，而 V8 分析器拒绝没有这份证明的 completed 结果。审计失败时结果被标记为 `interrupted`，禁止分析或重试。完整输入与哈希锁定在 [`effect-experiment-v8/preregistration.json`](./examples/effect-experiment-v8/preregistration.json)。它目前只证明实验设计与夹具已验证，**不**证明 Skill、修复成功率或模型因果能力已有提升。
+V8 现仅保留为失效历史协议，不得引用其 hidden success 作为能力证据。复核发现它的 hidden tree 可包含修复后的实现文件，而评分器会把整棵 hidden tree 覆盖到候选工作区；因此未修复候选也可能被参考实现替换后得到通过。历史文件保持不变，以便重放这个测试工具缺陷。
+
+V9 是当前的能力检验协议：[`materialize_effect_corpus_v9.py`](./scripts/materialize_effect_corpus_v9.py) 把 Agent 可见的 `tasks/`、只含测试的 `hidden-tests/` 与仅用于语料校验的 `references/` 物理分离；[`score_effect_workspace_v9.py`](./scripts/score_effect_workspace_v9.py) 不接受参考实现路径，只注入测试，并在注入前后校验候选实现 SHA-256 未变化。实验对同一题执行 `no_skill`、冻结 old Skill 和冻结 new Skill 三个条件，主对比为 `new_skill - old_skill`，`new_skill - no_skill` 仅作次要锚点；20 个决策保留题与 20 个端到端修复题分别按 `6/8/6` 分层分析。所有非敏感 prompt、输出、stdout/stderr、diff、公开/隐藏结果、审计和哈希 manifest 永久保留；中断、遗漏、隔离失败或关键安全回退会阻断分析，不能选择性重试或删样本。V9 只有在预注册完整采集及统计门槛实际通过后，才能支持固定模型、Harness、Skill 快照、语料和评分器范围内的提升结论。
 
 ```bash
-PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect.py \
-  examples/skill-effect-preregistration.json
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \
+  examples/effect-experiment-v9/preregistration.json
 ```
 
 原生 Codex 子代理共享文件系统时仅能称为协议隔离；要让该结论更强，需要独立 worktree 或容器、独立保存的 prompt/output 和与条件标签隔离的评分器。即使满足这些条件，结论也只适用于预注册范围，不能外推到所有模型、仓库或生产系统。

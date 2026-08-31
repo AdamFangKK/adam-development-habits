@@ -1,0 +1,46 @@
+V9 real-Codex smoke verification
+
+Scope
+  These are pre-collection infrastructure probes. They are retained permanently,
+  are ineligible for formal capability analysis, and were not selectively rerun.
+
+smoke-001
+  status: interrupted
+  planned trials: 3 (no_skill, old_skill, new_skill)
+  completed formal trials: 0
+  observed failure: the isolated wrapper was not executable, so every condition
+    stopped before an Agent invocation.
+  discriminating check:
+    rg -q 'PermissionError:.*codex_v9_isolated.py' \
+      .adam/iterations/adam-skill-effect-v9/smoke-001/raw
+    result: exit 0 with no log content printed.
+  repair: scripts/codex_v9_isolated.py now has the Git executable bit, and the
+    runner preflight rejects a non-frozen or non-executable wrapper.
+
+smoke-002
+  status: interrupted
+  planned trials: 3 (no_skill, old_skill, new_skill)
+  completed formal trials: 0
+  observed failure: every wrapper invocation reached Codex and exited 1 after
+    97.567 to 110.927 seconds because the configured API-key authentication was
+    rejected with HTTP 401 / invalid_api_key.
+  discriminating checks:
+    rg -q '401 Unauthorized' \
+      .adam/iterations/adam-skill-effect-v9/smoke-002/raw
+    rg -q 'invalid_api_key' \
+      .adam/iterations/adam-skill-effect-v9/smoke-002/raw
+    result: both commands exited 0 with no log content printed.
+  protocol response: the frozen V9 runtime requires ChatGPT authentication.
+    Preflight must remain blocked until `codex login status` reports that mode.
+
+Evidence handling
+  The raw directories are retained locally and excluded through .git/info/exclude.
+  They were not deleted or rewritten because they are the primary failure record.
+  They are not Git-tracked because stderr contains a partially masked credential
+  identifier. Only result.json, isolation-audit.json, and this redacted transcript
+  are eligible for commit.
+
+Conclusion
+  Both probes successfully exposed infrastructure blockers before formal
+  collection. Neither probe measures model capability. AC-4 remains unmet until a
+  fresh smoke-003 and clean detached-worktree preflight both pass.

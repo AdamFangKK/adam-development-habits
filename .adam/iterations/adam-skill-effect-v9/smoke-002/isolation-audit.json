@@ -1,0 +1,25 @@
+{
+  "failures": [
+    "rotation/no_skill: agent-output.md is empty",
+    "rotation/no_skill: result records no absolute Agent output",
+    "rotation/old_skill: agent-output.md is empty",
+    "rotation/old_skill: result records no absolute Agent output",
+    "rotation/old_skill: Agent did not complete a full read of the frozen Skill snapshot",
+    "rotation/new_skill: agent-output.md is empty",
+    "rotation/new_skill: result records no absolute Agent output",
+    "rotation/new_skill: Agent did not complete a full read of the frozen Skill snapshot"
+  ],
+  "new_skill_sha256": "7874acfc0b35d95b3867f410863a850f460e882b0139a7822cc5f70d88c273a4",
+  "old_skill_sha256": "7e43d25526ec1980b0937bfa72ce829c7b06d628fc9b43b877c37e3535aef564",
+  "passed": false,
+  "required_artifacts": [
+    "agent.stdout.log",
+    "agent.stderr.log",
+    "agent-output.md",
+    "candidate.diff",
+    "public.json",
+    "hidden-score.json"
+  ],
+  "trial_count": 3,
+  "unique_task_condition_count": 3
+}

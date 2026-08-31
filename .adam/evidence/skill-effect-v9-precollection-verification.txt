@@ -1,0 +1,51 @@
+V9 pre-collection verification
+
+Executed at
+  2026-08-27T04:35:29Z
+
+Repository revision
+  97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree
+
+Focused V9 protocol tests
+  command: PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_effect_runner_v9 tests.test_effect_isolation_v9 tests.test_effect_preregistration_v9 tests.test_effect_corpus_v9 tests.test_effect_scorer_v9 tests.test_effect_analyzer_v9 tests.test_effect_artifact_manifest_v9
+  exit code: 0
+  observed result: 22 tests passed in 6.867 seconds.
+
+Full package regression
+  command: PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests
+  exit code: 0
+  observed result: 206 tests passed in 25.151 seconds.
+
+Static type analysis
+  command: PYTHONPATH=scripts basedpyright --level error scripts/analyze_skill_effect_v9.py scripts/audit_effect_isolation_v9.py scripts/codex_v9_isolated.py scripts/create_effect_preregistration_v9.py scripts/generate_effect_artifact_manifest_v9.py scripts/materialize_effect_corpus_v9.py scripts/run_effect_experiment_v9.py scripts/score_effect_workspace_v9.py tests/test_effect_analyzer_v9.py tests/test_effect_artifact_manifest_v9.py tests/test_effect_corpus_v9.py tests/test_effect_isolation_v9.py tests/test_effect_preregistration_v9.py tests/test_effect_runner_v9.py tests/test_effect_scorer_v9.py
+  exit code: 0
+  observed result: 0 errors, 0 warnings, 0 notes.
+
+Skill package validation
+  command: python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
+  exit code: 0
+  observed result: Skill is valid.
+
+Whitespace validation
+  command: git diff --check
+  exit code: 0
+  observed result: no output; no whitespace error.
+
+Evidence schema validation
+  command: python3 scripts/validate_evidence.py .adam/evidence/skill-effect-v9-experiment.json
+  exit code: 0
+  observed result: valid evidence for the V9 Level 2 record.
+
+Runtime authentication gate
+  command: codex login status
+  exit code: 0
+  observed result: API-key authentication mode; credential text intentionally
+    omitted from this transcript.
+  required result: ChatGPT authentication mode.
+  status: blocked for formal preflight and collection.
+
+Interpretation
+  The protocol, corpus, scorer, runner, analyzer, tests, and package structure pass
+  their offline checks. This does not satisfy AC-4 or AC-5 and does not support a
+  model-capability claim. The next eligible action after the two-commit freeze is
+  ChatGPT authentication followed by smoke-003 and detached-worktree preflight.

@@ -1,0 +1,254 @@
+{
+  "schema_version": 2,
+  "change_id": "retirement-cleanup-automatic-default",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md",
+    "README.md",
+    "agents/openai.yaml",
+    "assets/evidence-ledger.example.json",
+    "references/enforcement.md"
+  ],
+  "affected_callers": [
+    "Codex Skill discovery and invocation",
+    "package contract tests",
+    "repository evidence and CI consumers"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Level 1 and Level 2 behavior changes implicitly run a scoped retirement sweep; Level 0 does not trigger a full sweep.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_skill_contract -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Replacement candidates are classified as remove, retain, or unknown and dynamic references cannot be deleted based only on an empty direct-reference search.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "Implementation, tests, configuration, telemetry, comments, documentation, version descriptions, and metadata are treated as one synchronized surface.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The full package regression suite and Skill package validator pass.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "A path is removed only after the new owner has taken responsibility and no real consumer or compatibility obligation remains.",
+    "A dynamic, generated, or external reference remains unknown until a targeted registration, runtime, or configuration check resolves it.",
+    "Retained compatibility has a named consumer, removal condition, observability signal, and coverage.",
+    "The current contract is consistent across implementation, tests, configuration, telemetry, comments, documentation, version descriptions, and metadata.",
+    "Formal V9 model-effect collection remains unrun and is not represented as a capability improvement claim."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "retirement_sweep": {
+    "remove": [
+      "The prior cleanup-only framing in README and the stale historical evidence bindings that rejected current verification."
+    ],
+    "retain": [
+      {
+        "path": "examples/effect-experiment-v9/skills/new/SKILL.md",
+        "consumer": "Frozen V9 treatment input",
+        "removal_condition": "Remove or regenerate only when a new preregistered effect experiment supersedes V9.",
+        "observability": "V9 manifest and isolation audit hash",
+        "test": "tests.test_effect_preregistration_v9 and tests.test_effect_isolation_v9"
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "tests/test_retirement_cleanup_contract.py",
+      "examples/retirement-cleanup-traps.json",
+      "focused and full test outputs"
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "README.md",
+      "SKILL.md",
+      "references/enforcement.md",
+      "agents/openai.yaml",
+      "assets/evidence-ledger.example.json"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "examples/effect-experiment-v9/skills/new/SKILL.md remains frozen by protocol",
+      "historical evidence uses git_commit binding"
+    ],
+    "evidence": "retirement-cleanup-review.txt and retirement-cleanup-focused-tests.txt"
+  },
+  "safeguards": [
+    {
+      "name": "dynamic-reference guard",
+      "status": "applied",
+      "rationale": "Unknown dynamic or generated paths cannot be deleted from an empty direct-reference result."
+    },
+    {
+      "name": "compatibility retention guard",
+      "status": "applied",
+      "rationale": "A retained path must name a consumer, expiry, observability, and test."
+    },
+    {
+      "name": "historical evidence binding",
+      "status": "applied",
+      "rationale": "Historical hashes point to the real prior commit instead of being silently rebound to current bytes."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "SKILL.md owns the normative cleanup contract; README, metadata, template, reference, tests, and evidence are synchronized consumers."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "No new dependency was added; the workflow reuses existing Git, unittest, pytest replay, and Skill validator tooling."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "This change strengthens an existing policy surface and adds no runtime extension point."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "No mutable business or personal data path was changed."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Unresolved cleanup references are explicit unknowns; failed verification is a blocker rather than a passing claim."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "Existing Skill consumers remain compatible; the frozen V9 snapshot is retained with an explicit removal condition."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The policy text and deterministic tests do not alter a production resource budget."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The cleanup contract prevents unsafe deletion of dynamic or externally consumed paths and prevents stale documentation from misleading future agents."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The change is kept in one reviewable commit after tests and diff checks."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployable runtime or release configuration changed."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No database or persistence schema changed."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No runtime secret or environment contract changed."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No package or lockfile dependency was added or upgraded."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README, enforcement reference, ledger template, and review record explain the cleanup workflow and evidence boundary."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The focused and full unittest commands, Skill validator command, and pinned replay tool discovery are recorded."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_skill_contract tests.test_external_quixbugs_replay -v",
+      "status": "passed",
+      "result": "31 focused contract, metadata, trap, and external replay tests passed.",
+      "evidence_refs": ["focused-tests"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "211 package tests passed.",
+      "evidence_refs": ["full-suite"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid.",
+      "evidence_refs": ["tooling"]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors reported.",
+      "evidence_refs": ["git-diff-check"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/retirement-cleanup-focused-tests.txt",
+      "sha256": "d76cfc26b56a7e0c279e04bb7162d5716407d7a4d9c3b6567969fb26069089ed",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_skill_contract tests.test_external_quixbugs_replay -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T12:00:00Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Focused retirement-cleanup contract, trap, metadata, and pinned replay tests passed."
+    },
+    {
+      "id": "full-suite",
+      "kind": "test_output",
+      "path": ".adam/evidence/retirement-cleanup-full-suite.txt",
+      "sha256": "abe297c40f4e95a5c7fe735225ff01d7e5ec94d272495b5f4dd53e635176e534",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T12:01:00Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Full package regression suite passed."
+    },
+    {
+      "id": "tooling",
+      "kind": "command_output",
+      "path": ".adam/evidence/retirement-cleanup-tooling.txt",
+      "sha256": "d204938e077fd7b064b5234ead24033ba16a9f14654366237eb4fb514df9e34c",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T12:02:00Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Skill package validator passed; the same file also records a zero-exit git diff check."
+    },
+    {
+      "id": "git-diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/retirement-cleanup-tooling.txt",
+      "sha256": "d204938e077fd7b064b5234ead24033ba16a9f14654366237eb4fb514df9e34c",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T12:02:30Z",
+      "repository_revision": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01+worktree",
+      "summary": "Git diff whitespace check passed with no output."
+    },
+    {
+      "id": "review",
+      "kind": "review_report",
+      "path": ".adam/evidence/retirement-cleanup-review.txt",
+      "sha256": "9970810031459ef1752dac1185369f21550a0dfb551a323b1ef951198eac4bcb",
+      "summary": "Independent review approved the level matrix, classification guards, surface synchronization, and residual effect-claim limit."
+    }
+  ],
+  "rollback_or_compatibility": "Revert this atomic Skill package commit together. The frozen V9 snapshot and historical evidence remain compatible through explicit retention and git_commit binding.",
+  "independent_review": {
+    "reviewer": "independent contract reviewer",
+    "outcome": "approved",
+    "notes": "Confirmed automatic Level 1/2 activation, risk-scaled Level 0 behavior, guarded remove/retain/unknown decisions, synchronized documentation surfaces, and no unsupported model-effect claim.",
+    "evidence_ref": "review"
+  },
+  "remaining_risks": [
+    "A Skill contract guides an Agent but cannot itself force a model to run tools; repository CI and evidence gates remain necessary.",
+    "The six trap scenarios validate rule coverage, not aggregate model behavior or production-wide dead-code completeness.",
+    "Formal V9 three-condition model collection has not run, so no repair-success or general causal-capability improvement is claimed.",
+    "Dynamic references outside the repository may remain unknown until the target runtime exposes a registration or load check."
+  ]
+}

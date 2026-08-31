@@ -1,4 +1,4 @@
 interface:
   display_name: "Adam's Development Habits"
-  short_description: "Build resilient code and safe, reviewable delivery."
-  default_prompt: "Use $adam-development-habits to deliver a risk-scaled, reviewable change with applicable boundaries, safeguards, delivery planning, and evidence."
+  short_description: "Build resilient code with clear boundaries and retired stale paths."
+  default_prompt: "Use $adam-development-habits to deliver a risk-scaled, reviewable change with automatic retirement of obsolete or duplicate paths, synchronized documentation, applicable safeguards, delivery planning, and evidence."

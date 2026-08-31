@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "scenarios": [
+    {
+      "id": "replacement_leaves_old_impl",
+      "trigger": "A refactor moves validation from legacy_validate to validate_request.",
+      "trap": "The old function has no direct references, but its helper, fixture, export, and test remain.",
+      "expected": "remove",
+      "required_evidence": ["callers", "tests", "types/exports", "final diff"]
+    },
+    {
+      "id": "dynamic_registration",
+      "trigger": "A handler is replaced, but a plugin registry loads its name from configuration.",
+      "trap": "A zero direct-reference search would incorrectly delete a live runtime entry.",
+      "expected": "unknown",
+      "required_evidence": ["dynamic loading/registration", "configuration", "runtime check"]
+    },
+    {
+      "id": "compatibility_shim_consumer",
+      "trigger": "A public API is replaced while an older mobile client remains supported.",
+      "trap": "Deleting the shim breaks a real consumer even though internal callers migrated.",
+      "expected": "retain",
+      "required_evidence": ["real consumer", "removal condition", "compatibility test", "observability"]
+    },
+    {
+      "id": "flag_configuration_telemetry_drift",
+      "trigger": "A feature flag rollout is completed and the new path is canonical.",
+      "trap": "Only deleting the branch leaves the flag key, environment setting, dashboard label, and runbook stale.",
+      "expected": "remove",
+      "required_evidence": ["configuration", "flags", "telemetry", "runbook", "rollback"]
+    },
+    {
+      "id": "rename_documentation_drift",
+      "trigger": "A public symbol is renamed and its behavior changes slightly.",
+      "trap": "Source compiles while README examples, comments, version notes, and API descriptions still teach the old contract.",
+      "expected": "remove",
+      "required_evidence": ["README/API docs", "comments", "version descriptions", "metadata"]
+    },
+    {
+      "id": "duplicate_wheel",
+      "trigger": "A new task needs behavior already owned by an existing adapter.",
+      "trap": "Adding a third helper appears faster but creates competing business rules.",
+      "expected": "reuse_existing_owner",
+      "required_evidence": ["existing owner", "extension point", "dependency direction"]
+    }
+  ]
+}

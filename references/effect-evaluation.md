@@ -6,6 +6,8 @@ Use this protocol only for a claim that enabling the Skill improves repair succe
 
 Create one JSON experiment record from `examples/skill-effect-preregistration.json` before collecting results. Fill its task IDs/strata and fixed stopping rule, commit it, then record the immutable commit SHA in the completed record. Freeze the corpus manifest, public task prompt, baseline prompt, Skill prompt, hidden scorer, Skill revision, analysis seed, practical threshold, sample target, strata, randomized condition order, and stopping rule in the envelope digest. Run formal collection from a clean Git worktree at that commit; keep all declared inputs within it, reject symbolic links, and verify their bytes immediately before execution. The baseline and treatment must differ only by the presence of the Skill and its necessary invocation instruction.
 
+Also freeze the non-secret Codex CLI version and authentication mode. Verify the mode with `codex login status` before collection, but never store, print, or hash a credential or access token in the preregistration or evidence artifacts.
+
 Use a held-out corpus. Keep references, hidden tests, expected patches, scoring rubrics, and prior candidate outputs unavailable to repair agents. Give a blind scorer candidate diffs and test outcomes without condition labels. Run both conditions for every task, randomize their order within each pair, retain raw outputs/diffs/logs, and record every exclusion before looking at results.
 
 ## Measure and Decide
@@ -30,3 +32,17 @@ When a result is inconclusive, preserve all attempts and label failures before c
 Native Codex subagents sharing a filesystem provide only protocol isolation. A stronger effect claim requires separate worktrees or containers, independent prompt/output storage, deterministic environment capture, and a scorer that cannot read condition labels.
 
 For multi-file causal-repair tasks, use the v6 workspace protocol when the current function-level runner cannot express the responsible owner. The public task workspace contains only implementation files, task metadata, and public tests. The runner records the exact allowed edit paths, runs the public command after the Agent exits, and injects the scorer-only hidden test tree into a temporary copy after that exit. Hidden scoring must execute the public and hidden suite together, reject any path outside the registered implementation set, and never copy hidden files back into Agent artifacts. The v6 runner writes an atomic checkpoint after every complete pair; a process or service interruption is an ineligible interrupted collection, not a partial result to be analyzed or selectively retried.
+
+## V9 Three-Condition Protocol
+
+V8 is retained only as historical protocol evidence and must not be cited as capability evidence. Its hidden layout could contain reference implementation files, and its scorer copied the entire hidden tree over the candidate before running tests. A hidden pass from that protocol therefore cannot prove that an Agent repaired the candidate.
+
+Use V9 for new effect claims. It compares `no_skill`, a frozen old Skill, and a frozen new Skill on the same task. The primary contrast is `new_skill - old_skill`; `new_skill - no_skill` is a secondary anchor. Analyze the decision-retention and end-to-end repair cohorts separately. Both preregistered cohorts must pass the practical-effect, confidence-interval, randomization, isolation, and critical-safety gates before reporting improvement.
+
+The V9 corpus uses separate roots:
+
+- `tasks/<task-id>` contains only the Agent-visible buggy workspace and public tests.
+- `hidden-tests/<task-id>` contains only tests injected after Agent exit.
+- `references/<task-id>` contains the fixed implementation for corpus validation only and is never an Agent or scorer input.
+
+The V9 scorer accepts no reference path, rejects symbolic links and path collisions, injects tests only, and verifies every allowed implementation file has the same SHA-256 before and after injection. Retain every non-secret prompt, absolute Agent output, stdout, stderr, diff, public result, hidden result, audit, collection result, analysis, and artifact hash manifest. Existing output paths are an error; interrupted or excluded trials remain in the record and make the collection ineligible rather than eligible for selective retry.
