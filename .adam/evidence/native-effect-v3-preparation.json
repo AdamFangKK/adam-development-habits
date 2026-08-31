@@ -1,0 +1,300 @@
+{
+  "schema_version": 2,
+  "change_id": "native-effect-v3-preparation",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/materialize_native_cleanup_effect_v3.py:materialize_native_cleanup_effect_v3",
+    "scripts/native_cleanup_effect_runner_v3.py:prepare_condition and score_condition",
+    "scripts/create_native_cleanup_effect_preregistration_v3.py:create",
+    "scripts/analyze_native_cleanup_effect_v3.py:analyze"
+  ],
+  "affected_callers": [
+    "tests/test_native_cleanup_effect_v3.py",
+    "tests/test_native_cleanup_effect_runner_v3.py",
+    "tests/test_native_cleanup_effect_protocol_v3.py",
+    "README.md",
+    "future native Codex subagent collection operators"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "V3 materializes ten fresh public/hidden/reference tasks across both cohorts and all topology strata; reference repairs pass while shallow repairs, registry retargets, erased descriptions, and copied canonical-owner implementations fail.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_native_cleanup_effect_protocol_v3 tests.test_native_cleanup_effect_runner_v3 tests.test_native_cleanup_effect_v3 -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "A later condition cannot be prepared before a predecessor blind score; the analyzer rejects scorer drift, post-score candidate diff tampering, unexpected task or condition artifacts, task-level files, retries, and broken sequence credentials.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_native_cleanup_effect_protocol_v3 tests.test_native_cleanup_effect_runner_v3 tests.test_native_cleanup_effect_v3 -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The full Skill package remains regression-clean and the V3 scripts and tests compile after the new protocol is materialized and preregistered.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The skill package remains structurally valid and the README states V3's unrun, protocol-only status and its claim limits.",
+      "verification": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    }
+  ],
+  "invariants": [
+    "V1 and V2 remain immutable, explicitly ineligible historical records and are never analyzed as V3 or Skill-effect evidence.",
+    "V3 uses only fresh native_v3 task identifiers, a planned no-outcome preregistration, and an exact three-condition order for every task.",
+    "Each later condition is blocked until its predecessor blind score exists; its sequence credential records predecessor score hashes.",
+    "The V3 preregistration binds the corpus manifest, generator, V3 runner, actual V1 base scorer, analyzer, prompt, and frozen Skill snapshots.",
+    "A V3 preparation result does not demonstrate an improvement in cleanup, repair, causal reasoning, or production reliability."
+  ],
+  "replaced_paths": [
+    "The V3 protocol form that omitted the V1 base hidden scorer from the frozen-input hash envelope.",
+    "The hidden delegation checks that accepted same-name local owner copies.",
+    "The analyzer form that accepted extra task-level artifacts or a post-score modified candidate diff."
+  ],
+  "retained_compatibility": [
+    {
+      "consumer": "Historical audit readers of examples/effect-experiment-native-v1 and examples/effect-experiment-native-v2.",
+      "removal_condition": "Retain permanently as protocol-invalidation records; never combine their raw data with V3 or use it for effectiveness statistics.",
+      "test": "tests/test_native_cleanup_effect_protocol_v2.py and tests/test_native_cleanup_effect_protocol_v3.py"
+    }
+  ],
+  "retirement_sweep": {
+    "remove": [
+      "Stale V3 manifest and preregistration hashes produced before the final hidden-contract and base-scorer bindings."
+    ],
+    "retain": [
+      {
+        "path": "examples/effect-experiment-native-v1 and examples/effect-experiment-native-v2",
+        "consumer": "Historical audit and invalidation documentation.",
+        "removal_condition": "Permanent preserved invalidation record; no statistical consumer.",
+        "observability": "Each version's collection-invalid.json and README protocol history.",
+        "test": "Focused V3 protocol tests require fresh native_v3 IDs and the README documents the boundary."
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "V3 deterministic manifest and preregistration reconstruction tests.",
+      "README V3 protocol-status synchronization.",
+      "Independent adversarial review."
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "README.md",
+      "examples/effect-experiment-native-v3/manifest.json",
+      "examples/effect-experiment-native-v3/preregistration.json"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "V1 and V2 invalidation records",
+      "V3 frozen old/new Skill snapshots",
+      "V3 agent-task-template.txt"
+    ],
+    "evidence": "Focused tests, full package regression, Skill validator, and independent review passed."
+  },
+  "instrumentation": {
+    "status": "not_applicable",
+    "reason": "This is an offline deterministic protocol. Hash-bound artifacts, test output, and the append-only raw collection shape are its applicable observable checkpoints."
+  },
+  "safeguards": [
+    {
+      "name": "actual hidden-scorer hash binding",
+      "status": "applied",
+      "rationale": "The preregistration and analyzer bind native_cleanup_effect_runner_v1.py because V3 delegates its private scoring primitives to that implementation."
+    },
+    {
+      "name": "canonical-owner identity contract",
+      "status": "applied",
+      "rationale": "Hidden tests assert that cross-module consumers and integration adapters reference the actual policy symbols before monkeypatching them."
+    },
+    {
+      "name": "append-only raw shape and score-time artifact binding",
+      "status": "applied",
+      "rationale": "The analyzer rejects unplanned task directories, task-level files, unexpected condition artifacts, and any post-score change to the candidate diff or pre-score inputs."
+    },
+    {
+      "name": "strict sequential condition collection",
+      "status": "applied",
+      "rationale": "The runner refuses to prepare a later condition until each predecessor has been scored and stores predecessor score hashes in the subsequent condition credential."
+    },
+    {
+      "name": "independent adversarial review",
+      "status": "applied",
+      "rationale": "A separate reviewer independently ran each former bypass and confirmed that current V3 rejects it."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The materializer owns fixture semantics, the runner owns sequencing and scoring-time commitments, preregistration owns frozen inputs, and the analyzer owns eligibility."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "No dependency or lockfile changed; the protocol uses the standard library and existing native Codex facilities."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "V3 is an internal versioned evaluation protocol, not a new public extension interface."
+    },
+    "data_ownership": {
+      "status": "applied",
+      "rationale": "Public task trees, private hidden/reference trees, candidate workspaces, raw artifacts, frozen snapshots, and evidence outputs have distinct owners and lifecycles."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Hash drift, missing or extra artifacts, failed checks, retry attempts, and sequence violations are explicit ineligible outcomes rather than retryable successes."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "V3 uses fresh identifiers and a new envelope while preserving V1/V2 invalidations as immutable historical audit records."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "The preregistration fixes a 300-second agent limit, 20-second test limit, one block per task, and no early-stop or selective-retry rule."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "Hidden/reference paths and condition outcomes are outside declared agent input, while the shared-filesystem limitation is explicitly recorded as protocol rather than OS isolation."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "V3 scripts, tests, manifest, preregistration, README, evidence, and review form one atomic pre-collection scope that is frozen before any trial starts."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "This offline experiment has no production release, feature flag, or user rollout."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No production persistence, schema, or backfill is changed."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "The native protocol stores no API key, credential, or runtime secret."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No package manifest, lockfile, or third-party component is added or updated."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The README, preregistration, invalidation records, review report, and this ledger state collection operation and claim limits."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "Deterministic materialization plus hash-bound manifest, preregistration, score-time artifacts, and committed command output expose source or collection drift."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_native_cleanup_effect_protocol_v3 tests.test_native_cleanup_effect_runner_v3 tests.test_native_cleanup_effect_v3 -v",
+      "status": "passed",
+      "result": "17 focused V3 tests passed, including same-name owner-copy, base-scorer hash, raw-shape, and candidate-diff tampering traps.",
+      "evidence_refs": [
+        "focused-v3-tests"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "281 complete package regression tests passed in 48.198 seconds.",
+      "evidence_refs": [
+        "full-suite"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m py_compile scripts/analyze_native_cleanup_effect_v3.py scripts/create_native_cleanup_effect_preregistration_v3.py scripts/materialize_native_cleanup_effect_v3.py scripts/native_cleanup_effect_runner_v3.py tests/test_native_cleanup_effect_protocol_v3.py tests/test_native_cleanup_effect_runner_v3.py tests/test_native_cleanup_effect_v3.py",
+      "status": "passed",
+      "result": "All changed V3 Python scripts and tests compiled successfully.",
+      "evidence_refs": [
+        "v3-pycompile"
+      ]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package structural validation passed.",
+      "evidence_refs": [
+        "skill-validator"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "focused-v3-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-effect-v3-preparation-focused.txt",
+      "sha256": "1acc86e0b4d2d14100048d92a3b0d65c7e89089988d26e192aa18845192d47e9",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_native_cleanup_effect_protocol_v3 tests.test_native_cleanup_effect_runner_v3 tests.test_native_cleanup_effect_v3 -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T18:33:18Z",
+      "repository_revision": "b60680f1c27b5a9445ce1d527326cbdcda3cecf2+worktree",
+      "summary": "Focused V3 protocol, runner, fixture, topology, metadata, and adversarial integrity test output."
+    },
+    {
+      "id": "full-suite",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-effect-v3-preparation-full.txt",
+      "sha256": "b0dc3199ed7a02b8ef2c8392b015e3c7a74dd9c0ca2e63c9e9a772fe07217735",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T18:33:18Z",
+      "repository_revision": "b60680f1c27b5a9445ce1d527326cbdcda3cecf2+worktree",
+      "summary": "Complete package regression output after final V3 protocol and README synchronization."
+    },
+    {
+      "id": "v3-pycompile",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-effect-v3-preparation-pycompile.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m py_compile scripts/analyze_native_cleanup_effect_v3.py scripts/create_native_cleanup_effect_preregistration_v3.py scripts/materialize_native_cleanup_effect_v3.py scripts/native_cleanup_effect_runner_v3.py tests/test_native_cleanup_effect_protocol_v3.py tests/test_native_cleanup_effect_runner_v3.py tests/test_native_cleanup_effect_v3.py",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T18:33:18Z",
+      "repository_revision": "b60680f1c27b5a9445ce1d527326cbdcda3cecf2+worktree",
+      "summary": "Changed V3 Python modules compile with no output or syntax failure."
+    },
+    {
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-effect-v3-preparation-skill-validator.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T18:33:18Z",
+      "repository_revision": "b60680f1c27b5a9445ce1d527326cbdcda3cecf2+worktree",
+      "summary": "Skill package frontmatter and structure validator output."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/native-effect-v3-preparation-review.txt",
+      "sha256": "dbd58141b7e0d5374483775ece7f2e8902fed113246292a750be4af20a3886b6",
+      "summary": "Independent V3 review approving preparation after reproducing every former integrity bypass and stating the protocol-only claim boundary."
+    },
+    {
+      "id": "v3-manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-experiment-native-v3/manifest.json",
+      "sha256": "e8a5fc24f4b6e0297ea893e1804dcb4cec904b7b73372a627fd58aeaeee99e5d",
+      "summary": "Fresh ten-task V3 manifest with cohorts, topology strata, visible contracts, and deterministic tree digests."
+    },
+    {
+      "id": "v3-preregistration",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-experiment-native-v3/preregistration.json",
+      "sha256": "6b738b98107c4a806c290ce5f5736e82a98cc44d42b46daafcfd84b86bc1f80f",
+      "summary": "Frozen planned V3 envelope with no trial outcomes and hashes for the materializer, V3 runner, actual base scorer, analyzer, prompt, and Skill snapshots."
+    }
+  ],
+  "rollback_or_compatibility": "Before the first V3 trial, revert the V3 scripts, tests, manifest, preregistration, frozen snapshots, README, evidence outputs, and this ledger together if a protocol defect is found. After a V3 trial begins, preserve the frozen envelope and raw artifacts; invalidate rather than amend, retry, or selectively exclude collection data.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer v3_protocol_review",
+    "outcome": "approved",
+    "notes": "The reviewer independently reproduced all four former bypasses and verified current rejection. Approval is limited to V3 protocol preparation and explicitly excludes a Skill-effect or model-wide capability claim.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "No V3 trial has run, so no improvement in cleanup, repair success, causal analysis, or model capability has been demonstrated.",
+    "Native subagents share a filesystem; declared workspace limits are protocol isolation, not an OS or container security boundary.",
+    "The ten-task synthetic corpus is targeted and small; even a completed positive result would be limited to the frozen model, Harness, Skill snapshots, corpus, and scorer.",
+    "Collection must use a frozen commit and strict sequential execution; any interruption, retry, extra artifact, or frozen-input drift makes the collection ineligible."
+  ]
+}

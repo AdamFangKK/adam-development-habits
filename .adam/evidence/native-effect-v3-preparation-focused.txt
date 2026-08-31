@@ -1,0 +1,22 @@
+test_analyzer_accepts_a_complete_chain_and_rejects_retry_or_chain_tampering (tests.test_native_cleanup_effect_protocol_v3.NativeCleanupEffectProtocolV3Tests) ... ok
+test_analyzer_rejects_an_unexpected_retry_directory (tests.test_native_cleanup_effect_protocol_v3.NativeCleanupEffectProtocolV3Tests) ... ok
+test_analyzer_rejects_candidate_diff_tampering_after_scoring (tests.test_native_cleanup_effect_protocol_v3.NativeCleanupEffectProtocolV3Tests) ... ok
+test_analyzer_rejects_replaced_base_hidden_scorer (tests.test_native_cleanup_effect_protocol_v3.NativeCleanupEffectProtocolV3Tests) ... ok
+test_analyzer_rejects_unplanned_task_directory_and_task_file (tests.test_native_cleanup_effect_protocol_v3.NativeCleanupEffectProtocolV3Tests) ... ok
+test_committed_preregistration_matches_the_frozen_inputs (tests.test_native_cleanup_effect_protocol_v3.NativeCleanupEffectProtocolV3Tests) ... ok
+test_preregistration_writer_refuses_to_overwrite (tests.test_native_cleanup_effect_protocol_v3.NativeCleanupEffectProtocolV3Tests) ... ok
+test_later_condition_cannot_be_prepared_until_predecessor_is_scored (tests.test_native_cleanup_effect_runner_v3.NativeCleanupEffectRunnerV3Tests) ... ok
+test_preparation_refuses_wrong_condition_or_existing_workspace (tests.test_native_cleanup_effect_runner_v3.NativeCleanupEffectRunnerV3Tests) ... ok
+test_committed_manifest_matches_a_fresh_v3_materialization (tests.test_native_cleanup_effect_v3.NativeCleanupEffectV3Tests) ... ok
+test_consumers_must_delegate_to_canonical_policy_owner (tests.test_native_cleanup_effect_v3.NativeCleanupEffectV3Tests) ... ok
+test_hidden_contract_rejects_erased_current_descriptions_and_metadata (tests.test_native_cleanup_effect_v3.NativeCleanupEffectV3Tests) ... ok
+test_hidden_contract_rejects_same_name_local_owner_copies (tests.test_native_cleanup_effect_v3.NativeCleanupEffectV3Tests) ... ok
+test_hidden_contract_rejects_shallow_replacement_and_accepts_reference (tests.test_native_cleanup_effect_v3.NativeCleanupEffectV3Tests) ... ok
+test_initial_public_contract_distinguishes_retention_from_repair (tests.test_native_cleanup_effect_v3.NativeCleanupEffectV3Tests) ... ok
+test_materialization_covers_each_cohort_and_stratum (tests.test_native_cleanup_effect_v3.NativeCleanupEffectV3Tests) ... ok
+test_registry_retarget_and_adapter_deletion_fail_hidden_contract (tests.test_native_cleanup_effect_v3.NativeCleanupEffectV3Tests) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 3.204s
+
+OK

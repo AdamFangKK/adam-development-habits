@@ -1,0 +1,37 @@
+Independent review: V3 native cleanup-effect protocol preparation
+
+Reviewer: Codex native code-reviewer v3_protocol_review
+Verdict: APPROVE for V3 protocol preparation only. This does not approve or
+imply any Skill-effect improvement claim.
+
+Adversarial probes
+- Replaced base hidden scorer hash: rejected with
+  `protocol.base_runner_sha256 does not match the frozen input`.
+- Cross-module same-name local `evaluate` copy: hidden contract failed with
+  return code 1.
+- Integration same-name local `canonical_normalize` copy: hidden contract
+  failed with return code 1.
+- Extra raw task directory: collection became ineligible.
+- Task-level orphan file: collection became ineligible.
+- Post-score candidate.diff tampering: collection became ineligible because
+  the pre-score artifact binding was invalid.
+
+Independent commands and observed results
+- `python3 -m py_compile scripts/materialize_native_cleanup_effect_v3.py
+  scripts/native_cleanup_effect_runner_v3.py
+  scripts/create_native_cleanup_effect_preregistration_v3.py
+  scripts/analyze_native_cleanup_effect_v3.py
+  tests/test_native_cleanup_effect_v3.py
+  tests/test_native_cleanup_effect_runner_v3.py
+  tests/test_native_cleanup_effect_protocol_v3.py` returned exit code 0.
+- `python3 -m unittest tests.test_native_cleanup_effect_v3
+  tests.test_native_cleanup_effect_runner_v3
+  tests.test_native_cleanup_effect_protocol_v3` reported 17 tests, OK.
+- `python3 -m unittest discover -s tests` reported 281 tests, OK.
+- A targeted secret/empty-catch/log scan returned exit code 1 with no matches.
+
+Limits
+Native subagents share a filesystem, so the protocol is not a container or OS
+isolation boundary. The review verifies the protocol guards and does not
+establish model-wide causal reasoning, production reliability, or Skill-effect
+improvement.
