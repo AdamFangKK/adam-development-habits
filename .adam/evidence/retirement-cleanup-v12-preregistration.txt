@@ -1,0 +1,7 @@
+{
+  "causal_conclusion": "unknown",
+  "decision": "not_run",
+  "experiment_id": "adam-skill-effect-v9",
+  "reason": "A preregistration contains no model outcomes.",
+  "status": "planned"
+}

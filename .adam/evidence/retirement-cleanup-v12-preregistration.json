@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "change_id": "retirement-cleanup-v12-preregistration",
+  "level": 1,
+  "canonical_owner": [
+    "scripts/create_effect_preregistration_v9.py:create",
+    "examples/effect-experiment-v9/preregistration.json"
+  ],
+  "affected_callers": [
+    "scripts/run_effect_experiment_v9.py",
+    "scripts/analyze_skill_effect_v9.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The cleanup corpus, old Skill snapshot, prompts, runner, scorer, analyzer, generator, auditor, and wrapper are hash-frozen before any model trial.",
+      "verification": "python3 scripts/create_effect_preregistration_v9.py ..."
+    },
+    {
+      "id": "AC-2",
+      "condition": "A planned preregistration is analyzable as not_run and does not masquerade as model evidence.",
+      "verification": "python3 scripts/analyze_skill_effect_v9.py examples/effect-experiment-v9/preregistration.json"
+    }
+  ],
+  "invariants": [
+    "The only planned condition difference is no_skill versus the frozen old/new Skill snapshots.",
+    "References and hidden tests remain unavailable to repair agents.",
+    "A planned record produces unknown/not_run and cannot support an improvement claim."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "retirement_sweep": {"remove": [], "retain": [], "unknown": [], "evidence": ["preregistration hash and planned analyzer output"]},
+  "documentation_synchronization": {"updated": ["README.md", "references/effect-evaluation.md"], "deleted": [], "confirmed_current": ["preregistration is generated before first trial"], "evidence": "README and protocol reference describe the cleanup profile."},
+  "instrumentation": {"status": "not_applicable", "reason": "This commit freezes experiment inputs; no runtime boundary is changed."},
+  "safeguards": [{"name": "pre-registration envelope", "status": "applied", "rationale": "Manifest, prompts, Skill snapshots, runner, scorer, and analyzer hashes are frozen before trials."}],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The generated preregistration owns the experiment envelope; the analyzer owns interpretation."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "No dependency changed."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No extension point changed."},
+    "data_ownership": {"status": "applied", "rationale": "Raw experiment artifacts remain append-only and condition labels stay in the preregistration record."},
+    "error_model": {"status": "applied", "rationale": "Planned, interrupted, and completed states are distinct; missing trials are ineligible."},
+    "contract_evolution": {"status": "applied", "rationale": "The existing V9 protocol is reused with a cleanup-profile manifest."},
+    "operational_budget": {"status": "not_applicable", "rationale": "No production budget changes."},
+    "threat_boundary": {"status": "applied", "rationale": "References and hidden tests are not listed as Agent inputs."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The preregistration is committed before collection."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No release changed."},
+    "data_migration": {"status": "not_applicable", "rationale": "No migration changed."},
+    "configuration_secrets": {"status": "applied", "rationale": "Authentication mode is recorded without credentials or tokens."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No dependency changed."},
+    "operational_knowledge": {"status": "applied", "rationale": "The protocol reference documents the frozen cleanup profile and limitations."},
+    "reproducibility": {"status": "applied", "rationale": "All declared inputs have SHA-256 identities and a deterministic task order."}
+  },
+  "verification": [{"command": "python3 scripts/analyze_skill_effect_v9.py examples/effect-experiment-v9/preregistration.json", "status": "passed", "result": "Planned experiment returned decision not_run and causal_conclusion unknown.", "evidence_refs": ["planned-analysis"]}],
+  "supporting_artifacts": [{"id": "planned-analysis", "kind": "command_output", "path": ".adam/evidence/retirement-cleanup-v12-preregistration.txt", "sha256": "3993bd7fd32a22075d8340f332ee40a3e5bd828db970ec521036e5f49d8f8341", "command": "python3 scripts/analyze_skill_effect_v9.py examples/effect-experiment-v9/preregistration.json", "exit_code": 0, "executed_at": "2026-08-31T09:04:00Z", "repository_revision": "c284b1bd4e8efd75fea20301176b295f1c123d36+worktree", "summary": "Planned preregistration is explicitly not model evidence."}],
+  "remaining_risks": [
+    "No paired model trials have completed; no Skill effect claim is supported.",
+    "The frozen Codex authentication mode may block collection and must be recorded rather than retried selectively."
+  ]
+}
