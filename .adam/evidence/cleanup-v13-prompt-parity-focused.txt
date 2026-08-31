@@ -1,0 +1,15 @@
+test_cleanup_prompt_scope_is_condition_invariant (tests.test_effect_runner_v9.EffectRunnerV9Tests) ... ok
+test_execute_condition_records_skill_snapshot_and_hidden_integrity (tests.test_effect_runner_v9.EffectRunnerV9Tests) ... ok
+test_frozen_worktree_requires_tracked_inputs_and_preregistration_only_second_commit (tests.test_effect_runner_v9.EffectRunnerV9Tests) ... ok
+test_main_checkpoints_completed_and_interrupted_blocks (tests.test_effect_runner_v9.EffectRunnerV9Tests) ... {"task_id": "one", "condition": "old_skill", "trial_complete": true, "hidden_repair_pass": true, "scope_ok": true}
+{"task_id": "one", "condition": "no_skill", "trial_complete": true, "hidden_repair_pass": false, "scope_ok": true}
+{"task_id": "one", "condition": "new_skill", "trial_complete": true, "hidden_repair_pass": true, "scope_ok": true}
+ok
+test_preregistration_must_cover_manifest_once_with_cohort (tests.test_effect_runner_v9.EffectRunnerV9Tests) ... ok
+test_task_block_uses_preregistered_three_condition_order (tests.test_effect_runner_v9.EffectRunnerV9Tests) ... ok
+test_wrapper_injects_skill_search_disable_once (tests.test_effect_runner_v9.EffectRunnerV9Tests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.529s
+
+OK

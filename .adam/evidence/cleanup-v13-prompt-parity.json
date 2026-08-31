@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "change_id": "cleanup-v13-prompt-parity",
+  "level": 1,
+  "canonical_owner": [
+    "examples/effect-experiment-v9/prompts",
+    "tests/test_effect_runner_v9.py:test_cleanup_prompt_scope_is_condition_invariant"
+  ],
+  "affected_callers": [
+    "V9 no_skill, old_skill, and new_skill cleanup experiment conditions"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "All experiment conditions have identical editable scope and deletion policy; only Skill availability and snapshot content differ.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_runner_v9 -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The package regression suite remains green after fixing the treatment-isolation prompt boundary.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "The planned treatment contrast changes only the supplied frozen Skill, not allowed edits or task rules.",
+    "The no_skill condition cannot read a globally installed or supplied Skill.",
+    "A result remains not_run until every preregistered trial completes under the frozen protocol."
+  ],
+  "replaced_paths": [
+    "no_skill Python-only editable-scope wording",
+    "old/new Skill-specific deletion-rule wording"
+  ],
+  "retained_compatibility": [],
+  "retirement_sweep": {
+    "remove": [
+      "condition-specific scope wording that confounded Skill availability with allowed file types"
+    ],
+    "retain": [],
+    "unknown": [],
+    "evidence": [
+      "prompt parity test",
+      "full package regression suite"
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "references/effect-evaluation.md"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "examples/effect-experiment-v9/prompts/no_skill.txt",
+      "examples/effect-experiment-v9/prompts/old_skill.txt",
+      "examples/effect-experiment-v9/prompts/new_skill.txt"
+    ],
+    "evidence": "The parity regression checks every frozen prompt."
+  },
+  "safeguards": [
+    {
+      "name": "condition parity",
+      "status": "applied",
+      "rationale": "A dedicated regression rejects a Python-only baseline or a Skill-specific deletion rule."
+    },
+    {
+      "name": "frozen isolation",
+      "status": "applied",
+      "rationale": "The no_skill prompt explicitly prohibits all Skill reads while treatment prompts name only their supplied snapshot."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "Prompt text owns experimental framing and the runner test owns parity verification."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "No dependencies or imports changed."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No extension point was added."},
+    "data_ownership": {"status": "not_applicable", "rationale": "No mutable business data is involved."},
+    "error_model": {"status": "applied", "rationale": "Prompt drift is a deterministic test failure rather than an implicit protocol change."},
+    "contract_evolution": {"status": "applied", "rationale": "The frozen V13 envelope is delayed until its conditions share a common task contract."},
+    "operational_budget": {"status": "not_applicable", "rationale": "No runtime budget changed."},
+    "threat_boundary": {"status": "applied", "rationale": "No-skill isolation still prohibits global Skill discovery or reads."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The correction is separately verified and committed before preregistration."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No deployable release changed."},
+    "data_migration": {"status": "not_applicable", "rationale": "No persistent format changed."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No secret or runtime configuration changed."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No dependency or lockfile changed."},
+    "operational_knowledge": {"status": "applied", "rationale": "The evaluation reference now states the required condition parity."},
+    "reproducibility": {"status": "applied", "rationale": "The frozen prompt files and parity test reproduce the same condition boundary."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_runner_v9 -v", "status": "passed", "result": "7 V9 runner tests passed, including prompt scope parity.", "evidence_refs": ["focused-tests"]},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v", "status": "passed", "result": "225 package tests passed.", "evidence_refs": ["full-suite"]}
+  ],
+  "supporting_artifacts": [
+    {"id": "focused-tests", "kind": "test_output", "path": ".adam/evidence/cleanup-v13-prompt-parity-focused.txt", "sha256": "c589c169a186aecac4808f981d9fc66799480e32a0a935102b1418d20b017526", "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_effect_runner_v9 -v", "exit_code": 0, "executed_at": "2026-08-31T09:40:01Z", "repository_revision": "36abe20c7b0c97116a2a38ace0ca3b90ab46f42c+worktree", "summary": "V9 runner and prompt parity checks passed."},
+    {"id": "full-suite", "kind": "test_output", "path": ".adam/evidence/cleanup-v13-prompt-parity-full.txt", "sha256": "fee777d75a65f0d4d2cdad9bbdae87eba33f808a85d43b77afc7afdf49c5cc84", "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v", "exit_code": 0, "executed_at": "2026-08-31T09:40:01Z", "repository_revision": "36abe20c7b0c97116a2a38ace0ca3b90ab46f42c+worktree", "summary": "Full package regression suite passed with 225 tests."}
+  ],
+  "remaining_risks": [
+    "Condition parity removes this identified prompt confound but cannot itself prove a model effect.",
+    "Formal collection remains blocked until the frozen ChatGPT authentication mode is available."
+  ]
+}

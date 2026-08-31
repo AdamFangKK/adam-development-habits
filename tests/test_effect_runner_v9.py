@@ -14,6 +14,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
+PROMPTS = ROOT / "examples" / "effect-experiment-v9" / "prompts"
 sys.path.insert(0, str(SCRIPTS))
 
 import codex_v9_isolated as wrapper  # noqa: E402
@@ -30,6 +31,19 @@ from run_effect_experiment_v9 import (  # noqa: E402
 
 
 class EffectRunnerV9Tests(unittest.TestCase):
+    def test_cleanup_prompt_scope_is_condition_invariant(self) -> None:
+        shared_scope = (
+            "Modify only existing non-test files listed by the task contract. "
+            "The allowed set may include implementation, documentation, configuration, registration, or telemetry files "
+            "because a replacement must retire stale contract surfaces; do not modify tests or task metadata. "
+            "A listed file may be deleted only when the task evidence supports removal."
+        )
+        for condition in ("no_skill", "old_skill", "new_skill"):
+            with self.subTest(condition=condition):
+                prompt = (PROMPTS / f"{condition}.txt").read_text(encoding="utf-8")
+                self.assertIn(shared_scope, prompt)
+                self.assertNotIn("non-test Python implementation", prompt)
+
     def test_frozen_worktree_requires_tracked_inputs_and_preregistration_only_second_commit(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
