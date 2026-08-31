@@ -56,4 +56,6 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/materialize_effect_corpus_v9.py \
 
 This held-out split has 40 tasks (20 `decision-retention`, 20 `repair`) across the same `6/8/6` strata. Repair tasks contain obsolete implementations; decision-retention tasks deliberately let the public suite pass while hidden tests check duplicate removal, legitimate dynamic retention, and synchronized current documentation. The hidden tree contains tests only, and the reference tree is validation-only. Run `tests/test_cleanup_effect_corpus.py` before preregistering; do not use its reference sources or hidden tests as Agent inputs.
 
+Generate the cleanup-specific envelope at `examples/effect-experiment-v9/cleanup-preregistration.json` with `create_effect_preregistration_v9.py` after the cleanup corpus and old/new `SKILL.md` snapshots are committed. The preregistration is intentionally `planned`; `analyze_skill_effect_v9.py` must report `not_run`/`unknown` until all fixed-order three-condition pairs complete.
+
 When a trial emits process or runtime checkpoint JSONL, validate it with `scripts/validate_development_events.py`. The checker enforces the Level 0/1/2 event threshold, stable bounded names, unique logical transitions, lifecycle coverage, and sensitive-field rejection. Event validity is a telemetry-quality gate and never substitutes for the hidden behavioral contract.

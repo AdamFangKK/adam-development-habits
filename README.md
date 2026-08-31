@@ -250,6 +250,8 @@ V9 是当前的能力检验协议：[`materialize_effect_corpus_v9.py`](./script
 
 针对自动退役与漂移清理，另有固定的 [`effect-corpus-v9-cleanup`](./examples/effect-corpus-v9-cleanup) 语料。它包含 40 个任务、20 个 `decision-retention` 和 20 个 `repair`，隐藏测试分别检查当前行为、重复/废弃路径删除、真实动态消费者保留，以及注释/契约描述同步；公开测试故意允许部分浅层修改通过。生成命令是 `python3 scripts/materialize_effect_corpus_v9.py --profile cleanup --corpus examples/effect-corpus-v9-cleanup`，生成后必须保持 manifest 和目录 hash 不变。该语料的工程契约由 [`test_cleanup_effect_corpus.py`](./tests/test_cleanup_effect_corpus.py) 锁定；它证明夹具和评分边界有效，不等于已经证明模型效果提升。
 
+cleanup profile 的正式预注册入口是 [`cleanup-preregistration.json`](./examples/effect-experiment-v9/cleanup-preregistration.json)，它绑定 old/new Skill 快照、cleanup manifest、prompt、runner、scorer 和 analyzer 的 hash。预注册状态为 `planned`，分析结果必须保持 `not_run`/`unknown`，直到干净 worktree 中所有三条件 paired trials 完成。
+
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \
   examples/effect-experiment-v9/preregistration.json
