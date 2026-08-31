@@ -42,6 +42,20 @@
       "trap": "Adding a third helper appears faster but creates competing business rules.",
       "expected": "reuse_existing_owner",
       "required_evidence": ["existing owner", "extension point", "dependency direction"]
+    },
+    {
+      "id": "semantic_duplicate_without_name_match",
+      "trigger": "A new module implements the same normalization contract under different names.",
+      "trap": "Name-based search misses the duplicate, while two implementations can diverge on edge cases.",
+      "expected": "reuse_existing_owner",
+      "required_evidence": ["normalized control flow", "input/output contract", "call sites", "contract test"]
+    },
+    {
+      "id": "stale_release_description",
+      "trigger": "A replacement removes an old endpoint and changes the supported request shape.",
+      "trap": "The source and tests are current, but a changelog entry and package version description still teach the retired contract.",
+      "expected": "remove",
+      "required_evidence": ["old behavior phrase search", "changelog", "version metadata", "final diff"]
     }
   ]
 }

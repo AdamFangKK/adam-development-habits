@@ -4,7 +4,7 @@
 
 `SKILL.md` 是唯一的规范来源；本文是中文使用说明和概览。规则、模板或脚本发生变化时，以 `SKILL.md` 和实际校验结果为准。
 
-`Adam's Development Habits` 是适用于 Codex 的通用开发习惯 Skill。它不绑定语言、框架或云平台，也不试图替代项目本身的架构、测试或 CI。它的核心是让 AI 的每次改动具备可定位的唯一实现、可审计的替换清理、按风险匹配的保障，以及真实运行过的验证证据。
+`Adam's Development Habits` 是适用于 Codex 的通用开发习惯 Skill。它不绑定语言、框架或云平台，也不试图替代项目本身的架构、测试或 CI。它的核心是让 AI 的每次改动具备可定位的唯一实现、可审计的替换清理、按风险匹配的保障，以及真实运行过的验证证据。Level 1/2 的清理检查点由 Skill 自动触发，不需要用户额外提醒。
 
 ## 核心能力
 
@@ -23,7 +23,7 @@
 | 交付生命周期与仓库卫生 | 用原子 Git 提交、PR、发布回滚、迁移、配置/Secret、依赖、运行手册与可复现环境约束交付质量。 |
 | 机器可读证据模式 | 仓库显式启用后，用 JSON 工件记录改动事实，并由本地脚本和 CI 校验。 |
 | 企业级横切保障 | 按场景检查 `traceId`、结构化日志、超时、重试、幂等、限流、鉴权、审计和健康检查。 |
-| 自动退役与漂移清理 | Level 1/2 正常开发默认检查被替换实现、重复路径、测试/类型/配置/遥测、注释和文档；按证据删除、保留或标记未知，不需要用户额外提出“清理”。 |
+| 自动退役与漂移清理 | Level 1/2 正常开发默认检查被替换实现、重复路径、测试/类型/配置/遥测、注释和文档；先复用已有 owner，再按证据删除、保留或标记未知，不需要用户额外提出“清理”。 |
 | 验证门槛 | 要求实际运行相关的格式化、lint、类型检查、测试、构建和静态分析。 |
 | 真实完成报告 | 以已运行命令及结果作为证据，不允许用“应该可以”代替验证。 |
 
@@ -100,7 +100,9 @@ Delivery lifecycle: <atomic commit/PR、发布恢复、迁移、配置/Secret、
 |---|---|---|---|---|
 | 功能替换、Bug 修复、重构、优化、重命名，或契约/配置/Flag/依赖变更导致旧路径不再是 canonical owner | 不触发全面清理；只修正本次直接编辑且不改变行为的文字 | 检查实现、调用方、测试、类型/导出、依赖、路由/注册、配置/Flag、遥测、文档/示例、注释和版本/metadata；每项标记 `remove`、`retain` 或 `unknown` | 额外检查动态加载/注册、任务/队列、生成入口、兼容 shim、迁移状态、API/ADR/runbook，并由独立复查确认；保留项必须有真实消费者、删除条件、可观测信号和覆盖测试 | `rg`/导入或调用图、注册/配置查找、静态分析或依赖扫描、最终 diff、测试/CI、迁移/回滚演练、文档审查、证据台账和完成报告 |
 
-`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、删除条件、可观测性和测试；`unknown` 遇到动态、生成或外部引用时不得猜删，先做针对性运行时/注册检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。
+`reuse_existing_owner` 表示已有 owner 的契约能够承接需求，不能另起第三套规则；`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、删除条件、可观测性和测试；`unknown` 遇到动态、生成或外部引用时不得猜删，先做针对性运行时/注册检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。清理检查点必须在最终验证和提交前完成，未解析的 `unknown` 不得被静默带过。
+
+检查顺序固定为：实现前先找并复用已有 owner；实现后、最终验证和提交前扫描重复/废弃路径；随后同步旧符号、旧行为描述、注释、版本说明和 metadata；动态或外部引用没有证据时停止完成门禁并报告 `unknown`/`blocked`。
 
 ### 风险分级
 
@@ -230,7 +232,7 @@ v7 的首次收集已归档为 `interrupted`：20 个预注册 task 的 40 个�
 
 V8 现仅保留为失效历史协议，不得引用其 hidden success 作为能力证据。复核发现它的 hidden tree 可包含修复后的实现文件，而评分器会把整棵 hidden tree 覆盖到候选工作区；因此未修复候选也可能被参考实现替换后得到通过。历史文件保持不变，以便重放这个测试工具缺陷。
 
-V9 是当前的能力检验协议：[`materialize_effect_corpus_v9.py`](./scripts/materialize_effect_corpus_v9.py) 把 Agent 可见的 `tasks/`、只含测试的 `hidden-tests/` 与仅用于语料校验的 `references/` 物理分离；[`score_effect_workspace_v9.py`](./scripts/score_effect_workspace_v9.py) 不接受参考实现路径，只注入测试，并在注入前后校验候选实现 SHA-256 未变化。实验对同一题执行 `no_skill`、冻结 old Skill 和冻结 new Skill 三个条件，主对比为 `new_skill - old_skill`，`new_skill - no_skill` 仅作次要锚点；20 个决策保留题与 20 个端到端修复题分别按 `6/8/6` 分层分析。所有非敏感 prompt、输出、stdout/stderr、diff、公开/隐藏结果、审计和哈希 manifest 永久保留；中断、遗漏、隔离失败或关键安全回退会阻断分析，不能选择性重试或删样本。V9 只有在预注册完整采集及统计门槛实际通过后，才能支持固定模型、Harness、Skill 快照、语料和评分器范围内的提升结论。
+V9 是当前的能力检验协议：[`materialize_effect_corpus_v9.py`](./scripts/materialize_effect_corpus_v9.py) 把 Agent 可见的 `tasks/`、只含测试的 `hidden-tests/` 与仅用于语料校验的 `references/` 物理分离；[`score_effect_workspace_v9.py`](./scripts/score_effect_workspace_v9.py) 不接受参考实现路径，只注入测试，并在注入前后校验候选实现 SHA-256 未变化。实验对同一题执行 `no_skill`、冻结 old Skill 和冻结 new Skill 三个条件，主对比为 `new_skill - old_skill`，`new_skill - no_skill` 仅作次要锚点；20 个决策保留题与 20 个端到端修复题分别按 `6/8/6` 分层分析。所有非敏感 prompt、输出、stdout/stderr、diff、公开/隐藏结果、审计和哈希 manifest 永久保留；中断、遗漏、隔离失败或关键安全回退会阻断分析，不能选择性重试或删样本。V9 只有在预注册完整采集及统计门槛实际通过后，才能支持固定模型、Harness、Skill 快照、语料和评分器范围内的提升结论。预注册文件不是手工维护的版本说明：正式采集前必须用 [`create_effect_preregistration_v9.py`](./scripts/create_effect_preregistration_v9.py) 在冻结提交上生成 `examples/effect-experiment-v9/preregistration.json`；在生成前该路径不存在是预期状态，不得把未生成的分析命令当作已执行证据。
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \

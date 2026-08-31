@@ -181,11 +181,19 @@ Use narrow searches to establish the ledger. Check imports, exports, registratio
 
 ## Automatic Retirement and Drift Cleanup
 
-This is the default maintenance behavior for normal development. It is scoped to the paths touched, replaced, or made non-canonical by the current logical change; it is not permission for an unrelated repository-wide cleanup.
+This is the default maintenance behavior for normal development. The Agent performs it as an internal checkpoint; it must not wait for the user to ask for cleanup explicitly. It is scoped to the paths touched, replaced, or made non-canonical by the current logical change; it is not permission for an unrelated repository-wide cleanup.
 
 | Practice | Trigger | Level 0 | Level 1 | Level 2 | Evidence |
 |---|---|---|---|---|---|
 | Automatic retirement and drift cleanup | A feature, bug fix, refactor, optimization, rename, contract/configuration/flag/dependency change, or any change that introduces a replacement or makes an earlier path non-canonical. Level 0 never triggers a full sweep. | No full sweep; only correct directly edited text when the requested no-behavior change requires it. | Run a light sweep over the changed boundary: implementation, callers, tests, types/exports, dependencies, routes/registrations, configuration/flags, telemetry, docs/examples, comments, and version/metadata descriptions. Classify candidates as `remove`, `retain`, or `unknown`; delete confirmed leftovers and update stale descriptions in the same change. | Run the complete sweep, including dynamic loading/registration, jobs/queues, generated entry points, compatibility shims, migration state, API/ADR/runbook references, and independent review. Retained paths require a real consumer, removal condition, observability, and coverage; unresolved dynamic paths stay `unknown` until checked. | Search/import or call-graph output, registration/config lookup, static-analysis or dependency scan, final diff, focused tests/CI, migration or rollback rehearsal when applicable, documentation review, and ledger/report entries. |
+
+Use this checkpoint in order for every Level 1 or Level 2 change:
+
+1. **Before implementation**, locate the canonical owner by responsibility and inspect nearby utilities, adapters, exports, and extension points. If an existing owner already satisfies the contract, mark the candidate `reuse_existing_owner` and extend or call it; do not create a parallel implementation merely because it is shorter to write.
+2. **After implementation and before the final verification/commit**, search the changed boundary for duplicate or superseded paths. Prefer the repository's existing duplicate-code or static-analysis tool; when none exists, compare the normalized control flow, input/output contract, and call sites rather than relying on names alone. Record the command or inspection result.
+3. **Classify each candidate** as `remove`, `retain`, or `unknown`. A semantic duplicate that has no independent contract is `remove` after callers move; a real compatibility consumer is `retain`; a dynamic, generated, or external path is `unknown` until its lookup or runtime use is checked.
+4. **Synchronize descriptions in the same change**: search old symbols, old behavior phrases, configuration keys, flag names, telemetry labels, version notes, changelog entries, examples, and package metadata. Update or delete stale explanatory text; do not leave a comment or release description teaching the retired contract.
+5. **Stop the completion gate when evidence is unresolved**. Do not silently retain an unknown path or report the change complete. Run a targeted registration/runtime/configuration check, or report the exact unresolved path and residual risk as `blocked`/`unknown`.
 
 Before editing, record the canonical owner, affected callers/consumers, and every path expected to be replaced. Search for an existing owner, utility, extension point, or adapter before adding another implementation. Reuse or extend the owner when its contract and boundary fit; do not create a third implementation to avoid reading the existing one.
 

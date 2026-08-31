@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "SKILL.md"
 README = ROOT / "README.md"
 METADATA = ROOT / "agents" / "openai.yaml"
+ENFORCEMENT = ROOT / "references" / "enforcement.md"
 CORPUS = ROOT / "examples" / "retirement-cleanup-traps.json"
 
 
@@ -17,6 +18,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
     skill: str = ""
     readme: str = ""
     metadata: str = ""
+    enforcement: str = ""
     corpus: dict[str, object] = {}
     policy: str = ""
 
@@ -24,6 +26,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.skill = SKILL.read_text(encoding="utf-8")
         self.readme = README.read_text(encoding="utf-8")
         self.metadata = METADATA.read_text(encoding="utf-8")
+        self.enforcement = ENFORCEMENT.read_text(encoding="utf-8")
         self.corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
         start = self.skill.index("## Automatic Retirement and Drift Cleanup")
         end = self.skill.index("When Causal Execution Discipline is active", start)
@@ -31,18 +34,34 @@ class RetirementCleanupContractTests(unittest.TestCase):
 
     def test_policy_is_implicit_but_risk_scaled(self) -> None:
         self.assertIn("implicit even when the user does not request it explicitly", self.skill)
+        self.assertIn("must not wait for the user to ask for cleanup explicitly", self.policy)
         self.assertIn("Level 0 never triggers a full sweep", self.policy)
         self.assertIn("Level 1", self.policy)
         self.assertIn("Level 2", self.policy)
         self.assertIn("Search/import or call-graph output", self.policy)
         self.assertIn("migration or rollback rehearsal", self.policy)
 
+    def test_checkpoint_orders_reuse_sweep_description_sync_and_unknown_stop(self) -> None:
+        for requirement in (
+            "Before implementation",
+            "reuse_existing_owner",
+            "After implementation and before the final verification/commit",
+            "duplicate-code or static-analysis tool",
+            "normalized control flow",
+            "Synchronize descriptions in the same change",
+            "old behavior phrases",
+            "Stop the completion gate when evidence is unresolved",
+            "Do not silently retain an unknown path",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.policy)
+
     def test_hybrid_trap_corpus_has_distinct_expected_decisions_and_evidence(self) -> None:
         scenarios_value = self.corpus["scenarios"]
         self.assertIsInstance(scenarios_value, list)
         scenarios = cast(list[dict[str, object]], scenarios_value)
         self.assertEqual(self.corpus["schema_version"], 1)
-        self.assertEqual(len(scenarios), 6)
+        self.assertEqual(len(scenarios), 8)
         self.assertEqual(
             {cast(str, scenario["expected"]) for scenario in scenarios},
             {"remove", "retain", "unknown", "reuse_existing_owner"},
@@ -111,9 +130,20 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.assertIn("Level 2（完整）", self.readme)
         self.assertIn("零直接引用", self.readme)
         self.assertIn("动态、生成或外部引用时不得猜删", self.readme)
+        self.assertIn("先复用已有 owner", self.readme)
+        self.assertIn("清理检查点必须在最终验证和提交前完成", self.readme)
         self.assertIn("Documentation synchronization:", self.readme)
         self.assertIn("automatic retirement", self.metadata)
         self.assertIn("stale paths", self.metadata)
+        self.assertIn("Before implementation reuse an existing owner", self.metadata)
+        for requirement in (
+            "retirement checkpoint before final verification and commit",
+            "reuse a fitting existing owner",
+            "normalized control-flow, contract, and call-site inspection",
+            "unresolved `unknown` paths stop silent completion",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.enforcement)
 
 
 if __name__ == "__main__":
