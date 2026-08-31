@@ -39,7 +39,7 @@
   "experiment_id": "adam-skill-effect-v9",
   "preregistration": {
     "envelope_sha256": "b9e68237109f1d16917a96921f8e3814a358a20faacba7a1810785104b06e47e",
-    "git_commit": "d056a2c378b45cb5bfa23b57e0884caf46d4e6ee",
+    "git_commit": "76a6c13",
     "raw_artifacts_append_only": true,
     "recorded_before_first_trial": true,
     "references_unavailable_to_agents": true
