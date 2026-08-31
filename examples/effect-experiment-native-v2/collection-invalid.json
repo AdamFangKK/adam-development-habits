@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "experiment_id": "adam-native-cleanup-effect-v2",
+  "status": "ineligible",
+  "analysis_eligibility": "ineligible",
+  "frozen_preparation_commit": "e0a9666e971777639e4a6eac48699cbb179281b0",
+  "preregistration_path": "examples/effect-experiment-native-v2/preregistration.json",
+  "preregistration_sha256": "aa33dd4964c08c4c6df72d0e2b4e710b261ba871e29670397df326762df8e006",
+  "collection": {
+    "planned_trials": 30,
+    "completed_trials": 3,
+    "task_id": "native_v2_cleanup_tenant_casefold",
+    "planned_execution_order": [
+      "old_skill",
+      "new_skill",
+      "no_skill"
+    ],
+    "observed_execution_deviation": "All three conditions were launched concurrently instead of being started only after the previous condition had exited and been blind-scored.",
+    "raw_artifacts": {
+      "root": "examples/effect-experiment-native-v2/raw",
+      "per_trial": [
+        "prepare.json",
+        "seed.txt",
+        "candidate.diff",
+        "agent-result.json",
+        "score.json"
+      ],
+      "count": 15
+    },
+    "all_implementation_integrity_passed": true,
+    "all_public_suites_passed": true,
+    "all_hidden_tests_injected_after_agent_exit": true,
+    "isolation_classification": "protocol-isolated shared filesystem",
+    "isolation_limit": "The native subagents shared a filesystem. Their supplied workspaces excluded hidden/reference trees, but this was not OS or container isolation."
+  },
+  "invalidation": {
+    "kind": "preregistered execution-order violation",
+    "reason": "The V2 preregistration fixes a three-condition order for each task, but the first task's three agents were launched concurrently. The analyzer did not yet require a predecessor-score credential, so it could not independently detect this execution violation.",
+    "effect_on_interpretation": "The partial outcomes are preserved as diagnostics only. They must not be completed, retried, statistically analyzed, or used as Skill-effect, repair-success, or causal-capability evidence."
+  },
+  "next_protocol_requirement": "A successor corpus must use fresh task IDs and a frozen runner/analyzer that require every later condition to carry the SHA-256 digest of the prior condition's blind score before it can be prepared.",
+  "observed_hidden_passes_diagnostic_only": {
+    "no_skill": false,
+    "old_skill": false,
+    "new_skill": true
+  },
+  "causal_conclusion": "unknown"
+}

@@ -1,0 +1,46 @@
+diff --git a/README.md b/README.md
+index 8feed65..21cae58 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1 @@
+-legacy_contract_native_v2_cleanup_tenant_casefold: legacy helper remains canonical.
++canonical_normalize: trims surrounding whitespace, casefolds, and collapses internal whitespace runs to ASCII hyphens.
+diff --git a/docs/native_v2_cleanup_tenant_casefold.md b/docs/native_v2_cleanup_tenant_casefold.md
+index daf0182..a85a1f7 100644
+--- a/docs/native_v2_cleanup_tenant_casefold.md
++++ b/docs/native_v2_cleanup_tenant_casefold.md
+@@ -1 +1 @@
+-legacy_contract_native_v2_cleanup_tenant_casefold: current normalization owner.
++canonical_normalize is the current normalization owner.
+diff --git a/legacy/native_v2_cleanup_tenant_casefold.py b/legacy/native_v2_cleanup_tenant_casefold.py
+deleted file mode 100644
+index 4d253ae..0000000
+--- a/legacy/native_v2_cleanup_tenant_casefold.py
++++ /dev/null
+@@ -1,2 +0,0 @@
+-def legacy_normalize(value):
+-    return value.strip().casefold()
+diff --git a/package-metadata.json b/package-metadata.json
+index 7e93d8c..b44268c 100644
+--- a/package-metadata.json
++++ b/package-metadata.json
+@@ -1 +1 @@
+-{"normalization_contract": "legacy_contract_native_v2_cleanup_tenant_casefold"}
++{"normalization_contract": "canonical_normalize"}
+diff --git a/policy.py b/policy.py
+index 5c10056..b1c9c5b 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,4 +1,4 @@
+-"""legacy_contract_native_v2_cleanup_tenant_casefold: policy normalization contract."""
++"""canonical_normalize owns trim, casefold, and whitespace collapse."""
+ 
+ def canonical_normalize(value):
+     return "-".join(value.strip().casefold().split())
+diff --git a/runbook.md b/runbook.md
+index 1e1ef66..3e10e23 100644
+--- a/runbook.md
++++ b/runbook.md
+@@ -1 +1 @@
+-legacy_contract_native_v2_cleanup_tenant_casefold: recovery uses the documented normalization owner.
++canonical_normalize: recovery uses the documented normalization owner.

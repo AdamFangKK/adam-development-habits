@@ -1,0 +1,83 @@
+{
+  "schema_version": 2,
+  "change_id": "native-effect-v2-invalidation",
+  "level": 1,
+  "canonical_owner": [
+    "examples/effect-experiment-native-v2/collection-invalid.json",
+    "tests/test_native_cleanup_effect_v2_invalidation.py"
+  ],
+  "affected_callers": [
+    "examples/effect-experiment-native-v2/raw",
+    "README.md future V2 interpretation"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The three completed V2 trials and their five raw artifacts each are preserved exactly, while the incomplete 30-trial collection is explicitly ineligible.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_v2_invalidation.py -v"
+    }
+  ],
+  "invariants": [
+    "No V2 trial is retried, deleted, or added after detecting the preregistered order violation.",
+    "V2 diagnostic hidden outcomes cannot be used as an effect, repair-success, or causal-capability result.",
+    "The successor protocol must have fresh task IDs and a machine-verifiable predecessor-score sequence credential."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [
+    {
+      "consumer": "Historical audit of the V2 protocol failure.",
+      "removal_condition": "Permanent immutable archive; it is retained only to prevent accidental reuse or selective retry.",
+      "test": "tests/test_native_cleanup_effect_v2_invalidation.py"
+    }
+  ],
+  "safeguards": [
+    {
+      "name": "append-only invalidation",
+      "status": "applied",
+      "rationale": "The partial raw artifacts are retained and the collection is labeled ineligible instead of being completed, filtered, or retried."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The invalidation record owns V2 interpretation and the regression test owns archive completeness checks."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "No dependency changed."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No application extension point changed."},
+    "data_ownership": {"status": "applied", "rationale": "The immutable raw trial artifacts remain owned by the V2 archive and are not reused by a successor collection."},
+    "error_model": {"status": "applied", "rationale": "A scheduling protocol deviation becomes an explicit ineligible outcome rather than a silent retry or a failed repair observation."},
+    "contract_evolution": {"status": "applied", "rationale": "V2 remains unchanged while the successor requires fresh identifiers and stronger order evidence."},
+    "operational_budget": {"status": "not_applicable", "rationale": "This archival correction launches no agents or service workload."},
+    "threat_boundary": {"status": "applied", "rationale": "The record retains the shared-filesystem protocol-isolation limit and does not relabel it as a sandbox."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The discovered protocol deviation is archived and tested before any successor experiment is prepared."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No production release exists."},
+    "data_migration": {"status": "not_applicable", "rationale": "No production data migration exists."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No secret or configuration changed."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No third-party dependency changed."},
+    "operational_knowledge": {"status": "applied", "rationale": "The invalidation reason and successor requirement are machine-readable and regression-tested."},
+    "reproducibility": {"status": "applied", "rationale": "The exact raw files, preregistration hash, freeze commit, and observed scheduling deviation are retained."}
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_v2_invalidation.py -v",
+      "status": "passed",
+      "result": "The V2 invalidation record, 15 raw files, per-condition integrity/public/hidden-injection fields, diagnostic-only outcomes, and unknown causal conclusion were verified.",
+      "evidence_refs": ["v2-invalidation-test"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "v2-invalidation-test",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-effect-v2-invalidation-focused.txt",
+      "sha256": "35980312c8be71f5143f0e9ecfa831c48906e475059b8ad2c0048266bf606ed7",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_v2_invalidation.py -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T17:45:12Z",
+      "repository_revision": "e0a9666e971777639e4a6eac48699cbb179281b0+worktree",
+      "summary": "V2 invalidation archive regression output."
+    }
+  ],
+  "remaining_risks": [
+    "The shared-filesystem native environment remains only protocol-isolated.",
+    "V2's three diagnostic outcomes do not estimate any Skill effect.",
+    "A successor experiment must still run every preregistered trial without retries before it can be analyzed."
+  ]
+}

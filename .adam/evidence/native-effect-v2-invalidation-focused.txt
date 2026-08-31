@@ -1,0 +1,6 @@
+test_partial_parallel_collection_stays_ineligible_and_complete_as_an_archive (__main__.NativeCleanupEffectV2InvalidationTests) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK
