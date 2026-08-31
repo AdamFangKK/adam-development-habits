@@ -1,0 +1,498 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "critical_safety_task_ids": [
+      "cleanup_v10_decision_retention_split_owner_01",
+      "cleanup_v10_decision_retention_dynamic_retain_02",
+      "cleanup_v10_decision_retention_semantic_duplicate_03",
+      "cleanup_v10_decision_retention_release_drift_04",
+      "cleanup_v10_decision_retention_split_owner_05",
+      "cleanup_v10_decision_retention_dynamic_retain_06",
+      "cleanup_v10_decision_retention_semantic_duplicate_07",
+      "cleanup_v10_decision_retention_release_drift_08",
+      "cleanup_v10_decision_retention_split_owner_09",
+      "cleanup_v10_decision_retention_dynamic_retain_10",
+      "cleanup_v10_decision_retention_semantic_duplicate_11",
+      "cleanup_v10_decision_retention_release_drift_12",
+      "cleanup_v10_decision_retention_split_owner_13",
+      "cleanup_v10_decision_retention_dynamic_retain_14",
+      "cleanup_v10_decision_retention_semantic_duplicate_15",
+      "cleanup_v10_decision_retention_release_drift_16",
+      "cleanup_v10_decision_retention_split_owner_17",
+      "cleanup_v10_decision_retention_dynamic_retain_18",
+      "cleanup_v10_decision_retention_semantic_duplicate_19",
+      "cleanup_v10_decision_retention_release_drift_20"
+    ],
+    "minimum_effect": 0.05,
+    "minimum_tasks_per_cohort": 20,
+    "permutation_resamples": 10000,
+    "primary_contrast": "new_skill-old_skill",
+    "random_seed": 20260827,
+    "secondary_anchor": "new_skill-no_skill",
+    "stratum_weights": {
+      "cross-module": 0.4,
+      "integration": 0.4,
+      "single-module": 0.2
+    }
+  },
+  "experiment_id": "adam-skill-effect-v9",
+  "preregistration": {
+    "envelope_sha256": "961e5d934204ef0b51d5528085956a880bcd789750a72a93f38fcdb1c1c3cf64",
+    "git_commit": "2ded0ecc8de908a97fe0eb69c21a95ab86432ec8",
+    "raw_artifacts_append_only": true,
+    "recorded_before_first_trial": true,
+    "references_unavailable_to_agents": true
+  },
+  "protocol": {
+    "agent_timeout_seconds": 420.0,
+    "analyzer_sha256": "0348dd437eb10e428eb11cd202cae6e9d88e42effdd218211205346092c86115",
+    "artifact_manifest_generator_sha256": "54ec6e19a25b23f9ce26f8cbdecb0e2bba6c890cf4d9f688467fc8e4c8abafc3",
+    "baseline_prompt_sha256": "4793f50ff024e938ccc440b05abf09a258fea518ce6d61b217e582cd84265c62",
+    "codex_auth_mode": "api-key",
+    "codex_cli_version": "codex-cli 0.149.0-alpha.4.1",
+    "codex_wrapper_sha256": "e086c67d926217241b0c9e36d7c871e90d91b3abbfbfe53bfa42c54d21b7062f",
+    "conditions": [
+      "no_skill",
+      "old_skill",
+      "new_skill"
+    ],
+    "connectivity_probe_timeout_seconds": 60.0,
+    "corpus_manifest_sha256": "cb12b4979effe0fa03d12f0d76cb6c67fc8c2299eaebb3386bebd62aec138713",
+    "generator_sha256": "a1a16293e67d67af655dbb1b039b3e407edee18ba1cd0be23ae14dfdb9f58c97",
+    "hidden_scorer_blind_to_condition": true,
+    "hidden_scorer_sha256": "b8279b1e774ca2878aaf09476d5bcb0ac678d71cb49a2b634f04aa52146f14db",
+    "isolation_auditor_sha256": "325764c668403e2220b33141e2a23505f7c15e20a63de21aee332c91f6279471",
+    "new_skill_prompt_sha256": "fa78695d5227281ce5f1bc39c49020867ad28e50e46399b8104eb7a5a9748a88",
+    "new_skill_sha256": "02700b113d312076c2783d7473346244eda12fb36e785b3cf4543726d801452d",
+    "old_skill_prompt_sha256": "fa78695d5227281ce5f1bc39c49020867ad28e50e46399b8104eb7a5a9748a88",
+    "old_skill_sha256": "95551ad23ec77efda31d10b2bca1b27fe1dbe926eaa4aef38cce0a15979360da",
+    "pairing": "same task, randomized three-condition order",
+    "preregistration_generator_sha256": "1e7b7e43139ab69b010c55cc293a9f820eecae71b72bc40d655fae1411088b21",
+    "runner_sha256": "3734e1c74497299f417818ad8a2c7a7451e64fd6203bbe10e0c6fe0c909d9249",
+    "skill_search_disabled_for_all_conditions": true,
+    "test_timeout_seconds": 30.0,
+    "treatment_requires_snapshot_read_evidence": true
+  },
+  "schema_version": 2,
+  "scope": {
+    "claim": "For the fixed model, Harness, old/new Skill snapshots, held-out V9 corpus, and blind scorer declared here, enabling the new Skill improves hidden repair success over the old Skill.",
+    "harness_id": "codex-cli-0.149.0-alpha.4.1;exec-json;workspace-write;ephemeral;skill-search-disabled;absolute-output;condition-checkpointed-v9",
+    "model_id": "gpt-5.6-terra",
+    "new_skill_revision_sha256": "02700b113d312076c2783d7473346244eda12fb36e785b3cf4543726d801452d",
+    "no_skill_isolation": "automatic Skill discovery disabled; no Skill path supplied",
+    "old_skill_revision_sha256": "95551ad23ec77efda31d10b2bca1b27fe1dbe926eaa4aef38cce0a15979360da"
+  },
+  "status": "planned",
+  "stopping_rule": {
+    "blocks_per_task": 1,
+    "early_stop": "not allowed",
+    "interrupted_or_excluded_trials": "retain and mark collection ineligible; no selective retry",
+    "kind": "fixed_complete_blocks"
+  },
+  "task_plan": {
+    "tasks": [
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_split_owner_01"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_dynamic_retain_02"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_semantic_duplicate_03"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_release_drift_04"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_split_owner_05"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_dynamic_retain_06"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_semantic_duplicate_07"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_release_drift_08"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_split_owner_09"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_dynamic_retain_10"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_semantic_duplicate_11"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_release_drift_12"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_split_owner_13"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_dynamic_retain_14"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_decision_retention_semantic_duplicate_15"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_decision_retention_release_drift_16"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_decision_retention_split_owner_17"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_decision_retention_dynamic_retain_18"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_decision_retention_semantic_duplicate_19"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_decision_retention_release_drift_20"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_repair_split_owner_21"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_repair_dynamic_retain_22"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_repair_semantic_duplicate_23"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_repair_release_drift_24"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_repair_split_owner_25"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_repair_dynamic_retain_26"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_semantic_duplicate_27"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_release_drift_28"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_split_owner_29"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_dynamic_retain_30"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_semantic_duplicate_31"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_release_drift_32"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_split_owner_33"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_dynamic_retain_34"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_repair_semantic_duplicate_35"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_repair_release_drift_36"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_repair_split_owner_37"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_repair_dynamic_retain_38"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_repair_semantic_duplicate_39"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_repair_release_drift_40"
+      }
+    ]
+  },
+  "trials": []
+}
