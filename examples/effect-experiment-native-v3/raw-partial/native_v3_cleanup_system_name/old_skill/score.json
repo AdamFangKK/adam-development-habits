@@ -1,0 +1,37 @@
+{
+  "changed_paths": [
+    "README.md",
+    "consumers/native_v3_cleanup_system_name_consumer.py",
+    "docs/native_v3_cleanup_system_name.md",
+    "legacy/native_v3_cleanup_system_name.py",
+    "package-metadata.json",
+    "policy.py",
+    "runbook.md"
+  ],
+  "disallowed_changed_paths": [],
+  "hidden_injected_after_agent_exit": true,
+  "hidden_repair_passed": false,
+  "hidden_result": {
+    "passed": false,
+    "returncode": 1,
+    "stderr": "F.\n======================================================================\nFAIL: test_behavior_owner_and_current_documentation (test_hidden.HiddenCleanupContract)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/native-cleanup-score-qtk2ec3d/candidate/tests/test_hidden.py\", line 17, in test_behavior_owner_and_current_documentation\n    self.assertIn('policy.canonical_normalize', policy_source)\nAssertionError: 'policy.canonical_normalize' not found in '\"\"\"Canonical normalization policy for native_v3_cleanup_system_name.\"\"\"\\n\\ndef canonical_normalize(value):\\n    return \"-\".join(value.strip().casefold().split())\\n'\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "implementation_integrity_passed": true,
+  "pre_score_artifact_sha256": {
+    "agent-result.json": "33861231cae2e91ef3121940e68906ba4f3eec3a4b95e7edf61a7f14579e1400",
+    "candidate.diff": "3ea60e428e8c93f28b5b84b6ca381a0355dbfd302f3deee54ea760a2c0798b3c",
+    "prepare.json": "19600670f7fb41aee189b7b89186cb724a53c12bff2fef27325fa38cdb82a22f",
+    "seed.txt": "61f2210a9d159a2d0c374e1745b7609246be0b8a85e2ba80f2027536d4deb1e1",
+    "sequence.json": "c1c2f8240d2df9265b9f694a5b64bd7af1cec62e64d0c89e00e492d2f2f94767"
+  },
+  "public_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "task_id": "native_v3_cleanup_system_name"
+}

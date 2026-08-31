@@ -1,0 +1,17 @@
+{
+  "condition": "new_skill",
+  "condition_index": 2,
+  "execution_order": [
+    "old_skill",
+    "new_skill",
+    "no_skill"
+  ],
+  "predecessor_score_sha256": [
+    {
+      "condition": "old_skill",
+      "sha256": "3d113d551c8c6121627bec3239849d0381265b4fcd7b53f7550cb2f9c1c11a02"
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "native_v3_cleanup_workspace_key"
+}

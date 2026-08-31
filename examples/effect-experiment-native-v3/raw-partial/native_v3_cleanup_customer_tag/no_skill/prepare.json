@@ -1,0 +1,20 @@
+{
+  "allowed_edit_paths": [
+    "README.md",
+    "consumers/native_v3_cleanup_customer_tag_consumer.py",
+    "docs/native_v3_cleanup_customer_tag.md",
+    "legacy/native_v3_cleanup_customer_tag.py",
+    "package-metadata.json",
+    "policy.py",
+    "runbook.md"
+  ],
+  "condition": "no_skill",
+  "predecessor_score_sha256": [
+    {
+      "condition": "new_skill",
+      "sha256": "e4032186669b4cd02534910edea6939c9ff68673b9e1db28d326bcd5941d4274"
+    }
+  ],
+  "seed_commit": "107080660e43078d247e60d5bb6c3173664b01be",
+  "task_id": "native_v3_cleanup_customer_tag"
+}

@@ -1,0 +1,36 @@
+{
+  "changed_paths": [
+    "README.md",
+    "docs/native_v3_cleanup_workspace_key.md",
+    "legacy/native_v3_cleanup_workspace_key.py",
+    "package-metadata.json",
+    "policy.py",
+    "runbook.md"
+  ],
+  "disallowed_changed_paths": [],
+  "hidden_injected_after_agent_exit": true,
+  "hidden_repair_passed": false,
+  "hidden_result": {
+    "passed": false,
+    "returncode": 1,
+    "stderr": "F.\n======================================================================\nFAIL: test_behavior_owner_and_current_documentation (test_hidden.HiddenCleanupContract)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/native-cleanup-score-f5cp8yth/candidate/tests/test_hidden.py\", line 19, in test_behavior_owner_and_current_documentation\n    self.assertFalse(Path(\"legacy/native_v3_cleanup_workspace_key.py\").exists())\nAssertionError: True is not false\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "implementation_integrity_passed": true,
+  "pre_score_artifact_sha256": {
+    "agent-result.json": "637e16286e4d2ee1157be048880adf48ca263c45717ef4b98cf2e652246783e8",
+    "candidate.diff": "8039a5b9cce4a48047bd250fe78c1a2129946b2d5761392853647f94845e9e8c",
+    "prepare.json": "6471f9fbb1b284473d403ebe14c4eeb3635503852f8b1e8bbb7da97e90eb9a8e",
+    "seed.txt": "9d076fc2ea47b21bc1be2847a0d8c62f866508ed74c2482d27641dbc5ed27c4e",
+    "sequence.json": "6db2a6f0944894b26989eaf566a3a24f59f429b77af6e3a4d3a9fcf4e25ed1fd"
+  },
+  "public_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "task_id": "native_v3_cleanup_workspace_key"
+}

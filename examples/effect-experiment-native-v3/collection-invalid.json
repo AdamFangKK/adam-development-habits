@@ -1,0 +1,73 @@
+{
+  "experiment_id": "adam-native-cleanup-effect-v3",
+  "status": "ineligible",
+  "reason": "The partial native collection was stopped after the first sequential blocks exposed a repeated hidden-contract outcome that distinguishes implementation behavior from the preregistered cleanup target; the fixed 30-trial block was not completed.",
+  "preregistration_sha256": "6b738b98107c4a806c290ce5f5736e82a98cc44d42b46daafcfd84b86bc1f80f",
+  "raw_artifacts_path": "raw-partial/",
+  "planned_trials": 30,
+  "completed_trials": 8,
+  "eligible_for_statistics": false,
+  "selective_retry": false,
+  "observed_outcomes": [
+    {
+      "task_id": "native_v3_cleanup_workspace_key",
+      "condition": "old_skill",
+      "public_passed": true,
+      "hidden_repair_passed": true
+    },
+    {
+      "task_id": "native_v3_cleanup_workspace_key",
+      "condition": "new_skill",
+      "public_passed": true,
+      "hidden_repair_passed": false,
+      "failure": "retained legacy compatibility wrapper"
+    },
+    {
+      "task_id": "native_v3_cleanup_search_phrase",
+      "condition": "no_skill",
+      "public_passed": true,
+      "hidden_repair_passed": false,
+      "failure": "policy.py omitted the fully-qualified current owner marker"
+    },
+    {
+      "task_id": "native_v3_cleanup_search_phrase",
+      "condition": "old_skill",
+      "public_passed": true,
+      "hidden_repair_passed": true
+    },
+    {
+      "task_id": "native_v3_cleanup_customer_tag",
+      "condition": "new_skill",
+      "public_passed": true,
+      "hidden_repair_passed": false,
+      "failure": "policy.py omitted the fully-qualified current owner marker"
+    },
+    {
+      "task_id": "native_v3_cleanup_customer_tag",
+      "condition": "no_skill",
+      "public_passed": true,
+      "hidden_repair_passed": false,
+      "failure": "policy.py omitted the fully-qualified current owner marker"
+    },
+    {
+      "task_id": "native_v3_cleanup_system_name",
+      "condition": "old_skill",
+      "public_passed": true,
+      "hidden_repair_passed": false,
+      "failure": "policy.py omitted the fully-qualified current owner marker"
+    },
+    {
+      "task_id": "native_v3_cleanup_system_name",
+      "condition": "no_skill",
+      "public_passed": true,
+      "hidden_repair_passed": false,
+      "failure": "no implementation change; policy.py retained the legacy marker"
+    }
+  ],
+  "interpretation": "This is a retained partial raw record, not an effect estimate. The repeated failures support a follow-up Skill/protocol refinement around fully-qualified owner naming and explicit compatibility deletion conditions, but cannot support a claim that the Skill improves repair or causal reasoning.",
+  "limitations": [
+    "The preregistered 30 trials were not completed.",
+    "No statistical effect or model-wide capability claim is permitted.",
+    "Native subagents share a filesystem; isolation is protocol-only."
+  ]
+}

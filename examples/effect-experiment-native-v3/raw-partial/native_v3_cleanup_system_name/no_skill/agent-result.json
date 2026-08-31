@@ -1,0 +1,5 @@
+{
+  "condition": "no_skill",
+  "status": "agent_exited",
+  "task_id": "native_v3_cleanup_system_name"
+}

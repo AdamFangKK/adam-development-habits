@@ -1,0 +1,15 @@
+{
+  "allowed_edit_paths": [
+    "README.md",
+    "consumers/native_v3_cleanup_system_name_consumer.py",
+    "docs/native_v3_cleanup_system_name.md",
+    "legacy/native_v3_cleanup_system_name.py",
+    "package-metadata.json",
+    "policy.py",
+    "runbook.md"
+  ],
+  "condition": "old_skill",
+  "predecessor_score_sha256": [],
+  "seed_commit": "4b85546a1e3a478bc575325f2a28fb48b76c1e59",
+  "task_id": "native_v3_cleanup_system_name"
+}

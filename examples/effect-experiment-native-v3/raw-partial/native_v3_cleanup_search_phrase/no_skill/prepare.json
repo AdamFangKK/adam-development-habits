@@ -1,0 +1,14 @@
+{
+  "allowed_edit_paths": [
+    "README.md",
+    "docs/native_v3_cleanup_search_phrase.md",
+    "legacy/native_v3_cleanup_search_phrase.py",
+    "package-metadata.json",
+    "policy.py",
+    "runbook.md"
+  ],
+  "condition": "no_skill",
+  "predecessor_score_sha256": [],
+  "seed_commit": "1d0a988b73e7a3d8a08fb64e2f8f55c1dd745f0c",
+  "task_id": "native_v3_cleanup_search_phrase"
+}

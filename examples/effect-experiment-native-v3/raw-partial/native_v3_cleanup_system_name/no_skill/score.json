@@ -1,0 +1,29 @@
+{
+  "changed_paths": [],
+  "disallowed_changed_paths": [],
+  "hidden_injected_after_agent_exit": true,
+  "hidden_repair_passed": false,
+  "hidden_result": {
+    "passed": false,
+    "returncode": 1,
+    "stderr": "F.\n======================================================================\nFAIL: test_behavior_owner_and_current_documentation (test_hidden.HiddenCleanupContract)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/native-cleanup-score-yo0ux9ve/candidate/tests/test_hidden.py\", line 17, in test_behavior_owner_and_current_documentation\n    self.assertIn('policy.canonical_normalize', policy_source)\nAssertionError: 'policy.canonical_normalize' not found in '\"\"\"legacy_contract_native_v3_cleanup_system_name: policy normalization contract.\"\"\"\\n\\ndef canonical_normalize(value):\\n    return \"-\".join(value.strip().casefold().split())\\n\\n\\ndef evaluate(value):\\n    return canonical_normalize(value)\\n'\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "implementation_integrity_passed": true,
+  "pre_score_artifact_sha256": {
+    "agent-result.json": "e1f049aacd1abde7da3707e79e1814010827fd7eb70edd74bb3caae1c331aa81",
+    "candidate.diff": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "prepare.json": "3f686b38720a3be1c02c7da3d250c476a42f625e3c0e01508e4baf88fadb6c4e",
+    "seed.txt": "adb225806e3f9bc8f8fc0cfa6f2a3e969b7d520145f2430388af4724f68223a1",
+    "sequence.json": "f0f9abcec945f5cf5bc160c366c186e046bfad44fe63d01d5321d7fa3b4b6290"
+  },
+  "public_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "task_id": "native_v3_cleanup_system_name"
+}

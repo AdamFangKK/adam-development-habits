@@ -1,0 +1,17 @@
+{
+  "condition": "no_skill",
+  "condition_index": 2,
+  "execution_order": [
+    "old_skill",
+    "no_skill",
+    "new_skill"
+  ],
+  "predecessor_score_sha256": [
+    {
+      "condition": "old_skill",
+      "sha256": "f7808ea2b9ef0e0c48e2643ba59ff8f79cf0ba962a6bdefcc99c5951f1b32411"
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "native_v3_cleanup_system_name"
+}

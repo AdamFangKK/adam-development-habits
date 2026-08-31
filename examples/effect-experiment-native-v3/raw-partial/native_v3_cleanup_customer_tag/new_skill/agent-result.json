@@ -1,0 +1,5 @@
+{
+  "condition": "new_skill",
+  "status": "agent_exited",
+  "task_id": "native_v3_cleanup_customer_tag"
+}

@@ -1,0 +1,17 @@
+{
+  "condition": "old_skill",
+  "condition_index": 2,
+  "execution_order": [
+    "no_skill",
+    "old_skill",
+    "new_skill"
+  ],
+  "predecessor_score_sha256": [
+    {
+      "condition": "no_skill",
+      "sha256": "00d43f589a0aa3b5808494e9781ba0d34fea1e79def4b585ddaf6c61d087bfaa"
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "native_v3_cleanup_search_phrase"
+}

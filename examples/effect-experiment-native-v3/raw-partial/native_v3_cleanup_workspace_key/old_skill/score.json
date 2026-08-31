@@ -1,0 +1,36 @@
+{
+  "changed_paths": [
+    "README.md",
+    "docs/native_v3_cleanup_workspace_key.md",
+    "legacy/native_v3_cleanup_workspace_key.py",
+    "package-metadata.json",
+    "policy.py",
+    "runbook.md"
+  ],
+  "disallowed_changed_paths": [],
+  "hidden_injected_after_agent_exit": true,
+  "hidden_repair_passed": true,
+  "hidden_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "implementation_integrity_passed": true,
+  "pre_score_artifact_sha256": {
+    "agent-result.json": "c8bf8b595cb8f8d173839785efce66454819725635b5fedbd0d4054d35505d82",
+    "candidate.diff": "8da9843da030128ec040cc345d2c0c38ad27bc69b6f6ed78ea1d0d5c7e22cf73",
+    "prepare.json": "1fc65cc8e3d8f38d671ba002ddbf3956d67a237e2a8399a1e930ea0be0d8eeb2",
+    "seed.txt": "e86660f9aa8982d7e5680329da04bda30389faecea24338dff7e87a3bc70cb97",
+    "sequence.json": "0be620e0c7e6bc90782a635ca1c075458dec859d70370bafc50b7e55f3f3a0ff"
+  },
+  "public_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "task_id": "native_v3_cleanup_workspace_key"
+}

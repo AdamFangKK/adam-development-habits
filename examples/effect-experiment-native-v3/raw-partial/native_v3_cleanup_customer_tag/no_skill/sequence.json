@@ -1,0 +1,17 @@
+{
+  "condition": "no_skill",
+  "condition_index": 2,
+  "execution_order": [
+    "new_skill",
+    "no_skill",
+    "old_skill"
+  ],
+  "predecessor_score_sha256": [
+    {
+      "condition": "new_skill",
+      "sha256": "e4032186669b4cd02534910edea6939c9ff68673b9e1db28d326bcd5941d4274"
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "native_v3_cleanup_customer_tag"
+}
