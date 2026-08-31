@@ -47,14 +47,26 @@ NON_RUNTIME_DIRECTORIES = {
 }
 
 
-def changed_files(base: str) -> list[Path]:
+def changed_files(base: str, *, include_working_tree: bool = False) -> list[Path]:
+    """Return committed changes, optionally including staged, unstaged, and untracked paths."""
+    comparison = base if include_working_tree else f"{base}...HEAD"
+    command = ["git", "diff", "--name-only", "--diff-filter=ACDMR", comparison]
     result = subprocess.run(
-        ["git", "diff", "--name-only", "--diff-filter=ACDMR", f"{base}...HEAD"],
+        command,
         check=True,
         capture_output=True,
         text=True,
     )
-    return [Path(line) for line in result.stdout.splitlines() if line]
+    paths = {Path(line) for line in result.stdout.splitlines() if line}
+    if include_working_tree:
+        untracked = subprocess.run(
+            ["git", "ls-files", "--others", "--exclude-standard"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        paths.update(Path(line) for line in untracked.stdout.splitlines() if line)
+    return sorted(paths)
 
 
 def is_code_file(path: Path) -> bool:
@@ -130,6 +142,11 @@ def main() -> int:
     parser.add_argument("--evidence-dir", type=Path, default=Path(".adam/evidence"))
     parser.add_argument("--require-for-code-change", action="store_true")
     parser.add_argument(
+        "--include-working-tree",
+        action="store_true",
+        help="Also inspect staged, unstaged, and untracked files for a local pre-commit check.",
+    )
+    parser.add_argument(
         "--require-level-two-for-high-risk",
         action="store_true",
         help="Require at least one changed evidence artifact at level 2 for high-risk paths.",
@@ -139,7 +156,7 @@ def main() -> int:
     try:
         root = repository_root()
         evidence_dir = normalize_evidence_dir(args.evidence_dir, root)
-        changed = changed_files(args.base)
+        changed = changed_files(args.base, include_working_tree=args.include_working_tree)
     except subprocess.CalledProcessError as error:
         print(error.stderr.strip() or "could not determine Git paths", file=sys.stderr)
         return 2

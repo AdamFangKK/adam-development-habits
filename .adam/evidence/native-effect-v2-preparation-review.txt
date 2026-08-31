@@ -1,0 +1,44 @@
+Independent final protocol review
+
+Reviewer: Codex native code-reviewer: v2_final_review
+Outcome: approved
+
+Scope reviewed: V2 native cleanup-effect generator, runner use, analyzer,
+preregistration binding, public/hidden/reference contract alignment, and the
+local --include-working-tree evidence gate.
+
+Findings: no blocking issues.
+
+The public task, visible tests, hidden tests, and reference fixtures agree on
+the explicit migration: trim, casefold, and replace internal whitespace runs
+with one ASCII '-'; " User Name " therefore becomes "user-name". The
+decision-retention cohort begins public-green but retains obsolete surfaces;
+the repair cohort begins public-red. Hidden tests reject shallow behavioral
+repairs, stale prose or metadata, test mutation, adapter deletion or registry
+retargeting, and consumer/adapter copies that bypass the canonical owner.
+
+The shared-filesystem native environment is accurately described as protocol
+isolation rather than a security sandbox. The analyzer rejects incomplete
+collections, missing artifacts, unexpected retry directories, hash drift, and
+failed integrity/public/hidden-injection gates. The preregistration binds the
+manifest, generator, runner, analyzer, prompt template, and frozen old/new
+Skill snapshots by SHA-256.
+
+The --include-working-tree gate preserves default committed-CI semantics and
+additionally detects tracked local and untracked behavioral files when invoked
+explicitly; its regression test proves an untracked scripts/local-precommit.py
+is rejected without schema v2 evidence.
+
+Evidence read: 14 focused V2 protocol tests passed; 263 full tests passed in
+39.207 seconds; 55 evidence-gate tests passed; the local pre-commit probe
+correctly failed before a JSON evidence artifact existed; the Skill validator
+passed. git diff --check and Python compilation passed. No secrets, stale V1/V2
+identifier, empty-exception, or console-pattern concerns were found in the
+targeted scans.
+
+Limitations: unavailable LSP/AST tooling was substituted with Python compile
+and targeted repository scans. Approval applies to V2 protocol preparation
+only. It does not establish Skill effectiveness, repair-success improvement,
+model-wide causal reasoning, or production reliability. Those claims require
+the frozen preregistration to be committed first, then a complete no-retry
+three-condition collection that satisfies the preregistered analyzer gate.

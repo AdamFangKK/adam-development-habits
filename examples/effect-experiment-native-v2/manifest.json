@@ -1,0 +1,387 @@
+{
+  "conditions": [
+    "no_skill",
+    "old_skill",
+    "new_skill"
+  ],
+  "corpus_id": "native-cleanup-effect-v2",
+  "profile": "native-cleanup-effect-v2",
+  "schema_version": 1,
+  "task_contract": {
+    "agent_visible": [
+      "tasks/<task-id> only"
+    ],
+    "checks": [
+      "canonical_owner",
+      "positive_documentation_and_metadata_sync",
+      "cross_module_consumer",
+      "exact_dynamic_consumer_delegation",
+      "behavior"
+    ],
+    "hidden_after_agent_exit": true,
+    "reference_never_available_to_agent": true
+  },
+  "task_count": 10,
+  "tasks": [
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/native_v2_cleanup_tenant_casefold.md",
+        "legacy/native_v2_cleanup_tenant_casefold.py",
+        "package-metadata.json",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_tenant_casefold",
+      "hidden_tests_tree_sha256": "4bbeaf98251b0ccd44aa47298e765f0c40ad1f04567aba99070e0aefb20d94cb",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_tenant_casefold",
+      "reference_tree_sha256": "47261a03c58f152a59773a3cbdd5d055accf10097978c81e7a8eccf97948d8f6",
+      "stratum": "single-module",
+      "task_id": "native_v2_cleanup_tenant_casefold",
+      "workspace_path": "tasks/native_v2_cleanup_tenant_casefold",
+      "workspace_tree_sha256": "8c1a16b4424a362eb6a8ad0f0626fec9e2db5c91169e4283c3aebd730ddbb412"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/native_v2_cleanup_header_trim.md",
+        "legacy/native_v2_cleanup_header_trim.py",
+        "package-metadata.json",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_header_trim",
+      "hidden_tests_tree_sha256": "cbb00ca14875d2fb299ba6601cde7d63b3c2060941034a29d1eb0f0e651fca19",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_header_trim",
+      "reference_tree_sha256": "76580436a3c9619720d60721ef59332d414b747d9f53aad82eb72c71c70510e9",
+      "stratum": "single-module",
+      "task_id": "native_v2_cleanup_header_trim",
+      "workspace_path": "tasks/native_v2_cleanup_header_trim",
+      "workspace_tree_sha256": "f0283d1c5970403f2262769fde4f696feb576942a2130e43d1b037802cb83cdd"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "consumers/native_v2_cleanup_route_slug_consumer.py",
+        "docs/native_v2_cleanup_route_slug.md",
+        "legacy/native_v2_cleanup_route_slug.py",
+        "package-metadata.json",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_route_slug",
+      "hidden_tests_tree_sha256": "21d9413e1508a931d9768a83be12cc67a7fa0d60b82103045e81cfb15b1cd995",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_route_slug",
+      "reference_tree_sha256": "4400292fbb1b9df78170158bcc00fa3c0c7c41b192aff703b87da1742eab6b17",
+      "stratum": "cross-module",
+      "task_id": "native_v2_cleanup_route_slug",
+      "workspace_path": "tasks/native_v2_cleanup_route_slug",
+      "workspace_tree_sha256": "10233fe5d1782b6448865824b3e201b13504d7d76ab05fd858e50ad6e7e67735"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "consumers/native_v2_cleanup_account_label_consumer.py",
+        "docs/native_v2_cleanup_account_label.md",
+        "legacy/native_v2_cleanup_account_label.py",
+        "package-metadata.json",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_account_label",
+      "hidden_tests_tree_sha256": "43dde455a79562bb1ef37d5f9cc223416f0fbc80977aa478b18de8c36479a171",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_account_label",
+      "reference_tree_sha256": "c612ee8367f958cfe9a0a8169ae7aa84d64073741f1dfbc033e666952c65b8f6",
+      "stratum": "cross-module",
+      "task_id": "native_v2_cleanup_account_label",
+      "workspace_path": "tasks/native_v2_cleanup_account_label",
+      "workspace_tree_sha256": "9f331100df1a7e65747cf32fe3638bbbaa9aeae74cf091c5496dcf4b32f47967"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/native_v2_cleanup_audit_key.md",
+        "legacy/native_v2_cleanup_audit_key.py",
+        "package-metadata.json",
+        "plugins/native_v2_cleanup_audit_key_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/native_v2_cleanup_audit_key.json",
+        "runtime_loader.py"
+      ],
+      "cohort": "decision-retention",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_audit_key",
+      "hidden_tests_tree_sha256": "4090a1196bf9b82925815d0dc048ebacc110cc06ec3a56446af8a347c2cb20a4",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_audit_key",
+      "reference_tree_sha256": "f53536462ea9ab2ddeef6f4f772f0ae129de293321204819bea41de52c60da40",
+      "stratum": "integration",
+      "task_id": "native_v2_cleanup_audit_key",
+      "workspace_path": "tasks/native_v2_cleanup_audit_key",
+      "workspace_tree_sha256": "544fb56ac4a84b4dffbdb08eec9005755ce5dd41f53ade39e123288d6fcab97b"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/native_v2_cleanup_request_slug.md",
+        "legacy/native_v2_cleanup_request_slug.py",
+        "package-metadata.json",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_request_slug",
+      "hidden_tests_tree_sha256": "57a86bd6138b4731820e26ce2f247652a3f294b9146286e0f8e2131251a29be5",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_request_slug",
+      "reference_tree_sha256": "cea0912213dbb9bc8b99e00e908151a723d36a0771ca1b212837b7f466ac5ba1",
+      "stratum": "single-module",
+      "task_id": "native_v2_cleanup_request_slug",
+      "workspace_path": "tasks/native_v2_cleanup_request_slug",
+      "workspace_tree_sha256": "0d9abe8272815f58ae2ba852c9c9fcb26211d531932433cc724cc0c722f68f57"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/native_v2_cleanup_team_alias.md",
+        "legacy/native_v2_cleanup_team_alias.py",
+        "package-metadata.json",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_team_alias",
+      "hidden_tests_tree_sha256": "f056728a220b6a7c0243c53878305e91c4b975a3ba6c713f3c15c343e80bf86b",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_team_alias",
+      "reference_tree_sha256": "47def26ab05e7588c33202d3ac30a5f69b1c56d235d8a200c672707d178ed58f",
+      "stratum": "single-module",
+      "task_id": "native_v2_cleanup_team_alias",
+      "workspace_path": "tasks/native_v2_cleanup_team_alias",
+      "workspace_tree_sha256": "73967f202bad4d421d13246391ccec7137da94e0a1fc07fa81d66906f4215cde"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "consumers/native_v2_cleanup_tenant_route_consumer.py",
+        "docs/native_v2_cleanup_tenant_route.md",
+        "legacy/native_v2_cleanup_tenant_route.py",
+        "package-metadata.json",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_tenant_route",
+      "hidden_tests_tree_sha256": "3f9c46b2b2970a4450796fff7374199db75c413bf36f63c4c353ff5dd93f9ecf",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_tenant_route",
+      "reference_tree_sha256": "dc0a4a8e869c12b43c9a8c1c8884fb4520ddfdf159d0042ac06a6cc46a933d49",
+      "stratum": "cross-module",
+      "task_id": "native_v2_cleanup_tenant_route",
+      "workspace_path": "tasks/native_v2_cleanup_tenant_route",
+      "workspace_tree_sha256": "89eec5608a02e7e29c73f0509c9af91d00c6dc68e861f001cdc9f8a0e18de726"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "consumers/native_v2_cleanup_sync_label_consumer.py",
+        "docs/native_v2_cleanup_sync_label.md",
+        "legacy/native_v2_cleanup_sync_label.py",
+        "package-metadata.json",
+        "policy.py",
+        "runbook.md"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_sync_label",
+      "hidden_tests_tree_sha256": "b5a6b99b31cb82209e9ffb16629ff9901070d71bda6b360c44187f59af454706",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_sync_label",
+      "reference_tree_sha256": "62c92e53a9f4ef02a0a5d0b5eacc40f9f6fd2ab8f10c5b93816de20dcdb7c2f0",
+      "stratum": "cross-module",
+      "task_id": "native_v2_cleanup_sync_label",
+      "workspace_path": "tasks/native_v2_cleanup_sync_label",
+      "workspace_tree_sha256": "e1bfce8be1ca98041d2c7af082f38dd94e0ce8da5fd048e8599756eeeedd7bc0"
+    },
+    {
+      "allowed_edit_paths": [
+        "README.md",
+        "docs/native_v2_cleanup_release_key.md",
+        "legacy/native_v2_cleanup_release_key.py",
+        "package-metadata.json",
+        "plugins/native_v2_cleanup_release_key_adapter.py",
+        "policy.py",
+        "runbook.md",
+        "runtime/native_v2_cleanup_release_key.json",
+        "runtime_loader.py"
+      ],
+      "cohort": "repair",
+      "hidden_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "hidden_tests_path": "hidden-tests/native_v2_cleanup_release_key",
+      "hidden_tests_tree_sha256": "0d5df2027a84a2edd10dbc9d7ff4ee61e58a94968c3f8797a6a6db71b7a643a0",
+      "public_command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "reference_path": "references/native_v2_cleanup_release_key",
+      "reference_tree_sha256": "565b45d8fb36fd78f93362f3ab4be9d1a9a1faa72a618f3860416f5f878ad7b8",
+      "stratum": "integration",
+      "task_id": "native_v2_cleanup_release_key",
+      "workspace_path": "tasks/native_v2_cleanup_release_key",
+      "workspace_tree_sha256": "22aab9ee4ac68ad7e1d9930514cc2afb441ed2b80c7cdf010cf60825692372eb"
+    }
+  ]
+}

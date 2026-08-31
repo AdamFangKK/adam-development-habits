@@ -451,6 +451,15 @@ class EvidenceScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("no behavior-changing files changed", result.stdout)
 
+    def test_include_working_tree_detects_an_untracked_behavioral_file(self) -> None:
+        directory = self._make_repository(include_evidence=False)
+        untracked = directory / "scripts" / "local-precommit.py"
+        untracked.parent.mkdir(exist_ok=True)
+        untracked.write_text("VALUE = 3\n", encoding="utf-8")
+        result = self._run_gate(directory, base="HEAD", include_working_tree=True)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("behavioral changes require", result.stderr)
+
     def test_evidence_filename_must_match_change_id(self) -> None:
         directory = self._make_repository(
             include_evidence=True,
@@ -586,18 +595,22 @@ class EvidenceScriptTests(unittest.TestCase):
         *,
         evidence_dir: Path | None = None,
         require_level_two_for_high_risk: bool = False,
+        include_working_tree: bool = False,
+        base: str = "HEAD~1",
     ) -> subprocess.CompletedProcess[str]:
         command = [
             sys.executable,
             str(SCRIPTS / "check_change_evidence.py"),
             "--base",
-            "HEAD~1",
+            base,
             "--require-for-code-change",
         ]
         if evidence_dir is not None:
             command.extend(["--evidence-dir", str(evidence_dir)])
         if require_level_two_for_high_risk:
             command.append("--require-level-two-for-high-risk")
+        if include_working_tree:
+            command.append("--include-working-tree")
         return subprocess.run(
             command,
             cwd=directory,

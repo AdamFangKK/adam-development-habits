@@ -1,0 +1,299 @@
+{
+  "schema_version": 2,
+  "change_id": "native-effect-v2-preparation",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/materialize_native_cleanup_effect_v2.py:materialize_native_cleanup_effect_v2",
+    "scripts/native_cleanup_effect_runner_v1.py:prepare_trial and score_trial",
+    "scripts/create_native_cleanup_effect_preregistration_v2.py:create",
+    "scripts/analyze_native_cleanup_effect_v2.py:analyze",
+    "scripts/check_change_evidence.py:changed_files"
+  ],
+  "affected_callers": [
+    "tests/test_native_cleanup_effect_v2.py",
+    "tests/test_native_cleanup_effect_runner_v2.py",
+    "tests/test_native_cleanup_effect_protocol_v2.py",
+    "tests/test_evidence_scripts.py",
+    "README.md"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Every V2 public task, public test, hidden test, and reference fixture shares the explicitly visible whitespace-normalization contract; reference fixes pass and shallow or bypassing repairs fail.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_v2.py -v && PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_runner_v2.py -v && PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_protocol_v2.py -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "V2 has fresh task identifiers, a deterministic committed manifest, an unmodifiable preregistration binding all implementation inputs, and an analyzer that rejects missing or retry artifacts.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_v2.py -v && PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_runner_v2.py -v && PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_protocol_v2.py -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "An explicit local pre-commit gate sees tracked working-tree and untracked behavioral paths while the default committed-CI comparison remains unchanged.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_evidence_scripts.py -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The full Skill package and its structural validator remain clean after V2 protocol preparation.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "V1 remains immutable and ineligible because its hidden semantic contract contradicted its visible task contract.",
+    "A V2 agent receives only its public task workspace and the condition-specific frozen policy snapshot; hidden tests and reference trees remain outside the declared input.",
+    "All public and hidden V2 layers explicitly require trim, casefold, and internal whitespace collapse to one ASCII '-'.",
+    "Decision-retention measures retirement and description synchronization after correct runtime behavior; repair measures both behavior repair and retirement.",
+    "A V2 effect claim requires a committed preregistration plus all thirty no-retry three-condition trials; protocol preparation alone supports no effectiveness claim."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [
+    {
+      "consumer": "Historical audit readers of examples/effect-experiment-native-v1 and its raw trial artifacts.",
+      "removal_condition": "Retain permanently as an explicitly ineligible protocol-failure record; do not reuse it for statistical analysis.",
+      "test": "tests/test_native_cleanup_effect_protocol_v2.py verifies V2 uses fresh native_v2 task identifiers and a separate frozen envelope."
+    }
+  ],
+  "retirement_sweep": {
+    "remove": [
+      "No V1 source, manifest, preregistration, or raw artifact was copied into V2; V2 task IDs and protocol paths are distinct."
+    ],
+    "retain": [
+      {
+        "path": "examples/effect-experiment-native-v1",
+        "consumer": "Historical protocol audit and invalidation record.",
+        "removal_condition": "Permanent immutable invalidation record; it must never be analyzed as V2 or Skill-effect evidence.",
+        "observability": "examples/effect-experiment-native-v1/collection-invalid.json",
+        "test": "tests/test_native_cleanup_effect_protocol_v2.py"
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "Targeted V1/V2 identifier scan from independent review",
+      "Fresh V2 manifest test",
+      "README V1 invalidation and V2 protocol boundary documentation"
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "README.md"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "examples/effect-experiment-native-v1/collection-invalid.json",
+      "examples/effect-experiment-native-v2/preregistration.json",
+      "examples/effect-experiment-native-v2/manifest.json"
+    ],
+    "evidence": "Independent review and focused V2 tests confirm V1 is clearly labeled ineligible and V2 is described only as an unrun protocol."
+  },
+  "instrumentation": {
+    "status": "not_applicable",
+    "events": [],
+    "cardinality_review": "Offline deterministic protocol preparation has no application runtime event stream; test output, hashed manifests, raw artifact completeness, and the evidence gate provide the required observable checkpoints.",
+    "owner": "adam-development-habits maintainer",
+    "threshold_and_action": "Any missing, extra, invalid, or hash-drifted protocol artifact blocks collection or completion; correct the protocol before freezing it and never amend it after trial collection begins.",
+    "evidence": "Focused protocol tests and the independent review exercise the artifact and integrity gates."
+  },
+  "safeguards": [
+    {
+      "name": "explicit public semantic contract",
+      "status": "applied",
+      "rationale": "The task text and public suite expose the exact whitespace migration that V1 left implicit, so hidden scoring no longer introduces a different behavior specification."
+    },
+    {
+      "name": "post-exit blind scoring",
+      "status": "applied",
+      "rationale": "The generic runner copies only the public task tree to a trial workspace and injects the hidden test into a disposable scoring copy after the agent returns."
+    },
+    {
+      "name": "canonical-owner runtime probe",
+      "status": "applied",
+      "rationale": "Cross-module consumers and dynamic adapters are monkeypatched in hidden tests so behaviorally equivalent duplicate implementations cannot pass."
+    },
+    {
+      "name": "fixed complete-block analysis",
+      "status": "applied",
+      "rationale": "The V2 analyzer requires every task and all three preregistered conditions, rejects extra retry directories, and marks missing or failed completeness gates ineligible."
+    },
+    {
+      "name": "working-tree evidence visibility",
+      "status": "applied",
+      "rationale": "The explicit local gate mode detects staged, unstaged, and untracked behavioral files before a commit while leaving committed-CI behavior stable."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The generator owns V2 fixture semantics, the runner owns public-workspace preparation and post-exit scoring, the preregistration generator owns frozen input hashes, the analyzer owns eligibility/statistics, and the evidence gate owns local/CI change visibility."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "No dependency, lockfile, or external service was added; the protocol uses the Python standard library and native Codex subagents."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "This adds internal, versioned evaluation tooling rather than an application extension point or public adapter interface."
+    },
+    "data_ownership": {
+      "status": "applied",
+      "rationale": "Public task input, private hidden/reference trees, candidate workspaces, raw artifacts, frozen Skill snapshots, and evidence output have separate owners and lifecycles."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Missing raw artifacts, integrity failure, public-suite failure, hidden-injection failure, unexpected retries, and hash drift are explicit ineligible outcomes, not retryable successes."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "V2 uses fresh identifiers and a new frozen envelope; V1 stays preserved and explicitly ineligible rather than being silently rewritten."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "The preregistration fixes a 300-second agent limit, 20-second test limit, one block per task, and no early-stop/retry rule."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "Hidden/reference paths and condition outcomes are outside declared agent input, but native shared filesystem access remains documented as protocol isolation rather than security isolation."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The protocol, tests, manifest, frozen snapshots, README, evidence ledger, independent review, and pre-commit gate are one verified preparation scope that must be committed before collection."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "This is an offline evaluation protocol without a production release, user rollout, or feature flag."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No production data, database schema, or application migration changes."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "The native route does not consume or store API keys, credentials, or runtime secret configuration."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No package manifest, lockfile, or third-party dependency changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README, the frozen preregistration, V1 invalidation record, review report, and this ledger state how to interpret and operate the protocol without promoting an unrun effect claim."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The V2 envelope hashes all evaluation inputs; committed-manifest and preregistration-rebuild tests make source drift observable before collection."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_v2.py -v && PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_runner_v2.py -v && PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_protocol_v2.py -v",
+      "status": "passed",
+      "result": "14 V2 fixture, semantic-contract, hidden-trap, post-exit scoring, deterministic-manifest, preregistration, no-retry, and analyzer eligibility tests passed.",
+      "evidence_refs": [
+        "focused-v2-tests"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_evidence_scripts.py -v",
+      "status": "passed",
+      "result": "55 evidence-validator and gate tests passed, including the untracked local behavioral-file regression.",
+      "evidence_refs": [
+        "gate-tests"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "263 complete package regression tests passed in 42.773 seconds.",
+      "evidence_refs": [
+        "full-suite"
+      ]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package structural validation passed.",
+      "evidence_refs": [
+        "skill-validator"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "focused-v2-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-effect-v2-preparation-focused.txt",
+      "sha256": "d9cd11266dc7a3a41a4f741a8d6db585f1763fcb93c5fb7e42e94ad450cbbc88",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_v2.py -v && PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_runner_v2.py -v && PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 tests/test_native_cleanup_effect_protocol_v2.py -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T16:59:15Z",
+      "repository_revision": "00980519aa940a552c0ea0adc37b539167d595d7+worktree",
+      "summary": "Focused V2 protocol tests with semantic, topology, documentation, metadata, scope, retry, and scorer adversarial checks."
+    },
+    {
+      "id": "gate-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-effect-v2-preparation-gate-tests.txt",
+      "sha256": "3e66d62395b00881c1e94e36229cdc2c3553a505f478425dee077c9c99203742",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests/test_evidence_scripts.py -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T16:59:15Z",
+      "repository_revision": "00980519aa940a552c0ea0adc37b539167d595d7+worktree",
+      "summary": "Evidence schema and gate suite, including an untracked behavioral file under scripts/ rejected by --include-working-tree."
+    },
+    {
+      "id": "full-suite",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-effect-v2-preparation-full.txt",
+      "sha256": "35b3e89b44cd9b31e9bbbe51b1ecf89cc56773678d3b2a863fb286ef1813e685",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T16:59:15Z",
+      "repository_revision": "00980519aa940a552c0ea0adc37b539167d595d7+worktree",
+      "summary": "Complete Skill package regression output after the V2 protocol and evidence-gate update."
+    },
+    {
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-effect-v2-preparation-skill-validator.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T16:59:15Z",
+      "repository_revision": "00980519aa940a552c0ea0adc37b539167d595d7+worktree",
+      "summary": "Skill package frontmatter and structure validator output."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/native-effect-v2-preparation-review.txt",
+      "sha256": "2ee4f8958be23c46c266500500e826a73ea3f1de88dfeda6ddbc1d5ed609d2b8",
+      "summary": "Independent final code review approving V2 protocol preparation and the working-tree evidence-gate repair, with scope limits."
+    },
+    {
+      "id": "v2-preregistration",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-experiment-native-v2/preregistration.json",
+      "sha256": "aa33dd4964c08c4c6df72d0e2b4e710b261ba871e29670397df326762df8e006",
+      "summary": "Frozen planned V2 three-condition envelope, with no trial data and input hashes for later collection."
+    },
+    {
+      "id": "v2-manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-experiment-native-v2/manifest.json",
+      "sha256": "0c6b8d806c64a8f0eab5e90fe1cc1918b4038991efd55ed4dd72f7f5e5830c12",
+      "summary": "Ten-task V2 manifest with fresh IDs, cohorts, topology strata, and deterministic public/hidden/reference tree digests."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the V2 generator, analyzer, preregistration generator, manifest, frozen snapshots, V2 tests, gate option, README entry, evidence outputs, and this ledger together before collection if a protocol defect is found. After V2 trial collection begins, preserve the frozen envelope and raw records; invalidate rather than amend inconsistent collection data.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: v2_final_review",
+    "outcome": "approved",
+    "notes": "No blocking V2 semantic, isolation, retry, frozen-input, or local evidence-gate issues were found. The reviewer approved protocol preparation only and explicitly rejected any premature Skill-effect or model-wide causal-capability claim.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "No V2 trial has run; no improvement in cleanup success, repair success, or causal reasoning has been demonstrated.",
+    "Native subagents share a filesystem, so protocol isolation cannot prevent a deliberately noncompliant agent from searching outside its declared workspace.",
+    "The synthetic ten-task corpus is targeted and small; even a completed positive result would be limited to the fixed model, Harness, Skill snapshots, corpus, and scorer.",
+    "The effect analyzer has a fixed small-sample exact sign-flip threshold; its decision is a protocol gate, not a general scientific claim."
+  ]
+}
