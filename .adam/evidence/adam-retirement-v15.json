@@ -1,0 +1,245 @@
+{
+  "schema_version": 2,
+  "change_id": "adam-retirement-v15",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Retirement Quick Gate",
+    "scripts/materialize_effect_corpus_v9.py:cleanup_v10_hidden_test",
+    "scripts/validate_development_events.py:validate_events",
+    "tests/test_cleanup_effect_corpus_v10.py:CleanupEffectCorpusV10Tests",
+    "tests/test_development_events.py:DevelopmentEventTests"
+  ],
+  "affected_callers": [
+    "Codex agents applying Adam's Development Habits to Level 1 or Level 2 replacements",
+    "cleanup-v10 deterministic corpus generation and hidden-contract scoring",
+    "development checkpoint event validation",
+    "package regression suite"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Level 1 and Level 2 retirement cleanup requires owner-local ownership evidence, explicit remove/retain/unknown classification, synchronized explanatory surfaces, and a post-retirement orphan scan.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10 tests.test_development_events -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Adversarial hidden contracts reject documentation-only ownership, unconsumed compatibility wrappers, and registry retargeting that deletes a real dynamic adapter.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10 tests.test_development_events -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "Cleanup-specific Level 1 and Level 2 event streams enforce the complete ordered lifecycle while Level 0 and ordinary lifecycle rules remain intact.",
+      "verification": "python3 scripts/validate_development_events.py --events .adam/evidence/adam-retirement-v15-events-level2.jsonl --level 2 --cleanup"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The complete Skill package remains valid under unit tests, pytest, compilation, static analysis, Skill validation, and whitespace checks.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "Canonical ownership is proved in the implementation module by a fully-qualified module.symbol declaration and current invariant.",
+    "A document is evidence to investigate, not a standalone consumer that can retain obsolete runtime code.",
+    "An unconsumed thin compatibility wrapper is removed; a real dynamic consumer retains its exact adapter path.",
+    "Cleanup evidence cannot be satisfied by a passing public test while stale code, documentation, metadata, or registration remains.",
+    "The deterministic corpus and protocol tests demonstrate contract enforcement only, not a model-wide causal-reasoning improvement."
+  ],
+  "replaced_paths": [
+    "Documentation-only ownership evidence in cleanup fixtures",
+    "Unconsumed compatibility-wrapper retention in semantic-duplicate fixtures",
+    "Registry-retarget behavior as sufficient evidence for dynamic compatibility retention",
+    "Non-cleanup event sequences for replacement cleanup work"
+  ],
+  "retained_compatibility": [
+    {
+      "consumer": "The dynamic cleanup fixture runtime/<task>.json, whose registered external adapter is plugins.<task>_adapter.",
+      "removal_condition": "Remove only when a separately verified corpus contract retires the dynamic external-adapter obligation.",
+      "test": "tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests.test_dynamic_registry_retarget_cannot_replace_the_retained_adapter"
+    }
+  ],
+  "retirement_sweep": {
+    "remove": [
+      "Documentation-only owner markers as proof",
+      "Unconsumed compat/legacy wrapper in semantic_duplicate fixtures",
+      "Permissive registry-retarget hidden assertion"
+    ],
+    "retain": [
+      {
+        "path": "plugins/<task>_adapter.py in dynamic_retain corpus fixtures",
+        "consumer": "runtime/<task>.json registry",
+        "removal_condition": "Only under a new dynamic-retention contract with a matching hidden regression.",
+        "observability": "The hidden test asserts the exact registry module, adapter file, import, and normalize behavior.",
+        "test": "tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests.test_dynamic_registry_retarget_cannot_replace_the_retained_adapter"
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "27 focused adversarial and event-contract tests passed.",
+      "40 deterministic V10 cleanup tasks cover split-owner, dynamic-retain, semantic-duplicate, and release-drift traps.",
+      "The full 289-test package regression and independent review passed."
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "SKILL.md",
+      "README.md",
+      "references/enforcement.md",
+      "agents/openai.yaml",
+      "examples/retirement-cleanup-observability.json",
+      "examples/retirement-cleanup-traps.json"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "scripts/materialize_effect_corpus_v9.py",
+      "scripts/validate_development_events.py",
+      "tests/test_cleanup_effect_corpus_v10.py",
+      "tests/test_development_events.py",
+      "tests/test_retirement_cleanup_contract.py"
+    ],
+    "evidence": "Focused tests, full regression, event validation, Skill validation, static analysis, and diff check passed."
+  },
+  "instrumentation": {
+    "status": "applied",
+    "events": [
+      "cleanup_started",
+      "owner_located",
+      "retirement_classified",
+      "documentation_synchronized",
+      "orphan_scan_completed",
+      "verification_completed",
+      "started",
+      "implemented",
+      "cleanup_classified",
+      "verified",
+      "committed"
+    ],
+    "redaction_and_cardinality": "The event validator accepts only bounded labels and rejects sensitive or unbounded field names; both cleanup streams validate successfully.",
+    "evidence_refs": ["events-level1", "events-level2", "focused-tests"]
+  },
+  "safeguards": [
+    {
+      "name": "implementation-local owner proof",
+      "status": "applied",
+      "rationale": "Reference fixtures and hidden tests require the fully-qualified owner and current invariant in policy.py itself."
+    },
+    {
+      "name": "unconsumed wrapper removal",
+      "status": "applied",
+      "rationale": "The semantic duplicate hidden contract rejects reintroduced compat/legacy wrappers without a named consumer."
+    },
+    {
+      "name": "exact dynamic-consumer assertion",
+      "status": "applied",
+      "rationale": "The hidden contract binds registry value, adapter file, import, and behavior to the declared external compatibility path."
+    },
+    {
+      "name": "cleanup lifecycle validator",
+      "status": "applied",
+      "rationale": "Level 1 and Level 2 cleanup sequences require documentation synchronization and orphan-scan checkpoints in order."
+    },
+    {
+      "name": "independent review",
+      "status": "applied",
+      "rationale": "A separate read-only reviewer inspected the changed policy, generator, validator, tests, and evidence boundary."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "SKILL.md defines the policy; generator, validator, fixtures, and tests own executable enforcement."},
+    "dependency_audit": {"status": "applied", "rationale": "No dependency or import outside existing standard-library and installed project tooling was added."},
+    "extension_decision": {"status": "not_applicable", "rationale": "The update strengthens existing cleanup and evidence contracts without adding a production extension point."},
+    "data_ownership": {"status": "not_applicable", "rationale": "Only deterministic fixtures, documentation, and evidence records changed; no business data is owned."},
+    "error_model": {"status": "applied", "rationale": "Missing owner proof, stale surfaces, wrapper retention, registry retargeting, and event drift fail deterministically."},
+    "contract_evolution": {"status": "applied", "rationale": "The cleanup contract now explicitly distinguishes implementation-local ownership, wrapper removal, dynamic retention, and cleanup event sequences."},
+    "operational_budget": {"status": "applied", "rationale": "The 27-test focused suite completed in 7.028 seconds; unittest completed 289 tests in 41.219 seconds; pytest completed 289 tests in 44.70 seconds."},
+    "threat_boundary": {"status": "applied", "rationale": "Event validation rejects sensitive fields and the hidden scorer rejects registry-based compatibility bypasses and candidate tampering."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The logical update has focused and full checks, hash-linked evidence, independent review, and an atomic Lore commit pending publication."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No deployable service or user-facing rollout changed."},
+    "data_migration": {"status": "not_applicable", "rationale": "No production schema, persistence format, or migration contract changed."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No credentials, environment configuration, or secret-handling behavior changed."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No package manifest, lockfile, dependency version, or third-party import changed."},
+    "operational_knowledge": {"status": "applied", "rationale": "README, references, event schema, and evidence records describe the current cleanup and verification behavior."},
+    "reproducibility": {"status": "applied", "rationale": "The V10 materializer is deterministic and all verification commands are repository-local with captured output and revision metadata."}
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10 tests.test_development_events -v",
+      "status": "passed",
+      "result": "27 focused cleanup, adversarial corpus, and event-contract tests passed.",
+      "evidence_refs": ["focused-tests"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "289 package regression tests passed.",
+      "evidence_refs": ["unittest"]
+    },
+    {
+      "command": "/Users/adamfang/Library/Python/3.9/bin/pytest -q",
+      "status": "passed",
+      "result": "289 pytest tests passed in 44.70 seconds.",
+      "evidence_refs": ["pytest"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m compileall -q scripts tests",
+      "status": "passed",
+      "result": "All scripts and tests compiled successfully.",
+      "evidence_refs": ["compileall"]
+    },
+    {
+      "command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_development_events.py scripts/materialize_effect_corpus_v9.py tests/test_development_events.py tests/test_cleanup_effect_corpus_v10.py tests/test_retirement_cleanup_contract.py",
+      "status": "passed",
+      "result": "0 errors, 0 warnings, 0 notes.",
+      "evidence_refs": ["typecheck"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid!",
+      "evidence_refs": ["skill-validator"]
+    },
+    {
+      "command": "python3 scripts/validate_development_events.py --events .adam/evidence/adam-retirement-v15-events-level1.jsonl --level 1 --cleanup",
+      "status": "passed",
+      "result": "Level 1 cleanup event sequence validated.",
+      "evidence_refs": ["events-level1"]
+    },
+    {
+      "command": "python3 scripts/validate_development_events.py --events .adam/evidence/adam-retirement-v15-events-level2.jsonl --level 2 --cleanup",
+      "status": "passed",
+      "result": "Level 2 cleanup event sequence validated.",
+      "evidence_refs": ["events-level2"]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors reported.",
+      "evidence_refs": ["diff-check"]
+    }
+  ],
+  "supporting_artifacts": [
+    {"id": "focused-tests", "kind": "test_output", "path": ".adam/evidence/adam-retirement-v15-focused.txt", "sha256": "30da6273717e47324b6f92614487841ffa4fef5f2eb220ef3504afa48b136e2b", "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10 tests.test_development_events -v", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Focused cleanup, adversarial corpus, and event-contract tests passed."},
+    {"id": "unittest", "kind": "test_output", "path": ".adam/evidence/adam-retirement-v15-unittest.txt", "sha256": "0835641e67f50476c9ee43026d49a224635454d015d7337dbb4a1640c2ad384b", "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Complete package unittest regression passed with 289 tests."},
+    {"id": "pytest", "kind": "test_output", "path": ".adam/evidence/adam-retirement-v15-pytest.txt", "sha256": "0cfaabdf2e1333c368d6d621e46814ba59e11b92f79c8e6de7075661f5c0d4ce", "command": "/Users/adamfang/Library/Python/3.9/bin/pytest -q", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Project pytest executable passed all 289 tests."},
+    {"id": "compileall", "kind": "command_output", "path": ".adam/evidence/adam-retirement-v15-compileall.txt", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m compileall -q scripts tests", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Compilation completed with no output or errors."},
+    {"id": "typecheck", "kind": "command_output", "path": ".adam/evidence/adam-retirement-v15-typecheck.txt", "sha256": "56882e01cb80173ef053c4096e4ee43e3123a15f5c0a06715f96988d48fbd91c", "command": "PYTHONPATH=scripts /Users/adamfang/Library/Python/3.9/bin/basedpyright --level error scripts/validate_development_events.py scripts/materialize_effect_corpus_v9.py tests/test_development_events.py tests/test_cleanup_effect_corpus_v10.py tests/test_retirement_cleanup_contract.py", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Static type analysis returned zero errors, warnings, and notes."},
+    {"id": "skill-validator", "kind": "command_output", "path": ".adam/evidence/adam-retirement-v15-skill-validator.txt", "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0", "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Skill package validator reported Skill is valid."},
+    {"id": "events-level1", "kind": "command_output", "path": ".adam/evidence/adam-retirement-v15-events-level1.txt", "sha256": "4d412a6d7d04420a0036e2c7126bd9904434cac7d1b12b48141ddfc88f2cd2e4", "command": "python3 scripts/validate_development_events.py --events .adam/evidence/adam-retirement-v15-events-level1.jsonl --level 1 --cleanup", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Level 1 cleanup event sequence passed validation."},
+    {"id": "events-level2", "kind": "command_output", "path": ".adam/evidence/adam-retirement-v15-events-level2.txt", "sha256": "5cdaf746ea424f560383c6aae3e819ef1de5358418e932a8a55a609dc6f4ecbb", "command": "python3 scripts/validate_development_events.py --events .adam/evidence/adam-retirement-v15-events-level2.jsonl --level 2 --cleanup", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Level 2 cleanup event sequence passed validation."},
+    {"id": "diff-check", "kind": "command_output", "path": ".adam/evidence/adam-retirement-v15-diff-check.txt", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "command": "git diff --check", "exit_code": 0, "executed_at": "2026-08-31T19:40:37Z", "repository_revision": "c2bc7b98ef44edac92d6bedfc01837feff8c772e+worktree", "summary": "Git whitespace validation passed."},
+    {"id": "verification-summary", "kind": "evaluation_transcript", "path": ".adam/evidence/adam-retirement-v15-verification.txt", "sha256": "472cb742055a16003c4aa7b9994fa1b1207cebd961ff32f0269a43801464b0e7", "summary": "Human-readable summary of the current verification commands, adversarial coverage, and explicit no-model-effect-claim boundary."},
+    {"id": "review-report", "kind": "review_report", "path": ".adam/evidence/adam-retirement-v15-review.txt", "sha256": "291b1eaaedd84b9d2db157673d3b95f32f5378f7b540ebaf05c8dfd5d3ed3d2d", "summary": "Independent read-only review approved the changed policy, fixtures, validator, tests, and evidence boundary."}
+  ],
+  "rollback_or_compatibility": "Revert the Skill wording, hidden-contract assertions, event validator, regression tests, README/reference synchronization, and evidence together only if a separately verified replacement cleanup contract supersedes them. Do not restore permissive registry retargeting or documentation-only ownership evidence.",
+  "independent_review": {
+    "reviewer": "Codex native fast_review independent read-only reviewer",
+    "outcome": "approved",
+    "notes": "The reviewer verified the owner-local declaration, unconsumed-wrapper rejection, exact dynamic adapter retention, cleanup event ordering, synchronized policy surfaces, and 27 focused tests. No blocking finding remains in the reviewed scope.",
+    "evidence_ref": "review-report"
+  },
+  "remaining_risks": [
+    "This deterministic package corpus proves cleanup-contract enforcement and adversarial rejection, not a model-wide causal-reasoning or repair-success increase.",
+    "The prior native V3 paired collection remains ineligible; no overall Skill-effect claim is made.",
+    "Dynamic loaders, generated entry points, and external consumers still require project-specific runtime evidence in target repositories.",
+    "The package update is not yet published until its atomic Lore commit and GitHub push complete."
+  ]
+}

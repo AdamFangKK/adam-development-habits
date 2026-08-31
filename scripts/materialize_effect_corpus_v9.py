@@ -560,7 +560,7 @@ def cleanup_v10_tasks() -> list[CleanupV10Spec]:
     descriptions = {
         "split_owner": "Move normalization to its canonical owner and retire the replaced module and every stale contract surface.",
         "dynamic_retain": "Update a canonical policy while preserving the adapter selected by a runtime registry.",
-        "semantic_duplicate": "Reuse the canonical normalizer and remove the differently named semantic duplicate.",
+        "semantic_duplicate": "Reuse the canonical normalizer and remove the differently named semantic duplicate and any unconsumed compatibility wrapper.",
         "release_drift": "Keep the current implementation while synchronizing release, version, and recovery documentation.",
     }
     return [
@@ -596,7 +596,7 @@ def cleanup_v10_source(task: CleanupV10Spec, *, fixed: bool) -> dict[str, str]:
     if task.kind == "split_owner":
         if fixed:
             return common | {
-                "policy.py": f'"""{marker_new}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
+                "policy.py": f'"""{marker_new}; owner: policy.canonical_normalize; invariant: normalized lowercase output."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
                 "release-notes.md": f"{marker_new}: legacy module retired.\n",
                 "package-metadata.json": json.dumps({"contract": marker_new}, sort_keys=True) + "\n",
             }
@@ -609,7 +609,7 @@ def cleanup_v10_source(task: CleanupV10Spec, *, fixed: bool) -> dict[str, str]:
     if task.kind == "dynamic_retain":
         adapter = f"plugins.{task.task_id}_adapter"
         return common | {
-            "policy.py": f'"""{marker_new if fixed else marker_old}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
+            "policy.py": f'"""{marker_new if fixed else marker_old}{"; owner: policy.canonical_normalize; invariant: normalized lowercase output" if fixed else ""}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
             f"plugins/{task.task_id}_adapter.py": f"def normalize(value):\n    return {fixed_logic}\n",
             f"runtime/{task.task_id}.json": json.dumps({"adapter": adapter}, sort_keys=True) + "\n",
             "runbook.md": f"{marker_new if fixed else marker_old}: runtime adapter stays registered.\n",
@@ -618,16 +618,17 @@ def cleanup_v10_source(task: CleanupV10Spec, *, fixed: bool) -> dict[str, str]:
         helper = f"helpers/{task.task_id}_alias.py"
         if fixed:
             return common | {
-                "policy.py": f'"""{marker_new}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
+                "policy.py": f'"""{marker_new}; owner: policy.canonical_normalize; invariant: normalized lowercase output."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return canonical_normalize(value)\n',
                 "release-notes.md": f"{marker_new}: duplicate helper removed.\n",
             }
         return common | {
             "policy.py": f'"""{marker_old}."""\n\nfrom helpers.{task.task_id}_alias import normalize_alias\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    return normalize_alias(value)\n',
             helper: f"def normalize_alias(value):\n    return {buggy_logic}\n",
-            "release-notes.md": f"{marker_old}: alternate helper remains canonical.\n",
+            "compat/legacy_wrapper.py": f"def normalize(value):\n    return {buggy_logic}\n",
+            "release-notes.md": f"{marker_old}: alternate helper and legacy wrapper remain canonical.\n",
         }
     return common | {
-        "policy.py": f'"""{marker_new if fixed else marker_old}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    # {marker_new if fixed else marker_old}\n    return canonical_normalize(value)\n',
+        "policy.py": f'"""{marker_new if fixed else marker_old}{"; owner: policy.canonical_normalize; invariant: normalized lowercase output" if fixed else ""}."""\n\ndef canonical_normalize(value):\n    return {fixed_logic}\n\ndef evaluate(value):\n    # {marker_new if fixed else marker_old}\n    return canonical_normalize(value)\n',
         "CHANGELOG.md": f"{marker_new if fixed else marker_old}: request normalization behavior.\n",
         "VERSION.md": f"{marker_new if fixed else marker_old}: supported contract description.\n",
         "runbook.md": f"{marker_new if fixed else marker_old}: diagnose and recover this path.\n",
@@ -649,20 +650,27 @@ def cleanup_v10_hidden_test(task: CleanupV10Spec) -> str:
     special = {
         "split_owner": (
             f"        self.assertFalse(Path('legacy/{task.task_id}.py').exists())\n"
-            "        self.assertNotIn('legacy_normalize', Path('policy.py').read_text(encoding='utf-8'))"
+            "        self.assertNotIn('legacy_normalize', Path('policy.py').read_text(encoding='utf-8'))\n"
+            "        self.assertIn('owner: policy.canonical_normalize', Path('policy.py').read_text(encoding='utf-8'))"
         ),
         "dynamic_retain": (
             "        registry = json.loads(Path('runtime/" + task.task_id + ".json').read_text(encoding='utf-8'))\n"
             f"        self.assertEqual(registry['adapter'], 'plugins.{task.task_id}_adapter')\n"
             f"        self.assertTrue(Path('plugins/{task.task_id}_adapter.py').is_file())\n"
             "        adapter = importlib.import_module(registry['adapter'])\n"
-            "        self.assertEqual(adapter.normalize(' User '), 'user')"
+            "        self.assertEqual(adapter.normalize(' User '), 'user')\n"
+            "        self.assertIn('owner: policy.canonical_normalize', Path('policy.py').read_text(encoding='utf-8'))"
         ),
         "semantic_duplicate": (
             f"        self.assertFalse(Path('helpers/{task.task_id}_alias.py').exists())\n"
-            "        self.assertNotIn('normalize_alias', Path('policy.py').read_text(encoding='utf-8'))"
+            "        self.assertFalse(Path('compat/legacy_wrapper.py').exists())\n"
+            "        self.assertNotIn('normalize_alias', Path('policy.py').read_text(encoding='utf-8'))\n"
+            "        self.assertIn('owner: policy.canonical_normalize', Path('policy.py').read_text(encoding='utf-8'))"
         ),
-        "release_drift": "        self.assertNotIn('legacy_contract', Path('policy.py').read_text(encoding='utf-8'))",
+        "release_drift": (
+            "        self.assertNotIn('legacy_contract', Path('policy.py').read_text(encoding='utf-8'))\n"
+            "        self.assertIn('owner: policy.canonical_normalize', Path('policy.py').read_text(encoding='utf-8'))"
+        ),
     }[task.kind]
     return (
         "import importlib\nimport json\nfrom pathlib import Path\nimport unittest\n\n"

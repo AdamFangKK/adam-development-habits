@@ -1,0 +1,23 @@
+Independent review: APPROVED
+Reviewer: Codex native fast_review (independent read-only review)
+
+Scope reviewed:
+- SKILL.md, README.md, references/enforcement.md, agents/openai.yaml
+- scripts/validate_development_events.py and scripts/materialize_effect_corpus_v9.py
+- tests/test_development_events.py, tests/test_cleanup_effect_corpus_v10.py,
+  tests/test_retirement_cleanup_contract.py
+
+Review result:
+- Owner-local fully qualified declaration is required in generated reference fixes.
+- Unconsumed compatibility wrappers are rejected by the hidden contract.
+- Dynamic registry retention requires the exact adapter path and importable file.
+- Cleanup-specific event ordering is validated without weakening Level 0 or ordinary Level 1/2 behavior.
+- Cross-file documentation, metadata, and orphan-scan requirements are synchronized across policy and README.
+
+Independent commands:
+- python3 -m unittest tests.test_development_events tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10
+  -> 27 tests passed.
+- git diff --check -> passed.
+
+Verdict: APPROVE. No blocking finding remains in the reviewed scope.
+Limit: This review does not establish a model-wide Skill-effect improvement claim.

@@ -147,6 +147,44 @@ class CleanupEffectCorpusV10Tests(unittest.TestCase):
             result = run_suite(candidate)
             self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_owner_declaration_must_live_in_policy_even_when_documents_are_current(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            corpus = Path(directory) / "corpus"
+            materialize_cleanup_v10(corpus)
+            task = next(task for task in cleanup_v10_tasks() if task.kind == "split_owner")
+            candidate = Path(directory) / "candidate"
+            shutil.copytree(corpus / "references" / task.task_id, candidate)
+            policy = candidate / "policy.py"
+            _ = policy.write_text(
+                policy.read_text(encoding="utf-8").replace(
+                    "; owner: policy.canonical_normalize; invariant: normalized lowercase output", ""
+                ),
+                encoding="utf-8",
+            )
+            _ = shutil.copy2(
+                corpus / "hidden-tests" / task.task_id / "tests/test_hidden.py",
+                candidate / "tests/test_hidden.py",
+            )
+            result = run_suite(candidate)
+            self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_unconsumed_compatibility_wrapper_is_not_allowed_back_into_reference_fix(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            corpus = Path(directory) / "corpus"
+            materialize_cleanup_v10(corpus)
+            task = next(task for task in cleanup_v10_tasks() if task.kind == "semantic_duplicate")
+            candidate = Path(directory) / "candidate"
+            shutil.copytree(corpus / "references" / task.task_id, candidate)
+            wrapper = candidate / "compat" / "legacy_wrapper.py"
+            wrapper.parent.mkdir(parents=True)
+            _ = wrapper.write_text("def normalize(value):\n    return value\n", encoding="utf-8")
+            _ = shutil.copy2(
+                corpus / "hidden-tests" / task.task_id / "tests/test_hidden.py",
+                candidate / "tests/test_hidden.py",
+            )
+            result = run_suite(candidate)
+            self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_hidden_contract_accepts_equivalent_current_contract_wording(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             corpus = Path(directory) / "corpus"
@@ -161,11 +199,34 @@ class CleanupEffectCorpusV10Tests(unittest.TestCase):
                         path.read_text(encoding="utf-8").replace(old_marker, f"current_contract_{dynamic.task_id}"),
                         encoding="utf-8",
                     )
+            policy = candidate / "policy.py"
+            _ = policy.write_text(
+                policy.read_text(encoding="utf-8")
+                + "\n# owner: policy.canonical_normalize; invariant: normalized lowercase output\n",
+                encoding="utf-8",
+            )
             _ = shutil.copy2(
                 corpus / "hidden-tests" / dynamic.task_id / "tests" / "test_hidden.py",
                 candidate / "tests" / "test_hidden.py",
             )
             self.assertEqual(run_suite(candidate).returncode, 0, dynamic.task_id)
+
+    def test_hidden_contract_checks_every_declared_documentation_surface_in_candidate_workspace(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            corpus = Path(directory) / "corpus"
+            materialize_cleanup_v10(corpus)
+            release = next(task for task in cleanup_v10_tasks() if task.kind == "release_drift")
+            hidden = (corpus / "hidden-tests" / release.task_id / "tests/test_hidden.py").read_text(encoding="utf-8")
+            for relative in (
+                "policy.py",
+                "README.md",
+                f"docs/{release.task_id}.md",
+                "CHANGELOG.md",
+                "VERSION.md",
+                "runbook.md",
+            ):
+                with self.subTest(relative=relative):
+                    self.assertIn(f"Path({relative!r}).read_text", hidden)
 
 
 if __name__ == "__main__":

@@ -107,7 +107,7 @@ Delivery lifecycle: <atomic commit/PR、发布恢复、迁移、配置/Secret、
 |---|---|---|---|---|
 | 功能替换、Bug 修复、重构、优化、重命名，或契约/配置/Flag/依赖变更导致旧路径不再是 canonical owner | 不触发全面清理；只修正本次直接编辑且不改变行为的文字 | 检查实现、调用方、测试、类型/导出、依赖、路由/注册、配置/Flag、遥测、文档/示例、注释和版本/metadata；每项标记 `remove`、`retain` 或 `unknown` | 额外检查动态加载/注册、任务/队列、生成入口、兼容 shim、迁移状态、API/ADR/runbook，并由独立复查确认；保留项必须有真实消费者、删除条件、可观测信号和覆盖测试 | `rg`/导入或调用图、注册/配置查找、静态分析或依赖扫描、最终 diff、测试/CI、迁移/回滚演练、文档审查、证据台账和完成报告 |
 
-`reuse_existing_owner` 表示已有 owner 的契约能够承接需求，不能另起第三套规则；`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、删除条件、可观测性和测试；`unknown` 遇到动态、生成或外部引用时不得猜删，先做针对性运行时/注册检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。先建立 `path | role | owner | consumers | lookup kind | evidence | classification | removal condition` 退休清单，再允许删除；删除后必须做孤儿引用扫描，并确认删除路径属于本次范围。清理检查点必须在最终验证和提交前完成，未解析的 `unknown` 不得被静默带过。
+`reuse_existing_owner` 表示已有 owner 的契约能够承接需求，不能另起第三套规则；canonical owner 的证据必须在实现模块的 docstring、API 声明或邻近契约注释中写出完整限定的 `<module>.<symbol>` 和当前不变量，README/API 文档单独写了 owner 不算证明。`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、消费者 owner、删除条件/到期时间、可观测信号和兼容/集成测试。只有 `legacy`、`deprecated` 或“可能还有使用者”的标签不能支撑保留；无命名消费者的薄 wrapper 必须删除，无法解析的动态引用必须标记 `unknown`。动态、生成或外部引用时不得猜删，先完成针对性的注册表、运行时或配置检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。先建立 `path | role | owner | consumers | lookup kind | evidence | classification | removal condition` 退休清单，再允许删除；删除后必须做孤儿引用扫描，并确认删除路径属于本次范围。清理检查点必须在最终验证和提交前完成，未解析的 `unknown` 不得被静默带过。
 
 检查顺序固定为：实现前先找并复用已有 owner；实现后、最终验证和提交前扫描重复/废弃路径；随后同步旧符号、旧行为描述、注释、版本说明和 metadata；删除后再做一次跨文件孤儿扫描，覆盖导入/导出、注册表、配置、遥测和文档；动态或外部引用没有证据时停止完成门禁并报告 `unknown`/`blocked`。版本、状态和发布说明以当前 Git/CI 证据为准，不能留下无法验证的手工描述。
 
@@ -116,12 +116,12 @@ Delivery lifecycle: <atomic commit/PR、发布恢复、迁移、配置/Secret、
 埋点不是每行代码都写日志。只有改动具有可观测的状态转换、外部调用、性能/可靠性预算、清理决策或多个执行阶段时才触发。先发现并复用项目已有 logger、metrics、tracing、audit 和 evidence 约定，不新增第二套事件词汇。事件名应稳定，标签保持低基数（例如 `change_id`、`component`、`operation`、`outcome`、`classification`、`error_class`），不得写入 Secret、原始 payload、个人数据、源码或用户控制的无限标签。
 
 - Level 0：不新增遥测；纯文档或无运行信号的纯函数只记录 `Instrumentation: not applicable` 及理由。
-- Level 1：在责任决策/状态转换、超时或错误路径、验证边界放置最小结构化事件，并记录 `owner_located`、`retirement_classified`、`verification_completed`。
-- Level 2：覆盖 `started -> owner_located -> implemented -> cleanup_classified -> verified -> committed`，以及适用的重试、并发、恢复和回滚；定义 owner、阈值、采样/保留和告警动作，并测试每个逻辑转换只发一次且重试安全。
+- Level 1：在责任决策/状态转换、超时或错误路径、验证边界放置最小结构化事件，并记录 `owner_located`、`retirement_classified`、`verification_completed`。触发退役清理时，增加 `cleanup_started`、`documentation_synchronized`、`orphan_scan_completed`，并用 `scripts/validate_development_events.py --level 1 --cleanup` 校验顺序。
+- Level 2：覆盖 `started -> owner_located -> implemented -> cleanup_classified -> verified -> committed`，以及适用的重试、并发、恢复和回滚；触发退役清理时扩展为 `started -> owner_located -> implemented -> cleanup_started -> cleanup_classified -> documentation_synchronized -> orphan_scan_completed -> verified -> committed`，并用 `scripts/validate_development_events.py --level 2 --cleanup` 校验。定义 owner、阈值、采样/保留和告警动作，并测试每个逻辑转换只发一次且重试安全。
 
 埋点只说明“发生了什么”，不能单独证明“做对了什么”。每个事件都要和测试、命令、CI、trace 或运行指标配对；缺少适用边界的事件或无法证明脱敏/动态注册时，保持 `unknown`，不得静默完成。
 
-JSONL 事件可用包内标准库校验器复核：`python3 scripts/validate_development_events.py --events <events.jsonl> --level <0|1|2>`。非零退出码就是验证失败，不能通过放宽规则掩盖敏感字段、重复转换或缺少生命周期事件。
+JSONL 事件可用包内标准库校验器复核：`python3 scripts/validate_development_events.py --events <events.jsonl> --level <0|1|2> [--cleanup]`。任何替换、重复实现删除、兼容决策或说明漂移清理都必须带 `--cleanup`；非零退出码就是验证失败，不能通过放宽规则掩盖敏感字段、重复转换或缺少生命周期事件。
 
 ### 风险分级
 

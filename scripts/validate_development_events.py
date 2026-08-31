@@ -16,6 +16,44 @@ CLASSIFICATIONS = {"remove", "retain", "unknown", "reuse_existing_owner", "not_a
 LEVEL_ONE_EVENTS = {"owner_located", "retirement_classified", "verification_completed"}
 LEVEL_TWO_EVENTS = {"started", "owner_located", "implemented", "cleanup_classified", "verified", "committed"}
 LEVEL_TWO_ORDER = ("started", "owner_located", "implemented", "cleanup_classified", "verified", "committed")
+CLEANUP_LEVEL_ONE_EVENTS = {
+    "cleanup_started",
+    "owner_located",
+    "retirement_classified",
+    "documentation_synchronized",
+    "orphan_scan_completed",
+    "verification_completed",
+}
+CLEANUP_LEVEL_ONE_ORDER = (
+    "cleanup_started",
+    "owner_located",
+    "retirement_classified",
+    "documentation_synchronized",
+    "orphan_scan_completed",
+    "verification_completed",
+)
+CLEANUP_LEVEL_TWO_EVENTS = {
+    "started",
+    "owner_located",
+    "implemented",
+    "cleanup_started",
+    "cleanup_classified",
+    "documentation_synchronized",
+    "orphan_scan_completed",
+    "verified",
+    "committed",
+}
+CLEANUP_LEVEL_TWO_ORDER = (
+    "started",
+    "owner_located",
+    "implemented",
+    "cleanup_started",
+    "cleanup_classified",
+    "documentation_synchronized",
+    "orphan_scan_completed",
+    "verified",
+    "committed",
+)
 EVENT_NAME = re.compile(r"^[a-z][a-z0-9_]{2,63}$")
 FORBIDDEN_TOKENS = (
     "secret",
@@ -81,7 +119,7 @@ def _validate_event(event: Any, index: int) -> list[str]:
     return errors
 
 
-def validate_events(events: Iterable[Any], *, level: int) -> list[str]:
+def validate_events(events: Iterable[Any], *, level: int, cleanup: bool = False) -> list[str]:
     values = list(events)
     errors: list[str] = []
     if level not in {0, 1, 2}:
@@ -104,14 +142,27 @@ def validate_events(events: Iterable[Any], *, level: int) -> list[str]:
             if isinstance(data.get("event"), str):
                 names.add(data["event"])
                 ordered_names.append(data["event"])
-    required = LEVEL_ONE_EVENTS if level == 1 else LEVEL_TWO_EVENTS
+    if cleanup and level == 1:
+        required = CLEANUP_LEVEL_ONE_EVENTS
+    elif cleanup and level == 2:
+        required = CLEANUP_LEVEL_TWO_EVENTS
+    else:
+        required = LEVEL_ONE_EVENTS if level == 1 else LEVEL_TWO_EVENTS
     missing = sorted(required - names)
     if missing:
         errors.append(f"missing required level {level} events: {', '.join(missing)}")
-    if level == 2 and not missing:
-        positions = [ordered_names.index(name) for name in LEVEL_TWO_ORDER]
+    if cleanup and level == 1 and not missing:
+        positions = [ordered_names.index(name) for name in CLEANUP_LEVEL_ONE_ORDER]
         if positions != sorted(positions):
-            errors.append("level 2 lifecycle events must be ordered started -> owner_located -> implemented -> cleanup_classified -> verified -> committed")
+            errors.append(
+                "level 1 cleanup events must be ordered cleanup_started -> owner_located -> retirement_classified -> documentation_synchronized -> orphan_scan_completed -> verification_completed"
+            )
+    if level == 2 and not missing:
+        order = CLEANUP_LEVEL_TWO_ORDER if cleanup else LEVEL_TWO_ORDER
+        positions = [ordered_names.index(name) for name in order]
+        if positions != sorted(positions):
+            expected = " -> ".join(order)
+            errors.append(f"level {level}{' cleanup' if cleanup else ''} lifecycle events must be ordered {expected}")
     return errors
 
 
@@ -131,10 +182,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     _ = parser.add_argument("--events", type=Path, required=True)
     _ = parser.add_argument("--level", type=int, required=True, choices=(0, 1, 2))
+    _ = parser.add_argument(
+        "--cleanup",
+        action="store_true",
+        help="require the retirement cleanup checkpoint sequence for Level 1 or Level 2",
+    )
     arguments = parser.parse_args()
     try:
         events = load_events(arguments.events)
-        errors = validate_events(events, level=arguments.level)
+        errors = validate_events(events, level=arguments.level, cleanup=arguments.cleanup)
     except (OSError, ValueError) as error:
         print(json.dumps({"valid": False, "errors": [str(error)]}, indent=2))
         return 1

@@ -46,6 +46,42 @@ class DevelopmentEventTests(unittest.TestCase):
         reversed_events = [event(name) for name in ("started", "implemented", "owner_located", "cleanup_classified", "verified", "committed")]
         self.assertTrue(any("must be ordered" in error for error in validate_events(reversed_events, level=2)))
 
+    def test_cleanup_level_one_requires_documentation_and_orphan_checkpoints(self) -> None:
+        events = [
+            event(name, classification="remove" if name == "retirement_classified" else "not_applicable")
+            for name in (
+                "cleanup_started",
+                "owner_located",
+                "retirement_classified",
+                "documentation_synchronized",
+                "orphan_scan_completed",
+                "verification_completed",
+            )
+        ]
+        self.assertEqual(validate_events(events, level=1, cleanup=True), [])
+        missing_docs = [item for item in events if item["event"] != "documentation_synchronized"]
+        self.assertTrue(any("documentation_synchronized" in error for error in validate_events(missing_docs, level=1, cleanup=True)))
+
+    def test_cleanup_level_two_rejects_out_of_order_or_incomplete_lifecycle(self) -> None:
+        names = (
+            "started",
+            "owner_located",
+            "implemented",
+            "cleanup_started",
+            "cleanup_classified",
+            "documentation_synchronized",
+            "orphan_scan_completed",
+            "verified",
+            "committed",
+        )
+        self.assertEqual(validate_events([event(name) for name in names], level=2, cleanup=True), [])
+        reordered = [event(name) for name in (*names[:5], "orphan_scan_completed", "documentation_synchronized", *names[7:])]
+        self.assertTrue(any("must be ordered" in error for error in validate_events(reordered, level=2, cleanup=True)))
+
+    def test_cleanup_flag_does_not_change_level_zero_no_telemetry_rule(self) -> None:
+        self.assertEqual(validate_events([], level=0, cleanup=True), [])
+        self.assertTrue(validate_events([event("cleanup_started")], level=0, cleanup=True))
+
     def test_traps_reject_sensitive_fields_duplicate_transitions_and_unbounded_labels(self) -> None:
         events = [
             event("owner_located"),
@@ -73,6 +109,38 @@ class DevelopmentEventTests(unittest.TestCase):
             report = json.loads(result.stdout)
             self.assertTrue(report["valid"])
             self.assertEqual(report["event_count"], 3)
+
+    def test_cli_cleanup_flag_enforces_cleanup_sequence(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "events.jsonl"
+            lines = [
+                event(name, classification="remove" if name == "retirement_classified" else "not_applicable")
+                for name in (
+                    "cleanup_started",
+                    "owner_located",
+                    "retirement_classified",
+                    "documentation_synchronized",
+                    "orphan_scan_completed",
+                    "verification_completed",
+                )
+            ]
+            _ = path.write_text("".join(json.dumps(item) + "\n" for item in lines), encoding="utf-8")
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "validate_development_events.py"),
+                    "--events",
+                    str(path),
+                    "--level",
+                    "1",
+                    "--cleanup",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertTrue(json.loads(result.stdout)["valid"])
 
 
 if __name__ == "__main__":

@@ -70,6 +70,27 @@
       "trap": "The agent either keeps the orphan forever or deletes an out-of-scope path without proving callers and generated references are absent.",
       "expected": "remove",
       "required_evidence": ["allowed change scope", "consumer search", "post-retirement test", "clean checkout"]
+    },
+    {
+      "id": "owner_marker_only_in_docs",
+      "trigger": "A canonical owner is selected and README/API text is updated.",
+      "trap": "The implementation file never declares the fully-qualified owner or current invariant, so a documentation-only claim could hide a split owner.",
+      "expected": "unknown",
+      "required_evidence": ["implementation-local owner declaration", "fully-qualified module.symbol", "current invariant", "owner-level test"]
+    },
+    {
+      "id": "unconsumed_compatibility_wrapper",
+      "trigger": "A replacement leaves a thin legacy wrapper with no named caller.",
+      "trap": "The wrapper is labeled compatibility/deprecated and appears harmless, but retaining it preserves an unowned path and stale imports.",
+      "expected": "remove",
+      "required_evidence": ["consumer search", "removal inventory", "orphan scan", "wrapper deletion test"]
+    },
+    {
+      "id": "verified_dynamic_consumer_retention",
+      "trigger": "A runtime registry loads an adapter by configuration after the canonical owner changes.",
+      "trap": "Name-based search misses the consumer; deleting the adapter breaks a live external lookup even though internal tests pass.",
+      "expected": "retain",
+      "required_evidence": ["named registry consumer", "consumer owner", "runtime lookup result", "expiry/removal condition", "integration test"]
     }
   ]
 }

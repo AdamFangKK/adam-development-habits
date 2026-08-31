@@ -86,7 +86,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.assertIsInstance(scenarios_value, list)
         scenarios = cast(list[dict[str, object]], scenarios_value)
         self.assertEqual(self.corpus["schema_version"], 2)
-        self.assertEqual(len(scenarios), 10)
+        self.assertEqual(len(scenarios), 13)
         self.assertEqual(
             {cast(str, scenario["expected"]) for scenario in scenarios},
             {"remove", "retain", "unknown", "reuse_existing_owner"},
@@ -116,6 +116,10 @@ class RetirementCleanupContractTests(unittest.TestCase):
             "green public test alone",
             "Do not delete it or call the change complete",
             "real consumer, removal condition, observability, and coverage",
+            "canonical owner proof must be implementation-local",
+            "A README or external document alone cannot establish ownership",
+            "A thin wrapper with no named consumer is `remove`",
+            "consumer owner, removal condition, observable signal, and coverage",
         ):
             with self.subTest(guard=guard):
                 self.assertIn(guard, self.policy)
@@ -133,6 +137,37 @@ class RetirementCleanupContractTests(unittest.TestCase):
                 self.assertIn(requirement, self.policy)
         self.assertIn("本身不是消费者", self.readme)
         self.assertIn("不能单独成为保留旧实现的理由", self.readme)
+
+    def test_owner_and_wrapper_rules_close_the_v3_hidden_failure_modes(self) -> None:
+        scenarios = cast(list[dict[str, object]], self.corpus["scenarios"])
+        expected = {
+            cast(str, scenario["id"]): cast(str, scenario["expected"])
+            for scenario in scenarios
+            if cast(str, scenario["id"])
+            in {
+                "owner_marker_only_in_docs",
+                "unconsumed_compatibility_wrapper",
+                "verified_dynamic_consumer_retention",
+            }
+        }
+        self.assertEqual(
+            expected,
+            {
+                "owner_marker_only_in_docs": "unknown",
+                "unconsumed_compatibility_wrapper": "remove",
+                "verified_dynamic_consumer_retention": "retain",
+            },
+        )
+        for requirement in (
+            "canonical owner proof must be implementation-local",
+            "A README or external document alone cannot establish ownership",
+            "A thin wrapper with no named consumer is `remove`",
+            "consumer owner, removal condition, observable signal, and coverage",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.skill)
+        self.assertIn("完整限定的 `<module>.<symbol>`", self.readme)
+        self.assertIn("无命名消费者的薄 wrapper 必须删除", self.readme)
 
     def test_all_implementation_surfaces_and_explanatory_drift_are_named(self) -> None:
         for surface in (
@@ -191,18 +226,56 @@ class RetirementCleanupContractTests(unittest.TestCase):
             ["event", "change_id", "component", "outcome", "classification", "evidence_id"],
         )
         self.assertEqual(
+            schema["cleanup_level_one_order"],
+            [
+                "cleanup_started",
+                "owner_located",
+                "retirement_classified",
+                "documentation_synchronized",
+                "orphan_scan_completed",
+                "verification_completed",
+            ],
+        )
+        self.assertEqual(
+            schema["cleanup_level_two_order"],
+            [
+                "started",
+                "owner_located",
+                "implemented",
+                "cleanup_started",
+                "cleanup_classified",
+                "documentation_synchronized",
+                "orphan_scan_completed",
+                "verified",
+                "committed",
+            ],
+        )
+        self.assertEqual(
             set(cast(list[str], schema["forbidden_values"])),
             {"secret", "raw_payload", "personal_data", "source_text", "unbounded_user_label"},
         )
         scenarios = cast(list[dict[str, object]], self.observability["scenarios"])
         level_zero = next(item for item in scenarios if item["id"] == "pure_helper_level_0")
         self.assertEqual(level_zero["instrumentation"], "not_applicable")
-        level_one = next(item for item in scenarios if item["id"] == "cleanup_boundary_level_1")
+        level_one = next(item for item in scenarios if item["id"] == "ordinary_boundary_level_1")
         self.assertEqual(
             set(cast(list[str], level_one["required_events"])),
             {"owner_located", "retirement_classified", "verification_completed"},
         )
+        cleanup_level_one = next(item for item in scenarios if item["id"] == "cleanup_boundary_level_1")
+        self.assertEqual(
+            cast(list[str], cleanup_level_one["required_events"]),
+            [
+                "cleanup_started",
+                "owner_located",
+                "retirement_classified",
+                "documentation_synchronized",
+                "orphan_scan_completed",
+                "verification_completed",
+            ],
+        )
         multifile = next(item for item in scenarios if item["id"] == "multifile_retirement_level_1")
+        self.assertEqual(cast(list[str], multifile["required_events"]), cast(list[str], cleanup_level_one["required_events"]))
         self.assertEqual(
             cast(list[str], multifile["required_evidence"]),
             ["retirement inventory", "post-retirement orphan scan", "documentation synchronization"],
@@ -214,6 +287,21 @@ class RetirementCleanupContractTests(unittest.TestCase):
         )
         trap = next(item for item in scenarios if item["id"] == "redaction_and_cardinality_trap")
         self.assertEqual(cast(list[str], trap["forbid"]), cast(list[str], schema["forbidden_values"]))
+        cleanup_full = next(item for item in scenarios if item["id"] == "cleanup_full_lifecycle_level_2")
+        self.assertEqual(
+            cast(list[str], cleanup_full["required_events"]),
+            [
+                "started",
+                "owner_located",
+                "implemented",
+                "cleanup_started",
+                "cleanup_classified",
+                "documentation_synchronized",
+                "orphan_scan_completed",
+                "verified",
+                "committed",
+            ],
+        )
 
     def test_readme_exposes_automatic_behavior_and_evidence_boundary(self) -> None:
         self.assertIn("不需要用户额外说“清理垃圾代码”", self.readme)
@@ -228,6 +316,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.assertIn("分层埋点与开发过程数据", self.readme)
         self.assertIn("Level 0：不新增遥测", self.readme)
         self.assertIn("retirement_classified", self.readme)
+        self.assertIn("python3 scripts/validate_development_events.py --events <events.jsonl> --level <0|1|2> [--cleanup]", self.readme)
         self.assertIn("automatic retirement", self.metadata)
         self.assertIn("stale paths", self.metadata)
         self.assertIn("Before implementation reuse an existing owner", self.metadata)
@@ -239,6 +328,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
             "add instrumentation at the responsible decision and failure boundaries",
             "event names stable",
             "labels bounded",
+            "validate_development_events.py --cleanup",
         ):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.enforcement)

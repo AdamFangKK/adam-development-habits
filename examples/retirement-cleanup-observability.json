@@ -18,6 +18,25 @@
       "reuse_existing_owner",
       "not_applicable"
     ],
+    "cleanup_level_one_order": [
+      "cleanup_started",
+      "owner_located",
+      "retirement_classified",
+      "documentation_synchronized",
+      "orphan_scan_completed",
+      "verification_completed"
+    ],
+    "cleanup_level_two_order": [
+      "started",
+      "owner_located",
+      "implemented",
+      "cleanup_started",
+      "cleanup_classified",
+      "documentation_synchronized",
+      "orphan_scan_completed",
+      "verified",
+      "committed"
+    ],
     "forbidden_values": [
       "secret",
       "raw_payload",
@@ -39,6 +58,20 @@
       "trigger": "replacement cleanup with a measurable verification outcome",
       "level": 1,
       "required_events": [
+        "cleanup_started",
+        "owner_located",
+        "retirement_classified",
+        "documentation_synchronized",
+        "orphan_scan_completed",
+        "verification_completed"
+      ],
+      "required_paths": ["decision", "failure_or_timeout", "verification"]
+    },
+    {
+      "id": "ordinary_boundary_level_1",
+      "trigger": "an observable Level 1 change with no replacement or retirement sweep",
+      "level": 1,
+      "required_events": [
         "owner_located",
         "retirement_classified",
         "verification_completed"
@@ -50,8 +83,11 @@
       "trigger": "replacement spans source, documentation, configuration, or registration files",
       "level": 1,
       "required_events": [
+        "cleanup_started",
         "owner_located",
         "retirement_classified",
+        "documentation_synchronized",
+        "orphan_scan_completed",
         "verification_completed"
       ],
       "required_evidence": [
@@ -59,6 +95,22 @@
         "post-retirement orphan scan",
         "documentation synchronization"
       ]
+    },
+    {
+      "id": "cleanup_full_lifecycle_level_2",
+      "trigger": "a Level 2 replacement changes the owner and retires code or contract surfaces",
+      "required_events": [
+        "started",
+        "owner_located",
+        "implemented",
+        "cleanup_started",
+        "cleanup_classified",
+        "documentation_synchronized",
+        "orphan_scan_completed",
+        "verified",
+        "committed"
+      ],
+      "required_paths": ["owner declaration", "compatibility decision", "documentation", "orphan scan", "verification", "commit"]
     },
     {
       "id": "remote_lifecycle_level_2",
