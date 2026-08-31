@@ -266,6 +266,8 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \
 
 原生 Codex 子代理共享文件系统时仅能称为协议隔离；要让该结论更强，需要独立 worktree 或容器、独立保存的 prompt/output 和与条件标签隔离的评分器。即使满足这些条件，结论也只适用于预注册范围，不能外推到所有模型、仓库或生产系统。
 
+当远端 API-key 采集不可用时，可使用已预注册的 [`effect-experiment-native-v1`](./examples/effect-experiment-native-v1)：它让原生 Codex 子代理在每题独立的公开工作区完成 `no_skill`、冻结 old Skill、冻结 new Skill 三个条件，并在 Agent 退出后才把只含测试的隐藏契约注入一次性评分副本。10 个新夹具分别覆盖单模块、跨模块与动态注册集成边界，以及决策保留和端到端修复两类任务；公开区不含 reference 或 hidden tree。运行器和回归测试位于 [`native_cleanup_effect_runner_v1.py`](./scripts/native_cleanup_effect_runner_v1.py)、[`materialize_native_cleanup_effect_v1.py`](./scripts/materialize_native_cleanup_effect_v1.py) 与相应 `test_native_cleanup_effect*_v1.py`。该路径的共享文件系统限制已写入预注册；结果即使通过统计门槛，也只能支持其固定模型、Harness、Skill 快照、语料和隐藏评分器范围内的结论。
+
 ### 多模块因果探针
 
 [`causal-probe-fixture`](./examples/causal-probe-fixture) 用发送超时、队列确认、持久化 ledger、供应商对账、租户身份和下游仪表盘组成一个可重放的多模块回归。评分器只允许改动 dispatcher，并拒绝测试篡改；隐藏契约要求“对账未知时保持 pending、完整操作身份包含租户、仅在明确不存在时重发”。基线与 Skill 组都通过 `4` 个公开和 `3` 个隐藏测试，因此它**不能**证明修复成功率提升。可观察差异仅在过程证据：Skill 组记录了替代假设、发布时间线、首个偏离不变量的 causal owner、反事实干预与明确结论；这一项由 [`tests/test_causal_probe_forward.py`](./tests/test_causal_probe_forward.py) 固化。该本地夹具仍不是实际队列、供应商、数据库或生产发布的证明。

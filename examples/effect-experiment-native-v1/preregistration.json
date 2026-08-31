@@ -1,0 +1,84 @@
+{
+  "schema_version": 2,
+  "experiment_id": "adam-native-cleanup-effect-v1",
+  "status": "planned",
+  "scope": {
+    "claim": "For the fixed native Codex subagent model, shared-filesystem Harness, frozen old/new Skill snapshots, fresh V1 corpus, and blind hidden scorer declared here, enabling the new Skill improves automatic retirement and documentation-synchronization success over the old Skill.",
+    "model_id": "gpt-5.5",
+    "harness_id": "codex-app-native-subagent;shared-filesystem;protocol-isolated;task-workspace-only;manual-hidden-scorer-v1",
+    "old_skill_revision_sha256": "7874acfc0b35d95b3867f410863a850f460e882b0139a7822cc5f70d88c273a4",
+    "new_skill_revision_sha256": "95551ad23ec77efda31d10b2bca1b27fe1dbe926eaa4aef38cce0a15979360da",
+    "isolation_limit": "Native subagents share a filesystem and are instructed to read only the supplied workspace and condition policy. This is protocol isolation, not container isolation."
+  },
+  "protocol": {
+    "conditions": ["no_skill", "old_skill", "new_skill"],
+    "pairing": "same task, preregistered three-condition order",
+    "agent_timeout_seconds": 300,
+    "test_timeout_seconds": 20,
+    "corpus_manifest_path": "examples/effect-experiment-native-v1/manifest.json",
+    "corpus_manifest_sha256": "0d7861721f97e813530e5561fa31e0d2b4fb4a6da150e42a8498718b563467fc",
+    "generator_path": "scripts/materialize_native_cleanup_effect_v1.py",
+    "generator_sha256": "fac302461a1995cebc6566c2f6ffe0d6e01bcb25ad64201e36b13f88e20d94a8",
+    "runner_path": "scripts/native_cleanup_effect_runner_v1.py",
+    "runner_sha256": "97709e37df0a656014169e6e365c9506de96cdb764ebef99e430de1c28dbdd8f",
+    "task_prompt_path": "examples/effect-experiment-native-v1/agent-task-template.txt",
+    "task_prompt_sha256": "4e4e03dadef191cebb293399ce5e86af0ca6cbbe4ad41c1db974b83e9cc02837",
+    "old_skill_path": "examples/effect-experiment-native-v1/skills/old/SKILL.md",
+    "old_skill_sha256": "7874acfc0b35d95b3867f410863a850f460e882b0139a7822cc5f70d88c273a4",
+    "new_skill_path": "examples/effect-experiment-native-v1/skills/new/SKILL.md",
+    "new_skill_sha256": "95551ad23ec77efda31d10b2bca1b27fe1dbe926eaa4aef38cce0a15979360da",
+    "hidden_scorer": "native_cleanup_effect_runner_v1 copies tests/test_hidden.py from the private corpus into a disposable scoring candidate only after the native subagent returns",
+    "hidden_scorer_blind_to_condition": true,
+    "allowed_agent_input": ["task workspace", "condition-specific frozen Skill snapshot when supplied"],
+    "agent_must_not_receive": ["hidden tests", "reference tree", "scoring rubric", "prior trial outputs", "condition outcome"]
+  },
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "permutation_resamples": 10000,
+    "random_seed": 20260831,
+    "minimum_effect": 0.2,
+    "minimum_tasks_per_cohort": 5,
+    "stratum_weights": {
+      "single-module": 0.2,
+      "cross-module": 0.4,
+      "integration": 0.4
+    },
+    "primary_contrast": "new_skill-old_skill",
+    "secondary_anchor": "new_skill-no_skill",
+    "critical_safety_task_ids": [
+      "native_cleanup_tenant_casefold",
+      "native_cleanup_header_trim",
+      "native_cleanup_route_slug",
+      "native_cleanup_account_label",
+      "native_cleanup_audit_key"
+    ]
+  },
+  "task_plan": {
+    "tasks": [
+      {"task_id": "native_cleanup_tenant_casefold", "cohort": "decision-retention", "stratum": "single-module", "execution_order": ["old_skill", "new_skill", "no_skill"]},
+      {"task_id": "native_cleanup_header_trim", "cohort": "decision-retention", "stratum": "single-module", "execution_order": ["no_skill", "old_skill", "new_skill"]},
+      {"task_id": "native_cleanup_route_slug", "cohort": "decision-retention", "stratum": "cross-module", "execution_order": ["new_skill", "no_skill", "old_skill"]},
+      {"task_id": "native_cleanup_account_label", "cohort": "decision-retention", "stratum": "cross-module", "execution_order": ["old_skill", "no_skill", "new_skill"]},
+      {"task_id": "native_cleanup_audit_key", "cohort": "decision-retention", "stratum": "integration", "execution_order": ["new_skill", "old_skill", "no_skill"]},
+      {"task_id": "native_cleanup_request_slug", "cohort": "repair", "stratum": "single-module", "execution_order": ["no_skill", "new_skill", "old_skill"]},
+      {"task_id": "native_cleanup_team_alias", "cohort": "repair", "stratum": "single-module", "execution_order": ["old_skill", "new_skill", "no_skill"]},
+      {"task_id": "native_cleanup_tenant_route", "cohort": "repair", "stratum": "cross-module", "execution_order": ["no_skill", "old_skill", "new_skill"]},
+      {"task_id": "native_cleanup_sync_label", "cohort": "repair", "stratum": "cross-module", "execution_order": ["new_skill", "no_skill", "old_skill"]},
+      {"task_id": "native_cleanup_release_key", "cohort": "repair", "stratum": "integration", "execution_order": ["old_skill", "no_skill", "new_skill"]}
+    ]
+  },
+  "stopping_rule": {
+    "kind": "fixed_complete_blocks",
+    "blocks_per_task": 1,
+    "early_stop": "not allowed",
+    "interrupted_or_excluded_trials": "retain and mark collection ineligible; no selective retry"
+  },
+  "preregistration": {
+    "recorded_before_first_trial": true,
+    "raw_artifacts_append_only": true,
+    "references_unavailable_to_agents": true,
+    "envelope_sha256": "2732f0eeadf33039af361975be2b5a5f450acedf569b2c23130fc493948e7de3"
+  },
+  "trials": []
+}

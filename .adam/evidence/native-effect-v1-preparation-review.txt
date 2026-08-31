@@ -1,0 +1,35 @@
+Independent protocol review: approved
+
+Scope:
+- scripts/materialize_native_cleanup_effect_v1.py
+- scripts/native_cleanup_effect_runner_v1.py
+- tests/test_native_cleanup_effect_v1.py
+- tests/test_native_cleanup_effect_runner_v1.py
+- examples/effect-experiment-native-v1/preregistration.json
+- examples/effect-experiment-native-v1/manifest.json
+- examples/effect-experiment-native-v1/agent-task-template.txt
+
+The initial review found four high-risk defects before collection: empty
+documentation could pass, integration adapters could duplicate policy logic,
+strata were labels rather than real topology, and hidden/reference trees could
+be siblings of an agent-visible path. The repaired protocol requires positive
+current documentation and metadata, distinguishes each topology, copies only a
+public task tree into the agent workspace, and injects hidden tests only into a
+disposable candidate after the agent exits.
+
+A final review found one remaining high-risk source-string loophole: an unused
+canonical-owner import plus duplicate normalization logic could satisfy the
+cross-module or adapter source check. The generator now monkeypatches the live
+consumer or adapter binding and requires the delegated sentinel result. The
+regression writes both unused-import duplicate near misses, and both fail.
+
+Checks run by the independent reviewer:
+- focused pytest suite: 5 passed
+- Python compilation of generator and regression test: passed
+- generated reference fixtures: all public and hidden suites passed
+- cross-module and integration unused-import duplicate near misses: rejected
+- whitespace check: passed
+
+Limit: native subagents share a filesystem. The resulting experiment has
+protocol isolation only, not OS or container isolation, and can support only a
+fixed-model, fixed-Harness, fixed-corpus conclusion.

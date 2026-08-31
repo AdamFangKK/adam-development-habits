@@ -1,0 +1,13 @@
+test_consumers_must_delegate_to_canonical_policy_owner (tests.test_native_cleanup_effect_v1.NativeCleanupEffectV1Tests) ... ok
+test_hidden_contract_rejects_erased_current_descriptions_and_metadata (tests.test_native_cleanup_effect_v1.NativeCleanupEffectV1Tests) ... ok
+test_hidden_contract_rejects_shallow_replacement_and_accepts_reference (tests.test_native_cleanup_effect_v1.NativeCleanupEffectV1Tests) ... ok
+test_materialization_covers_each_cohort_and_stratum (tests.test_native_cleanup_effect_v1.NativeCleanupEffectV1Tests) ... ok
+test_registry_retarget_and_adapter_deletion_fail_hidden_contract (tests.test_native_cleanup_effect_v1.NativeCleanupEffectV1Tests) ... ok
+test_preparation_exposes_only_public_task_tree_and_scoring_accepts_reference (tests.test_native_cleanup_effect_runner_v1.NativeCleanupEffectRunnerV1Tests) ... ok
+test_score_result_is_machine_readable (tests.test_native_cleanup_effect_runner_v1.NativeCleanupEffectRunnerV1Tests) ... ok
+test_scoring_rejects_public_test_mutation (tests.test_native_cleanup_effect_runner_v1.NativeCleanupEffectRunnerV1Tests) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.456s
+
+OK

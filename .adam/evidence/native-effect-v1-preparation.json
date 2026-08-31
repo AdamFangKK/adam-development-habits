@@ -1,0 +1,205 @@
+{
+  "schema_version": 2,
+  "change_id": "native-effect-v1-preparation",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/materialize_native_cleanup_effect_v1.py:materialize_native_cleanup_effect_v1",
+    "scripts/native_cleanup_effect_runner_v1.py:prepare_trial and score_trial",
+    "examples/effect-experiment-native-v1/preregistration.json"
+  ],
+  "affected_callers": [
+    "tests/test_native_cleanup_effect_v1.py",
+    "tests/test_native_cleanup_effect_runner_v1.py",
+    "scripts/analyze_skill_effect_v9.py",
+    "README.md"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "A fresh ten-task corpus contains both cohorts and real single-module, cross-module, and integration topologies; an Agent workspace receives only one public task tree.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_native_cleanup_effect_v1 tests.test_native_cleanup_effect_runner_v1 -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Hidden scoring rejects policy-only repair, blank documentation or metadata, registry retargeting, and unused-import duplicate implementations while reference repairs pass.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_native_cleanup_effect_v1 tests.test_native_cleanup_effect_runner_v1 -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The frozen envelope is internally consistent and cannot be represented as a completed effect result before trials exist.",
+      "verification": "PYTHONPATH=scripts PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect_v9.py examples/effect-experiment-native-v1/preregistration.json"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The Skill package remains valid and regression-clean after the new protocol and documentation are added.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "Only the condition-specific frozen Skill availability may differ across a preregistered task block.",
+    "The public Agent workspace excludes hidden tests and reference fixes; the scorer injects only hidden tests after Agent exit into a disposable copy.",
+    "Cross-module consumers and dynamic adapters must demonstrably return the canonical owner's result, not merely contain an import string.",
+    "A planned experiment with zero trials is not evidence of Skill effectiveness or general model causal ability.",
+    "Any completed conclusion is limited to the fixed native subagent model, shared-filesystem Harness, frozen snapshots, corpus, and blind hidden scorer."
+  ],
+  "replaced_paths": [
+    "The uncommitted V1 source-string delegation checks that accepted unused canonical-owner imports while duplicate normalization code ran."
+  ],
+  "retained_compatibility": [
+    {
+      "consumer": "Each integration fixture runtime/<task-id>.json registry retains its named plugins.<task-id>_adapter module.",
+      "removal_condition": "A new corpus revision explicitly retires the dynamic adapter contract and supplies a matching hidden regression.",
+      "test": "tests.test_native_cleanup_effect_v1.NativeCleanupEffectV1Tests.test_registry_retarget_and_adapter_deletion_fail_hidden_contract"
+    }
+  ],
+  "safeguards": [
+    {
+      "name": "fresh deterministic corpus",
+      "status": "applied",
+      "rationale": "The standard-library generator creates new public, hidden, and reference trees and records their digests in the manifest."
+    },
+    {
+      "name": "post-exit hidden scoring",
+      "status": "applied",
+      "rationale": "The runner copies only a public task tree to the Agent workspace and inserts scorer-only tests into a disposable candidate only after the Agent exits."
+    },
+    {
+      "name": "runtime canonical-owner probe",
+      "status": "applied",
+      "rationale": "Hidden tests monkeypatch the live consumer or adapter binding and require the delegated sentinel return value."
+    },
+    {
+      "name": "positive documentation and metadata contract",
+      "status": "applied",
+      "rationale": "Hidden tests require the current canonical marker in each prose surface and the exact metadata value, rather than merely checking old-marker absence."
+    },
+    {
+      "name": "fixed complete-block analysis",
+      "status": "applied",
+      "rationale": "The envelope requires every task's three preregistered conditions and forbids early stopping or selective retry."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "The generator owns fixtures and hidden contract creation; the runner owns public-workspace preparation and scoring; the analyzer owns the statistical decision."},
+    "dependency_audit": {"status": "not_applicable", "rationale": "No dependency, lockfile, or external service was added; the protocol uses the Python standard library and the native Codex subagent surface."},
+    "extension_decision": {"status": "not_applicable", "rationale": "The protocol adds no application extension point or public adapter interface."},
+    "data_ownership": {"status": "applied", "rationale": "Public task inputs, private hidden/reference trees, candidate workspaces, and evidence artifacts have separate explicit lifecycles."},
+    "error_model": {"status": "applied", "rationale": "Scope violation, public failure, hidden failure, timeout, and interrupted trial remain separately recordable outcomes rather than being silently retried."},
+    "contract_evolution": {"status": "applied", "rationale": "Native V1 is a new frozen envelope; historical API-key and older interrupted protocols remain unchanged."},
+    "operational_budget": {"status": "applied", "rationale": "The preregistration freezes a 300-second Agent timeout, a 20-second test timeout, and a no-early-stop rule."},
+    "threat_boundary": {"status": "applied", "rationale": "Hidden tests, references, prior outputs, and condition outcomes are outside the declared Agent input; native filesystem sharing remains a documented protocol-isolation limit."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "Generator, runner, tests, manifest, frozen snapshots, README, review, and evidence are committed as one verified preparation scope before collection."},
+    "release_recovery": {"status": "not_applicable", "rationale": "This is an offline evaluation protocol with no production release or user rollout."},
+    "data_migration": {"status": "not_applicable", "rationale": "No application schema, production record, or data migration changes."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "The native route does not consume or record API keys, credentials, or runtime secret configuration."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No package manifest, lockfile, or dependency version changed."},
+    "operational_knowledge": {"status": "applied", "rationale": "README identifies the native protocol, its purpose, and its protocol-isolation limitation; the review records every corrected scoring defect."},
+    "reproducibility": {"status": "applied", "rationale": "The envelope hashes the manifest, generator, runner, prompt, old/new snapshots, task order, and analysis threshold before collection."}
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_native_cleanup_effect_v1 tests.test_native_cleanup_effect_runner_v1 -v",
+      "status": "passed",
+      "result": "8 focused protocol, topology, positive-documentation, post-exit-scoring, scope, registry, and runtime-delegation adversarial tests passed.",
+      "evidence_refs": ["focused-tests"]
+    },
+    {
+      "command": "PYTHONPATH=scripts PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect_v9.py examples/effect-experiment-native-v1/preregistration.json",
+      "status": "passed",
+      "result": "The analyzer accepted the frozen envelope and returned planned/not_run with causal conclusion unknown.",
+      "evidence_refs": ["planned-analysis"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "248 package regression tests passed.",
+      "evidence_refs": ["full-suite"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed.",
+      "evidence_refs": ["skill-validator"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-effect-v1-preparation-focused.txt",
+      "sha256": "c7f736001f28a43abccd515a66bf923eab89e4cb7f9cb65f3d18abf779b9012c",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_native_cleanup_effect_v1 tests.test_native_cleanup_effect_runner_v1 -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T14:00:21Z",
+      "repository_revision": "eaa1604374b51e8b99cb5fe884af77e36d40914a+worktree",
+      "summary": "Focused native protocol tests with adversarial delegation and scoring cases."
+    },
+    {
+      "id": "planned-analysis",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-effect-v1-preparation-planned.txt",
+      "sha256": "53c0bac9d9af829dc3314daed0844d846eb8ad1bdef3be520ad9345f26efc1cd",
+      "command": "PYTHONPATH=scripts PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 scripts/analyze_skill_effect_v9.py examples/effect-experiment-native-v1/preregistration.json",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T14:00:21Z",
+      "repository_revision": "eaa1604374b51e8b99cb5fe884af77e36d40914a+worktree",
+      "summary": "Analyzer acceptance of planned envelope without model outcomes."
+    },
+    {
+      "id": "full-suite",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-effect-v1-preparation-full.txt",
+      "sha256": "ecea8a556ce22f80ecca51416ff33f70e4e3f707b69773cdafe1351229b38844",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T14:00:21Z",
+      "repository_revision": "eaa1604374b51e8b99cb5fe884af77e36d40914a+worktree",
+      "summary": "Full Skill package regression suite."
+    },
+    {
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-effect-v1-preparation-skill-validator.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T14:00:21Z",
+      "repository_revision": "eaa1604374b51e8b99cb5fe884af77e36d40914a+worktree",
+      "summary": "Skill package structural validator output."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/native-effect-v1-preparation-review.txt",
+      "sha256": "8748eedcd6df2009a80ce1d400a1febd8917ce16781fa4650354a6ae0cff6b84",
+      "summary": "Independent review that found, reproduced, and approved repairs for five protocol loopholes."
+    },
+    {
+      "id": "preregistration",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-experiment-native-v1/preregistration.json",
+      "sha256": "2e6cc7279f44efccb584ab092fca5fbd43d51c726734d09ef17ef0156a7052b4",
+      "summary": "Frozen planned three-condition native experiment envelope with no trial data."
+    },
+    {
+      "id": "manifest",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-experiment-native-v1/manifest.json",
+      "sha256": "0d7861721f97e813530e5561fa31e0d2b4fb4a6da150e42a8498718b563467fc",
+      "summary": "Hash-linked manifest for ten topology-varying tasks and their public, hidden, and reference tree digests."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the generator, runner, tests, manifest, frozen envelope, README entry, and this evidence together if a stronger independently verified execution mechanism replaces Native V1. Do not alter this envelope after trial collection starts.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: native_protocol_review",
+    "outcome": "approved",
+    "notes": "The reviewer identified five concrete bypasses before trial collection, verified the repairs, and confirmed reference fixtures still pass while unused-import duplicate implementations fail.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "No trial has run, so no Skill-effect, repair-success, or causal-capability improvement is established by this preparation commit.",
+    "Native subagents share a filesystem; the protocol is not a security sandbox and cannot prevent a deliberately noncompliant Agent from searching external paths.",
+    "The synthetic corpus is small and targeted, so even a completed passing analysis would not generalize to all repositories, failure modes, or model configurations.",
+    "The configured remote API-key route remains unavailable and is intentionally not cited as effect evidence."
+  ]
+}
