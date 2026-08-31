@@ -1,0 +1,497 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "bootstrap_resamples": 10000,
+    "critical_safety_task_ids": [
+      "cleanup_decision_retention_casefold_01",
+      "cleanup_decision_retention_trim_02",
+      "cleanup_decision_retention_segment_03",
+      "cleanup_decision_retention_scale_04",
+      "cleanup_decision_retention_order_05",
+      "cleanup_decision_retention_casefold_06",
+      "cleanup_decision_retention_trim_07",
+      "cleanup_decision_retention_segment_08",
+      "cleanup_decision_retention_scale_09",
+      "cleanup_decision_retention_order_10",
+      "cleanup_decision_retention_casefold_11",
+      "cleanup_decision_retention_trim_12",
+      "cleanup_decision_retention_segment_13",
+      "cleanup_decision_retention_scale_14",
+      "cleanup_decision_retention_order_15",
+      "cleanup_decision_retention_casefold_16",
+      "cleanup_decision_retention_trim_17",
+      "cleanup_decision_retention_segment_18",
+      "cleanup_decision_retention_scale_19",
+      "cleanup_decision_retention_order_20"
+    ],
+    "minimum_effect": 0.05,
+    "minimum_tasks_per_cohort": 20,
+    "permutation_resamples": 10000,
+    "primary_contrast": "new_skill-old_skill",
+    "random_seed": 20260827,
+    "secondary_anchor": "new_skill-no_skill",
+    "stratum_weights": {
+      "cross-module": 0.4,
+      "integration": 0.4,
+      "single-module": 0.2
+    }
+  },
+  "experiment_id": "adam-skill-effect-v9",
+  "preregistration": {
+    "envelope_sha256": "b9e68237109f1d16917a96921f8e3814a358a20faacba7a1810785104b06e47e",
+    "git_commit": "53faca7f84d599b5d8c4bbfbd16754e1bfdbef02",
+    "raw_artifacts_append_only": true,
+    "recorded_before_first_trial": true,
+    "references_unavailable_to_agents": true
+  },
+  "protocol": {
+    "agent_timeout_seconds": 420.0,
+    "analyzer_sha256": "0348dd437eb10e428eb11cd202cae6e9d88e42effdd218211205346092c86115",
+    "artifact_manifest_generator_sha256": "54ec6e19a25b23f9ce26f8cbdecb0e2bba6c890cf4d9f688467fc8e4c8abafc3",
+    "baseline_prompt_sha256": "21de326e3bd3b394a380a91756f35332e9f1cf0cd57a9cee948fd4acc163a304",
+    "codex_auth_mode": "chatgpt",
+    "codex_cli_version": "codex-cli 0.149.0-alpha.4.1",
+    "codex_wrapper_sha256": "e086c67d926217241b0c9e36d7c871e90d91b3abbfbfe53bfa42c54d21b7062f",
+    "conditions": [
+      "no_skill",
+      "old_skill",
+      "new_skill"
+    ],
+    "corpus_manifest_sha256": "03e8d22a740f9e3cd933b07bd855c86bca14692264c95711a2d4bc277ed98952",
+    "generator_sha256": "1fd9c88c5238d953424acb9bc4c5e43b26e69327bfd2b2426c77d68b4a24d900",
+    "hidden_scorer_blind_to_condition": true,
+    "hidden_scorer_sha256": "31b69bc0f65f7734d38b769612793877e3c513cf552d84543f68f42b99308062",
+    "isolation_auditor_sha256": "325764c668403e2220b33141e2a23505f7c15e20a63de21aee332c91f6279471",
+    "new_skill_prompt_sha256": "9d1a1e09a66f96af39d810115e3a17c60ac49e101d0388a772f90b4f871f39d0",
+    "new_skill_sha256": "72d4055ab9af84051fb5cc8824ab8f3b3381c679216819502a1b2613ff34f079",
+    "old_skill_prompt_sha256": "9d1a1e09a66f96af39d810115e3a17c60ac49e101d0388a772f90b4f871f39d0",
+    "old_skill_sha256": "7874acfc0b35d95b3867f410863a850f460e882b0139a7822cc5f70d88c273a4",
+    "pairing": "same task, randomized three-condition order",
+    "preregistration_generator_sha256": "ca6a8be991741f4ed29c6b2711848c15b3c93f4079d8a856f5069c316b105f84",
+    "runner_sha256": "ee31585e6be8bc28adbefff022ed2fbe5fe88e51946eef9648b85262056e7f7b",
+    "skill_search_disabled_for_all_conditions": true,
+    "test_timeout_seconds": 30.0,
+    "treatment_requires_snapshot_read_evidence": true
+  },
+  "schema_version": 2,
+  "scope": {
+    "claim": "For the fixed model, Harness, old/new Skill snapshots, held-out V9 corpus, and blind scorer declared here, enabling the new Skill improves hidden repair success over the old Skill.",
+    "harness_id": "codex-cli-0.149.0-alpha.4.1;exec-json;workspace-write;ephemeral;skill-search-disabled;absolute-output;condition-checkpointed-v9",
+    "model_id": "gpt-5.6-terra",
+    "new_skill_revision_sha256": "72d4055ab9af84051fb5cc8824ab8f3b3381c679216819502a1b2613ff34f079",
+    "no_skill_isolation": "automatic Skill discovery disabled; no Skill path supplied",
+    "old_skill_revision_sha256": "7874acfc0b35d95b3867f410863a850f460e882b0139a7822cc5f70d88c273a4"
+  },
+  "status": "planned",
+  "stopping_rule": {
+    "blocks_per_task": 1,
+    "early_stop": "not allowed",
+    "interrupted_or_excluded_trials": "retain and mark collection ineligible; no selective retry",
+    "kind": "fixed_complete_blocks"
+  },
+  "task_plan": {
+    "tasks": [
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_decision_retention_casefold_01"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_decision_retention_trim_02"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_decision_retention_segment_03"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_decision_retention_scale_04"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_decision_retention_order_05"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_decision_retention_casefold_06"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_decision_retention_trim_07"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_decision_retention_segment_08"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_decision_retention_scale_09"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_decision_retention_order_10"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_decision_retention_casefold_11"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_decision_retention_trim_12"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_decision_retention_segment_13"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_decision_retention_scale_14"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_decision_retention_order_15"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_decision_retention_casefold_16"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_decision_retention_trim_17"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_decision_retention_segment_18"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_decision_retention_scale_19"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_decision_retention_order_20"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_repair_casefold_21"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_repair_trim_22"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_repair_segment_23"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_repair_scale_24"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_repair_order_25"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_repair_casefold_26"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_repair_trim_27"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_repair_segment_28"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_repair_scale_29"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_repair_order_30"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_repair_casefold_31"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_repair_trim_32"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_repair_segment_33"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_repair_scale_34"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_repair_order_35"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_repair_casefold_36"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_repair_trim_37"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_repair_segment_38"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_repair_scale_39"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_repair_order_40"
+      }
+    ]
+  },
+  "trials": []
+}
