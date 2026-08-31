@@ -46,3 +46,14 @@ The V9 corpus uses separate roots:
 - `references/<task-id>` contains the fixed implementation for corpus validation only and is never an Agent or scorer input.
 
 The V9 scorer accepts no reference path, rejects symbolic links and path collisions, injects tests only, and verifies every allowed implementation file has the same SHA-256 before and after injection. Retain every non-secret prompt, absolute Agent output, stdout, stderr, diff, public result, hidden result, audit, collection result, analysis, and artifact hash manifest. Existing output paths are an error; interrupted or excluded trials remain in the record and make the collection ineligible rather than eligible for selective retry.
+
+For the automatic-retirement capability, materialize the dedicated cleanup profile with:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/materialize_effect_corpus_v9.py \
+  --profile cleanup --corpus examples/effect-corpus-v9-cleanup
+```
+
+This held-out split has 40 tasks (20 `decision-retention`, 20 `repair`) across the same `6/8/6` strata. Repair tasks contain obsolete implementations; decision-retention tasks deliberately let the public suite pass while hidden tests check duplicate removal, legitimate dynamic retention, and synchronized current documentation. The hidden tree contains tests only, and the reference tree is validation-only. Run `tests/test_cleanup_effect_corpus.py` before preregistering; do not use its reference sources or hidden tests as Agent inputs.
+
+When a trial emits process or runtime checkpoint JSONL, validate it with `scripts/validate_development_events.py`. The checker enforces the Level 0/1/2 event threshold, stable bounded names, unique logical transitions, lifecycle coverage, and sensitive-field rejection. Event validity is a telemetry-quality gate and never substitutes for the hidden behavioral contract.

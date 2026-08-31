@@ -32,6 +32,20 @@ class TaskSpec:
     hidden_cases: tuple[Case, ...]
 
 
+@dataclass(frozen=True)
+class CleanupSpec:
+    task_id: str
+    cohort: str
+    stratum: str
+    description: str
+    kind: str
+    signature: str
+    buggy_source: str
+    fixed_source: str
+    public_cases: tuple[Case, ...]
+    hidden_cases: tuple[Case, ...]
+
+
 def body(value: str) -> str:
     return textwrap.dedent(value).strip()
 
@@ -132,6 +146,200 @@ def repair_tasks() -> list[TaskSpec]:
     return [spec(task_id, "repair", stratum, description, signature, buggy, fixed, public, hidden) for task_id, stratum, description, signature, buggy, fixed, public, hidden in rows]
 
 
+def cleanup_hidden_test(task_id: str, kind: str, hidden_cases: tuple[Case, ...]) -> str:
+    cases = repr(hidden_cases)
+    legacy_name = f"legacy_{task_id}"
+    duplicate_name = f"new_duplicate_{task_id}"
+    if kind == "retain":
+        hygiene = (
+            f"        self.assertIn('external_adapter_{task_id}', source)\n"
+            "        self.assertIn('EXTERNAL_REGISTRY', source)\n"
+            f"        self.assertNotIn('stale compatibility note {task_id}', source)\n"
+        )
+    elif kind == "duplicate":
+        hygiene = f"        self.assertNotIn('{duplicate_name}', source)\n"
+    elif kind == "docs":
+        hygiene = (
+            f"        self.assertNotIn('old contract {task_id}', source)\n"
+            f"        self.assertIn('Current contract {task_id}', source)\n"
+        )
+    else:
+        hygiene = (
+            f"        self.assertNotIn('{legacy_name}', source)\n"
+            "        self.assertNotIn('Legacy path retained', source)\n"
+        )
+    return (
+        "from pathlib import Path\n"
+        "import unittest\n\n"
+        "from policy import evaluate\n\n"
+        f"CASES = {cases}\n\n"
+        "class HiddenContract(unittest.TestCase):\n"
+        "    def test_current_behavior(self):\n"
+        "        for arguments, expected in CASES:\n"
+        "            with self.subTest(arguments=arguments):\n"
+        "                self.assertEqual(evaluate(*arguments), expected)\n\n"
+        "    def test_retirement_hygiene(self):\n"
+        "        source = Path('policy.py').read_text(encoding='utf-8')\n"
+        f"{hygiene}"
+        "\n\nif __name__ == '__main__':\n"
+        "    unittest.main()\n"
+    )
+
+
+def cleanup_source(
+    task_id: str,
+    kind: str,
+    signature: str,
+    buggy_logic: str,
+    fixed_logic: str,
+    description: str,
+) -> tuple[str, str]:
+    legacy_name = f"legacy_{task_id}"
+    canonical_name = f"canonical_{task_id}"
+    duplicate_name = f"new_duplicate_{task_id}"
+    if kind == "retain":
+        buggy = f'''"""{description}"""
+
+EXTERNAL_REGISTRY = {{"external_adapter_{task_id}": "{canonical_name}"}}
+
+
+def external_adapter_{task_id}({signature}):
+    return {fixed_logic}
+
+
+def {canonical_name}({signature}):
+    return {fixed_logic}
+
+
+def evaluate({signature}):
+    # stale compatibility note {task_id}
+    return {canonical_name}({signature})
+'''
+        fixed = f'''"""{description}"""
+
+EXTERNAL_REGISTRY = {{"external_adapter_{task_id}": "{canonical_name}"}}
+
+
+def external_adapter_{task_id}({signature}):
+    return {fixed_logic}
+
+
+def {canonical_name}({signature}):
+    return {fixed_logic}
+
+
+def evaluate({signature}):
+    return {canonical_name}({signature})
+'''
+        return buggy, fixed
+    if kind == "duplicate":
+        buggy = f'''"""{description}"""
+
+
+def {canonical_name}({signature}):
+    return {fixed_logic}
+
+
+def {duplicate_name}({signature}):
+    return {fixed_logic}
+
+
+def evaluate({signature}):
+    return {duplicate_name}({signature})
+'''
+        fixed = f'''"""{description}"""
+
+
+def {canonical_name}({signature}):
+    return {fixed_logic}
+
+
+def evaluate({signature}):
+    return {canonical_name}({signature})
+'''
+        return buggy, fixed
+    if kind == "docs":
+        buggy = f'''"""old contract {task_id}: legacy normalization remains the default."""
+
+
+def {canonical_name}({signature}):
+    return {fixed_logic}
+
+
+def evaluate({signature}):
+    # old contract {task_id}
+    return {canonical_name}({signature})
+'''
+        fixed = f'''"""Current contract {task_id}: the canonical behavior is maintained here."""
+
+
+def {canonical_name}({signature}):
+    return {fixed_logic}
+
+
+def evaluate({signature}):
+    return {canonical_name}({signature})
+'''
+        return buggy, fixed
+    buggy = f'''"""{description}"""
+
+
+def {legacy_name}({signature}):
+    return {buggy_logic}
+
+
+def {canonical_name}({signature}):
+    return {fixed_logic}
+
+
+def evaluate({signature}):
+    # Legacy path retained while the replacement rolls out.
+    return {legacy_name}({signature})
+'''
+    fixed = f'''"""{description}"""
+
+
+def {canonical_name}({signature}):
+    return {fixed_logic}
+
+
+def evaluate({signature}):
+    return {canonical_name}({signature})
+'''
+    return buggy, fixed
+
+
+def cleanup_tasks() -> list[CleanupSpec]:
+    strata = ("single-module",) * 6 + ("cross-module",) * 8 + ("integration",) * 6
+    logic_rows = (
+        ("casefold", "value", "value.strip().lower()", "value.strip().casefold()", ((" Straße@example.com ",), "strasse@example.com"), ((" User@example.com ",), "user@example.com")),
+        ("trim", "value", "value", "value.strip()", (("  value  ",), "value"), (("\nvalue\t",), "value")),
+        ("segment", "path, prefix", "path.startswith(prefix)", "path == prefix or path.startswith(prefix.rstrip('/') + '/')", (("/administer", "/admin"), False), (("/admin/users", "/admin"), True)),
+        ("scale", "minor, scale", "minor / 100", "minor / (10 ** scale)", ((1234, 3), 1.234), ((5, 0), 5.0)),
+        ("order", "records", "tuple(name for _, name in sorted(records, reverse=True))", "tuple(name for _, name in sorted(records, key=lambda item: item[0]))", ((((2, "b"), (1, "a")),), ("a", "b")), ((((1, "a"), (1, "b")),), ("a", "b"))),
+    )
+    specs: list[CleanupSpec] = []
+    for index in range(40):
+        cohort = "decision-retention" if index < 20 else "repair"
+        stratum = strata[index % len(strata)]
+        logic_name, signature, buggy_logic, fixed_logic, public_case, hidden_case = logic_rows[index % len(logic_rows)]
+        task_id = f"cleanup_{cohort.replace('-', '_')}_{logic_name}_{index + 1:02d}"
+        if cohort == "repair":
+            kind = "replace"
+            description = f"Replace the obsolete {logic_name} implementation with the canonical contract. Keep the public behavior correct and update the implementation in policy.py."
+            buggy_source, fixed_source = cleanup_source(task_id, kind, signature, buggy_logic, fixed_logic, description)
+            public_cases = (public_case,)
+            hidden_cases = (hidden_case,)
+        else:
+            kind = ("duplicate", "retain", "docs")[index % 3]
+            description = f"Update the {logic_name} request policy in policy.py while preserving the existing public contract."
+            buggy_source, fixed_source = cleanup_source(task_id, kind, signature, buggy_logic, fixed_logic, description)
+            public_cases = (hidden_case,)
+            hidden_cases = (hidden_case,)
+        specs.append(CleanupSpec(task_id, cohort, stratum, description + "\n", kind, signature, buggy_source, fixed_source, public_cases, hidden_cases))
+    return specs
+
+
 def make_tasks() -> list[TaskSpec]:
     return decision_tasks() + repair_tasks()
 
@@ -213,11 +421,84 @@ def materialize(corpus: Path) -> dict[str, object]:
     return manifest
 
 
+def materialize_cleanup(corpus: Path) -> dict[str, object]:
+    """Materialize a held-out corpus for automatic retirement and drift cleanup."""
+    tasks = cleanup_tasks()
+    if corpus.exists():
+        raise FileExistsError(f"refusing to overwrite existing corpus: {corpus}")
+    if len(tasks) != 40 or len({task.task_id for task in tasks}) != 40:
+        raise ValueError("cleanup corpus must contain 40 unique tasks")
+    for cohort, expected_count in EXPECTED_COHORTS.items():
+        cohort_tasks = [task for task in tasks if task.cohort == cohort]
+        if len(cohort_tasks) != expected_count:
+            raise ValueError(f"cleanup cohort {cohort} count mismatch")
+        counts = {stratum: sum(task.stratum == stratum for task in cohort_tasks) for stratum in EXPECTED_STRATA}
+        if counts != EXPECTED_STRATA:
+            raise ValueError(f"cleanup cohort {cohort} strata mismatch: {counts}")
+
+    manifest_tasks: list[dict[str, object]] = []
+    for task in tasks:
+        public_root = corpus / "tasks" / task.task_id
+        hidden_root = corpus / "hidden-tests" / task.task_id
+        reference_root = corpus / "references" / task.task_id
+        public_test = test_source(task.public_cases, "PublicContract")
+        hidden_test = cleanup_hidden_test(task.task_id, task.kind, task.hidden_cases)
+        write_tree(public_root, {"policy.py": task.buggy_source, "task.md": task.description, "tests/test_public.py": public_test})
+        write_tree(hidden_root, {"tests/test_hidden.py": hidden_test})
+        write_tree(reference_root, {"policy.py": task.fixed_source, "task.md": task.description, "tests/test_public.py": public_test, "tests/test_hidden.py": hidden_test})
+        manifest_tasks.append({
+            "task_id": task.task_id,
+            "cohort": task.cohort,
+            "stratum": task.stratum,
+            "kind": task.kind,
+            "workspace_path": f"tasks/{task.task_id}",
+            "hidden_tests_path": f"hidden-tests/{task.task_id}",
+            "reference_path": f"references/{task.task_id}",
+            "allowed_edit_paths": ["policy.py"],
+            "public_command": PUBLIC_COMMAND,
+            "hidden_command": PUBLIC_COMMAND,
+            "workspace_tree_sha256": tree_digest(public_root),
+            "hidden_tests_tree_sha256": tree_digest(hidden_root),
+            "reference_tree_sha256": tree_digest(reference_root),
+        })
+
+    manifest = cast(dict[str, object], {
+        "schema_version": 2,
+        "corpus_id": "effect-corpus-v9-cleanup",
+        "profile": "cleanup",
+        "generated_by": "scripts/materialize_effect_corpus_v9.py --profile cleanup",
+        "task_count": len(tasks),
+        "cohorts": EXPECTED_COHORTS,
+        "strata_per_cohort": EXPECTED_STRATA,
+        "conditions": CONDITIONS,
+        "split": {
+            "public_workspace_excludes_hidden_tests": True,
+            "hidden_tree_contains_tests_only": True,
+            "reference_tree_is_validation_only": True,
+            "hidden_tests_are_injected_after_agent_exit": True,
+        },
+        "cleanup_contract": {
+            "kinds": ["replace", "duplicate", "retain", "docs"],
+            "hidden_checks": ["current_behavior", "retirement_hygiene"],
+            "reference_implementation_is_not_available_to_agent": True,
+        },
+        "tasks": manifest_tasks,
+    })
+    corpus.mkdir(parents=True, exist_ok=True)
+    _ = (corpus / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return manifest
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     _ = parser.add_argument("--corpus", type=Path, required=True)
+    _ = parser.add_argument("--profile", choices=("v9", "cleanup"), default="v9")
     arguments = cast(dict[str, object], vars(parser.parse_args()))
-    _ = materialize(cast(Path, arguments["corpus"]))
+    corpus = cast(Path, arguments["corpus"])
+    if arguments["profile"] == "cleanup":
+        _ = materialize_cleanup(corpus)
+    else:
+        _ = materialize(corpus)
     return 0
 
 

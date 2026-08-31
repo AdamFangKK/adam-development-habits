@@ -1,6 +1,6 @@
 ---
 name: adam-development-habits
-description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, retirement of obsolete or duplicate paths, synchronized documentation, tests, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、清理废弃路径、同步说明与证据门禁。"
+description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, retirement of obsolete or duplicate paths, synchronized documentation, evidence-oriented instrumentation, tests, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、清理废弃路径、同步说明、合理埋点与证据门禁。"
 ---
 
 # Adam's Development Habits
@@ -158,6 +158,7 @@ Replaced paths: <what will be removed, or none>
 Retained compatibility: <consumer + removal condition + test, or none>
 Retirement sweep: <remove/retain/unknown decisions for touched or replaced paths + evidence>
 Documentation synchronization: <updated/deleted/confirmed-current README, API docs, ADR, runbook, examples, comments, version/metadata descriptions>
+Instrumentation: <not applicable with reason, or event boundaries/schema, redaction/cardinality review, tests and runtime/development evidence>
 Safeguards: <applicable items from the matrix>
 Verification: <commands run and actual results>
 Causal diagnosis: <not activated, or symptom + hypotheses + causal owner + counterfactual intervention + discriminating evidence + conclusion>
@@ -186,6 +187,7 @@ This is the default maintenance behavior for normal development. The Agent perfo
 | Practice | Trigger | Level 0 | Level 1 | Level 2 | Evidence |
 |---|---|---|---|---|---|
 | Automatic retirement and drift cleanup | A feature, bug fix, refactor, optimization, rename, contract/configuration/flag/dependency change, or any change that introduces a replacement or makes an earlier path non-canonical. Level 0 never triggers a full sweep. | No full sweep; only correct directly edited text when the requested no-behavior change requires it. | Run a light sweep over the changed boundary: implementation, callers, tests, types/exports, dependencies, routes/registrations, configuration/flags, telemetry, docs/examples, comments, and version/metadata descriptions. Classify candidates as `remove`, `retain`, or `unknown`; delete confirmed leftovers and update stale descriptions in the same change. | Run the complete sweep, including dynamic loading/registration, jobs/queues, generated entry points, compatibility shims, migration state, API/ADR/runbook references, and independent review. Retained paths require a real consumer, removal condition, observability, and coverage; unresolved dynamic paths stay `unknown` until checked. | Search/import or call-graph output, registration/config lookup, static-analysis or dependency scan, final diff, focused tests/CI, migration or rollback rehearsal when applicable, documentation review, and ledger/report entries. |
+| Development and runtime instrumentation | A Level 1/2 change has an observable state transition, external boundary, performance/reliability budget, cleanup decision, or more than one execution phase. Pure documentation and isolated pure functions without an operational signal do not trigger application telemetry. | No new telemetry; do not add instrumentation solely to satisfy the policy. | Add lightweight, structured, low-cardinality events at the changed decision/state boundary and failure/timeout path; include correlation/change ID, outcome, elapsed time or count, and redacted reason. Record the Skill checkpoints `owner_located`, `retirement_classified`, and `verification_completed` in the evidence ledger or existing event sink. | Add complete boundary coverage for plan/start, owner selection, replacement/cleanup classification, retained/unknown resolution, verification, rollout/rollback or recovery, and terminal failure; define metric names, owner, threshold, sampling/retention, and alert action. Validate that telemetry is emitted once per logical transition, is safe under retry/concurrency, and does not contain secrets, payloads, or unbounded labels. | Event schema or existing telemetry definition, focused tests asserting event name/outcome/redaction/cardinality, command output or CI artifact showing checkpoint events, and runtime metrics/trace export when available. |
 
 Use this checkpoint in order for every Level 1 or Level 2 change:
 
@@ -194,6 +196,28 @@ Use this checkpoint in order for every Level 1 or Level 2 change:
 3. **Classify each candidate** as `remove`, `retain`, or `unknown`. A semantic duplicate that has no independent contract is `remove` after callers move; a real compatibility consumer is `retain`; a dynamic, generated, or external path is `unknown` until its lookup or runtime use is checked.
 4. **Synchronize descriptions in the same change**: search old symbols, old behavior phrases, configuration keys, flag names, telemetry labels, version notes, changelog entries, examples, and package metadata. Update or delete stale explanatory text; do not leave a comment or release description teaching the retired contract.
 5. **Stop the completion gate when evidence is unresolved**. Do not silently retain an unknown path or report the change complete. Run a targeted registration/runtime/configuration check, or report the exact unresolved path and residual risk as `blocked`/`unknown`.
+
+### Instrumentation Checkpoint
+
+Instrumentation is part of the affected implementation surface when the changed boundary has a measurable runtime or development outcome. First discover the repository's existing logger, metrics, tracing, audit, and evidence conventions and reuse them; do not add a new telemetry dependency or a second event vocabulary. Use stable event names and bounded labels such as `change_id`, `component`, `operation`, `outcome`, `classification`, and `error_class`; never record secrets, raw payloads, personal data, source text, or user-controlled label values.
+
+At Level 1, place the smallest useful probes at the decision or state-transition owner, its timeout/error path, and the verification boundary. At Level 2, cover the full lifecycle (`started -> owner_located -> implemented -> cleanup_classified -> verified -> committed`), retries/concurrency and recovery/rollback branches when applicable, and define the metric owner, threshold, sampling/retention, and response. A probe must have a question it answers and a test or command that proves it emits the expected redacted event; do not add noisy line-by-line logging. For a pure local helper with no operational signal, record `Instrumentation: not applicable` with the reason.
+
+The process-level checkpoint event payload should be machine-readable and bounded:
+
+```text
+event: <stable checkpoint name>
+change_id: <non-secret logical change ID>
+component: <canonical owner>
+outcome: <planned|executed|verified|blocked>
+classification: <remove|retain|unknown|reuse_existing_owner|not_applicable>
+duration_ms: <optional non-negative number>
+evidence_id: <ledger artifact ID when available>
+```
+
+Do not treat an emitted event as proof that the behavior is correct: pair it with the command, test, CI, trace, or runtime metric that answers the underlying acceptance criterion. Missing telemetry from an applicable boundary is a verification gap; unresolved dynamic instrumentation or redaction behavior remains `unknown` rather than silently complete.
+
+When event output is available as JSONL, validate it with the package's standard-library checker, `python3 scripts/validate_development_events.py --events <events.jsonl> --level <0|1|2>`. Treat a non-zero result as a verification failure; do not weaken the checker to make an unsafe event stream pass.
 
 Before editing, record the canonical owner, affected callers/consumers, and every path expected to be replaced. Search for an existing owner, utility, extension point, or adapter before adding another implementation. Reuse or extend the owner when its contract and boundary fit; do not create a third implementation to avoid reading the existing one.
 
@@ -458,6 +482,7 @@ Delivery decisions: <Git/PR; release/recovery; migration; configuration/secrets;
 Explainability: <comments added/updated or not applicable; review result>
 Cleanup audit: <scoped retirement sweep; removed paths, retained consumers/removal conditions, unresolved unknowns, and evidence>
 Documentation synchronization: <docs/comments/examples/version/metadata updated, deleted, or confirmed current; evidence>
+Instrumentation: <not applicable, or event boundaries/schema, redaction/cardinality review, tests and runtime/development evidence>
 Verified: <command> - <result>
 Independent review: <result or not required>
 Evidence artifact: <path or enforcement mode not enabled>

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "event_schema": {
+    "required": [
+      "event",
+      "change_id",
+      "component",
+      "outcome",
+      "classification",
+      "evidence_id"
+    ],
+    "optional": ["duration_ms"],
+    "outcomes": ["planned", "executed", "verified", "blocked"],
+    "classifications": [
+      "remove",
+      "retain",
+      "unknown",
+      "reuse_existing_owner",
+      "not_applicable"
+    ],
+    "forbidden_values": [
+      "secret",
+      "raw_payload",
+      "personal_data",
+      "source_text",
+      "unbounded_user_label"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "pure_helper_level_0",
+      "trigger": "pure local helper with no operational signal",
+      "level": 0,
+      "required_events": [],
+      "instrumentation": "not_applicable"
+    },
+    {
+      "id": "cleanup_boundary_level_1",
+      "trigger": "replacement cleanup with a measurable verification outcome",
+      "level": 1,
+      "required_events": [
+        "owner_located",
+        "retirement_classified",
+        "verification_completed"
+      ],
+      "required_paths": ["decision", "failure_or_timeout", "verification"]
+    },
+    {
+      "id": "remote_lifecycle_level_2",
+      "trigger": "external write with retries and recovery",
+      "level": 2,
+      "required_events": [
+        "started",
+        "owner_located",
+        "implemented",
+        "cleanup_classified",
+        "verified",
+        "committed"
+      ],
+      "required_paths": ["retry", "concurrency", "recovery", "rollback"]
+    },
+    {
+      "id": "redaction_and_cardinality_trap",
+      "trigger": "telemetry must not leak or explode label cardinality",
+      "level": 2,
+      "forbid": [
+        "secret",
+        "raw_payload",
+        "personal_data",
+        "source_text",
+        "unbounded_user_label"
+      ]
+    }
+  ]
+}

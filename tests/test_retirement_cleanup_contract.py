@@ -12,6 +12,7 @@ README = ROOT / "README.md"
 METADATA = ROOT / "agents" / "openai.yaml"
 ENFORCEMENT = ROOT / "references" / "enforcement.md"
 CORPUS = ROOT / "examples" / "retirement-cleanup-traps.json"
+OBSERVABILITY = ROOT / "examples" / "retirement-cleanup-observability.json"
 
 
 class RetirementCleanupContractTests(unittest.TestCase):
@@ -20,6 +21,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
     metadata: str = ""
     enforcement: str = ""
     corpus: dict[str, object] = {}
+    observability: dict[str, object] = {}
     policy: str = ""
 
     def setUp(self) -> None:  # pyright: ignore[reportImplicitOverride]
@@ -28,6 +30,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.metadata = METADATA.read_text(encoding="utf-8")
         self.enforcement = ENFORCEMENT.read_text(encoding="utf-8")
         self.corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
+        self.observability = json.loads(OBSERVABILITY.read_text(encoding="utf-8"))
         start = self.skill.index("## Automatic Retirement and Drift Cleanup")
         end = self.skill.index("When Causal Execution Discipline is active", start)
         self.policy = self.skill[start:end]
@@ -124,6 +127,50 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.assertIn("Documentation synchronization:", self.skill)
         self.assertIn("Cleanup audit:", self.skill)
 
+    def test_instrumentation_is_risk_scaled_and_evidence_bound(self) -> None:
+        for phrase in (
+            "Development and runtime instrumentation",
+            "Level 0",
+            "Level 1",
+            "Level 2",
+            "owner_located",
+            "retirement_classified",
+            "verification_completed",
+            "stable event names",
+            "bounded labels",
+            "never record secrets",
+            "Missing telemetry from an applicable boundary is a verification gap",
+            "Instrumentation: <not applicable",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, self.policy if phrase != "Instrumentation: <not applicable" else self.skill)
+
+        schema = cast(dict[str, object], self.observability["event_schema"])
+        required = cast(list[str], schema["required"])
+        self.assertEqual(
+            required,
+            ["event", "change_id", "component", "outcome", "classification", "evidence_id"],
+        )
+        self.assertEqual(
+            set(cast(list[str], schema["forbidden_values"])),
+            {"secret", "raw_payload", "personal_data", "source_text", "unbounded_user_label"},
+        )
+        scenarios = cast(list[dict[str, object]], self.observability["scenarios"])
+        level_zero = next(item for item in scenarios if item["id"] == "pure_helper_level_0")
+        self.assertEqual(level_zero["instrumentation"], "not_applicable")
+        level_one = next(item for item in scenarios if item["id"] == "cleanup_boundary_level_1")
+        self.assertEqual(
+            set(cast(list[str], level_one["required_events"])),
+            {"owner_located", "retirement_classified", "verification_completed"},
+        )
+        level_two = next(item for item in scenarios if item["id"] == "remote_lifecycle_level_2")
+        self.assertEqual(
+            cast(list[str], level_two["required_events"]),
+            ["started", "owner_located", "implemented", "cleanup_classified", "verified", "committed"],
+        )
+        trap = next(item for item in scenarios if item["id"] == "redaction_and_cardinality_trap")
+        self.assertEqual(cast(list[str], trap["forbid"]), cast(list[str], schema["forbidden_values"]))
+
     def test_readme_exposes_automatic_behavior_and_evidence_boundary(self) -> None:
         self.assertIn("不需要用户额外说“清理垃圾代码”", self.readme)
         self.assertIn("Level 1（轻量）", self.readme)
@@ -133,6 +180,9 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.assertIn("先复用已有 owner", self.readme)
         self.assertIn("清理检查点必须在最终验证和提交前完成", self.readme)
         self.assertIn("Documentation synchronization:", self.readme)
+        self.assertIn("分层埋点与开发过程数据", self.readme)
+        self.assertIn("Level 0：不新增遥测", self.readme)
+        self.assertIn("retirement_classified", self.readme)
         self.assertIn("automatic retirement", self.metadata)
         self.assertIn("stale paths", self.metadata)
         self.assertIn("Before implementation reuse an existing owner", self.metadata)
@@ -141,6 +191,9 @@ class RetirementCleanupContractTests(unittest.TestCase):
             "reuse a fitting existing owner",
             "normalized control-flow, contract, and call-site inspection",
             "unresolved `unknown` paths stop silent completion",
+            "add instrumentation at the responsible decision and failure boundaries",
+            "event names stable",
+            "labels bounded",
         ):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.enforcement)

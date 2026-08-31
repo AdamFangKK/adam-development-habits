@@ -1,0 +1,6 @@
+{"event":"started","change_id":"cleanup-demo","component":"policy.evaluate","outcome":"executed","classification":"not_applicable","evidence_id":"cleanup-tests","duration_ms":1,"labels":["component","operation","outcome"]}
+{"event":"owner_located","change_id":"cleanup-demo","component":"policy.evaluate","outcome":"executed","classification":"reuse_existing_owner","evidence_id":"cleanup-tests","duration_ms":1,"labels":["component","operation","outcome"]}
+{"event":"implemented","change_id":"cleanup-demo","component":"policy.evaluate","outcome":"executed","classification":"not_applicable","evidence_id":"cleanup-tests","duration_ms":2,"labels":["component","operation","outcome"]}
+{"event":"cleanup_classified","change_id":"cleanup-demo","component":"policy.evaluate","outcome":"executed","classification":"remove","evidence_id":"cleanup-tests","duration_ms":1,"labels":["component","operation","classification"]}
+{"event":"verified","change_id":"cleanup-demo","component":"policy.evaluate","outcome":"verified","classification":"remove","evidence_id":"cleanup-tests","duration_ms":8,"labels":["component","operation","outcome"]}
+{"event":"committed","change_id":"cleanup-demo","component":"policy.evaluate","outcome":"verified","classification":"remove","evidence_id":"cleanup-tests","duration_ms":3,"labels":["component","operation","outcome"]}

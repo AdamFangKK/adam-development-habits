@@ -1,0 +1,153 @@
+{
+  "schema_version": 2,
+  "change_id": "retirement-cleanup-v12-instrumentation",
+  "level": 1,
+  "canonical_owner": [
+    "SKILL.md:Automatic Retirement and Drift Cleanup",
+    "SKILL.md:Instrumentation Checkpoint",
+    "scripts/materialize_effect_corpus_v9.py:materialize_cleanup",
+    "scripts/validate_development_events.py:validate_events"
+  ],
+  "affected_callers": [
+    "Codex Skill discovery and invocation",
+    "effect corpus generators and paired experiment runner",
+    "package regression and evidence tests"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Normal Level 1/2 development automatically performs retirement cleanup and synchronizes stale descriptions without an explicit cleanup request.",
+      "verification": "python3 -m unittest tests.test_retirement_cleanup_contract tests.test_skill_contract"
+    },
+    {
+      "id": "AC-2",
+      "condition": "A held-out cleanup corpus catches obsolete-path, duplicate, dynamic-retention, and documentation-drift mistakes that public tests alone can miss.",
+      "verification": "python3 -m unittest tests.test_cleanup_effect_corpus"
+    },
+    {
+      "id": "AC-3",
+      "condition": "Applicable development/runtime instrumentation is bounded, redacted, lifecycle-aware, and mechanically validated; Level 0 emits no events.",
+      "verification": "python3 -m unittest tests.test_development_events && python3 scripts/validate_development_events.py --events examples/retirement-cleanup-events.valid.jsonl --level 2"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The complete package remains valid and all existing regressions pass.",
+      "verification": "python3 -m unittest discover -s tests"
+    }
+  ],
+  "invariants": [
+    "A fitting existing owner is reused instead of creating a competing implementation.",
+    "Confirmed obsolete paths are removed only after consumer and dynamic-lookup evidence; retained paths have a named consumer and removal condition.",
+    "Public green tests do not substitute for hidden cleanup contracts.",
+    "Instrumentation never contains secrets, raw payloads, personal data, source text, or unbounded user labels.",
+    "This deterministic corpus and telemetry checker do not establish a model-wide capability improvement without a completed blinded paired experiment."
+  ],
+  "replaced_paths": [
+    "scripts/materialize_effect_corpus_v9.py:single-shape cleanup generation draft"
+  ],
+  "retained_compatibility": [],
+  "retirement_sweep": {
+    "remove": [
+      "single-argument assumptions in cleanup corpus generation"
+    ],
+    "retain": [
+      {
+        "path": "scripts/materialize_effect_corpus_v9.py:materialize",
+        "consumer": "existing V9 decision/repair corpus tests and runner",
+        "removal_condition": "Only remove when the V9 protocol is explicitly superseded.",
+        "observability": "V9 manifest tree hashes and existing corpus tests",
+        "test": "tests.test_effect_corpus_v9"
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "tests/test_cleanup_effect_corpus.py",
+      "tests/test_development_events.py",
+      "git diff --check"
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "SKILL.md",
+      "README.md",
+      "references/effect-evaluation.md",
+      "references/enforcement.md",
+      "agents/openai.yaml",
+      "assets/evidence-ledger.example.json"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "examples/effect-corpus-v9-cleanup/manifest.json",
+      "examples/retirement-cleanup-observability.json"
+    ],
+    "evidence": "Contract tests and package validator passed."
+  },
+  "instrumentation": {
+    "status": "applied",
+    "events": [
+      "started",
+      "owner_located",
+      "implemented",
+      "cleanup_classified",
+      "verified",
+      "committed"
+    ],
+    "redaction_and_cardinality": "validate_development_events.py rejects sensitive/unbounded keys, permits bounded snake_case labels, and rejects duplicate logical transitions.",
+    "evidence_refs": ["events", "focused-tests"]
+  },
+  "safeguards": [
+    {
+      "name": "hidden cleanup contract",
+      "status": "applied",
+      "rationale": "Hidden tests verify both current behavior and retirement hygiene, including traps where public tests pass."
+    },
+    {
+      "name": "bounded redacted event validator",
+      "status": "applied",
+      "rationale": "The standard-library checker enforces schema, level thresholds, lifecycle order, duplicate prevention, and forbidden fields."
+    },
+    {
+      "name": "no new dependency",
+      "status": "applied",
+      "rationale": "Corpus and event validation use the existing Python standard library and existing test runner."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "SKILL.md owns policy; generator, checker, fixtures, and tests are separate bounded enforcement surfaces."},
+    "dependency_audit": {"status": "applied", "rationale": "No dependency or import edge was added."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No runtime extension point was introduced."},
+    "data_ownership": {"status": "not_applicable", "rationale": "Only deterministic fixture and event-schema data changed."},
+    "error_model": {"status": "applied", "rationale": "Invalid or incomplete event streams and hidden cleanup failures return non-zero or failing tests."},
+    "contract_evolution": {"status": "applied", "rationale": "Existing V9 profile remains unchanged; cleanup is an explicit additive profile."},
+    "operational_budget": {"status": "applied", "rationale": "Event validation bounds labels and lifecycle volume; runtime thresholds remain project-owned."},
+    "threat_boundary": {"status": "applied", "rationale": "Sensitive and user-controlled telemetry fields are rejected."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The package change is verified as one reviewable atomic scope."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No deployable runtime changed."},
+    "data_migration": {"status": "not_applicable", "rationale": "No schema or persistent application data changed."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No runtime configuration or credential path changed."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No package or lockfile changed."},
+    "operational_knowledge": {"status": "applied", "rationale": "README and effect-evaluation reference document cleanup corpus and event validation commands."},
+    "reproducibility": {"status": "applied", "rationale": "Corpus manifest/tree hashes and deterministic tests reproduce the same split."}
+  },
+  "verification": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_cleanup_effect_corpus tests.test_development_events tests.test_retirement_cleanup_contract tests.test_skill_contract -v", "status": "passed", "result": "33 focused tests passed.", "evidence_refs": ["focused-tests"]},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v", "status": "passed", "result": "222 package tests passed.", "evidence_refs": ["full-suite"]},
+    {"command": "python3 scripts/validate_development_events.py --events examples/retirement-cleanup-events.valid.jsonl --level 2", "status": "passed", "result": "Six lifecycle events validated with no errors.", "evidence_refs": ["events"]},
+    {"command": "basedpyright --level error scripts/materialize_effect_corpus_v9.py scripts/validate_development_events.py", "status": "passed", "result": "0 errors, 0 warnings, and 0 notes.", "evidence_refs": ["typecheck"]},
+    {"command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .", "status": "passed", "result": "Skill is valid!", "evidence_refs": ["tooling"]},
+    {"command": "git diff --check", "status": "passed", "result": "No whitespace errors reported.", "evidence_refs": ["diff-check"]}
+  ],
+  "supporting_artifacts": [
+    {"id": "focused-tests", "kind": "test_output", "path": ".adam/evidence/retirement-cleanup-v12-focused.txt", "sha256": "f01300925e5bc5671074b7b335c96e0a57829ffd6bf16270f0548d932f6de6a6", "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_cleanup_effect_corpus tests.test_development_events tests.test_retirement_cleanup_contract tests.test_skill_contract -v", "exit_code": 0, "executed_at": "2026-08-31T08:57:00Z", "repository_revision": "cb8fad10faf6478301da782d631b89339082f159+worktree", "summary": "Focused cleanup, instrumentation, retirement, and Skill contract tests passed."},
+    {"id": "full-suite", "kind": "test_output", "path": ".adam/evidence/retirement-cleanup-v12-full.txt", "sha256": "608a04f78ab87efe3bec2b1919fd6e014837d50a388c473ca9f0149920496d66", "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v", "exit_code": 0, "executed_at": "2026-08-31T08:57:00Z", "repository_revision": "cb8fad10faf6478301da782d631b89339082f159+worktree", "summary": "Full package regression suite passed with 222 tests."},
+    {"id": "events", "kind": "command_output", "path": ".adam/evidence/retirement-cleanup-v12-events.txt", "sha256": "23db7886e23f1737e2b1665a3235bc982a4b1b4966117fd9e34cc9520ab65796", "command": "python3 scripts/validate_development_events.py --events examples/retirement-cleanup-events.valid.jsonl --level 2", "exit_code": 0, "executed_at": "2026-08-31T08:57:00Z", "repository_revision": "cb8fad10faf6478301da782d631b89339082f159+worktree", "summary": "Six redaction-safe lifecycle events validated."},
+    {"id": "typecheck", "kind": "command_output", "path": ".adam/evidence/retirement-cleanup-v12-typecheck.txt", "sha256": "56882e01cb80173ef053c4096e4ee43e3123a15f5c0a06715f96988d48fbd91c", "command": "basedpyright --level error scripts/materialize_effect_corpus_v9.py scripts/validate_development_events.py", "exit_code": 0, "executed_at": "2026-08-31T08:58:00Z", "repository_revision": "cb8fad10faf6478301da782d631b89339082f159+worktree", "summary": "Static check returned zero errors, warnings, and notes."},
+    {"id": "tooling", "kind": "command_output", "path": ".adam/evidence/retirement-cleanup-v12-tooling.txt", "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0", "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .", "exit_code": 0, "executed_at": "2026-08-31T08:57:00Z", "repository_revision": "cb8fad10faf6478301da782d631b89339082f159+worktree", "summary": "Skill package validator passed."},
+    {"id": "diff-check", "kind": "command_output", "path": ".adam/evidence/retirement-cleanup-v12-diff-check.txt", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "command": "git diff --check", "exit_code": 0, "executed_at": "2026-08-31T08:58:00Z", "repository_revision": "cb8fad10faf6478301da782d631b89339082f159+worktree", "summary": "Whitespace check passed."}
+  ],
+  "remaining_risks": [
+    "The cleanup corpus proves hidden-contract and instrumentation enforcement, not intrinsic model-wide capability improvement.",
+    "Formal old/new/no-skill paired collection remains blocked until the frozen Codex authentication mode is available.",
+    "Project-specific dynamic loaders and runtime telemetry backends still require targeted checks in the target repository."
+  ]
+}

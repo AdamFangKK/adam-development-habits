@@ -24,6 +24,7 @@
 | 机器可读证据模式 | 仓库显式启用后，用 JSON 工件记录改动事实，并由本地脚本和 CI 校验。 |
 | 企业级横切保障 | 按场景检查 `traceId`、结构化日志、超时、重试、幂等、限流、鉴权、审计和健康检查。 |
 | 自动退役与漂移清理 | Level 1/2 正常开发默认检查被替换实现、重复路径、测试/类型/配置/遥测、注释和文档；先复用已有 owner，再按证据删除、保留或标记未知，不需要用户额外提出“清理”。 |
+| 分层埋点与开发证据 | 有运行时状态、外部边界、性能/可靠性预算或多阶段流程时，在责任决策点和失败路径复用现有日志/指标/追踪；同时记录 owner、清理分类和验证检查点。Level 0 不新增埋点，Level 1 轻量，Level 2 覆盖完整生命周期。 |
 | 验证门槛 | 要求实际运行相关的格式化、lint、类型检查、测试、构建和静态分析。 |
 | 真实完成报告 | 以已运行命令及结果作为证据，不允许用“应该可以”代替验证。 |
 
@@ -79,6 +80,7 @@ Replaced paths: <需要删除的旧路径，或 none>
 Retained compatibility: <保留原因、消费者、删除条件与测试，或 none>
 Retirement sweep: <remove/retain/unknown 分类、范围与证据>
 Documentation synchronization: <README/API/ADR/runbook/示例/注释/版本描述/metadata 的同步结果>
+Instrumentation: <not applicable 或事件边界、稳定事件名、脱敏/基数检查、测试和运行/开发证据>
 Safeguards: <适用的稳定性与可观测性措施>
 Verification: <已执行命令及实际结果>
 Causal diagnosis: <启用时记录症状、假设、区分性证据与结论>
@@ -103,6 +105,18 @@ Delivery lifecycle: <atomic commit/PR、发布恢复、迁移、配置/Secret、
 `reuse_existing_owner` 表示已有 owner 的契约能够承接需求，不能另起第三套规则；`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、删除条件、可观测性和测试；`unknown` 遇到动态、生成或外部引用时不得猜删，先做针对性运行时/注册检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。清理检查点必须在最终验证和提交前完成，未解析的 `unknown` 不得被静默带过。
 
 检查顺序固定为：实现前先找并复用已有 owner；实现后、最终验证和提交前扫描重复/废弃路径；随后同步旧符号、旧行为描述、注释、版本说明和 metadata；动态或外部引用没有证据时停止完成门禁并报告 `unknown`/`blocked`。
+
+### 分层埋点与开发过程数据
+
+埋点不是每行代码都写日志。只有改动具有可观测的状态转换、外部调用、性能/可靠性预算、清理决策或多个执行阶段时才触发。先发现并复用项目已有 logger、metrics、tracing、audit 和 evidence 约定，不新增第二套事件词汇。事件名应稳定，标签保持低基数（例如 `change_id`、`component`、`operation`、`outcome`、`classification`、`error_class`），不得写入 Secret、原始 payload、个人数据、源码或用户控制的无限标签。
+
+- Level 0：不新增遥测；纯文档或无运行信号的纯函数只记录 `Instrumentation: not applicable` 及理由。
+- Level 1：在责任决策/状态转换、超时或错误路径、验证边界放置最小结构化事件，并记录 `owner_located`、`retirement_classified`、`verification_completed`。
+- Level 2：覆盖 `started -> owner_located -> implemented -> cleanup_classified -> verified -> committed`，以及适用的重试、并发、恢复和回滚；定义 owner、阈值、采样/保留和告警动作，并测试每个逻辑转换只发一次且重试安全。
+
+埋点只说明“发生了什么”，不能单独证明“做对了什么”。每个事件都要和测试、命令、CI、trace 或运行指标配对；缺少适用边界的事件或无法证明脱敏/动态注册时，保持 `unknown`，不得静默完成。
+
+JSONL 事件可用包内标准库校验器复核：`python3 scripts/validate_development_events.py --events <events.jsonl> --level <0|1|2>`。非零退出码就是验证失败，不能通过放宽规则掩盖敏感字段、重复转换或缺少生命周期事件。
 
 ### 风险分级
 
@@ -233,6 +247,8 @@ v7 的首次收集已归档为 `interrupted`：20 个预注册 task 的 40 个�
 V8 现仅保留为失效历史协议，不得引用其 hidden success 作为能力证据。复核发现它的 hidden tree 可包含修复后的实现文件，而评分器会把整棵 hidden tree 覆盖到候选工作区；因此未修复候选也可能被参考实现替换后得到通过。历史文件保持不变，以便重放这个测试工具缺陷。
 
 V9 是当前的能力检验协议：[`materialize_effect_corpus_v9.py`](./scripts/materialize_effect_corpus_v9.py) 把 Agent 可见的 `tasks/`、只含测试的 `hidden-tests/` 与仅用于语料校验的 `references/` 物理分离；[`score_effect_workspace_v9.py`](./scripts/score_effect_workspace_v9.py) 不接受参考实现路径，只注入测试，并在注入前后校验候选实现 SHA-256 未变化。实验对同一题执行 `no_skill`、冻结 old Skill 和冻结 new Skill 三个条件，主对比为 `new_skill - old_skill`，`new_skill - no_skill` 仅作次要锚点；20 个决策保留题与 20 个端到端修复题分别按 `6/8/6` 分层分析。所有非敏感 prompt、输出、stdout/stderr、diff、公开/隐藏结果、审计和哈希 manifest 永久保留；中断、遗漏、隔离失败或关键安全回退会阻断分析，不能选择性重试或删样本。V9 只有在预注册完整采集及统计门槛实际通过后，才能支持固定模型、Harness、Skill 快照、语料和评分器范围内的提升结论。预注册文件不是手工维护的版本说明：正式采集前必须用 [`create_effect_preregistration_v9.py`](./scripts/create_effect_preregistration_v9.py) 在冻结提交上生成 `examples/effect-experiment-v9/preregistration.json`；在生成前该路径不存在是预期状态，不得把未生成的分析命令当作已执行证据。
+
+针对自动退役与漂移清理，另有固定的 [`effect-corpus-v9-cleanup`](./examples/effect-corpus-v9-cleanup) 语料。它包含 40 个任务、20 个 `decision-retention` 和 20 个 `repair`，隐藏测试分别检查当前行为、重复/废弃路径删除、真实动态消费者保留，以及注释/契约描述同步；公开测试故意允许部分浅层修改通过。生成命令是 `python3 scripts/materialize_effect_corpus_v9.py --profile cleanup --corpus examples/effect-corpus-v9-cleanup`，生成后必须保持 manifest 和目录 hash 不变。该语料的工程契约由 [`test_cleanup_effect_corpus.py`](./tests/test_cleanup_effect_corpus.py) 锁定；它证明夹具和评分边界有效，不等于已经证明模型效果提升。
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \
@@ -391,6 +407,7 @@ adam-development-habits/
 ├── scripts/
 │   ├── check_change_evidence.py
 │   ├── validate_evidence.py
+│   ├── validate_development_events.py
 │   └── ...              # 因果回放与 Skill 效果实验工具
 ├── references/
 │   ├── enforcement.md    # Hook、CI 与静态检查的选择和接入原则

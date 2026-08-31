@@ -67,6 +67,23 @@
     ],
     "evidence": "Documentation review linked from the final report."
   },
+  "instrumentation": {
+    "status": "applied",
+    "events": [
+      {
+        "event": "order_write_verified",
+        "component": "src/orders/create_order.ts:createOrder",
+        "outcome": "verified",
+        "labels": ["change_id", "component", "operation", "outcome", "error_class"],
+        "redaction_review": "No secrets, payloads, personal data, or user-controlled labels.",
+        "evidence_refs": ["order-tests"]
+      }
+    ],
+    "cardinality_review": "Bounded labels only; one event per logical state transition.",
+    "owner": "orders-oncall",
+    "threshold_and_action": "Alert when verification failures exceed the existing CI/runtime threshold; follow the order rollback runbook.",
+    "evidence": "Event assertions and the linked test output prove emission and redaction."
+  },
   "safeguards": [
     {
       "name": "idempotency",
