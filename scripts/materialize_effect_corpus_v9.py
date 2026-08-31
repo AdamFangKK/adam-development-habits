@@ -636,7 +636,6 @@ def cleanup_v10_source(task: CleanupV10Spec, *, fixed: bool) -> dict[str, str]:
 
 def cleanup_v10_hidden_test(task: CleanupV10Spec) -> str:
     marker_old = f"legacy_contract_{task.task_id}"
-    marker_new = f"canonical_contract_{task.task_id}"
     files = {
         "split_owner": ["policy.py", "README.md", f"docs/{task.task_id}.md", "release-notes.md", "package-metadata.json"],
         "dynamic_retain": ["policy.py", "README.md", f"docs/{task.task_id}.md", "runbook.md"],
@@ -644,8 +643,7 @@ def cleanup_v10_hidden_test(task: CleanupV10Spec) -> str:
         "release_drift": ["policy.py", "README.md", f"docs/{task.task_id}.md", "CHANGELOG.md", "VERSION.md", "runbook.md"],
     }[task.kind]
     hygiene = "\n".join(
-        f"        self.assertNotIn({marker_old!r}, Path({relative!r}).read_text(encoding='utf-8'))\n"
-        f"        self.assertIn({marker_new!r}, Path({relative!r}).read_text(encoding='utf-8'))"
+        f"        self.assertNotIn({marker_old!r}, Path({relative!r}).read_text(encoding='utf-8'))"
         for relative in files
     )
     special = {
@@ -655,6 +653,8 @@ def cleanup_v10_hidden_test(task: CleanupV10Spec) -> str:
         ),
         "dynamic_retain": (
             "        registry = json.loads(Path('runtime/" + task.task_id + ".json').read_text(encoding='utf-8'))\n"
+            f"        self.assertEqual(registry['adapter'], 'plugins.{task.task_id}_adapter')\n"
+            f"        self.assertTrue(Path('plugins/{task.task_id}_adapter.py').is_file())\n"
             "        adapter = importlib.import_module(registry['adapter'])\n"
             "        self.assertEqual(adapter.normalize(' User '), 'user')"
         ),

@@ -1,0 +1,18 @@
+Independent review: APPROVED
+Reviewer: Codex native code-reviewer: quick_gate_review
+
+Scope reviewed:
+- SKILL.md Retirement Quick Gate
+- scripts/materialize_effect_corpus_v9.py dynamic_retain hidden contract
+- tests/test_cleanup_effect_corpus_v10.py adversarial retention regression
+
+Result: no remaining findings.
+
+The review independently verified that the hidden contract now requires the
+registry to name plugins.<task>_adapter and requires the corresponding adapter
+file to exist before importing it. The adversarial candidate that deleted the
+adapter and retargeted the registry to policy was rejected with exit code 1.
+
+It also verified that the Quick Gate final scan explicitly covers every
+existing non-test file in the changed boundary, plus changed explanatory
+surfaces.

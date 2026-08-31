@@ -1,0 +1,215 @@
+{
+  "schema_version": 2,
+  "change_id": "retirement-quick-gate-v14",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Retirement Quick Gate",
+    "scripts/materialize_effect_corpus_v9.py:cleanup_v10_hidden_test",
+    "tests/test_cleanup_effect_corpus_v10.py:CleanupEffectCorpusV10Tests"
+  ],
+  "affected_callers": [
+    "Codex agents applying Adam's Development Habits to Level 1 or Level 2 replacements",
+    "cleanup-v10 deterministic corpus generation and hidden-contract scoring",
+    "package regression suite"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Quick Gate final verification covers every existing non-test file in the changed boundary and every changed explanatory surface.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10 -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "A dynamic adapter cannot be deleted and replaced by retargeting its registry to policy while hidden verification still passes.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10 -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The Skill package remains valid and all package regressions pass after the contract change.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "A document is evidence to investigate, not a standalone consumer that can retain obsolete runtime code.",
+    "A named dynamic compatibility obligation retains its exact adapter path, not merely equivalent behavior from an arbitrary replacement module.",
+    "Semantic current-contract wording remains valid when every retired marker is gone and the actual contract is preserved.",
+    "The local corpus demonstrates protocol behavior only; it does not demonstrate a model-wide causal-reasoning improvement."
+  ],
+  "replaced_paths": [
+    "The permissive dynamic_retain hidden assertion that imported whatever module the editable registry named.",
+    "The Quick Gate wording that could be read as scanning only files edited during the change."
+  ],
+  "retained_compatibility": [
+    {
+      "consumer": "The dynamic cleanup fixture runtime/<task>.json, whose registered external adapter is plugins.<task>_adapter.",
+      "removal_condition": "Remove only when a new separately verified corpus contract retires the dynamic external-adapter obligation.",
+      "test": "tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests.test_dynamic_registry_retarget_cannot_replace_the_retained_adapter"
+    }
+  ],
+  "retirement_sweep": {
+    "remove": [
+      "Registry-retarget behavior as sufficient evidence of dynamic compatibility retention."
+    ],
+    "retain": [
+      {
+        "path": "plugins/<task>_adapter.py in dynamic_retain corpus fixtures",
+        "consumer": "runtime/<task>.json registry",
+        "removal_condition": "Only under a replacement dynamic-contract decision with a matching hidden regression.",
+        "observability": "The hidden test asserts the exact registry module, file presence, import, and normalize result.",
+        "test": "tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests.test_dynamic_registry_retarget_cannot_replace_the_retained_adapter"
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "The red test demonstrated the old bypass returned exit code 0.",
+      "The focused suite and independent review demonstrate the repaired hidden contract rejects the same bypass."
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "SKILL.md Retirement Quick Gate",
+      "README.md automatic retirement guidance",
+      "tests/test_retirement_cleanup_contract.py wording contract"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "scripts/materialize_effect_corpus_v9.py hidden contract",
+      "tests/test_cleanup_effect_corpus_v10.py adversarial fixture"
+    ],
+    "evidence": "Focused contract tests, full package regression, Skill validation, and independent review passed."
+  },
+  "instrumentation": {
+    "status": "not_applicable",
+    "reason": "This is a deterministic local Skill and test-corpus contract change with no deployable runtime boundary; the evidence artifacts are the applicable verification record."
+  },
+  "safeguards": [
+    {
+      "name": "exact dynamic-consumer assertion",
+      "status": "applied",
+      "rationale": "The hidden test now binds the registry value, required adapter file, import, and behavior to the declared external compatibility path."
+    },
+    {
+      "name": "adversarial retarget regression",
+      "status": "applied",
+      "rationale": "A generated candidate deletes the adapter, adds a policy substitute, and rewrites the registry; the hidden test must reject it."
+    },
+    {
+      "name": "cross-surface retirement scan",
+      "status": "applied",
+      "rationale": "Quick Gate names the complete non-test changed boundary and explanatory surface so stale markers cannot survive only outside edited files."
+    },
+    {
+      "name": "independent review",
+      "status": "applied",
+      "rationale": "A separate read-only reviewer found the bypass, then verified the repaired generator and regression have no remaining findings."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "SKILL.md defines the agent decision gate; the generator defines executable hidden contracts; tests own the adversarial regression."},
+    "dependency_audit": {"status": "applied", "rationale": "No dependency or import outside existing Python standard-library and unittest tooling was added."},
+    "extension_decision": {"status": "not_applicable", "rationale": "The corpus strengthens an existing verification contract rather than exposing a new production extension point."},
+    "data_ownership": {"status": "not_applicable", "rationale": "Only deterministic fixture and evidence data changed; no business data or privacy boundary is introduced."},
+    "error_model": {"status": "applied", "rationale": "Stale marker, missing adapter, registry redirection, and behavior errors are deterministic hidden-test failures rather than silent acceptance."},
+    "contract_evolution": {"status": "applied", "rationale": "The dynamic-retention contract now precisely requires the named adapter path while preserving semantic flexibility for current explanatory wording."},
+    "operational_budget": {"status": "applied", "rationale": "The focused suite completed 14 tests in 13.271 seconds and the full suite completed 240 tests in 54.661 seconds within the existing subprocess limits."},
+    "threat_boundary": {"status": "applied", "rationale": "The hidden scorer now rejects an editable runtime-registry rewrite that attempts to evade an external compatibility obligation."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The logical change has focused and full checks, evidence hashes, and independent review; it will be published as one atomic commit through the Skill package's own GitHub remote."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No deployed service or user-facing rollout changed."},
+    "data_migration": {"status": "not_applicable", "rationale": "No production schema, persistent record, or migration contract changed."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No credential, environment configuration, or secret-handling behavior changed."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No package manifest, lockfile, dependency version, or external package changed."},
+    "operational_knowledge": {"status": "applied", "rationale": "The Skill and README describe automatic cleanup and the evidence ledger records the former hidden-contract weakness and its repair."},
+    "reproducibility": {"status": "applied", "rationale": "The standard-library generator recreates the corpus deterministically and the captured commands reproduce focused, full, syntax, and structural checks."}
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10 -v",
+      "status": "passed",
+      "result": "14 focused retirement and adversarial corpus tests passed, including registry retarget plus adapter deletion.",
+      "evidence_refs": ["focused-tests"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "240 package regression tests passed.",
+      "evidence_refs": ["full-suite"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m py_compile scripts/materialize_effect_corpus_v9.py tests/test_cleanup_effect_corpus_v10.py tests/test_retirement_cleanup_contract.py",
+      "status": "passed",
+      "result": "All changed Python modules compiled successfully.",
+      "evidence_refs": ["pycompile"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid.",
+      "evidence_refs": ["skill-validator"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/retirement-quick-gate-v14-focused.txt",
+      "sha256": "e7bdc9896465f09af590288700e098ee9ccff097433281efe116ecc008d6866e",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_cleanup_effect_corpus_v10 -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T12:48:23Z",
+      "repository_revision": "785e792bd66681b576294063d08084d5bd1ce500+worktree",
+      "summary": "Focused retirement policy and adversarial hidden-contract tests passed."
+    },
+    {
+      "id": "full-suite",
+      "kind": "test_output",
+      "path": ".adam/evidence/retirement-quick-gate-v14-full.txt",
+      "sha256": "c68b8953fb433ef4885bd4b3e554fa6efaaed69097aee67a790ec6c442b9cc82",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T12:48:23Z",
+      "repository_revision": "785e792bd66681b576294063d08084d5bd1ce500+worktree",
+      "summary": "Full package regression suite passed with 240 tests."
+    },
+    {
+      "id": "pycompile",
+      "kind": "command_output",
+      "path": ".adam/evidence/retirement-quick-gate-v14-pycompile.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m py_compile scripts/materialize_effect_corpus_v9.py tests/test_cleanup_effect_corpus_v10.py tests/test_retirement_cleanup_contract.py",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T12:48:23Z",
+      "repository_revision": "785e792bd66681b576294063d08084d5bd1ce500+worktree",
+      "summary": "Changed Python sources compiled successfully."
+    },
+    {
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/retirement-quick-gate-v14-skill-validator.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-08-31T12:48:23Z",
+      "repository_revision": "785e792bd66681b576294063d08084d5bd1ce500+worktree",
+      "summary": "Skill package validator reported Skill is valid."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/retirement-quick-gate-v14-review.txt",
+      "sha256": "ebf9402e37058fe95b35cc5eb201b76dbb90f4f270495ca12f628e7f4e4f0523",
+      "summary": "Independent review approved the repair and reported no remaining findings."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the Skill wording, hidden-contract assertion, regression test, README synchronization, and this evidence artifact together only if a separately verified corpus contract replaces them. Do not restore the permissive registry-retarget behavior without an explicit compatibility decision.",
+  "independent_review": {
+    "reviewer": "Codex native code-reviewer: quick_gate_review",
+    "outcome": "approved",
+    "notes": "The reviewer first found the dynamic retention bypass, then independently verified the exact-registry assertion, required adapter-file check, adversarial regression, and expanded scan scope. No findings remain.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "The isolated corpus demonstrates that this known cleanup protocol and adversarial bypass are handled; it is not statistical evidence of a model-wide causal-reasoning or repair-success increase.",
+    "The frozen API-key paired experiment remains unavailable because the configured key was rejected by the remote API; no remote result is claimed here.",
+    "The package is published from its own repository; downstream local installations must still pull or reinstall the new commit before they receive the updated Skill."
+  ]
+}

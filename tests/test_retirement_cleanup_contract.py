@@ -45,6 +45,23 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.assertIn("Search/import or call-graph output", self.policy)
         self.assertIn("migration or rollback rehearsal", self.policy)
 
+    def test_retirement_quick_gate_front_loads_cross_surface_identifier_cleanup(self) -> None:
+        quick_gate = self.skill.index("## Retirement Quick Gate")
+        detailed_policy = self.skill.index("## Automatic Retirement and Drift Cleanup")
+        self.assertLess(quick_gate, detailed_policy)
+        for requirement in (
+            "inspect every existing non-test file in the changed boundary before editing",
+            "retired code identifiers, imports, exports, registry keys, flags, and paths",
+            "old contract markers taken from source docstrings/comments and README/API/docs/changelog/release/version/metadata text",
+            "search every existing non-test file in the changed boundary, plus every changed explanatory surface, for every recorded value",
+            "Do not finish while an old marker remains merely because a public test passes",
+            "A document is a lead, not a consumer",
+            "named live runtime/API consumer or a verifiable external compatibility obligation",
+            "classify it `unknown` and stop completion",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.skill[quick_gate:detailed_policy])
+
     def test_checkpoint_orders_reuse_sweep_description_sync_and_unknown_stop(self) -> None:
         for requirement in (
             "Before implementation",
@@ -102,6 +119,20 @@ class RetirementCleanupContractTests(unittest.TestCase):
         ):
             with self.subTest(guard=guard):
                 self.assertIn(guard, self.policy)
+
+    def test_documentation_cannot_be_a_standalone_retention_consumer(self) -> None:
+        for requirement in (
+            "is **not a consumer by itself**",
+            "cannot independently justify `retain`",
+            "live runtime/API consumer or a verifiable external compatibility obligation",
+            "authoritative contract, owner, and expiry",
+            "stale or unverified project document is not such a commitment",
+            "classify the superseded path as `remove`",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.policy)
+        self.assertIn("本身不是消费者", self.readme)
+        self.assertIn("不能单独成为保留旧实现的理由", self.readme)
 
     def test_all_implementation_surfaces_and_explanatory_drift_are_named(self) -> None:
         for surface in (

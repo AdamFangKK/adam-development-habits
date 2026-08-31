@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import shutil
 import subprocess
@@ -117,6 +118,54 @@ class CleanupEffectCorpusV10Tests(unittest.TestCase):
             self.assertTrue((reference / f"plugins/{dynamic.task_id}_adapter.py").is_file())
             self.assertTrue((reference / f"runtime/{dynamic.task_id}.json").is_file())
             self.assertEqual(run_suite(reference).returncode, 0, dynamic.task_id)
+
+    def test_dynamic_registry_retarget_cannot_replace_the_retained_adapter(self) -> None:
+        """A passing substitute must not erase the named external compatibility path."""
+        with tempfile.TemporaryDirectory() as directory:
+            corpus = Path(directory) / "corpus"
+            materialize_cleanup_v10(corpus)
+            dynamic = next(task for task in cleanup_v10_tasks() if task.kind == "dynamic_retain")
+            candidate = Path(directory) / "candidate"
+            shutil.copytree(corpus / "references" / dynamic.task_id, candidate)
+
+            policy = candidate / "policy.py"
+            _ = policy.write_text(
+                policy.read_text(encoding="utf-8")
+                + "\n\ndef normalize(value):\n    return canonical_normalize(value)\n",
+                encoding="utf-8",
+            )
+            (candidate / f"plugins/{dynamic.task_id}_adapter.py").unlink()
+            _ = (candidate / f"runtime/{dynamic.task_id}.json").write_text(
+                json.dumps({"adapter": "policy"}, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            _ = shutil.copy2(
+                corpus / "hidden-tests" / dynamic.task_id / "tests" / "test_hidden.py",
+                candidate / "tests" / "test_hidden.py",
+            )
+
+            result = run_suite(candidate)
+            self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_hidden_contract_accepts_equivalent_current_contract_wording(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            corpus = Path(directory) / "corpus"
+            materialize_cleanup_v10(corpus)
+            dynamic = next(task for task in cleanup_v10_tasks() if task.kind == "dynamic_retain")
+            candidate = Path(directory) / "candidate"
+            shutil.copytree(corpus / "tasks" / dynamic.task_id, candidate)
+            old_marker = f"legacy_contract_{dynamic.task_id}"
+            for path in candidate.rglob("*"):
+                if path.is_file() and "tests" not in path.parts:
+                    _ = path.write_text(
+                        path.read_text(encoding="utf-8").replace(old_marker, f"current_contract_{dynamic.task_id}"),
+                        encoding="utf-8",
+                    )
+            _ = shutil.copy2(
+                corpus / "hidden-tests" / dynamic.task_id / "tests" / "test_hidden.py",
+                candidate / "tests" / "test_hidden.py",
+            )
+            self.assertEqual(run_suite(candidate).returncode, 0, dynamic.task_id)
 
 
 if __name__ == "__main__":

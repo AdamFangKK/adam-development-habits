@@ -1,0 +1,20 @@
+test_all_implementation_surfaces_and_explanatory_drift_are_named (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_checkpoint_orders_reuse_sweep_description_sync_and_unknown_stop (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_documentation_cannot_be_a_standalone_retention_consumer (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_hybrid_trap_corpus_has_distinct_expected_decisions_and_evidence (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_instrumentation_is_risk_scaled_and_evidence_bound (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_policy_defends_against_each_trap_without_equating_no_reference_with_dead (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_policy_is_implicit_but_risk_scaled (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_readme_exposes_automatic_behavior_and_evidence_boundary (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_retirement_quick_gate_front_loads_cross_surface_identifier_cleanup (tests.test_retirement_cleanup_contract.RetirementCleanupContractTests) ... ok
+test_dynamic_registry_is_a_real_retention_constraint (tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests) ... ok
+test_dynamic_registry_retarget_cannot_replace_the_retained_adapter (tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests)
+A passing substitute must not erase the named external compatibility path. ... ok
+test_hidden_contract_accepts_equivalent_current_contract_wording (tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests) ... ok
+test_hidden_contract_rejects_shallow_repairs_and_accepts_reference_fixes (tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests) ... ok
+test_materialization_is_deterministic_and_has_all_adversarial_kinds (tests.test_cleanup_effect_corpus_v10.CleanupEffectCorpusV10Tests) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 13.271s
+
+OK
