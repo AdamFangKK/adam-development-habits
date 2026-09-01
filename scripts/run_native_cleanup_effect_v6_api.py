@@ -220,7 +220,14 @@ def main() -> int:
     _ = parser.add_argument("--raw-root", type=Path, required=True)
     _ = parser.add_argument("--codex", default=shutil.which("codex") or "codex")
     arguments = parser.parse_args()
-    _ = collect(**vars(arguments))
+    values = vars(arguments)
+    _ = collect(
+        corpus=values["corpus"],
+        preregistration_path=values["preregistration"],
+        source_root=values["source_root"],
+        raw_root=values["raw_root"],
+        codex=values["codex"],
+    )
     return 0
 
 

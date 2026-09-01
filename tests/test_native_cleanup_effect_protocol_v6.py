@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from typing import cast
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,6 +24,7 @@ from create_native_cleanup_effect_preregistration_v6 import (  # noqa: E402
 )
 from materialize_native_cleanup_effect_v6 import materialize_native_cleanup_effect_v6  # noqa: E402
 from native_cleanup_effect_runner_v6 import mark_agent_complete, prepare_condition, score_condition  # noqa: E402
+import run_native_cleanup_effect_v6_api as api_runner  # noqa: E402
 
 
 EXPERIMENT = ROOT / "examples" / "effect-experiment-native-v6"
@@ -142,6 +144,34 @@ def write_real_raw(root: Path, preregistration: dict[str, object], *, apply_refe
 
 
 class NativeCleanupEffectProtocolV6Tests(unittest.TestCase):
+    def test_cli_main_maps_preregistration_option_to_collect_parameter(self) -> None:
+        arguments = [
+            "runner",
+            "--corpus",
+            "corpus",
+            "--preregistration",
+            "plan.json",
+            "--source-root",
+            "source",
+            "--raw-root",
+            "raw",
+            "--codex",
+            "codex-bin",
+        ]
+        with patch.object(sys, "argv", arguments), patch.object(api_runner, "collect", return_value=[]) as collect:
+            self.assertEqual(api_runner.main(), 0)
+
+        self.assertEqual(
+            collect.call_args.kwargs,
+            {
+                "corpus": Path("corpus"),
+                "preregistration_path": Path("plan.json"),
+                "source_root": Path("source"),
+                "raw_root": Path("raw"),
+                "codex": "codex-bin",
+            },
+        )
+
     def test_canonical_suite_result_ignores_only_volatile_execution_details(self) -> None:
         first = {"passed": True, "returncode": 0, "timeout": False, "stdout": "", "stderr": "Ran 2 tests in 0.001s\nOK\n"}
         second = {"passed": True, "returncode": 0, "timeout": False, "stdout": "", "stderr": "Ran 2 tests in 0.097s\nOK\n"}

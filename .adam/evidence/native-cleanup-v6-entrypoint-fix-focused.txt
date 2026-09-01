@@ -1,0 +1,6 @@
+Command: python3 -m unittest tests.test_retirement_cleanup_contract tests.test_native_cleanup_effect_v6 tests.test_native_cleanup_effect_runner_v6 tests.test_native_cleanup_effect_protocol_v6 -q
+Exit code: 0
+----------------------------------------------------------------------
+Ran 32 tests in 16.331s
+
+OK

@@ -1,0 +1,10 @@
+{"task_id": "one", "condition": "baseline", "trial_complete": true, "hidden_repair_pass": false, "scope_ok": true}
+{"task_id": "one", "condition": "skill", "trial_complete": true, "hidden_repair_pass": true, "scope_ok": true}
+V8 preflight passed
+{"task_id": "one", "condition": "old_skill", "trial_complete": true, "hidden_repair_pass": true, "scope_ok": true}
+{"task_id": "one", "condition": "no_skill", "trial_complete": true, "hidden_repair_pass": false, "scope_ok": true}
+{"task_id": "one", "condition": "new_skill", "trial_complete": true, "hidden_repair_pass": true, "scope_ok": true}
+----------------------------------------------------------------------
+Ran 343 tests in 83.577s
+
+OK

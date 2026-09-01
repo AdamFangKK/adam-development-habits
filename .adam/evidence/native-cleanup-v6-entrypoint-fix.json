@@ -1,0 +1,242 @@
+{
+  "schema_version": 2,
+  "change_id": "native-cleanup-v6-entrypoint-fix",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/run_native_cleanup_effect_v6_api.py:main",
+    "scripts/run_native_cleanup_effect_v6_api.py:collect"
+  ],
+  "affected_callers": [
+    "API-key V6 collection CLI invocation",
+    "V6 preregistration hash validator"
+  ],
+  "invariants": [
+    "The --preregistration CLI option is passed to collect as preregistration_path.",
+    "The V6 preregistration hash binds the exact executor bytes before any trial starts.",
+    "No prior or partial raw collection exists for this preregistration."
+  ],
+  "replaced_paths": [
+    "Implicit vars(arguments) forwarding that used the incompatible preregistration keyword."
+  ],
+  "retained_compatibility": [],
+  "remaining_risks": [
+    "The API-key 30-condition collection has not started; its result remains unknown.",
+    "The wider repository basedpyright scan retains historical example-fixture errors outside the V6 scoped files."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The CLI entrypoint maps every parsed argument to the collect signature without a TypeError.",
+      "verification": "Focused V6 protocol tests exercise main() with a patched collect function and assert its exact keyword arguments."
+    },
+    {
+      "id": "AC-2",
+      "condition": "The committed preregistration binds the repaired executor and remains internally hash-consistent.",
+      "verification": "The preregistration generator reproduces the checked-in JSON and the independent review recomputes executor, protocol, and envelope hashes."
+    },
+    {
+      "id": "AC-3",
+      "condition": "The repaired frozen inputs pass the repository's relevant checks before collection.",
+      "verification": "Full unittest and pytest suites, V6 error-level type check, Skill validator, independent review, compilation, and diff hygiene all pass."
+    }
+  ],
+  "safeguards": [
+    {
+      "name": "Explicit CLI-to-collector mapping",
+      "status": "applied",
+      "rationale": "Explicit keyword names prevent argparse field names from silently drifting from the collector API."
+    },
+    {
+      "name": "Hash-bound preregistration regeneration",
+      "status": "applied",
+      "rationale": "The fresh preregistration records the repaired executor SHA-256 before any raw trial exists."
+    },
+    {
+      "name": "Independent entrypoint review",
+      "status": "applied",
+      "rationale": "A read-only reviewer verified the old failure mode, direct regression test, hash binding, and secret-output boundary."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The CLI entrypoint is the boundary between command-line parsing and the collection protocol."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "The correction adds no dependency and reuses argparse and existing collection code."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "This is a direct repair of an existing entrypoint rather than a new extension surface."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "The correction does not introduce application data or a new authoritative data owner."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "The former argument mismatch is prevented by a tested explicit call; later collector failures remain fail-closed."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The preregistration was regenerated before any trial so its executor hash matches the repaired contract."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "No timeout, capacity, or resource policy changed."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The review confirmed authentication is checked in memory and token-shaped transcript content is redacted."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The repair is committed only after full checks and a fresh preregistration freeze."
+    },
+    "release_recovery": {
+      "status": "applied",
+      "rationale": "No raw trial directory was created; reverting this repair leaves the earlier frozen commit intact."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No stored schema or data format changed."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "The repair preserves API-key mode checks without recording a key or login-status artifact."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No package, lockfile, binary, or external supply-chain dependency changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The V6 README and preregistration continue to state the precise collection scope and ineligibility rules."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The generator output, executor hash, protocol hash, envelope hash, focused regression, and full-suite results are recorded."
+    }
+  },
+  "rollback_or_compatibility": "Revert this entrypoint repair and its regenerated preregistration together. Do not run the old executor because it cannot start collection; if a future raw trial exists, preserve it and create a new protocol rather than overwriting it.",
+  "independent_review": {
+    "reviewer": "independent Codex read-only reviewer",
+    "outcome": "approved",
+    "notes": "The reviewer reproduced the direct entrypoint regression, verified hash binding, scoped secret handling, syntax, and diff hygiene with no findings.",
+    "evidence_ref": "review"
+  },
+  "supporting_artifacts": [
+    {
+      "id": "focused",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v6-entrypoint-fix-focused.txt",
+      "sha256": "479e35442c12fb05f695491a29710ee0688462679e348217f884a83a74124530",
+      "summary": "Focused V6 and retirement contract tests passed after the entrypoint repair.",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_native_cleanup_effect_v6 tests.test_native_cleanup_effect_runner_v6 tests.test_native_cleanup_effect_protocol_v6 -q",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T03:58:35Z",
+      "repository_revision": "1ecea64c541368cdea520caf5f24c620823427d4+worktree"
+    },
+    {
+      "id": "unittest",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v6-entrypoint-fix-unittest.txt",
+      "sha256": "a15029bea1a48a6d2994a575fda4a46d695be4f4890c3c924516131ec211b743",
+      "summary": "Full unittest suite passed after the entrypoint repair.",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T03:58:35Z",
+      "repository_revision": "1ecea64c541368cdea520caf5f24c620823427d4+worktree"
+    },
+    {
+      "id": "pytest",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v6-entrypoint-fix-pytest.txt",
+      "sha256": "eaded018ee7a1ad0bd8e51f8ce68228cba99e0bfa40f09deba836aeb8af54177",
+      "summary": "Full pytest suite passed after the entrypoint repair.",
+      "command": "pytest -q",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T03:58:35Z",
+      "repository_revision": "1ecea64c541368cdea520caf5f24c620823427d4+worktree"
+    },
+    {
+      "id": "typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v6-entrypoint-fix-typecheck.txt",
+      "sha256": "56882e01cb80173ef053c4096e4ee43e3123a15f5c0a06715f96988d48fbd91c",
+      "summary": "V6 scoped error-level basedpyright check passed.",
+      "command": "basedpyright --level error scripts/analyze_native_cleanup_effect_v6.py scripts/create_native_cleanup_effect_preregistration_v6.py scripts/materialize_native_cleanup_effect_v6.py scripts/native_cleanup_effect_runner_v6.py scripts/run_native_cleanup_effect_v6_api.py tests/test_native_cleanup_effect_protocol_v6.py tests/test_native_cleanup_effect_runner_v6.py tests/test_native_cleanup_effect_v6.py",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T03:58:35Z",
+      "repository_revision": "1ecea64c541368cdea520caf5f24c620823427d4+worktree"
+    },
+    {
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v6-entrypoint-fix-skill-validator.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "summary": "Skill frontmatter and instruction structure remain valid.",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T03:58:35Z",
+      "repository_revision": "1ecea64c541368cdea520caf5f24c620823427d4+worktree"
+    },
+    {
+      "id": "preregistration",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v6-entrypoint-fix-preregistration.txt",
+      "sha256": "4cd97abaf99df5496ffcf9df42063a899bf6c55743441659b3a745affb784c12",
+      "summary": "The V6 preregistration generator emitted the repaired hash-bound record.",
+      "command": "python3 scripts/create_native_cleanup_effect_preregistration_v6.py --output /tmp/adam-native-cleanup-v6-preregistration-1ecea64.json --root .",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T03:58:35Z",
+      "repository_revision": "1ecea64c541368cdea520caf5f24c620823427d4+worktree"
+    },
+    {
+      "id": "review",
+      "kind": "review_report",
+      "path": ".adam/evidence/native-cleanup-v6-entrypoint-fix-independent-review.txt",
+      "sha256": "0923a462937abe76e2cd5d547d8a96dc0c787cf56d0b86d890beb00ecfee4976",
+      "summary": "Independent read-only review approved the entrypoint repair and preregistration binding."
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_retirement_cleanup_contract tests.test_native_cleanup_effect_v6 tests.test_native_cleanup_effect_runner_v6 tests.test_native_cleanup_effect_protocol_v6 -q",
+      "result": "32 focused tests passed.",
+      "status": "passed",
+      "evidence_refs": ["focused"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q",
+      "result": "343 tests passed.",
+      "status": "passed",
+      "evidence_refs": ["unittest"]
+    },
+    {
+      "command": "pytest -q",
+      "result": "343 tests passed.",
+      "status": "passed",
+      "evidence_refs": ["pytest"]
+    },
+    {
+      "command": "basedpyright --level error scripts/analyze_native_cleanup_effect_v6.py scripts/create_native_cleanup_effect_preregistration_v6.py scripts/materialize_native_cleanup_effect_v6.py scripts/native_cleanup_effect_runner_v6.py scripts/run_native_cleanup_effect_v6_api.py tests/test_native_cleanup_effect_protocol_v6.py tests/test_native_cleanup_effect_runner_v6.py tests/test_native_cleanup_effect_v6.py",
+      "result": "0 errors, 0 warnings, 0 notes.",
+      "status": "passed",
+      "evidence_refs": ["typecheck"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "result": "Skill is valid.",
+      "status": "passed",
+      "evidence_refs": ["skill-validator"]
+    },
+    {
+      "command": "python3 scripts/create_native_cleanup_effect_preregistration_v6.py --output /tmp/adam-native-cleanup-v6-preregistration-1ecea64.json --root .",
+      "result": "Generated record matches the repaired checked-in preregistration.",
+      "status": "passed",
+      "evidence_refs": ["preregistration"]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+Native Cleanup V6 Entrypoint Fix Independent Review
+==================================================
+
+Scope
+-----
+
+Independent read-only Level 2 review of the V6 entrypoint fix.
+Review scope was limited to:
+
+- scripts/run_native_cleanup_effect_v6_api.py
+- tests/test_native_cleanup_effect_protocol_v6.py
+- examples/effect-experiment-native-v6/preregistration.json
+
+No existing files were modified. This report is the only file written by this review.
+
+Review focus
+------------
+
+- Verify `main()` argument mapping.
+- Verify regression test effectiveness.
+- Verify preregistration executor hash consistency.
+- Check that API-key status/key material is not recorded.
+- Check that the preregistration remains hash-bound.
+
+Commands run
+------------
+
+1. Inspect the scoped diff:
+
+`git diff -- scripts/run_native_cleanup_effect_v6_api.py tests/test_native_cleanup_effect_protocol_v6.py examples/effect-experiment-native-v6/preregistration.json`
+
+Observed result:
+- `scripts/run_native_cleanup_effect_v6_api.py` changed `main()` from `collect(**vars(arguments))` to explicit keyword mapping.
+- `tests/test_native_cleanup_effect_protocol_v6.py` added `test_cli_main_maps_preregistration_option_to_collect_parameter`.
+- `examples/effect-experiment-native-v6/preregistration.json` updated `executor_sha256`, `protocol_sha256`, and `envelope_sha256`.
+
+2. Targeted entrypoint regression:
+
+`PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest -p no:cacheprovider tests/test_native_cleanup_effect_protocol_v6.py::NativeCleanupEffectProtocolV6Tests::test_cli_main_maps_preregistration_option_to_collect_parameter -q`
+
+Observed result:
+- `1 passed in 0.05s`
+
+3. Scoped protocol regression:
+
+`PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest -p no:cacheprovider tests/test_native_cleanup_effect_protocol_v6.py -q`
+
+Observed result:
+- `10 passed in 11.45s`
+
+4. Hash-bound preregistration check:
+
+`python3 - <<'PY' ... compute executor_sha256, protocol_sha256, envelope_sha256, and compare create(ROOT) to committed preregistration ... PY`
+
+Observed result:
+- `executor_sha_match True`
+- `protocol_sha_match True`
+- `envelope_sha_match True`
+- `create_matches_committed True`
+- Actual executor SHA-256: `325573676cda030d9376394b1260d9d8ac9c8c371ae261ce85aa9e413a26f959`
+- Recorded executor SHA-256: `325573676cda030d9376394b1260d9d8ac9c8c371ae261ce85aa9e413a26f959`
+
+5. Syntax and whitespace checks:
+
+`PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile scripts/run_native_cleanup_effect_v6_api.py tests/test_native_cleanup_effect_protocol_v6.py && git diff --check -- scripts/run_native_cleanup_effect_v6_api.py tests/test_native_cleanup_effect_protocol_v6.py examples/effect-experiment-native-v6/preregistration.json`
+
+Observed result:
+- Passed with no output.
+
+6. Scoped secret/auth-output search:
+
+`rg -n "sk-[A-Za-z0-9]|API_KEY|OPENAI_API_KEY|auth_text|login status|stdout|stderr|redact|transcript|executor_sha256|preregistration_path|collect\\(" scripts/run_native_cleanup_effect_v6_api.py tests/test_native_cleanup_effect_protocol_v6.py examples/effect-experiment-native-v6/preregistration.json`
+
+Observed result:
+- No literal API key or auth output artifact was found.
+- Matches were limited to the redaction regex, in-memory `auth_text` preflight logic, redacted transcript construction, the entrypoint mapping, and preregistration hash fields.
+
+Spec compliance
+---------------
+
+PASS.
+
+`main()` now maps CLI arguments to the `collect()` signature explicitly:
+
+- `--corpus` -> `collect(corpus=...)`
+- `--preregistration` -> `collect(preregistration_path=...)`
+- `--source-root` -> `collect(source_root=...)`
+- `--raw-root` -> `collect(raw_root=...)`
+- `--codex` -> `collect(codex=...)`
+
+This fixes the previous mismatch where `vars(arguments)` supplied `preregistration` but `collect()` requires `preregistration_path`.
+
+Regression test validity
+------------------------
+
+PASS.
+
+`test_cli_main_maps_preregistration_option_to_collect_parameter` patches `sys.argv`, patches `api_runner.collect`, calls `api_runner.main()`, and asserts the exact keyword arguments passed to `collect()`. This test directly fails against the old `collect(**vars(arguments))` implementation and passes against the explicit mapping.
+
+Executor hash and preregistration binding
+-----------------------------------------
+
+PASS.
+
+The recorded executor hash in `examples/effect-experiment-native-v6/preregistration.json` matches the current bytes of `scripts/run_native_cleanup_effect_v6_api.py`.
+
+The preregistration is also internally bound:
+
+- `protocol_sha256` matches the canonical SHA-256 of `protocol`.
+- `envelope_sha256` matches the canonical SHA-256 of the immutable envelope.
+- `create(ROOT)` reconstructs the committed preregistration exactly.
+
+API-key and auth-output handling
+--------------------------------
+
+PASS.
+
+Within the scoped entrypoint:
+
+- API-key login status is checked in memory via `auth_text`, but no auth output artifact is written.
+- Agent stdout/stderr is persisted only through `transcript_text(...)`, which applies `redact(...)`.
+- No literal API key was found in the scoped files.
+
+Issues
+------
+
+CRITICAL: 0
+HIGH: 0
+MEDIUM: 0
+LOW: 0
+
+Recommendation
+--------------
+
+APPROVE.
+
+The V6 entrypoint fix is correct within the scoped review boundary. The argument mapping is covered by a direct regression test, the focused protocol tests pass, and the preregistration hashes are consistent with the updated executor.
