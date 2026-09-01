@@ -1,0 +1,215 @@
+{
+  "analysis_eligibility": "ineligible",
+  "collection": {
+    "all_hidden_tests_injected_after_agent_exit": false,
+    "all_implementation_integrity_and_public_checks_passed": false,
+    "completed_trials": 8,
+    "errors": [
+      "score.changed_paths does not match the independent replay",
+      "trial cleanup_v10_decision_retention_semantic_duplicate_07/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_semantic_duplicate_07/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_semantic_duplicate_07/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_dynamic_retain_18/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_dynamic_retain_18/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_dynamic_retain_18/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_23/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_23/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_23/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_release_drift_24/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_release_drift_24/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_release_drift_24/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_29/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_29/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_29/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_dynamic_retain_30/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_dynamic_retain_30/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_dynamic_retain_30/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_35/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_35/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_35/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "collection has 8 readable trials, expected 30"
+    ],
+    "planned_trials": 30
+  },
+  "conclusion": "ineligible: collection did not satisfy the preregistered completeness and integrity rule.",
+  "experiment_id": "adam-native-cleanup-effect-v5",
+  "limitations": [
+    "This is protocol isolation on a shared filesystem, not OS or container isolation.",
+    "The result cannot establish a model-wide causal-reasoning capability or production reliability claim."
+  ],
+  "preregistration_sha256": "5e82b8e82285d823b1c0096c73e36e784290d6f3a33d2b66a3fb83ed5e2f2ac3",
+  "schema_version": 1,
+  "statistics": {
+    "decision_retention_regressions": [],
+    "primary_new_skill_minus_old_skill": {
+      "effect": 0.0,
+      "one_sided_exact_sign_flip_p_value": 1.0,
+      "task_differences": [
+        0,
+        0
+      ]
+    },
+    "secondary_new_skill_minus_no_skill": {
+      "effect": 0.0,
+      "task_differences": [
+        0,
+        0
+      ]
+    }
+  },
+  "status": "ineligible",
+  "trials": [
+    {
+      "artifact_sha256": {
+        "agent-prompt.txt": "3cd0de5b942566da787db3ad36253cf6763b5c13d7b05fd59494b5cfaa50d44a",
+        "agent-result.json": "43e7183ce4b6e06383dc7f00adf23f1c501afa100563a8481ecf1b960a16d016",
+        "agent-transcript.md": "953cc34226aea175028b5edac048e4f1d6c725a5a8075a2150d3d9149899291c",
+        "candidate.diff": "ea5cd0fe940ae8598a4bf94ca965d9e7ed443ecb84aca967b70369b9ee723b94",
+        "prepare.json": "e8ed0dbc73329d132dcb89f5a7dc91970fde0a7e320ab7b610e9d60632fc6d76",
+        "score.json": "509e6718704da184a07df29cf54d01c0d92056e70e1ee0f1ab023a0937f64414",
+        "seed.txt": "b49822d10b585ba31aad3c41a2858dfe6d1e84d395d009d3d3791935ba66c9db",
+        "sequence.json": "967c3ddb68ff47f3e3d62b772c7a2faa5a332fb66cf01bab4cf41750f6c7c498"
+      },
+      "cohort": "decision-retention",
+      "complete": true,
+      "condition": "old_skill",
+      "execution_order": 1,
+      "hidden_repair_pass": false,
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_release_drift_04"
+    },
+    {
+      "artifact_sha256": {
+        "agent-prompt.txt": "3cd0de5b942566da787db3ad36253cf6763b5c13d7b05fd59494b5cfaa50d44a",
+        "agent-result.json": "861074e372a5a83337e1a6b9be9004679c45cc9ffe6f598a8b3d0bc3259c89e4",
+        "agent-transcript.md": "89aec3a700e857e7dafe85f5d3af59c8f452333ea4b8fff831637741717995bd",
+        "candidate.diff": "b56bd5349ddce7d56554b31a5fff1319ff067f65cfada6f2e91fb46b999ff122",
+        "prepare.json": "438604f636c1d0b8bce602eb44d1e2545f09aaf0082aab2c75744736593b4575",
+        "score.json": "f97d96a17c2ba12477e75f72b894e97a3b5fb7b62bd99b09f154f0b9a3001909",
+        "seed.txt": "6e69825b8209af2899a23422cf93071e7c707ccb2af289a655e0e288868b64a9",
+        "sequence.json": "c59f340e8b3cf0d87756d4cd3349c94ab5d33fa04f4f8d4311f43918a54e6b02"
+      },
+      "cohort": "decision-retention",
+      "complete": true,
+      "condition": "new_skill",
+      "execution_order": 2,
+      "hidden_repair_pass": false,
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_release_drift_04"
+    },
+    {
+      "artifact_sha256": {
+        "agent-prompt.txt": "f214ec37e01ee7b245965639cc7b0c22aa5c5712f23c7c56af8868def9b4d6d6",
+        "agent-result.json": "f3025a501cb53f2d03c88803dc6dd4a92e69ee534a48e7d7d609e92c1c6f2d8d",
+        "agent-transcript.md": "3c22930626c6acabead0ef5ba4089457a583dfc3a9a3d9f9d6616276c37a5f0a",
+        "candidate.diff": "4974b3cc3c3bf2e7ec34569b2767254c4e12dacaee542af3fbb1ede8dc3e3c02",
+        "prepare.json": "1a7c7716df26382a5ab7387017ae507a7fa54618d4bcabb65348aa08dc61fb91",
+        "score.json": "5d7bb789ea573cf3e117c901e954eb28629de59750961c0b0b3e307d0a614a54",
+        "seed.txt": "296f4a39467c27a55a3e0258faac10420428ebbca1e86f9d6232fadf126d0e13",
+        "sequence.json": "acee2663aa1aed3309988c738b1357a32e0537fe969a6bcb45094de34235988f"
+      },
+      "cohort": "decision-retention",
+      "complete": true,
+      "condition": "no_skill",
+      "execution_order": 3,
+      "hidden_repair_pass": false,
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_release_drift_04"
+    },
+    {
+      "artifact_sha256": {
+        "agent-prompt.txt": "f214ec37e01ee7b245965639cc7b0c22aa5c5712f23c7c56af8868def9b4d6d6",
+        "agent-result.json": "4a0c2b94e340efd01530f8f7d50b1f88ce158cb8a88330698d89b1e0914450af",
+        "agent-transcript.md": "0484620ab9109e49a7c270d4f40b4fed6844bbe3859ef8a048bfa2b7b7172509",
+        "candidate.diff": "91f4a91350c1ca928ca058273513a597fc6129b9b0dacde9bedf2922be67473a",
+        "prepare.json": "d6ac6e40e453ba431a98f7142ef247b51263576cfb2f7edb03e07156a7b6878b",
+        "score.json": "9bd0c11251a99fab92f7e16b54edaa46a5381e2f6ef8bbac9bd21726140131df",
+        "seed.txt": "042b8b035505a58e518d4c3a40dfb4207e9a4dd023e2a978f851287049ba266f",
+        "sequence.json": "a6f1229af690a92cc2800028b4d23f22d95af93b057af9ea7a6a33bb884d8ee1"
+      },
+      "cohort": "decision-retention",
+      "complete": true,
+      "condition": "no_skill",
+      "execution_order": 1,
+      "hidden_repair_pass": false,
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_split_owner_05"
+    },
+    {
+      "artifact_sha256": {
+        "agent-prompt.txt": "3cd0de5b942566da787db3ad36253cf6763b5c13d7b05fd59494b5cfaa50d44a",
+        "agent-result.json": "b450e2ba7b643db6657d8c83dbcc582c909c2b62caf333d037fe5e46223aeb24",
+        "agent-transcript.md": "04209e7d71255c293964612ec1f8e0780fa97ea6ff3b460dc2d52bb57cc63c75",
+        "candidate.diff": "3c1d71e32aebd25659a56d41fd79fed4534cfcefed38c53fe2c76a1f419841bf",
+        "prepare.json": "f9e22ccf311f616c484433d8812dd7eec4afc6cfdb978d38965ba9d867ffc5c8",
+        "score.json": "3a37569e360c9fdc60b7d12bdbc488d9d44f4f9e2ae707262511992abda130c8",
+        "seed.txt": "ef2997ab54aebe4b502bc02f45d0e2155c68b0687a8abc74e8af029d2dda050c",
+        "sequence.json": "9850942112c1dc849e8211561365162d59de342b326e145d2ef0004460bd3068"
+      },
+      "cohort": "decision-retention",
+      "complete": true,
+      "condition": "old_skill",
+      "execution_order": 2,
+      "hidden_repair_pass": false,
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_split_owner_05"
+    },
+    {
+      "artifact_sha256": {
+        "agent-prompt.txt": "3cd0de5b942566da787db3ad36253cf6763b5c13d7b05fd59494b5cfaa50d44a",
+        "agent-result.json": "88f5e47b7115c309281fab574219124b3f8624e107201060ed62cc5096c13c41",
+        "agent-transcript.md": "65c21609902fa2f4974d6d500b822c94062742f40339713b1a37a590ad81ffde",
+        "candidate.diff": "eeea41917341f6a58af23197921a5a77b8a375fff8e4162021143a05a19f0094",
+        "prepare.json": "89acf6fd9a6ee61c536819458d9f6bd6daad358998e5afc65c9631e440049ae5",
+        "score.json": "922f452204e25076e5cecf7b61913f919243ba27643e9de87c99f7b7fcc3829f",
+        "seed.txt": "546bed85538bdc847c0365dd56f2cf1a9ec2c3df4c637b9c471d1638d0f9c09e",
+        "sequence.json": "ae673b0adfd9614999fa448f55302c3bb420ad10236e5f015529507471cc93fd"
+      },
+      "cohort": "decision-retention",
+      "complete": true,
+      "condition": "new_skill",
+      "execution_order": 1,
+      "hidden_repair_pass": false,
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_dynamic_retain_06"
+    },
+    {
+      "artifact_sha256": {
+        "agent-prompt.txt": "f214ec37e01ee7b245965639cc7b0c22aa5c5712f23c7c56af8868def9b4d6d6",
+        "agent-result.json": "5033299c74654a32722d04682ae7bf16ed1024314d206f1c0b07359ba4fd01a2",
+        "agent-transcript.md": "3ee7fe7a0558ea15d31adda06ea949497f67093efcc12978ab51adc71c5dbfb9",
+        "candidate.diff": "132a0f2cc9257afd04a8aefcbb67dafa4e063b8b1e8abddb44a9104b80bf1e9a",
+        "prepare.json": "5f9b3aa46233b2ca25b7ce05fb683deca5ec6cf0d7add3e4b70813325cbd86d2",
+        "score.json": "34042a57eaaf84f8d9aa5bc9006f7ea0195e9e9b7a0b751e807e4bd8e9c3af30",
+        "seed.txt": "4f665b961f95971968a333a3ca3ed4db94569d0ff5cbb328f7767e7907df05ef",
+        "sequence.json": "28702574a86d884061f62036f72d3909c509fb77319bfe406f2976b3cc352555"
+      },
+      "cohort": "decision-retention",
+      "complete": true,
+      "condition": "no_skill",
+      "execution_order": 2,
+      "hidden_repair_pass": false,
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_dynamic_retain_06"
+    },
+    {
+      "artifact_sha256": {
+        "agent-prompt.txt": "3cd0de5b942566da787db3ad36253cf6763b5c13d7b05fd59494b5cfaa50d44a",
+        "agent-result.json": "5b9dd41ff32393f328ff3ec5cadcd60de0f84cebd9f0e78af31e45101b68e3e6",
+        "agent-transcript.md": "484fc8408709c01a1e4dee02d65a278d801a4981dcf5019680bd64faf1ed947a",
+        "candidate.diff": "f2553645e50439715d6c73d94bf7d486cf814020d2842c6da51a6136d6a6fe0e",
+        "prepare.json": "9741086fb61702e927ef62acacdd38a273291f98c9e02081a4167ff692959f0d",
+        "score.json": "47109b5b1368b27e81588ab812e28302325a1bf0e6b9fddc6ca9e729e69e05b3",
+        "seed.txt": "97886522857fa8ee5e53d369b2e82ed63ee1ac278c8e39ddea444672e17acf51",
+        "sequence.json": "991d87411f64a017bb283c86be585ddbbca61a4ee850a2b1bcb51c1affb9ed42"
+      },
+      "cohort": "decision-retention",
+      "complete": true,
+      "condition": "old_skill",
+      "execution_order": 3,
+      "hidden_repair_pass": false,
+      "stratum": "single-module",
+      "task_id": "cleanup_v10_decision_retention_dynamic_retain_06"
+    }
+  ]
+}

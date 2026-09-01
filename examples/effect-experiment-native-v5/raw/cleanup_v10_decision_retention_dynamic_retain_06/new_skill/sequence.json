@@ -1,0 +1,12 @@
+{
+  "condition": "new_skill",
+  "condition_index": 1,
+  "execution_order": [
+    "new_skill",
+    "no_skill",
+    "old_skill"
+  ],
+  "predecessor_score_sha256": [],
+  "schema_version": 1,
+  "task_id": "cleanup_v10_decision_retention_dynamic_retain_06"
+}

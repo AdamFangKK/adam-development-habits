@@ -1,0 +1,16 @@
+{
+  "condition": "no_skill",
+  "executor": {
+    "agent_id": "/root/v5_t1_no",
+    "agent_prompt_sha256": "f214ec37e01ee7b245965639cc7b0c22aa5c5712f23c7c56af8868def9b4d6d6",
+    "condition_input_sha256": "08ea3262f9e40c6ca71675440ed910f3ca3388fde8f61903d34257b290d19be0",
+    "finished_at": "2026-09-01T02:46:15Z",
+    "kind": "codex-native-subagent",
+    "model_id": "gpt-5.5",
+    "started_at": "2026-09-01T02:43:00Z",
+    "transcript_sha256": "3c22930626c6acabead0ef5ba4089457a583dfc3a9a3d9f9d6616276c37a5f0a",
+    "workspace_handoff_sha256": "9c4b69d5b429f30c5c497bc8471d9c21e418861b634804f69379c3c4463fe899"
+  },
+  "status": "agent_exited",
+  "task_id": "cleanup_v10_decision_retention_release_drift_04"
+}

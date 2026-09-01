@@ -1,0 +1,51 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 5803e77..a7b8b43 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1 +1 @@
+-legacy_contract_cleanup_v10_decision_retention_release_drift_04: request normalization behavior.
++canonical_normalize: request normalization behavior.
+diff --git a/README.md b/README.md
+index e3c7c73..15434f1 100644
+--- a/README.md
++++ b/README.md
+@@ -1,2 +1,2 @@
+-# legacy_contract_cleanup_v10_decision_retention_release_drift_04
++# canonical_normalize
+ Current owners use the canonical normalizer.
+diff --git a/VERSION.md b/VERSION.md
+index 9cc8493..9c17ddb 100644
+--- a/VERSION.md
++++ b/VERSION.md
+@@ -1 +1 @@
+-legacy_contract_cleanup_v10_decision_retention_release_drift_04: supported contract description.
++canonical_normalize: supported contract description.
+diff --git a/docs/cleanup_v10_decision_retention_release_drift_04.md b/docs/cleanup_v10_decision_retention_release_drift_04.md
+index ee52955..9f9098c 100644
+--- a/docs/cleanup_v10_decision_retention_release_drift_04.md
++++ b/docs/cleanup_v10_decision_retention_release_drift_04.md
+@@ -1 +1 @@
+-legacy_contract_cleanup_v10_decision_retention_release_drift_04: policy contract.
++canonical_normalize: policy contract.
+diff --git a/policy.py b/policy.py
+index 6bfefda..e069cee 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,8 +1,8 @@
+-"""legacy_contract_cleanup_v10_decision_retention_release_drift_04."""
++"""Canonical request normalization policy."""
+ 
+ def canonical_normalize(value):
+     return value.strip().lower()
+ 
+ def evaluate(value):
+-    # legacy_contract_cleanup_v10_decision_retention_release_drift_04
++    # Keep evaluate as the public wrapper around the canonical normalizer.
+     return canonical_normalize(value)
+diff --git a/runbook.md b/runbook.md
+index f6ad21b..f61da0d 100644
+--- a/runbook.md
++++ b/runbook.md
+@@ -1 +1 @@
+-legacy_contract_cleanup_v10_decision_retention_release_drift_04: diagnose and recover this path.
++canonical_normalize: diagnose and recover this path.

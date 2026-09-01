@@ -274,7 +274,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/analyze_skill_effect_v9.py \
 
 [`effect-experiment-native-v4`](./examples/effect-experiment-native-v4) 已启动四条真实原生子代理条件，部分 raw 工件与 [`collection-invalid.json`](./examples/effect-experiment-native-v4/collection-invalid.json) 均已保留。该批次**不可分析**：一次允许范围外修改会让运行器把已完成的失败评分误判为“未 post-exit 评分”，从而阻断同题后续配对；同时，失败隐藏测试中的临时目录路径使重放输出被误判为不一致，空 diff 也被错误地交给 `git apply`。因此 V4 不能支持任何 Skill 效果结论，不能补样或选择性重试。它提供的可用证据仅是这些协议缺陷和实际失败模式，后续必须在新任务 ID、修正代码和新预注册下重新开始。
 
-[`effect-experiment-native-v5`](./examples/effect-experiment-native-v5) 是 V4 的修正后继，使用十个未被 V4 使用的 V10 任务。它把“Agent 已退出且已评分”从隐藏契约/实现完整性结果中分离：失败样本仍可按顺序完成同题配对，但任一完整性、安全或协议问题仍会使最终统计失格。分析器只规范化 `unittest` 时长和确定的临时评分目录，继续比较通过状态、退出码、超时、断言与其它输出，并将空 `candidate.diff` 重放为初始公开工作区。V5 当前仍未开始 trial；只有固定模型、Harness、旧/新 Skill 快照、语料和盲评分器上的完整合格采集才可能支持范围内的效果结论。
+[`effect-experiment-native-v5`](./examples/effect-experiment-native-v5) 已启动 8 条真实原生子代理条件，原始工件和 [`collection-invalid.json`](./examples/effect-experiment-native-v5/collection-invalid.json) 均已保留。该批次**不可分析**：一个 treatment 样本改动了白名单外的 `docs/policy.md`，而 V5 的 `candidate.diff` 又未收录这个未跟踪新文件，使独立重放无法复现原始范围判定。该结果不能用于任何 Skill 效果、修复成功率或模型能力结论，且不得补样或选择性重试。它证明了两项应在后续协议修复的机制问题：执行范围必须在实际采集时被守住，重放工件必须包含未跟踪文件；后续验证必须使用全新的未使用任务。
 
 ### 多模块因果探针
 

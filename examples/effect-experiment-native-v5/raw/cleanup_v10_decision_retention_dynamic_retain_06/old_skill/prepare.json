@@ -1,0 +1,25 @@
+{
+  "allowed_edit_paths": [
+    "README.md",
+    "docs/cleanup_v10_decision_retention_dynamic_retain_06.md",
+    "plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py",
+    "policy.py",
+    "runbook.md",
+    "runtime/cleanup_v10_decision_retention_dynamic_retain_06.json"
+  ],
+  "condition": "old_skill",
+  "condition_input_sha256": "a9aa83e9015149a163c908e61c3aa2fbecd773fe6303a90a4c18e6ee0c58e7aa",
+  "predecessor_score_sha256": [
+    {
+      "condition": "new_skill",
+      "sha256": "922f452204e25076e5cecf7b61913f919243ba27643e9de87c99f7b7fcc3829f"
+    },
+    {
+      "condition": "no_skill",
+      "sha256": "34042a57eaaf84f8d9aa5bc9006f7ea0195e9e9b7a0b751e807e4bd8e9c3af30"
+    }
+  ],
+  "seed_commit": "5aaff7f3dec2a56872d168fef692787958ae8786",
+  "task_id": "cleanup_v10_decision_retention_dynamic_retain_06",
+  "workspace_handoff_sha256": "ec8021845a384758d7cf2b700b9e19fd1559cb2b002059c3aa9340f3e4666dca"
+}

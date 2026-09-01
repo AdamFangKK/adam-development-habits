@@ -1,0 +1,47 @@
+{
+  "changed_paths": [
+    "CHANGELOG.md",
+    "README.md",
+    "VERSION.md",
+    "docs/cleanup_v10_decision_retention_release_drift_04.md",
+    "runbook.md"
+  ],
+  "disallowed_changed_paths": [],
+  "hidden_injected_after_agent_exit": true,
+  "hidden_repair_passed": false,
+  "hidden_result": {
+    "passed": false,
+    "returncode": 1,
+    "stderr": "F..\n======================================================================\nFAIL: test_complete_retirement_or_retention (test_hidden.HiddenContract)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/native-cleanup-score-yr8k0ifz/candidate/tests/test_hidden.py\", line 13, in test_complete_retirement_or_retention\n    self.assertNotIn('legacy_contract_cleanup_v10_decision_retention_release_drift_04', Path('policy.py').read_text(encoding='utf-8'))\nAssertionError: 'legacy_contract_cleanup_v10_decision_retention_release_drift_04' unexpectedly found in '\"\"\"legacy_contract_cleanup_v10_decision_retention_release_drift_04.\"\"\"\\n\\ndef canonical_normalize(value):\\n    return value.strip().lower()\\n\\ndef evaluate(value):\\n    # legacy_contract_cleanup_v10_decision_retention_release_drift_04\\n    return canonical_normalize(value)\\n'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nFAILED (failures=1)\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "implementation_integrity_passed": true,
+  "pre_score_artifact_sha256": {
+    "agent-prompt.txt": "f214ec37e01ee7b245965639cc7b0c22aa5c5712f23c7c56af8868def9b4d6d6",
+    "agent-result.json": "f3025a501cb53f2d03c88803dc6dd4a92e69ee534a48e7d7d609e92c1c6f2d8d",
+    "agent-transcript.md": "3c22930626c6acabead0ef5ba4089457a583dfc3a9a3d9f9d6616276c37a5f0a",
+    "candidate.diff": "4974b3cc3c3bf2e7ec34569b2767254c4e12dacaee542af3fbb1ede8dc3e3c02",
+    "prepare.json": "1a7c7716df26382a5ab7387017ae507a7fa54618d4bcabb65348aa08dc61fb91",
+    "seed.txt": "296f4a39467c27a55a3e0258faac10420428ebbca1e86f9d6232fadf126d0e13",
+    "sequence.json": "acee2663aa1aed3309988c738b1357a32e0537fe969a6bcb45094de34235988f"
+  },
+  "public_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "scored_after_agent_exit": true,
+  "scorer_provenance": {
+    "base_runner_path": "scripts/native_cleanup_effect_runner_v1.py",
+    "base_runner_sha256": "97709e37df0a656014169e6e365c9506de96cdb764ebef99e430de1c28dbdd8f",
+    "corpus_manifest_sha256": "2ec11e2bd1674bdf25b048b2ae3f6725744fcceedcd4545ad6ed3335786451d6",
+    "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_release_drift_04",
+    "hidden_tests_tree_sha256": "3a0508d6f0a3cb03fa2854219cc19d6985a5947c47a5fb0aadd38e5ea1b9a445",
+    "reference_tree_sha256": "a36c31d9c7f71b2b465428af3dcac6c3500a5e359f8dbebd57bab0d1bc23bb39",
+    "workspace_tree_sha256": "1daaba05d05e21c40a1ce238476805d599799f937a9544a68721c8cef1d8281f"
+  },
+  "task_id": "cleanup_v10_decision_retention_release_drift_04"
+}

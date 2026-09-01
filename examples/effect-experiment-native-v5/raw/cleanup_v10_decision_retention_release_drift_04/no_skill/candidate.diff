@@ -1,0 +1,68 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 5803e77..23f0d7e 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1 +1,7 @@
+-legacy_contract_cleanup_v10_decision_retention_release_drift_04: request normalization behavior.
++# legacy_contract_cleanup_v10_decision_retention_release_drift_04
++
++## Current
++
++- Retained request normalization behavior: strip surrounding whitespace and lowercase values through the canonical normalizer.
++- Synchronized release, version, and recovery documentation so each document describes the same supported contract.
++- No implementation behavior change.
+diff --git a/README.md b/README.md
+index e3c7c73..b104126 100644
+--- a/README.md
++++ b/README.md
+@@ -1,2 +1,6 @@
+ # legacy_contract_cleanup_v10_decision_retention_release_drift_04
+-Current owners use the canonical normalizer.
++
++Current owners use the canonical normalizer through `evaluate(value)`.
++The retained behavior strips surrounding whitespace and lowercases the supplied value.
++
++See `VERSION.md` for support status, `CHANGELOG.md` for release context, and `runbook.md` for recovery guidance.
+diff --git a/VERSION.md b/VERSION.md
+index 9cc8493..a9b508f 100644
+--- a/VERSION.md
++++ b/VERSION.md
+@@ -1 +1,5 @@
+-legacy_contract_cleanup_v10_decision_retention_release_drift_04: supported contract description.
++# legacy_contract_cleanup_v10_decision_retention_release_drift_04
++
++Status: supported contract description.
++Current behavior: `evaluate(value)` delegates to the canonical normalizer, which strips surrounding whitespace and lowercases the value.
++Release note: this contract remains retained for compatibility while release, version, and recovery documentation are synchronized.
+diff --git a/docs/cleanup_v10_decision_retention_release_drift_04.md b/docs/cleanup_v10_decision_retention_release_drift_04.md
+index ee52955..d39ebe4 100644
+--- a/docs/cleanup_v10_decision_retention_release_drift_04.md
++++ b/docs/cleanup_v10_decision_retention_release_drift_04.md
+@@ -1 +1,7 @@
+-legacy_contract_cleanup_v10_decision_retention_release_drift_04: policy contract.
++# legacy_contract_cleanup_v10_decision_retention_release_drift_04
++
++Policy contract: retain the current canonical normalization path.
++
++`evaluate(value)` must continue to call the canonical normalizer. The canonical normalizer strips surrounding whitespace and lowercases the value before returning it.
++
++The release, version, and recovery documents all describe this same retained behavior so operators and owners have one consistent contract reference.
+diff --git a/runbook.md b/runbook.md
+index f6ad21b..be33192 100644
+--- a/runbook.md
++++ b/runbook.md
+@@ -1 +1,13 @@
+-legacy_contract_cleanup_v10_decision_retention_release_drift_04: diagnose and recover this path.
++# legacy_contract_cleanup_v10_decision_retention_release_drift_04
++
++Recovery objective: diagnose and recover this path without changing the retained normalization contract.
++
++Expected behavior:
++- `evaluate(value)` delegates to the canonical normalizer.
++- The canonical normalizer strips surrounding whitespace.
++- The canonical normalizer lowercases the value.
++
++Recovery checks:
++1. Confirm callers still import `evaluate` from `policy`.
++2. Confirm `evaluate(" User ")` returns `"user"`.
++3. If behavior drifts, restore delegation to the canonical normalizer before changing documentation.

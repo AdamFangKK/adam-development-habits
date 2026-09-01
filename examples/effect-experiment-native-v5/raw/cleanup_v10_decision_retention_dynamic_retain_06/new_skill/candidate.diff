@@ -1,0 +1,62 @@
+diff --git a/README.md b/README.md
+index 8d54c07..623ca51 100644
+--- a/README.md
++++ b/README.md
+@@ -1,2 +1,5 @@
+-# legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06
+-Current owners use the canonical normalizer.
++# cleanup_v10_decision_retention_dynamic_retain_06
++
++`policy.canonical_normalize` owns the normalization contract: trim surrounding
++whitespace and lowercase text. The runtime-selected adapter is retained and
++delegates to that canonical policy.
+diff --git a/docs/cleanup_v10_decision_retention_dynamic_retain_06.md b/docs/cleanup_v10_decision_retention_dynamic_retain_06.md
+index d25c634..283e3d3 100644
+--- a/docs/cleanup_v10_decision_retention_dynamic_retain_06.md
++++ b/docs/cleanup_v10_decision_retention_dynamic_retain_06.md
+@@ -1 +1,3 @@
+-legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06: policy contract.
++cleanup_v10_decision_retention_dynamic_retain_06: `policy.canonical_normalize`
++is the canonical policy owner for trimming surrounding whitespace and lowercasing
++text.
+diff --git a/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py b/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
+index 12ae2eb..10fbfd0 100644
+--- a/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
++++ b/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
+@@ -1,2 +1,12 @@
++"""Runtime-retained adapter selected by the registry configuration.
++
++The runtime/cleanup_v10_decision_retention_dynamic_retain_06.json registry
++selects plugins.cleanup_v10_decision_retention_dynamic_retain_06_adapter.
++Remove this adapter only after that registry no longer names it.
++"""
++
++from policy import canonical_normalize
++
++
+ def normalize(value):
+-    return value.strip().lower()
++    return canonical_normalize(value)
+diff --git a/policy.py b/policy.py
+index 8bf5645..df1e526 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,4 +1,8 @@
+-"""legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06."""
++"""Canonical policy for cleanup_v10_decision_retention_dynamic_retain_06.
++
++The fully-qualified owner is policy.canonical_normalize. Its invariant is to
++trim surrounding whitespace and return lowercase text for every evaluation.
++"""
+ 
+ def canonical_normalize(value):
+     return value.strip().lower()
+diff --git a/runbook.md b/runbook.md
+index b20d978..20a2ecd 100644
+--- a/runbook.md
++++ b/runbook.md
+@@ -1 +1,3 @@
+-legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06: runtime adapter stays registered.
++cleanup_v10_decision_retention_dynamic_retain_06: the runtime registry still
++selects `plugins.cleanup_v10_decision_retention_dynamic_retain_06_adapter`, so
++the adapter is retained and delegates to `policy.canonical_normalize`.

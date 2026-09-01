@@ -1,0 +1,56 @@
+diff --git a/README.md b/README.md
+index b1d778f..c59a7db 100644
+--- a/README.md
++++ b/README.md
+@@ -1,2 +1,3 @@
+-# legacy_contract_cleanup_v10_decision_retention_split_owner_05
+-Current owners use the canonical normalizer.
++# policy.evaluate
++Current owner: `policy.evaluate`.
++Contract: strip surrounding whitespace and lowercase the input value before returning it.
+diff --git a/docs/cleanup_v10_decision_retention_split_owner_05.md b/docs/cleanup_v10_decision_retention_split_owner_05.md
+deleted file mode 100644
+index 842bd9b..0000000
+--- a/docs/cleanup_v10_decision_retention_split_owner_05.md
++++ /dev/null
+@@ -1 +0,0 @@
+-legacy_contract_cleanup_v10_decision_retention_split_owner_05: policy contract.
+diff --git a/legacy/cleanup_v10_decision_retention_split_owner_05.py b/legacy/cleanup_v10_decision_retention_split_owner_05.py
+deleted file mode 100644
+index 63d54da..0000000
+--- a/legacy/cleanup_v10_decision_retention_split_owner_05.py
++++ /dev/null
+@@ -1,2 +0,0 @@
+-def legacy_normalize(value):
+-    return value.strip().lower()
+diff --git a/package-metadata.json b/package-metadata.json
+index ab13d3c..acd6465 100644
+--- a/package-metadata.json
++++ b/package-metadata.json
+@@ -1 +1 @@
+-{"contract": "legacy_contract_cleanup_v10_decision_retention_split_owner_05"}
++{"contract": "policy.evaluate", "normalization": "strip surrounding whitespace and lowercase"}
+diff --git a/policy.py b/policy.py
+index 9069252..e281c8c 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,6 +1,8 @@
+-"""legacy_contract_cleanup_v10_decision_retention_split_owner_05."""
++"""Canonical policy normalization.
+ 
+-from legacy.cleanup_v10_decision_retention_split_owner_05 import legacy_normalize
++policy.evaluate owns normalization: strip surrounding whitespace and lowercase
++the input value before returning it.
++"""
+ 
+ def evaluate(value):
+-    return legacy_normalize(value)
++    return value.strip().lower()
+diff --git a/release-notes.md b/release-notes.md
+index fb9d6f2..61b687d 100644
+--- a/release-notes.md
++++ b/release-notes.md
+@@ -1 +1,2 @@
+-legacy_contract_cleanup_v10_decision_retention_split_owner_05: legacy module remains supported.
++policy.evaluate owns the normalization contract.
++The replaced normalization module has been removed.

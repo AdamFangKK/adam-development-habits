@@ -1,0 +1,48 @@
+{
+  "changed_paths": [
+    "README.md",
+    "docs/cleanup_v10_decision_retention_split_owner_05.md",
+    "legacy/cleanup_v10_decision_retention_split_owner_05.py",
+    "package-metadata.json",
+    "policy.py",
+    "release-notes.md"
+  ],
+  "disallowed_changed_paths": [],
+  "hidden_injected_after_agent_exit": true,
+  "hidden_repair_passed": false,
+  "hidden_result": {
+    "passed": false,
+    "returncode": 1,
+    "stderr": "F..\n======================================================================\nFAIL: test_complete_retirement_or_retention (test_hidden.HiddenContract)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/native-cleanup-score-_ht8oshy/candidate/tests/test_hidden.py\", line 20, in test_complete_retirement_or_retention\n    self.assertIn('owner: policy.canonical_normalize', Path('policy.py').read_text(encoding='utf-8'))\nAssertionError: 'owner: policy.canonical_normalize' not found in '\"\"\"Policy normalization contract.\"\"\"\\n\\ndef evaluate(value):\\n    return value.strip().lower()\\n'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=1)\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "implementation_integrity_passed": true,
+  "pre_score_artifact_sha256": {
+    "agent-prompt.txt": "3cd0de5b942566da787db3ad36253cf6763b5c13d7b05fd59494b5cfaa50d44a",
+    "agent-result.json": "b450e2ba7b643db6657d8c83dbcc582c909c2b62caf333d037fe5e46223aeb24",
+    "agent-transcript.md": "04209e7d71255c293964612ec1f8e0780fa97ea6ff3b460dc2d52bb57cc63c75",
+    "candidate.diff": "3c1d71e32aebd25659a56d41fd79fed4534cfcefed38c53fe2c76a1f419841bf",
+    "prepare.json": "f9e22ccf311f616c484433d8812dd7eec4afc6cfdb978d38965ba9d867ffc5c8",
+    "seed.txt": "ef2997ab54aebe4b502bc02f45d0e2155c68b0687a8abc74e8af029d2dda050c",
+    "sequence.json": "9850942112c1dc849e8211561365162d59de342b326e145d2ef0004460bd3068"
+  },
+  "public_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "scored_after_agent_exit": true,
+  "scorer_provenance": {
+    "base_runner_path": "scripts/native_cleanup_effect_runner_v1.py",
+    "base_runner_sha256": "97709e37df0a656014169e6e365c9506de96cdb764ebef99e430de1c28dbdd8f",
+    "corpus_manifest_sha256": "2ec11e2bd1674bdf25b048b2ae3f6725744fcceedcd4545ad6ed3335786451d6",
+    "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_split_owner_05",
+    "hidden_tests_tree_sha256": "6f2403c6726262c99fbbae80505d236194afd5baae5526a95af615a113e81ec1",
+    "reference_tree_sha256": "cce9c2eb731b856d79170b0af25191f3ca0feb8dc1b07efeb60f0e7c40730fc9",
+    "workspace_tree_sha256": "fb6125395c57c92ff7df3664c52b945ab90d406508c8cd5041162405a07bcd63"
+  },
+  "task_id": "cleanup_v10_decision_retention_split_owner_05"
+}

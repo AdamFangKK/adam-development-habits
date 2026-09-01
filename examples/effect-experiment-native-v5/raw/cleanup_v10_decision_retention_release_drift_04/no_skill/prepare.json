@@ -1,0 +1,25 @@
+{
+  "allowed_edit_paths": [
+    "CHANGELOG.md",
+    "README.md",
+    "VERSION.md",
+    "docs/cleanup_v10_decision_retention_release_drift_04.md",
+    "policy.py",
+    "runbook.md"
+  ],
+  "condition": "no_skill",
+  "condition_input_sha256": "08ea3262f9e40c6ca71675440ed910f3ca3388fde8f61903d34257b290d19be0",
+  "predecessor_score_sha256": [
+    {
+      "condition": "old_skill",
+      "sha256": "509e6718704da184a07df29cf54d01c0d92056e70e1ee0f1ab023a0937f64414"
+    },
+    {
+      "condition": "new_skill",
+      "sha256": "f97d96a17c2ba12477e75f72b894e97a3b5fb7b62bd99b09f154f0b9a3001909"
+    }
+  ],
+  "seed_commit": "42803b85eb28fbd9bae6a7932299bf748f10f099",
+  "task_id": "cleanup_v10_decision_retention_release_drift_04",
+  "workspace_handoff_sha256": "9c4b69d5b429f30c5c497bc8471d9c21e418861b634804f69379c3c4463fe899"
+}

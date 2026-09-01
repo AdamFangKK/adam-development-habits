@@ -1,0 +1,43 @@
+diff --git a/README.md b/README.md
+index 8d54c07..50f7172 100644
+--- a/README.md
++++ b/README.md
+@@ -1,2 +1,2 @@
+-# legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06
++# cleanup_v10_decision_retention_dynamic_retain_06
+ Current owners use the canonical normalizer.
+diff --git a/docs/cleanup_v10_decision_retention_dynamic_retain_06.md b/docs/cleanup_v10_decision_retention_dynamic_retain_06.md
+index d25c634..50c62b6 100644
+--- a/docs/cleanup_v10_decision_retention_dynamic_retain_06.md
++++ b/docs/cleanup_v10_decision_retention_dynamic_retain_06.md
+@@ -1 +1 @@
+-legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06: policy contract.
++cleanup_v10_decision_retention_dynamic_retain_06: canonical policy contract.
+diff --git a/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py b/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
+index 12ae2eb..ea0b3de 100644
+--- a/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
++++ b/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
+@@ -1,2 +1,5 @@
++from policy import canonical_normalize
++
++
+ def normalize(value):
+-    return value.strip().lower()
++    return canonical_normalize(value)
+diff --git a/policy.py b/policy.py
+index 8bf5645..810ba66 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,4 +1,4 @@
+-"""legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06."""
++"""Canonical normalization policy for cleanup_v10_decision_retention_dynamic_retain_06."""
+ 
+ def canonical_normalize(value):
+     return value.strip().lower()
+diff --git a/runbook.md b/runbook.md
+index b20d978..5432e7c 100644
+--- a/runbook.md
++++ b/runbook.md
+@@ -1 +1 @@
+-legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06: runtime adapter stays registered.
++cleanup_v10_decision_retention_dynamic_retain_06: runtime adapter stays registered and delegates to the canonical policy.

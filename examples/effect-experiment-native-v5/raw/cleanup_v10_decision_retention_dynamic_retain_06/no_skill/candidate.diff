@@ -1,0 +1,23 @@
+diff --git a/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py b/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
+index 12ae2eb..d4c58b8 100644
+--- a/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
++++ b/plugins/cleanup_v10_decision_retention_dynamic_retain_06_adapter.py
+@@ -1,2 +1,4 @@
++from policy import canonical_normalize
++
+ def normalize(value):
+-    return value.strip().lower()
++    return canonical_normalize(value)
+diff --git a/policy.py b/policy.py
+index 8bf5645..4eeb660 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,7 +1,7 @@
+ """legacy_contract_cleanup_v10_decision_retention_dynamic_retain_06."""
+ 
+ def canonical_normalize(value):
+-    return value.strip().lower()
++    return value.strip().casefold()
+ 
+ def evaluate(value):
+     return canonical_normalize(value)

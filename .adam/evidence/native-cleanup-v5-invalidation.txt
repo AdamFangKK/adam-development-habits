@@ -1,0 +1,14 @@
+V5 collection invalidation
+
+Observed collection state:
+- 8 of 30 preregistered conditions reached agent exit and blind scoring.
+- The V5 analyzer returned exit code 1 and wrote examples/effect-experiment-native-v5/collection-invalid.json.
+
+Decisive conditions:
+- cleanup_v10_decision_retention_split_owner_05/new_skill created docs/policy.md, which is outside the task's allowed edit paths. The stored blind score correctly set implementation_integrity_passed=false and hidden_injected_after_agent_exit=false.
+- V5 captured candidate.diff with git diff only. That omits the untracked docs/policy.md file even though the base scorer's changed_paths includes untracked files, so independent replay could not reproduce the stored changed_paths or integrity result.
+
+Conclusion:
+- V5 is permanently ineligible and cannot support an effect claim.
+- No V5 sample may be retried, removed, reclassified, or used for descriptive comparison.
+- A future protocol must use fresh task IDs and capture untracked candidate files in its replay artifact before scoring.

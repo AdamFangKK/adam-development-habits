@@ -1,0 +1,25 @@
+{
+  "allowed_edit_paths": [
+    "README.md",
+    "docs/cleanup_v10_decision_retention_split_owner_05.md",
+    "legacy/cleanup_v10_decision_retention_split_owner_05.py",
+    "package-metadata.json",
+    "policy.py",
+    "release-notes.md"
+  ],
+  "condition": "new_skill",
+  "condition_input_sha256": "f6a3275beabdc4d9823560caabe2b162a50d5cd14d123c5d292392fa1da72b6a",
+  "predecessor_score_sha256": [
+    {
+      "condition": "no_skill",
+      "sha256": "9bd0c11251a99fab92f7e16b54edaa46a5381e2f6ef8bbac9bd21726140131df"
+    },
+    {
+      "condition": "old_skill",
+      "sha256": "3a37569e360c9fdc60b7d12bdbc488d9d44f4f9e2ae707262511992abda130c8"
+    }
+  ],
+  "seed_commit": "28033170effd90309ba2c486623bffad62ecee8f",
+  "task_id": "cleanup_v10_decision_retention_split_owner_05",
+  "workspace_handoff_sha256": "a485819149518e80e1502f0f6aefa7a397e1c38593749b417fe3c0bf2b23474a"
+}
