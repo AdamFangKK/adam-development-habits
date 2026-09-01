@@ -1,0 +1,63 @@
+Native Cleanup V6 Independent Review
+===================================
+
+Scope
+-----
+
+Read-only review of the uncommitted V6 API-key protocol freeze state.
+Reviewed the runner, analyzer, preregistration, README scope text, and focused V6 tests.
+No code changes were made.
+
+Files reviewed
+--------------
+
+- scripts/run_native_cleanup_effect_v6_api.py
+- scripts/native_cleanup_effect_runner_v6.py
+- scripts/analyze_native_cleanup_effect_v6.py
+- scripts/create_native_cleanup_effect_preregistration_v6.py
+- tests/test_native_cleanup_effect_runner_v6.py
+- tests/test_native_cleanup_effect_protocol_v6.py
+- tests/test_native_cleanup_effect_v6.py
+- tests/test_effect_runner_v6.py
+- README.md
+- examples/effect-experiment-native-v6/preregistration.json
+
+Checks run
+---------
+
+- `python3 -m pytest tests/test_native_cleanup_effect_v6.py tests/test_native_cleanup_effect_protocol_v6.py tests/test_native_cleanup_effect_runner_v6.py -q`
+- `basedpyright --level error scripts/materialize_native_cleanup_effect_v6.py scripts/native_cleanup_effect_runner_v6.py scripts/analyze_native_cleanup_effect_v6.py scripts/create_native_cleanup_effect_preregistration_v6.py scripts/run_native_cleanup_effect_v6_api.py tests/test_native_cleanup_effect_protocol_v6.py tests/test_native_cleanup_effect_runner_v6.py tests/test_native_cleanup_effect_v6.py`
+- `python3 -m pytest tests/test_native_cleanup_effect_v6.py tests/test_native_cleanup_effect_protocol_v6.py tests/test_native_cleanup_effect_runner_v6.py tests/test_effect_runner_v6.py -q`
+
+Observed results
+----------------
+
+- basedpyright: `0 errors, 0 warnings, 0 notes`
+- focused V6 pytest: `28 passed in 13.40s`
+- the stale preregistration assertion no longer fails in the current freeze state
+
+Issue summary
+-------------
+
+None.
+
+Positive findings
+-----------------
+
+- V6 no-skill treatment disables automatic Skill search through the shared runner command path.
+- Old/new treatment is limited to the frozen policy snapshot; no other policy differences are introduced.
+- API-key/auth provenance is validated and not written as a standalone artifact.
+- The executor provenance is hash-bound and validated by the analyzer.
+- Untracked diffs are replayed through the analyzer path and are not trusted from stored booleans alone.
+- README and preregistration both correctly scope the claim to shared-filesystem protocol isolation, not container isolation or cryptographic attestation.
+
+Verdict
+-------
+
+APPROVE
+
+The V6 API-key protocol freeze now has matching README/preregistration scope text, a successful bare `basedpyright` run, and a passing focused V6 test set in the current workspace.
+
+Note:
+- In this workspace I could directly verify a 28-test focused V6 selection (`tests/test_native_cleanup_effect_v6.py`, `tests/test_native_cleanup_effect_protocol_v6.py`, `tests/test_native_cleanup_effect_runner_v6.py`, `tests/test_effect_runner_v6.py`), all passing.
+- I did not independently reproduce a 31-test V6-only count, so I am not asserting that exact number here.

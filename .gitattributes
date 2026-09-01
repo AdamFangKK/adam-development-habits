@@ -6,3 +6,4 @@ examples/effect-experiment-v6/raw/** -text whitespace=-trailing-space,-blank-at-
 examples/effect-experiment-native-v3/raw-partial/**/candidate.diff -whitespace
 examples/effect-experiment-native-v4/raw/**/candidate.diff -whitespace
 examples/effect-experiment-native-v5/raw/**/candidate.diff -whitespace
+examples/effect-experiment-native-v6/raw/**/candidate.diff -whitespace

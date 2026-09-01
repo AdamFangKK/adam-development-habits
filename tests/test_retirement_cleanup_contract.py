@@ -58,6 +58,9 @@ class RetirementCleanupContractTests(unittest.TestCase):
             "A document is a lead, not a consumer",
             "named live runtime/API consumer or a verifiable external compatibility obligation",
             "classify it `unknown` and stop completion",
+            "owner: <module>.<symbol>",
+            "invariant: <current contract>",
+            "allowed_edit_paths` list is a hard change boundary",
         ):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.skill[quick_gate:detailed_policy])
@@ -77,6 +80,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
             "A file deletion is valid only when the deleted path is listed in the change scope",
             "Stop the completion gate when evidence is unresolved",
             "Do not silently retain an unknown path",
+            "refuse to create or modify an unlisted implementation, documentation, metadata, or configuration path",
         ):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.policy)
@@ -166,7 +170,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
         ):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.skill)
-        self.assertIn("完整限定的 `<module>.<symbol>`", self.readme)
+        self.assertIn("相邻、稳定的两行：`owner: <module>.<symbol>` 与 `invariant: <current contract>`", self.readme)
         self.assertIn("无命名消费者的薄 wrapper 必须删除", self.readme)
 
     def test_all_implementation_surfaces_and_explanatory_drift_are_named(self) -> None:

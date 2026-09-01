@@ -1,0 +1,315 @@
+{
+  "acceptance_criteria": [
+    {
+      "condition": "V6 new Skill snapshot is byte-identical to SKILL.md and preregistration binds all frozen inputs.",
+      "id": "AC-1",
+      "verification": "cmp -s SKILL.md examples/effect-experiment-native-v6/skills/new/SKILL.md; python3 -m json.tool examples/effect-experiment-native-v6/preregistration.json"
+    },
+    {
+      "condition": "All three conditions run with automatic Skill search disabled; treatment provenance records API-key mode and CLI version.",
+      "id": "AC-2",
+      "verification": "python3 -m unittest tests.test_native_cleanup_effect_runner_v6 tests.test_native_cleanup_effect_protocol_v6"
+    },
+    {
+      "condition": "Untracked allowed and disallowed files are captured in candidate.diff and independently replayed.",
+      "id": "AC-3",
+      "verification": "python3 -m unittest tests.test_native_cleanup_effect_runner_v6"
+    },
+    {
+      "condition": "Full package tests, type checks, compilation, Skill validation, and diff hygiene pass before collection.",
+      "id": "AC-4",
+      "verification": "python3 -m unittest discover -s tests; pytest -q; basedpyright --level error <V6 files>"
+    }
+  ],
+  "affected_callers": [
+    "Codex CLI API-key collection process",
+    "V6 blind scorer and replay analyzer",
+    "repository maintainers running the frozen checks"
+  ],
+  "canonical_owner": [
+    "scripts/run_native_cleanup_effect_v6_api.py:collect",
+    "scripts/native_cleanup_effect_runner_v6.py:score_condition",
+    "scripts/analyze_native_cleanup_effect_v6.py:analyze"
+  ],
+  "change_id": "native-cleanup-v6",
+  "documentation_synchronization": {
+    "confirmed_current": [
+      "V6 preregistration",
+      "V6 executor and analyzer hashes"
+    ],
+    "deleted": [],
+    "evidence": "README and preregistration state API-key execution limits and scoped claim.",
+    "updated": [
+      "SKILL.md",
+      "README.md",
+      ".gitattributes",
+      "V6 frozen task snapshot"
+    ]
+  },
+  "independent_review": {
+    "evidence_ref": "review-report",
+    "notes": "Review confirms API-key/Skill-search isolation, provenance, replay, and scoped README claims after current focused suite passes.",
+    "outcome": "approved",
+    "reviewer": "independent Codex read-only reviewer"
+  },
+  "instrumentation": {
+    "cardinality_review": "Task and condition values are fixed by the manifest.",
+    "events": [
+      {
+        "component": "scripts.native_cleanup_effect_v6",
+        "event": "v6_condition_scored",
+        "evidence_refs": [
+          "focused"
+        ],
+        "labels": [
+          "task_id",
+          "condition",
+          "executor_kind",
+          "outcome"
+        ],
+        "outcome": "executed",
+        "redaction_review": "No API key, prompt payload, or personal data is recorded."
+      }
+    ],
+    "evidence": "Focused protocol tests assert provenance, sequencing, and replay gates.",
+    "owner": "V6 collection Harness",
+    "status": "applied",
+    "threshold_and_action": "Any missing provenance or replay mismatch makes collection ineligible."
+  },
+  "invariants": [
+    "Only the preregistered API-key Codex CLI executor may produce eligible V6 trials.",
+    "No condition may receive automatic Skill discovery; only old/new receive their frozen policy snapshot.",
+    "Hidden tests and reference fixes remain unavailable until after agent exit; scorer replay must match recorded semantics.",
+    "Any incomplete, tampered, out-of-scope, or replay-divergent collection is ineligible; no selective retry.",
+    "The result can support only the fixed model, CLI Harness, Skill snapshots, corpus, and scorer scope."
+  ],
+  "level": 2,
+  "quality_decisions": {
+    "configuration_secrets": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    },
+    "contract_evolution": {
+      "rationale": "V6 preserves V4/V5 as immutable ineligible history and introduces a fresh hash-bound protocol with a documented compatibility boundary.",
+      "status": "applied"
+    },
+    "data_migration": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    },
+    "data_ownership": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    },
+    "delivery_lifecycle": {
+      "rationale": "The protocol is frozen only after tests, type checks, compilation, Skill validation, and diff checks pass.",
+      "status": "applied"
+    },
+    "dependency_audit": {
+      "rationale": "The executor reuses the repository runner/scorer and the installed Codex CLI; no new runtime dependency was added.",
+      "status": "applied"
+    },
+    "dependency_supply_chain": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    },
+    "design_boundary": {
+      "rationale": "The API-key executor, frozen snapshots, runner, scorer replay, and analyzer form one explicit experimental boundary.",
+      "status": "applied"
+    },
+    "error_model": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    },
+    "extension_decision": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    },
+    "operational_budget": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    },
+    "operational_knowledge": {
+      "rationale": "README documents API-key preflight, isolation limits, failure invalidation, and scoped interpretation.",
+      "status": "applied"
+    },
+    "release_recovery": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    },
+    "reproducibility": {
+      "rationale": "Manifest, task order, prompt, snapshots, executor, scorer, analyzer, and raw artifact layout are hash-bound.",
+      "status": "applied"
+    },
+    "threat_boundary": {
+      "rationale": "No separate product boundary; this V6 protocol change does not introduce this category.",
+      "status": "not_applicable"
+    }
+  },
+  "remaining_risks": [
+    "Native CLI execution is protocol/workspace isolated rather than cryptographically attested container isolation.",
+    "API service availability or rate limiting can make the fixed collection ineligible; failures must be retained, not retried selectively.",
+    "Even an eligible collection cannot prove model-wide causal reasoning or production reliability."
+  ],
+  "replaced_paths": [
+    "V6 placeholder new Skill snapshot",
+    "V6 native-subagent-only executor description"
+  ],
+  "retained_compatibility": [],
+  "retirement_sweep": {
+    "evidence": [
+      "README stale-marker review",
+      "V6 focused tests",
+      "snapshot parity"
+    ],
+    "remove": [
+      "placeholder snapshot text and stale V6 executor wording"
+    ],
+    "retain": [
+      {
+        "consumer": "Historical ineligible protocol audit",
+        "observability": "collection-invalid.json",
+        "path": "examples/effect-experiment-native-v4/",
+        "removal_condition": "Separate archival decision",
+        "test": "existing V4 protocol tests"
+      }
+    ],
+    "unknown": []
+  },
+  "rollback_or_compatibility": "Revert the V6 executor, protocol scripts, snapshots, README, tests, evidence, and manifest together. Preserve V4/V5 invalidation archives byte-for-byte; do not convert an interrupted or invalid collection into an effect claim.",
+  "safeguards": [
+    {
+      "name": "API-key preflight and redaction",
+      "rationale": "The collector verifies non-secret auth status and redacts token-shaped text from transcripts.",
+      "status": "applied"
+    },
+    {
+      "name": "Skill-search isolation",
+      "rationale": "Every Codex invocation includes --disable skill_search and --ignore-user-config.",
+      "status": "applied"
+    },
+    {
+      "name": "Blind post-exit scoring",
+      "rationale": "Hidden tests are injected only after agent exit and candidate diffs are replayed independently.",
+      "status": "applied"
+    }
+  ],
+  "schema_version": 2,
+  "supporting_artifacts": [
+    {
+      "command": "python3 -m unittest tests.test_retirement_cleanup_contract tests.test_native_cleanup_effect_v6 tests.test_native_cleanup_effect_runner_v6 tests.test_native_cleanup_effect_protocol_v6",
+      "executed_at": "2026-09-01T03:35:00Z",
+      "exit_code": 0,
+      "id": "focused",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v6-focused.txt",
+      "repository_revision": "dec915226e99f9e65785796740ad571e7e113eb7+worktree",
+      "sha256": "890abf827404098c1916f9d66814bc3988b3b96e7b79b8869eb73bcb0c4104f6",
+      "summary": "Executed V6 evidence artifact: focused."
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "executed_at": "2026-09-01T03:35:00Z",
+      "exit_code": 0,
+      "id": "unittest",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v6-unittest.txt",
+      "repository_revision": "dec915226e99f9e65785796740ad571e7e113eb7+worktree",
+      "sha256": "00409bc3b425f388788e7c74668814a87fb4c0255c803ce5cc99e6eb18e451e4",
+      "summary": "Executed V6 evidence artifact: unittest."
+    },
+    {
+      "command": "pytest -q",
+      "executed_at": "2026-09-01T03:35:00Z",
+      "exit_code": 0,
+      "id": "pytest",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v6-pytest.txt",
+      "repository_revision": "dec915226e99f9e65785796740ad571e7e113eb7+worktree",
+      "sha256": "ae2d9fde1d09aba5eb0af909985768f1f1d8175240b8f39cc35c491f546e01c9",
+      "summary": "Executed V6 evidence artifact: pytest."
+    },
+    {
+      "command": "basedpyright --level error <V6 files>",
+      "executed_at": "2026-09-01T03:35:00Z",
+      "exit_code": 0,
+      "id": "typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v6-typecheck.txt",
+      "repository_revision": "dec915226e99f9e65785796740ad571e7e113eb7+worktree",
+      "sha256": "56882e01cb80173ef053c4096e4ee43e3123a15f5c0a06715f96988d48fbd91c",
+      "summary": "Executed V6 evidence artifact: typecheck."
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "executed_at": "2026-09-01T03:35:00Z",
+      "exit_code": 0,
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v6-skill-contract.txt",
+      "repository_revision": "dec915226e99f9e65785796740ad571e7e113eb7+worktree",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "summary": "Executed V6 evidence artifact: skill-validator."
+    },
+    {
+      "command": "python3 scripts/create_native_cleanup_effect_preregistration_v6.py --output examples/effect-experiment-native-v6/preregistration.json --root .",
+      "executed_at": "2026-09-01T03:35:00Z",
+      "exit_code": 0,
+      "id": "preregistration",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v6-preregistration.txt",
+      "repository_revision": "dec915226e99f9e65785796740ad571e7e113eb7+worktree",
+      "sha256": "40adceba28690dd356f74a43f6da2bb215136ca1c1bc2ba424716a248f148115",
+      "summary": "Executed V6 evidence artifact: preregistration."
+    },
+    {
+      "id": "review-report",
+      "kind": "review_report",
+      "path": ".adam/evidence/native-cleanup-v6-independent-review.txt",
+      "sha256": "0ed5575d88e35d869b8945152d93ab2e81be9b4cf73db9eb470f94511c516777",
+      "summary": "Executed V6 evidence artifact: review-report."
+    }
+  ],
+  "verification": [
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "evidence_refs": [
+        "unittest"
+      ],
+      "result": "342 tests passed.",
+      "status": "passed"
+    },
+    {
+      "command": "pytest -q",
+      "evidence_refs": [
+        "pytest"
+      ],
+      "result": "342 tests passed.",
+      "status": "passed"
+    },
+    {
+      "command": "basedpyright --level error <V6 files>",
+      "evidence_refs": [
+        "typecheck"
+      ],
+      "result": "0 errors, 0 warnings, 0 notes.",
+      "status": "passed"
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "evidence_refs": [
+        "skill-validator"
+      ],
+      "result": "Skill is valid.",
+      "status": "passed"
+    },
+    {
+      "command": "python3 -m unittest tests.test_retirement_cleanup_contract tests.test_native_cleanup_effect_v6 tests.test_native_cleanup_effect_runner_v6 tests.test_native_cleanup_effect_protocol_v6",
+      "evidence_refs": [
+        "focused"
+      ],
+      "result": "31 tests passed.",
+      "status": "passed"
+    }
+  ]
+}

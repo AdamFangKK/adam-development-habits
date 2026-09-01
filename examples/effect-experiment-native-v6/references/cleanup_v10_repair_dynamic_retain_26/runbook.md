@@ -1,0 +1,1 @@
+canonical_contract_cleanup_v10_repair_dynamic_retain_26: runtime adapter stays registered.
