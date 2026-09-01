@@ -339,6 +339,7 @@
       "id": "contract-tests",
       "kind": "diff",
       "path": "tests/test_skill_contract.py",
+      "git_commit": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01",
       "sha256": "5ae2dba58f8b22ef91f52a2af4b57f0f4ef9fdda10a165dcdd5f56432b683fa9",
       "summary": "Regression source containing the three new contract tests for truthful execution, concise Level 2 coverage, and Explainability."
     },
@@ -379,6 +380,7 @@
         "id": "optimization-contract-causal",
         "kind": "test_source",
         "path": "tests/test_skill_contract.py",
+        "git_commit": "97d27dc5efbfea45ea4a8a95f4dae699818a8d01",
         "sha256": "5ae2dba58f8b22ef91f52a2af4b57f0f4ef9fdda10a165dcdd5f56432b683fa9",
         "summary": "Contract tests reproduce the intended minimum checklist and execution-state requirements."
       }

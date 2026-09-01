@@ -16,6 +16,7 @@ EXAMPLE = ROOT / "assets" / "evidence-ledger.example.json"
 CAUSAL_EXAMPLE = ROOT / "examples" / "causal-execution-experiment.json"
 CAUSAL_NOTIFICATION_EXAMPLE = ROOT / "examples" / "causal-notification-experiment.json"
 HOLISTIC_EVIDENCE = ROOT / ".adam" / "evidence" / "holistic-quality-discipline.json"
+CONCISE_EXECUTION_EVIDENCE = ROOT / ".adam" / "evidence" / "adam-skill-concise-execution-optimization.json"
 sys.path.insert(0, str(SCRIPTS))
 
 from validate_evidence import validate_evidence  # noqa: E402
@@ -328,6 +329,23 @@ class EvidenceScriptTests(unittest.TestCase):
             "supporting_artifacts[0].git_commit does not reference a commit in the artifact repository",
             validate_evidence(payload, artifact_root=ROOT),
         )
+
+    def test_concise_execution_evidence_pins_historical_contract_tests(self) -> None:
+        payload = json.loads(CONCISE_EXECUTION_EVIDENCE.read_text(encoding="utf-8"))
+        expected_commit = "97d27dc5efbfea45ea4a8a95f4dae699818a8d01"
+        expected_sha256 = "5ae2dba58f8b22ef91f52a2af4b57f0f4ef9fdda10a165dcdd5f56432b683fa9"
+        artifacts = (
+            payload["supporting_artifacts"][12],
+            payload["causal"]["evidence_artifacts"][1],
+        )
+
+        for artifact in artifacts:
+            with self.subTest(artifact=artifact["id"]):
+                self.assertEqual(artifact["path"], "tests/test_skill_contract.py")
+                self.assertEqual(artifact["git_commit"], expected_commit)
+                self.assertEqual(artifact["sha256"], expected_sha256)
+
+        self.assertEqual(validate_evidence(payload, artifact_root=ROOT), [])
 
     def test_code_change_requires_evidence_when_enabled(self) -> None:
         without_evidence = self._make_repository(include_evidence=False)

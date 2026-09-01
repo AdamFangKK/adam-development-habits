@@ -1,0 +1,24 @@
+Historical evidence binding repair verification
+Executed at: 2026-09-01T05:56:29Z
+Repository revision: ae5d74062a5bb883f8ac07f467c097cd123b266e+worktree
+
+Observed failure:
+GitHub Actions run 33474717675 failed only in "Validate stored evidence" because
+adam-skill-concise-execution-optimization.json referenced a historical
+tests/test_skill_contract.py SHA-256 without its source commit. Local validation
+reproduced the same two mismatches. The recorded SHA-256 matches that file at
+97d27dc5efbfea45ea4a8a95f4dae699818a8d01, not the current worktree version.
+
+Command: python3 -m unittest tests.test_evidence_scripts tests.test_skill_contract -q
+Exit code: 0
+Result: 73 tests passed in 6.006 seconds, including the regression that pins both
+historical test references to commit 97d27dc5efbfea45ea4a8a95f4dae699818a8d01.
+
+Command: python3 scripts/validate_evidence.py .adam/evidence/*.json
+Exit code: 0
+Result: All 44 pre-existing evidence JSON artifacts validated after the historical
+commit anchors were added.
+
+Command: python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
+Exit code: 0
+Result: Skill is valid.

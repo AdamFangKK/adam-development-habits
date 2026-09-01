@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "change_id": "historical-evidence-binding-repair",
+  "level": 1,
+  "canonical_owner": [
+    ".adam/evidence/adam-skill-concise-execution-optimization.json",
+    "scripts/validate_evidence.py: read_artifact_bytes"
+  ],
+  "affected_callers": [
+    ".github/workflows/skill-quality.yml: Validate stored evidence",
+    "tests/test_evidence_scripts.py: EvidenceScriptTests"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The two historical references to tests/test_skill_contract.py are read from their original committed bytes and validate against their existing SHA-256.",
+      "verification": "python3 scripts/validate_evidence.py .adam/evidence/*.json"
+    },
+    {
+      "id": "AC-2",
+      "condition": "A regression test rejects removal or alteration of the historical commit and digest anchors.",
+      "verification": "python3 -m unittest tests.test_evidence_scripts tests.test_skill_contract -q"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The package remains a valid Codex Skill without disabling its evidence workflow.",
+      "verification": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    }
+  ],
+  "invariants": [
+    "Historical evidence hashes describe the bytes at their declared Git commit, not mutable current worktree bytes.",
+    "The GitHub workflow continues to validate every stored evidence artifact on pushes to main.",
+    "A changed current test file cannot silently rewrite a historical evidence claim."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "retirement_sweep": null,
+  "documentation_synchronization": null,
+  "instrumentation": null,
+  "safeguards": [
+    {
+      "name": "historical artifact pinning",
+      "status": "applied",
+      "rationale": "Both historical references now declare the exact commit whose test bytes match their retained SHA-256."
+    },
+    {
+      "name": "regression coverage",
+      "status": "applied",
+      "rationale": "The evidence-script test validates both anchors and the complete historical artifact."
+    },
+    {
+      "name": "CI quality gate retained",
+      "status": "applied",
+      "rationale": "The workflow remains enabled so later evidence drift fails visibly rather than being hidden by a disabled check."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The historical evidence record declares its source revision; validate_evidence.py owns loading either current or declared historical bytes."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "No dependency, import edge, action version, or external service changed."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "The repair uses the validator's existing git_commit field and adds no abstraction or extension point."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "Only immutable repository evidence metadata changes; no mutable business or personal data is handled."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "A stale historical hash is a stable validation failure; an absent or invalid commit remains a validation error rather than being rebound to current bytes."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "Historical evidence now explicitly uses the existing versioned Git-source contract, preserving its original digest and meaning."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The repair adds no runtime path or performance-sensitive operation."
+    },
+    "threat_boundary": {
+      "status": "not_applicable",
+      "rationale": "No credential, access boundary, untrusted input, or privileged operation changed."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "This is one atomic evidence-and-test repair, verified locally before the existing GitHub workflow reruns on main."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployable service or rollout configuration changed; reverting the commit restores the prior metadata state."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No schema, backfill, persistence format, or production data changed."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "The workflow configuration and all secret boundaries are unchanged."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No package manifest, lockfile, GitHub Action version, or third-party dependency changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The evidence record and regression test explain why a historical hash must include its source commit."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The exact commands, timestamp, repository revision, historical commit, and SHA-256 values are recorded in repository files."
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -m unittest tests.test_evidence_scripts tests.test_skill_contract -q",
+      "status": "passed",
+      "result": "73 tests passed, including the historical-anchor regression.",
+      "evidence_refs": [
+        "focused-tests"
+      ]
+    },
+    {
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "status": "passed",
+      "result": "All 44 pre-existing evidence artifacts validated after the historical anchors were added.",
+      "evidence_refs": [
+        "evidence-validation"
+      ]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill package validation passed.",
+      "evidence_refs": [
+        "skill-validation"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/historical-evidence-binding-repair-verification.txt",
+      "sha256": "72a6555b147598a4cc48e848b5960301fc5e9f61a153c0feee5db739ad9004ac",
+      "command": "python3 -m unittest tests.test_evidence_scripts tests.test_skill_contract -q",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T05:56:29Z",
+      "repository_revision": "ae5d74062a5bb883f8ac07f467c097cd123b266e+worktree",
+      "summary": "Focused evidence and Skill-contract regression tests passed."
+    },
+    {
+      "id": "evidence-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/historical-evidence-binding-repair-verification.txt",
+      "sha256": "72a6555b147598a4cc48e848b5960301fc5e9f61a153c0feee5db739ad9004ac",
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T05:56:29Z",
+      "repository_revision": "ae5d74062a5bb883f8ac07f467c097cd123b266e+worktree",
+      "summary": "All pre-existing stored evidence artifacts validated after repair."
+    },
+    {
+      "id": "skill-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/historical-evidence-binding-repair-verification.txt",
+      "sha256": "72a6555b147598a4cc48e848b5960301fc5e9f61a153c0feee5db739ad9004ac",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T05:56:29Z",
+      "repository_revision": "ae5d74062a5bb883f8ac07f467c097cd123b266e+worktree",
+      "summary": "Skill Creator reported a valid package."
+    }
+  ],
+  "rollback_or_compatibility": "Revert this atomic repair to restore the previous metadata; do not replace the pinned historical hash with a current-worktree digest.",
+  "independent_review": null,
+  "remaining_risks": [
+    "Future historical evidence can still omit git_commit, but the retained workflow will fail visibly and the regression protects this repaired record.",
+    "Remote workflow success remains pending until GitHub runs this commit."
+  ]
+}
