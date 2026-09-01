@@ -232,7 +232,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py \
 
 包内还保留了一次真实 GitHub 基准的可审计运行：[QuixBugs `shortest_paths` 固定提交清单](./examples/external-quixbugs-run-manifest.json)、[基线输出](./examples/external-quixbugs-baseline-output.md)、[Skill 复测输出](./examples/external-quixbugs-skill-output.md) 和[独立验证结果](./examples/external-quixbugs-evaluation.json)。两组都把公开 `3` 个失败和两个有效隐藏输入修复为通过，因此这个单一样本**不能**宣称 Skill 提升了修复成功率；可观察到的差异是 Skill 组留下了可证伪假设、区分性检查、不变量、输入不变性检查和结论等级，并以更小的改动范围完成同一修复。
 
-修复 Agent 的夹具严格排除 `correct_python_programs`、上游 Git 元数据和评分工件；两个 Agent 结束后，独立验证器才读取固定参考实现来执行差分检查。`tests/test_external_quixbugs_replay.py` 还从提交的公开源、测试和两个候选快照重放 `3` 个失败、`3` 个公开通过和每个候选的 `2` 个隐藏差分用例，并校验它们的 SHA-256。原生子代理没有文件系统级隔离，所以这仍只称为协议隔离。`BugsInPy`、`Defects4J`、`Bugs.jar`、`Codeflaws` 与 `BugSwarm` 的本轮阻塞原因同样记录在结果中；没有把缺少工具链或依赖的情况伪装成“失败样本”。QuixBugs 的缺陷刻意较小，不能作为跨服务、迁移、发布或生产因果能力的证明。
+修复 Agent 的夹具严格排除 `correct_python_programs`、上游 Git 元数据和评分工件；两个 Agent 结束后，独立验证器才读取固定参考实现来执行差分检查。`tests/test_external_quixbugs_replay.py` 还从提交的公开源、测试和两个候选快照重放 `3` 个失败、`3` 个公开通过和每个候选的 `2` 个隐藏差分用例，并校验它们的 SHA-256。该回放唯一需要的 CI 测试依赖 `pytest` 固定在 [`requirements-ci.txt`](./requirements-ci.txt)，由 workflow 在运行前安装，不会成为 Skill 的运行时依赖。原生子代理没有文件系统级隔离，所以这仍只称为协议隔离。`BugsInPy`、`Defects4J`、`Bugs.jar`、`Codeflaws` 与 `BugSwarm` 的本轮阻塞原因同样记录在结果中；没有把缺少工具链或依赖的情况伪装成“失败样本”。QuixBugs 的缺陷刻意较小，不能作为跨服务、迁移、发布或生产因果能力的证明。
 
 另有 Pallets Click 的真实符号链接回归 [#1921](https://github.com/pallets/click/issues/1921) 的离线回放协议。[固定清单](./examples/external-click-run-manifest.json) 分别锁定 `8.0.1` 的缺陷版本和官方修复提交；[回放器](./scripts/replay_external_click.py) 不联网，只接受本地已 materialize 的两份源码并校验每个 `src/click` 树和 `types.py` 的 SHA-256。测试子进程从中立临时目录运行，只能导入验证后的 `click` 副本，并有十秒超时。它运行来自上游 `test_symlink_resolution` 的公开边界测试，并以独立隐藏契约验证 `os.access` 针对已解析目标而不是原始 symlink。评分包含原始缺陷、一个“只修路径解析”的近似补丁、仅改真正 owner 的官方补丁和官方补丁提交：近似补丁通过公开测试却被隐藏测试拒绝，官方两种修复都通过。运行记录在 [external-click-replay.json](./examples/external-click-replay.json)。
 
@@ -436,6 +436,7 @@ adam-development-habits/
 ├── SKILL.md             # Codex 实际执行的开发习惯规则
 ├── README.md            # 本说明文档
 ├── LICENSE              # MIT License
+├── requirements-ci.txt  # 仅 GitHub Actions 回放测试需要的固定依赖
 ├── pytest.ini           # 默认 pytest 只收集包级 tests，隔离故意失败的实验夹具
 ├── assets/
 │   ├── evidence-ledger.example.json

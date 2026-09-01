@@ -1,0 +1,2 @@
+# Only the QuixBugs replay test requires pytest; the Skill has no runtime dependency.
+pytest==8.4.2

@@ -1,0 +1,28 @@
+CI portability repair verification
+Executed at: 2026-09-01T06:10:02Z
+Repository revision: 619a099eab0c1a5a28c36873f08f26f923cfdd97+worktree
+
+Observed GitHub failures:
+- test_external_quixbugs_replay could not import pytest because the workflow had
+  no declared test dependency.
+- test_rejects_self_reported_snapshot_path_without_full_read passed incorrectly
+  on Linux because its fixture used a real cat command and only failed locally
+  through the macOS /var to /private/var path-resolution difference.
+
+Command: python3 -m pip install --dry-run --disable-pip-version-check -r requirements-ci.txt
+Exit code: 0
+Result: The resolver selected the pinned pytest==8.4.2 test-only dependency and
+its declared transitive requirements without modifying the local environment.
+
+Command: python3 -m unittest tests.test_effect_isolation_v9 tests.test_external_quixbugs_replay -v
+Exit code: 0
+Result: 8 tests passed. The portable self-report fixture is rejected, and the
+QuixBugs public and hidden replay succeeds with the existing local pytest runner.
+
+Command: ruby -e 'require "yaml"; YAML.load_file(".github/workflows/skill-quality.yml")'
+Exit code: 0
+Result: The workflow YAML parsed successfully with the CI dependency installation step.
+
+Command: git diff --check
+Exit code: 0
+Result: No whitespace errors were reported.

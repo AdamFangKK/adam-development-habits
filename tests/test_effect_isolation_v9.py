@@ -95,10 +95,10 @@ class EffectIsolationV9Tests(unittest.TestCase):
                     "type": "item.completed",
                     "item": {
                         "type": "command_execution",
-                        "command": f"cat {root / 'new' / 'SKILL.md'}",
+                        "command": f"printf '%s\\n' {root / 'new' / 'SKILL.md'}",
                         "exit_code": 0,
                         "status": "completed",
-                        "aggregated_output": "new\n",
+                        "aggregated_output": f"{root / 'new' / 'SKILL.md'}\n",
                     },
                 }) + "\n",
                 encoding="utf-8",

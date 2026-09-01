@@ -1,0 +1,225 @@
+{
+  "schema_version": 2,
+  "change_id": "ci-portability-repair",
+  "level": 1,
+  "canonical_owner": [
+    ".github/workflows/skill-quality.yml",
+    "tests/test_effect_isolation_v9.py: test_rejects_self_reported_snapshot_path_without_full_read",
+    "requirements-ci.txt"
+  ],
+  "affected_callers": [
+    "GitHub Actions Verify Adam Development Habits workflow",
+    "tests/test_external_quixbugs_replay.py: run_public_tests",
+    "scripts/audit_effect_isolation_v9.py: proves_skill_read"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The workflow installs the explicitly pinned pytest test dependency before running the suite.",
+      "verification": "python3 -m pip install --dry-run --disable-pip-version-check -r requirements-ci.txt"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The isolation audit rejects a command that only prints a Skill path instead of completing an exact full cat read.",
+      "verification": "python3 -m unittest tests.test_effect_isolation_v9 tests.test_external_quixbugs_replay -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The QuixBugs replay remains exercised rather than skipped when the CI runner is clean.",
+      "verification": "python3 -m unittest tests.test_effect_isolation_v9 tests.test_external_quixbugs_replay -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "README explains that pytest is CI-only and not a Skill runtime dependency.",
+      "verification": "git diff --check"
+    }
+  ],
+  "invariants": [
+    "The CI workflow verifies the full Skill package instead of skipping external replay tests when dependencies are absent.",
+    "A frozen Skill snapshot is proven only by a completed exact cat command whose output equals the complete snapshot bytes.",
+    "pytest is pinned and used only for the QuixBugs test replay; the installed Skill has no runtime dependency."
+  ],
+  "replaced_paths": [
+    "tests/test_effect_isolation_v9.py: platform-dependent accidental full-read fixture",
+    ".github/workflows/skill-quality.yml: implicit pytest availability assumption"
+  ],
+  "retained_compatibility": [],
+  "retirement_sweep": null,
+  "documentation_synchronization": {
+    "updated": [
+      "README.md"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "requirements-ci.txt",
+      ".github/workflows/skill-quality.yml"
+    ],
+    "evidence": "The captured verification artifact records the dependency resolver, tests, YAML parse, and diff check."
+  },
+  "instrumentation": null,
+  "safeguards": [
+    {
+      "name": "declared CI-only test dependency",
+      "status": "applied",
+      "rationale": "requirements-ci.txt pins pytest==8.4.2 so a clean GitHub runner can execute the existing QuixBugs replay."
+    },
+    {
+      "name": "portable negative fixture",
+      "status": "applied",
+      "rationale": "The fixture now prints a path rather than issuing cat, so it cannot be accidentally accepted on platforms without macOS path aliases."
+    },
+    {
+      "name": "quality gate retained",
+      "status": "applied",
+      "rationale": "The workflow still executes all tests and evidence checks; no failure is suppressed or skipped."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The workflow owns CI environment preparation, requirements-ci.txt owns the test-only dependency version, and the fixture owns negative audit input construction."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "pytest==8.4.2 is the minimum explicit test runner required by the existing QuixBugs replay; it is pinned, has no production runtime consumer, and is removable with that replay."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "The repair extends existing workflow and test owners without introducing an extension point or adapter."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "Only deterministic test fixtures, CI configuration, and documentation change; no mutable business or personal data is handled."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "A missing test runner now fails during an explicit dependency-installation step, while the portable fixture rejects a path claim that lacks full-read evidence."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The audit contract remains exact-cat-plus-full-output; only its negative test input is corrected to express the intended invalid condition on every platform."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The test dependency installation has no application runtime budget or production performance impact."
+    },
+    "threat_boundary": {
+      "status": "not_applicable",
+      "rationale": "The change does not process secrets, untrusted production input, or privileged application operations."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The dependency declaration, workflow step, portable regression fixture, README update, evidence, and checks are delivered as one atomic CI repair."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployable service or release rollout changes; the complete repair can be reverted in one commit."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No schema, backfill, persistence format, or production data changes."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "The CI configuration receives only a committed requirements path; it introduces no credential, environment secret, or user-controlled input."
+    },
+    "dependency_supply_chain": {
+      "status": "applied",
+      "rationale": "pytest is a pinned CI-only dependency with an explicit removal condition: remove requirements-ci.txt and the install step if the QuixBugs replay no longer uses pytest."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README identifies pytest as a CI-only replay dependency and the evidence records why the workflow installs it."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The pinned requirements file, exact verification commands, timestamp, revision, and captured outputs allow local and GitHub replay."
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -m pip install --dry-run --disable-pip-version-check -r requirements-ci.txt",
+      "status": "passed",
+      "result": "The resolver selected the pinned pytest==8.4.2 test-only dependency without modifying the local environment.",
+      "evidence_refs": [
+        "dependency-resolution"
+      ]
+    },
+    {
+      "command": "python3 -m unittest tests.test_effect_isolation_v9 tests.test_external_quixbugs_replay -v",
+      "status": "passed",
+      "result": "8 portability and QuixBugs replay tests passed.",
+      "evidence_refs": [
+        "affected-tests"
+      ]
+    },
+    {
+      "command": "ruby -e 'require \"yaml\"; YAML.load_file(\".github/workflows/skill-quality.yml\")'",
+      "status": "passed",
+      "result": "Workflow YAML parsed successfully.",
+      "evidence_refs": [
+        "workflow-yaml"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported.",
+      "evidence_refs": [
+        "diff-check"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "dependency-resolution",
+      "kind": "command_output",
+      "path": ".adam/evidence/ci-portability-repair-verification.txt",
+      "sha256": "85efcc7eee4daf8682023a51f8f87ae768aca6fd85a5ac4fbcbea8ccc8b155bc",
+      "command": "python3 -m pip install --dry-run --disable-pip-version-check -r requirements-ci.txt",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T06:10:02Z",
+      "repository_revision": "619a099eab0c1a5a28c36873f08f26f923cfdd97+worktree",
+      "summary": "Dependency resolution selected the pinned CI-only pytest release."
+    },
+    {
+      "id": "affected-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/ci-portability-repair-verification.txt",
+      "sha256": "85efcc7eee4daf8682023a51f8f87ae768aca6fd85a5ac4fbcbea8ccc8b155bc",
+      "command": "python3 -m unittest tests.test_effect_isolation_v9 tests.test_external_quixbugs_replay -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T06:10:02Z",
+      "repository_revision": "619a099eab0c1a5a28c36873f08f26f923cfdd97+worktree",
+      "summary": "The portable negative fixture and the existing QuixBugs public/hidden replay passed."
+    },
+    {
+      "id": "workflow-yaml",
+      "kind": "command_output",
+      "path": ".adam/evidence/ci-portability-repair-verification.txt",
+      "sha256": "85efcc7eee4daf8682023a51f8f87ae768aca6fd85a5ac4fbcbea8ccc8b155bc",
+      "command": "ruby -e 'require \"yaml\"; YAML.load_file(\".github/workflows/skill-quality.yml\")'",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T06:10:02Z",
+      "repository_revision": "619a099eab0c1a5a28c36873f08f26f923cfdd97+worktree",
+      "summary": "The workflow containing the dependency-installation step is valid YAML."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/ci-portability-repair-verification.txt",
+      "sha256": "85efcc7eee4daf8682023a51f8f87ae768aca6fd85a5ac4fbcbea8ccc8b155bc",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T06:10:02Z",
+      "repository_revision": "619a099eab0c1a5a28c36873f08f26f923cfdd97+worktree",
+      "summary": "The CI portability repair had no whitespace errors."
+    }
+  ],
+  "rollback_or_compatibility": "Revert this atomic commit to restore the prior workflow and test fixture; do not remove the replay tests merely because a clean runner lacks their declared dependency.",
+  "independent_review": null,
+  "remaining_risks": [
+    "The pinned pytest wheel is resolved from PyPI during CI; GitHub Actions remains the authoritative clean Python 3.14 verification.",
+    "The existing Actions Node 20 deprecation notice is unrelated to this failure and does not change the workflow result."
+  ]
+}
