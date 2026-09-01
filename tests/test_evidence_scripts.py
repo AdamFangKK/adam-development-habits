@@ -17,6 +17,7 @@ CAUSAL_EXAMPLE = ROOT / "examples" / "causal-execution-experiment.json"
 CAUSAL_NOTIFICATION_EXAMPLE = ROOT / "examples" / "causal-notification-experiment.json"
 HOLISTIC_EVIDENCE = ROOT / ".adam" / "evidence" / "holistic-quality-discipline.json"
 CONCISE_EXECUTION_EVIDENCE = ROOT / ".adam" / "evidence" / "adam-skill-concise-execution-optimization.json"
+WORKFLOW = ROOT / ".github" / "workflows" / "skill-quality.yml"
 sys.path.insert(0, str(SCRIPTS))
 
 from validate_evidence import validate_evidence  # noqa: E402
@@ -346,6 +347,11 @@ class EvidenceScriptTests(unittest.TestCase):
                 self.assertEqual(artifact["sha256"], expected_sha256)
 
         self.assertEqual(validate_evidence(payload, artifact_root=ROOT), [])
+
+    def test_ci_workflow_uses_current_action_runtimes(self) -> None:
+        workflow = WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn("actions/checkout@v5", workflow)
+        self.assertIn("actions/setup-python@v6", workflow)
 
     def test_code_change_requires_evidence_when_enabled(self) -> None:
         without_evidence = self._make_repository(include_evidence=False)

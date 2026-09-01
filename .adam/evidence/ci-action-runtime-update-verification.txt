@@ -1,0 +1,27 @@
+CI Action runtime update verification
+Executed at: 2026-09-01T06:19:27Z
+Repository revision: 356d5992dc0c26ac55fb055a1dc2a9f8e81c39d9+worktree
+
+Observed condition:
+The successful GitHub run 33476844902 retained a non-failing annotation that
+actions/checkout@v4 and actions/setup-python@v5 target deprecated Node 20.
+
+Official action tag resolution:
+- actions/checkout@v5 -> fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+- actions/setup-python@v6 -> ece7cb06caefa5fff74198d8649806c4678c61a1
+
+Command: python3 -m unittest tests.test_evidence_scripts -q
+Exit code: 0
+Result: 57 tests passed, including the workflow action-runtime regression.
+
+Command: python3 scripts/validate_evidence.py .adam/evidence/*.json
+Exit code: 0
+Result: All pre-existing evidence artifacts validated before this update artifact was added.
+
+Command: ruby -e 'require "yaml"; YAML.load_file(".github/workflows/skill-quality.yml")'
+Exit code: 0
+Result: The updated workflow YAML parsed successfully.
+
+Command: git diff --check
+Exit code: 0
+Result: No whitespace errors were reported.

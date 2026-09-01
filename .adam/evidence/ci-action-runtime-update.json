@@ -1,0 +1,207 @@
+{
+  "schema_version": 2,
+  "change_id": "ci-action-runtime-update",
+  "level": 1,
+  "canonical_owner": [
+    ".github/workflows/skill-quality.yml",
+    "tests/test_evidence_scripts.py: test_ci_workflow_uses_current_action_runtimes"
+  ],
+  "affected_callers": [
+    "GitHub Actions Verify Adam Development Habits workflow"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "The workflow uses checkout@v5 and setup-python@v6, whose official tags resolve on GitHub.",
+      "verification": "python3 -m unittest tests.test_evidence_scripts -q"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The workflow remains valid YAML and retains every verification step.",
+      "verification": "ruby -e 'require \"yaml\"; YAML.load_file(\".github/workflows/skill-quality.yml\")'"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The next GitHub run has no Node 20 deprecation annotation from these actions.",
+      "verification": "GitHub Actions run for this commit"
+    }
+  ],
+  "invariants": [
+    "The workflow continues to run checkout, Python setup, dependency installation, evidence checks, full tests, causal replays, and diff validation.",
+    "The workflow uses officially resolved action tags that run on the current Node runtime.",
+    "Action runtime upgrades do not alter the Skill's runtime dependencies or behavior."
+  ],
+  "replaced_paths": [
+    ".github/workflows/skill-quality.yml: actions/checkout@v4",
+    ".github/workflows/skill-quality.yml: actions/setup-python@v5"
+  ],
+  "retained_compatibility": [],
+  "retirement_sweep": null,
+  "documentation_synchronization": null,
+  "instrumentation": null,
+  "safeguards": [
+    {
+      "name": "current action runtimes",
+      "status": "applied",
+      "rationale": "checkout@v5 and setup-python@v6 replace the Node 20-targeting action majors that generated the GitHub annotation."
+    },
+    {
+      "name": "workflow regression",
+      "status": "applied",
+      "rationale": "A package test verifies the required action majors remain explicit in the active workflow."
+    },
+    {
+      "name": "unchanged verification surface",
+      "status": "applied",
+      "rationale": "Only action runtime versions change; all existing verification steps remain present and will rerun remotely."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "The active workflow owns action runtime selection, while the evidence-script test owns regression detection for the chosen action majors."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "No Python or Skill dependency changes; this update changes only existing GitHub Action major tags."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "The workflow retains its existing steps and adds no extension point or adapter."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "No mutable business, personal, or application data is handled."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "The remote warning is eliminated by replacing the responsible action runtime versions, while a future downgrade becomes a deterministic regression failure."
+    },
+    "contract_evolution": {
+      "status": "not_applicable",
+      "rationale": "No public API, schema, or consumer contract changes."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The action runtime upgrade does not add an application runtime, latency, or resource budget."
+    },
+    "threat_boundary": {
+      "status": "not_applicable",
+      "rationale": "No secrets, authentication flow, untrusted input, or privileged application operation changes."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The two action upgrades, regression test, evidence record, local checks, and GitHub verification are delivered as one atomic update."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployable service release; one commit reverts the runtime tags if GitHub compatibility regresses."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No schema, backfill, persistence, or data transformation changes."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "The workflow permissions, inputs, and secret boundaries are unchanged."
+    },
+    "dependency_supply_chain": {
+      "status": "applied",
+      "rationale": "The official checkout and setup-python actions are upgraded only after their v5 and v6 tags resolved through the GitHub API; no third-party action is introduced."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The evidence records the original Node 20 annotation, resolved official tag objects, and the reason the runtime majors are pinned by regression test."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The workflow text, official action tag object IDs, exact commands, timestamp, revision, and captured output are retained."
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -m unittest tests.test_evidence_scripts -q",
+      "status": "passed",
+      "result": "57 evidence and workflow contract tests passed.",
+      "evidence_refs": [
+        "workflow-regression"
+      ]
+    },
+    {
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "status": "passed",
+      "result": "All pre-existing evidence artifacts validated before this update artifact was added.",
+      "evidence_refs": [
+        "evidence-validation"
+      ]
+    },
+    {
+      "command": "ruby -e 'require \"yaml\"; YAML.load_file(\".github/workflows/skill-quality.yml\")'",
+      "status": "passed",
+      "result": "The workflow YAML parsed successfully.",
+      "evidence_refs": [
+        "workflow-yaml"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported.",
+      "evidence_refs": [
+        "diff-check"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "workflow-regression",
+      "kind": "test_output",
+      "path": ".adam/evidence/ci-action-runtime-update-verification.txt",
+      "sha256": "be943856d8279ca3f134856a2856991ebe29d86599dbdca7808eb3a500e23595",
+      "command": "python3 -m unittest tests.test_evidence_scripts -q",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T06:19:27Z",
+      "repository_revision": "356d5992dc0c26ac55fb055a1dc2a9f8e81c39d9+worktree",
+      "summary": "The workflow action-runtime contract test passed."
+    },
+    {
+      "id": "evidence-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/ci-action-runtime-update-verification.txt",
+      "sha256": "be943856d8279ca3f134856a2856991ebe29d86599dbdca7808eb3a500e23595",
+      "command": "python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T06:19:27Z",
+      "repository_revision": "356d5992dc0c26ac55fb055a1dc2a9f8e81c39d9+worktree",
+      "summary": "All stored evidence present before this artifact validated."
+    },
+    {
+      "id": "workflow-yaml",
+      "kind": "command_output",
+      "path": ".adam/evidence/ci-action-runtime-update-verification.txt",
+      "sha256": "be943856d8279ca3f134856a2856991ebe29d86599dbdca7808eb3a500e23595",
+      "command": "ruby -e 'require \"yaml\"; YAML.load_file(\".github/workflows/skill-quality.yml\")'",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T06:19:27Z",
+      "repository_revision": "356d5992dc0c26ac55fb055a1dc2a9f8e81c39d9+worktree",
+      "summary": "The action-runtime-updated workflow parsed as YAML."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/ci-action-runtime-update-verification.txt",
+      "sha256": "be943856d8279ca3f134856a2856991ebe29d86599dbdca7808eb3a500e23595",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T06:19:27Z",
+      "repository_revision": "356d5992dc0c26ac55fb055a1dc2a9f8e81c39d9+worktree",
+      "summary": "The action-runtime update had no whitespace errors."
+    }
+  ],
+  "rollback_or_compatibility": "Revert this atomic update if the new official action majors fail in GitHub; do not restore the deprecated Node 20 versions merely to bypass a test failure.",
+  "independent_review": null,
+  "remaining_risks": [
+    "GitHub controls action implementation behind tags; the next workflow run is required to confirm the runtime warning is absent.",
+    "Future GitHub Action runtime deprecations may require a similarly reviewed action-major upgrade."
+  ]
+}
