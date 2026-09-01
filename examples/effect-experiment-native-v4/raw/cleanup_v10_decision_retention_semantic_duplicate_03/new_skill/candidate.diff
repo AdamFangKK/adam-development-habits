@@ -1,0 +1,40 @@
+diff --git a/compat/legacy_wrapper.py b/compat/legacy_wrapper.py
+deleted file mode 100644
+index 12ae2eb..0000000
+--- a/compat/legacy_wrapper.py
++++ /dev/null
+@@ -1,2 +0,0 @@
+-def normalize(value):
+-    return value.strip().lower()
+diff --git a/helpers/cleanup_v10_decision_retention_semantic_duplicate_03_alias.py b/helpers/cleanup_v10_decision_retention_semantic_duplicate_03_alias.py
+deleted file mode 100644
+index e398f80..0000000
+--- a/helpers/cleanup_v10_decision_retention_semantic_duplicate_03_alias.py
++++ /dev/null
+@@ -1,2 +0,0 @@
+-def normalize_alias(value):
+-    return value.strip().lower()
+diff --git a/policy.py b/policy.py
+index af95bd4..1b7875f 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,9 +1,9 @@
+-"""legacy_contract_cleanup_v10_decision_retention_semantic_duplicate_03."""
++"""policy.canonical_normalize owns text normalization: trim whitespace, then lowercase."""
+ 
+-from helpers.cleanup_v10_decision_retention_semantic_duplicate_03_alias import normalize_alias
+ 
+ def canonical_normalize(value):
+     return value.strip().lower()
+ 
++
+ def evaluate(value):
+-    return normalize_alias(value)
++    return canonical_normalize(value)
+diff --git a/release-notes.md b/release-notes.md
+index f52c7f2..f35ab0b 100644
+--- a/release-notes.md
++++ b/release-notes.md
+@@ -1 +1 @@
+-legacy_contract_cleanup_v10_decision_retention_semantic_duplicate_03: alternate helper and legacy wrapper remain canonical.
++legacy_contract_cleanup_v10_decision_retention_semantic_duplicate_03: policy.canonical_normalize is the canonical normalizer; duplicate helper and unconsumed legacy wrapper were removed.

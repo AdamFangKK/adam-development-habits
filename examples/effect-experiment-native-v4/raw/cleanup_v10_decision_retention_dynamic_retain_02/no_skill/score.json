@@ -1,0 +1,43 @@
+{
+  "changed_paths": [
+    "plugins/cleanup_v10_decision_retention_dynamic_retain_02_adapter.py",
+    "policy.py"
+  ],
+  "disallowed_changed_paths": [],
+  "hidden_injected_after_agent_exit": true,
+  "hidden_repair_passed": false,
+  "hidden_result": {
+    "passed": false,
+    "returncode": 1,
+    "stderr": "F..\n======================================================================\nFAIL: test_complete_retirement_or_retention (test_hidden.HiddenContract)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/native-cleanup-score-ypca92qw/candidate/tests/test_hidden.py\", line 13, in test_complete_retirement_or_retention\n    self.assertNotIn('legacy_contract_cleanup_v10_decision_retention_dynamic_retain_02', Path('policy.py').read_text(encoding='utf-8'))\nAssertionError: 'legacy_contract_cleanup_v10_decision_retention_dynamic_retain_02' unexpectedly found in '\"\"\"legacy_contract_cleanup_v10_decision_retention_dynamic_retain_02.\"\"\"\\n\\ndef canonical_normalize(value):\\n    return value.strip().casefold()\\n\\ndef evaluate(value):\\n    return canonical_normalize(value)\\n'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nFAILED (failures=1)\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "implementation_integrity_passed": true,
+  "pre_score_artifact_sha256": {
+    "agent-prompt.txt": "f214ec37e01ee7b245965639cc7b0c22aa5c5712f23c7c56af8868def9b4d6d6",
+    "agent-result.json": "59cb64f23c816a30ab00058dfe3bec394b5d8e3bcdc72ef21f04bf7b3ca1d823",
+    "agent-transcript.md": "1aecccf106621daafea0cfce46ffff85b78a0399c4974bca482595fb65a6ba11",
+    "candidate.diff": "f5d27510a61be6511167ed7b289454bfaa40986c3e0255c87a54089579869882",
+    "prepare.json": "c3711154ef9543128373243a3c7314e038273a1829c37befe7e16aa2c958ed4b",
+    "seed.txt": "4e3f0b201acd3d02c21778925278c1ad46d8051dcc9ff88e9df0887cbe0ca4d7",
+    "sequence.json": "2173568af9217986bf433f2037247b1ac7cbed4c4f66efd65b25680af26f099c"
+  },
+  "public_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "scorer_provenance": {
+    "base_runner_path": "scripts/native_cleanup_effect_runner_v1.py",
+    "base_runner_sha256": "97709e37df0a656014169e6e365c9506de96cdb764ebef99e430de1c28dbdd8f",
+    "corpus_manifest_sha256": "963f759ef19e3d1008b08379f2bcd9bc47f73712cd6476a6765078a421a21a95",
+    "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_dynamic_retain_02",
+    "hidden_tests_tree_sha256": "56ee8e1e7086d76d81e2d91e198892a00da54d5ca7eb4710d3939ba654ec4d6d",
+    "reference_tree_sha256": "a3010d45a9c60fa23687e44d8c21343445330ae4e7c81012f7a0761f5bd800fc",
+    "workspace_tree_sha256": "a0cec9d10348707eba8be0c4936a4232dfd45e7eadcc2d777e607e91d81cf319"
+  },
+  "task_id": "cleanup_v10_decision_retention_dynamic_retain_02"
+}

@@ -1,0 +1,16 @@
+{
+  "condition": "old_skill",
+  "executor": {
+    "agent_id": "/root/v4_run_d",
+    "agent_prompt_sha256": "3cd0de5b942566da787db3ad36253cf6763b5c13d7b05fd59494b5cfaa50d44a",
+    "condition_input_sha256": "e415bf4521c2f14d935cb2ab3904f808345d5a7700d3c91e4c8c8b55342ed89d",
+    "finished_at": "2026-09-01T02:02:01Z",
+    "kind": "codex-native-subagent",
+    "model_id": "gpt-5.5",
+    "started_at": "2026-09-01T01:58:22Z",
+    "transcript_sha256": "975af142ac74ed5f2a8fad6877f85a0c67d377120f13355d1bd38b988fc1d573",
+    "workspace_handoff_sha256": "5b94f17c79def9de7bd27df00553dd483f1035506bad8e30138375c78d4561b6"
+  },
+  "status": "agent_exited",
+  "task_id": "cleanup_v10_decision_retention_dynamic_retain_02"
+}

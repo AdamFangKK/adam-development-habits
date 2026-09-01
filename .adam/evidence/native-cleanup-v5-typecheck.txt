@@ -1,0 +1,272 @@
+/Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:16:20 - warning: Import "Any" is not accessed (reportUnusedImport)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:16:25 - warning: This type is deprecated as of Python 3.9; use "collections.abc.Mapping" instead (reportDeprecated)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:32:5 - warning: Type of "value" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:72:8 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:75:34 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:75:34 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_text"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:76:34 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:76:34 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_text"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:80:22 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:80:22 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_text"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:80:110 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "canonical_sha256"
+    Argument type is "dict[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:82:22 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:82:22 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_text"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:84:5 - warning: Type of "tasks" is partially unknown
+    Type of "tasks" is "Unknown | None" (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:84:13 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:89:16 - warning: Type of "raw" is unknown (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:89:33 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "__new__"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:92:33 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:92:33 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_text"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:96:12 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:98:27 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:98:27 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_text"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:99:27 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:99:27 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_text"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:185:35 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "result" in function "canonical_suite_result"
+    Argument type is "dict[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:185:69 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "result" in function "canonical_suite_result"
+    Argument type is "dict[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:255:42 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:257:30 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:257:30 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_text"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:261:8 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:263:38 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:263:38 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_utc_timestamp"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:264:39 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:264:39 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_utc_timestamp"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:272:8 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:274:8 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:276:8 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:279:71 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:337:27 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:337:27 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "value" in function "required_bool"
+    Argument type is "Unknown | None" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:490:8 - warning: Type of "output" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:490:8 - warning: Type of "exists" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:491:73 - warning: Type of "output" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:492:34 - warning: Type of "preregistration" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:492:34 - warning: Argument type is Any
+    Argument corresponds to parameter "path" in function "load_object" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:492:62 - warning: Type of "raw_root" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:492:62 - warning: Argument type is Any
+    Argument corresponds to parameter "raw_root" in function "analyze" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:492:87 - warning: Type of "root" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:492:87 - warning: Argument type is Any
+    Argument corresponds to parameter "root" in function "analyze" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:493:5 - warning: Type of "output" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/analyze_native_cleanup_effect_v5.py:493:5 - warning: Type of "write_text" is Any (reportAny)
+/Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:45:28 - warning: Type `Any` is not allowed (reportExplicitAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:51:9 - warning: Type of "raw" is unknown (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:54:9 - warning: Type of "task_id" is partially unknown
+    Type of "task_id" is "Unknown | None" (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:54:18 - warning: Type of "cohort" is partially unknown
+    Type of "cohort" is "Unknown | None" (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:54:26 - warning: Type of "stratum" is partially unknown
+    Type of "stratum" is "Unknown | None" (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:54:36 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:54:56 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:54:75 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:55:46 - warning: Type of "item" is partially unknown
+    Type of "item" is "Unknown | None" (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:167:5 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:176:44 - warning: Type of "output" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:176:44 - warning: Argument type is Any
+    Argument corresponds to parameter "output" in function "write_preregistration" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:176:67 - warning: Type of "root" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/create_native_cleanup_effect_preregistration_v5.py:176:67 - warning: Argument type is Any
+    Argument corresponds to parameter "root" in function "write_preregistration" (reportAny)
+/Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py:53:5 - warning: Type of "manifest" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py:54:57 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py:57:9 - warning: Type of "raw" is unknown (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py:58:56 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py:67:5 - warning: Result of call expression is of type "Path" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py:122:5 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py:130:59 - warning: Type of "corpus" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/materialize_native_cleanup_effect_v5.py:130:59 - warning: Argument type is Any
+    Argument corresponds to parameter "corpus" in function "materialize_native_cleanup_effect_v5" (reportAny)
+/Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:42:5 - warning: Type of "value" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:72:53 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:75:39 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:76:13 - warning: Type of "order" is partially unknown
+    Type of "order" is "Unknown | None" (reportUnknownVariableType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:76:21 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:77:53 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "__new__"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:122:5 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:192:5 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:222:5 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:292:5 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:319:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:320:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:321:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:322:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:323:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:324:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:325:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:327:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:328:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:329:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:330:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:331:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:332:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:333:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:334:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:336:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:337:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:338:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:339:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:340:5 - warning: Result of call expression is of type "Action" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:342:8 - warning: Type of "command" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:36 - warning: Type of "corpus" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:36 - warning: Argument type is Any
+    Argument corresponds to parameter "corpus" in function "prepare_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:49 - warning: Type of "preregistration" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:49 - warning: Argument type is Any
+    Argument corresponds to parameter "preregistration" in function "prepare_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:71 - warning: Type of "source_root" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:71 - warning: Argument type is Any
+    Argument corresponds to parameter "source_root" in function "prepare_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:89 - warning: Type of "raw_root" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:89 - warning: Argument type is Any
+    Argument corresponds to parameter "raw_root" in function "prepare_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:104 - warning: Type of "task" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:104 - warning: Argument type is Any
+    Argument corresponds to parameter "task_id" in function "prepare_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:115 - warning: Type of "condition" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:115 - warning: Argument type is Any
+    Argument corresponds to parameter "condition" in function "prepare_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:131 - warning: Type of "workspace" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:343:131 - warning: Argument type is Any
+    Argument corresponds to parameter "workspace" in function "prepare_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:345:10 - warning: Type of "command" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:347:13 - warning: Type of "raw_root" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:347:13 - warning: Argument type is Any
+    Argument corresponds to parameter "raw_root" in function "mark_agent_complete" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:348:13 - warning: Type of "task" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:348:13 - warning: Argument type is Any
+    Argument corresponds to parameter "task_id" in function "mark_agent_complete" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:349:13 - warning: Type of "condition" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:349:13 - warning: Argument type is Any
+    Argument corresponds to parameter "condition" in function "mark_agent_complete" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:350:22 - warning: Type of "agent_id" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:350:22 - warning: Argument type is Any
+    Argument corresponds to parameter "agent_id" in function "mark_agent_complete" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:351:22 - warning: Type of "model_id" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:351:22 - warning: Argument type is Any
+    Argument corresponds to parameter "model_id" in function "mark_agent_complete" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:352:24 - warning: Type of "started_at" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:352:24 - warning: Argument type is Any
+    Argument corresponds to parameter "started_at" in function "mark_agent_complete" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:353:25 - warning: Type of "finished_at" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:353:25 - warning: Argument type is Any
+    Argument corresponds to parameter "finished_at" in function "mark_agent_complete" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:354:24 - warning: Type of "transcript" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:354:24 - warning: Argument type is Any
+    Argument corresponds to parameter "transcript" in function "mark_agent_complete" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:42 - warning: Type of "corpus" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:42 - warning: Argument type is Any
+    Argument corresponds to parameter "corpus" in function "score_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:55 - warning: Type of "raw_root" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:55 - warning: Argument type is Any
+    Argument corresponds to parameter "raw_root" in function "score_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:70 - warning: Type of "task" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:70 - warning: Argument type is Any
+    Argument corresponds to parameter "task_id" in function "score_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:81 - warning: Type of "condition" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:81 - warning: Argument type is Any
+    Argument corresponds to parameter "condition" in function "score_condition" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:97 - warning: Type of "workspace" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/scripts/native_cleanup_effect_runner_v5.py:357:97 - warning: Argument type is Any
+    Argument corresponds to parameter "workspace" in function "score_condition" (reportAny)
+/Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:55:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:64:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:65:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:66:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:67:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:68:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:69:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:81:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:112:5 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:203:13 - warning: Type of "sequence" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:205:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:207:13 - warning: Type of "score" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:209:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:233:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_protocol_v5.py:264:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+/Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_runner_v5.py
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_runner_v5.py:52:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_runner_v5.py:68:68 - warning: Type of "sha256" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_runner_v5.py:68:68 - warning: Type of "hexdigest" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_runner_v5.py:78:13 - warning: Type of "sequence" is Any (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_runner_v5.py:80:34 - warning: Argument type is Any
+    Argument corresponds to parameter "obj" in function "len" (reportAny)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_runner_v5.py:91:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_runner_v5.py:113:13 - warning: Result of call expression is of type "int" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+/Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_v5.py
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_v5.py:90:21 - warning: Result of call expression is of type "Path" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_v5.py:96:21 - warning: Result of call expression is of type "Path" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_v5.py:110:13 - warning: Result of call expression is of type "Path" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+  /Users/adamfang/.codex/skills/adam-development-habits/tests/test_native_cleanup_effect_v5.py:117:13 - warning: Result of call expression is of type "Path" and is not used; assign to variable "_" if this is intentional (reportUnusedCallResult)
+0 errors, 171 warnings, 0 notes

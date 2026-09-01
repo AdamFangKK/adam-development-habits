@@ -1,0 +1,64 @@
+{
+  "analysis_eligibility": "ineligible",
+  "collection": {
+    "all_hidden_tests_injected_after_agent_exit": false,
+    "all_implementation_integrity_and_public_checks_passed": false,
+    "completed_trials": 0,
+    "errors": [
+      "score.changed_paths does not match the independent replay",
+      "trial cleanup_v10_decision_retention_split_owner_01/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_split_owner_01/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "score.hidden_result does not match the independent replay's canonical result",
+      "score.hidden_result does not match the independent replay's canonical result",
+      "trial cleanup_v10_decision_retention_dynamic_retain_02/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "score.hidden_result does not match the independent replay's canonical result",
+      "trial cleanup_v10_decision_retention_semantic_duplicate_03/no_skill is missing required artifacts: agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_semantic_duplicate_03/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_release_drift_08/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_release_drift_08/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_release_drift_08/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_dynamic_retain_10/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_dynamic_retain_10/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_decision_retention_dynamic_retain_10/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_21/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_21/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_21/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_dynamic_retain_22/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_dynamic_retain_22/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_dynamic_retain_22/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_27/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_27/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_semantic_duplicate_27/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_release_drift_28/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_release_drift_28/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_release_drift_28/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_37/old_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_37/no_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "trial cleanup_v10_repair_split_owner_37/new_skill is missing required artifacts: sequence.json, prepare.json, seed.txt, agent-prompt.txt, agent-transcript.md, agent-result.json, candidate.diff, score.json",
+      "collection has 0 readable trials, expected 30"
+    ],
+    "planned_trials": 30
+  },
+  "conclusion": "ineligible: collection did not satisfy the preregistered completeness and integrity rule.",
+  "experiment_id": "adam-native-cleanup-effect-v4",
+  "limitations": [
+    "This is protocol isolation on a shared filesystem, not OS or container isolation.",
+    "The result cannot establish a model-wide causal-reasoning capability or production reliability claim."
+  ],
+  "preregistration_sha256": "899d116faa89b58f62b349952ecda58f311223508ab959d8a0d18af826098285",
+  "schema_version": 1,
+  "statistics": {
+    "decision_retention_regressions": [],
+    "primary_new_skill_minus_old_skill": {
+      "effect": null,
+      "one_sided_exact_sign_flip_p_value": null,
+      "task_differences": []
+    },
+    "secondary_new_skill_minus_no_skill": {
+      "effect": null,
+      "task_differences": []
+    }
+  },
+  "status": "ineligible",
+  "trials": []
+}

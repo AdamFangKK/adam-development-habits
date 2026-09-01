@@ -1,0 +1,59 @@
+diff --git a/README.md b/README.md
+index 99abc49..1929eac 100644
+--- a/README.md
++++ b/README.md
+@@ -1,2 +1,2 @@
+-# legacy_contract_cleanup_v10_decision_retention_split_owner_01
+-Current owners use the canonical normalizer.
++# policy.normalize
++Current owners use the canonical normalization policy.
+diff --git a/docs/cleanup_v10_decision_retention_split_owner_01.md b/docs/cleanup_v10_decision_retention_split_owner_01.md
+deleted file mode 100644
+index 86e0cc6..0000000
+--- a/docs/cleanup_v10_decision_retention_split_owner_01.md
++++ /dev/null
+@@ -1 +0,0 @@
+-legacy_contract_cleanup_v10_decision_retention_split_owner_01: policy contract.
+diff --git a/legacy/cleanup_v10_decision_retention_split_owner_01.py b/legacy/cleanup_v10_decision_retention_split_owner_01.py
+deleted file mode 100644
+index 63d54da..0000000
+--- a/legacy/cleanup_v10_decision_retention_split_owner_01.py
++++ /dev/null
+@@ -1,2 +0,0 @@
+-def legacy_normalize(value):
+-    return value.strip().lower()
+diff --git a/package-metadata.json b/package-metadata.json
+index 78114fb..57647d3 100644
+--- a/package-metadata.json
++++ b/package-metadata.json
+@@ -1 +1 @@
+-{"contract": "legacy_contract_cleanup_v10_decision_retention_split_owner_01"}
++{"contract": "policy.normalize"}
+diff --git a/policy.py b/policy.py
+index 9c5e06a..b18d8a8 100644
+--- a/policy.py
++++ b/policy.py
+@@ -1,6 +1,13 @@
+-"""legacy_contract_cleanup_v10_decision_retention_split_owner_01."""
++"""Canonical normalization policy.
++
++policy.normalize owns the string normalization invariant: trim surrounding
++whitespace, then lowercase the remaining value.
++"""
++
++
++def normalize(value):
++    return value.strip().lower()
+ 
+-from legacy.cleanup_v10_decision_retention_split_owner_01 import legacy_normalize
+ 
+ def evaluate(value):
+-    return legacy_normalize(value)
++    return normalize(value)
+diff --git a/release-notes.md b/release-notes.md
+index 40b74d5..3b45307 100644
+--- a/release-notes.md
++++ b/release-notes.md
+@@ -1 +1 @@
+-legacy_contract_cleanup_v10_decision_retention_split_owner_01: legacy module remains supported.
++policy.normalize is the supported normalization contract.

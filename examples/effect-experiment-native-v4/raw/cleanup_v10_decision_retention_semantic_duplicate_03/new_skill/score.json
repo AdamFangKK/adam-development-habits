@@ -1,0 +1,45 @@
+{
+  "changed_paths": [
+    "compat/legacy_wrapper.py",
+    "helpers/cleanup_v10_decision_retention_semantic_duplicate_03_alias.py",
+    "policy.py",
+    "release-notes.md"
+  ],
+  "disallowed_changed_paths": [],
+  "hidden_injected_after_agent_exit": true,
+  "hidden_repair_passed": false,
+  "hidden_result": {
+    "passed": false,
+    "returncode": 1,
+    "stderr": "F..\n======================================================================\nFAIL: test_complete_retirement_or_retention (test_hidden.HiddenContract)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/var/folders/9g/ggntyg1d4j745npwxl320chr0000gn/T/native-cleanup-score-hzpbhqdl/candidate/tests/test_hidden.py\", line 14, in test_complete_retirement_or_retention\n    self.assertNotIn('legacy_contract_cleanup_v10_decision_retention_semantic_duplicate_03', Path('README.md').read_text(encoding='utf-8'))\nAssertionError: 'legacy_contract_cleanup_v10_decision_retention_semantic_duplicate_03' unexpectedly found in '# legacy_contract_cleanup_v10_decision_retention_semantic_duplicate_03\\nCurrent owners use the canonical normalizer.\\n'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nFAILED (failures=1)\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "implementation_integrity_passed": true,
+  "pre_score_artifact_sha256": {
+    "agent-prompt.txt": "3cd0de5b942566da787db3ad36253cf6763b5c13d7b05fd59494b5cfaa50d44a",
+    "agent-result.json": "2ea432971591babe29afe2e313b0870d51bfb4084067af9320ff51e0aec24e1a",
+    "agent-transcript.md": "94adcfc71be95ff434ce54f01567805cf95642347680bad1d913b73a05dd170f",
+    "candidate.diff": "7b10b79889793be2658682d622c795f42ae98ab6c18e812a3c4b4f9f49adbc27",
+    "prepare.json": "81727772b4175942d646a5adf1ff1b2868ae25404ef43bb87918556f38707982",
+    "seed.txt": "afd66db6137caa1ed35e1a65496e0a2ccfaa16ec698a564d6778848588bb1822",
+    "sequence.json": "cd89bd8ad38848b77972f2e009a9d629a4c70d702ef07a7b38074c00b4864590"
+  },
+  "public_result": {
+    "passed": true,
+    "returncode": 0,
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+    "stdout": "",
+    "timeout": false
+  },
+  "scorer_provenance": {
+    "base_runner_path": "scripts/native_cleanup_effect_runner_v1.py",
+    "base_runner_sha256": "97709e37df0a656014169e6e365c9506de96cdb764ebef99e430de1c28dbdd8f",
+    "corpus_manifest_sha256": "963f759ef19e3d1008b08379f2bcd9bc47f73712cd6476a6765078a421a21a95",
+    "hidden_tests_path": "hidden-tests/cleanup_v10_decision_retention_semantic_duplicate_03",
+    "hidden_tests_tree_sha256": "20f4a835d0efda3235d1fcb2263dfde2f6a33ef599bd27bf22b2d2a1ee520524",
+    "reference_tree_sha256": "4340976cf9bb781666abff39ccd11e860e0322af2c9c12fe1188d696a264e178",
+    "workspace_tree_sha256": "11cd410629461bbef4c898e985f0255c5b20261dea248d063065f8bcf3ed5995"
+  },
+  "task_id": "cleanup_v10_decision_retention_semantic_duplicate_03"
+}

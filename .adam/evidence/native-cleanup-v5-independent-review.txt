@@ -1,0 +1,15 @@
+Verdict: APPROVE
+
+Findings:
+- No blocking issues found in the V5 native cleanup-effect protocol.
+
+Evidence:
+- `python3 -m unittest tests.test_native_cleanup_effect_protocol_v5 tests.test_native_cleanup_effect_runner_v5 tests.test_native_cleanup_effect_v5` — passed (`Ran 17 tests in 12.325s`, `OK`).
+- `scripts/analyze_native_cleanup_effect_v5.py:148-196` — replay rebuilds from frozen V5 corpus, applies `candidate.diff`, and normalizes only unittest duration plus deterministic temp scoring paths.
+- `scripts/native_cleanup_effect_runner_v5.py:148-170` and `:233-260` — empty diff replay is handled without `git apply`, and native provenance is enforced with agent kind, agent id, UTC timestamps, prompt hash, condition-input hash, and workspace-handoff hash.
+- `tests/test_native_cleanup_effect_protocol_v5.py:126-214` — covers synthetic provenance rejection, complete real replay, tampered predecessor-score chain rejection, tampered candidate diff rejection, unexpected retry directory rejection, unplanned task/file rejection, and failed hidden samples that remain analyzable.
+- `tests/test_native_cleanup_effect_runner_v5.py:89-110` — covers the failed-sample predecessor path and the unconsumed wrapper trap.
+- `README.md:275-277` — states V5 is still protocol-isolated, that failed samples may continue in sequence, and that any integrity/safety/protocol issue makes the final statistics ineligible.
+
+Remaining limits:
+- This review is read-only and did not run the full repository-wide suite.

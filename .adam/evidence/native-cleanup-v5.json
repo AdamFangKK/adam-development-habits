@@ -1,0 +1,365 @@
+{
+  "schema_version": 2,
+  "change_id": "native-cleanup-v5",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/materialize_native_cleanup_effect_v5.py:materialize_native_cleanup_effect_v5",
+    "scripts/native_cleanup_effect_runner_v5.py:prepare_condition",
+    "scripts/native_cleanup_effect_runner_v5.py:score_condition",
+    "scripts/analyze_native_cleanup_effect_v5.py:analyze",
+    "scripts/create_native_cleanup_effect_preregistration_v5.py:create"
+  ],
+  "affected_callers": [
+    "Codex native subagents executing V5 no_skill, old_skill, and new_skill conditions",
+    "The parent Harness recording native-agent provenance and running blind scoring",
+    "The V5 analyzer replaying every candidate diff from the frozen corpus",
+    "Maintainers running the repository-local V5 verification commands"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "V5 uses ten V10-derived tasks not used by V4, with a hash-bound old/new policy snapshot and a fixed three-condition order per task.",
+      "verification": "python3 -m unittest tests.test_native_cleanup_effect_v5 tests.test_native_cleanup_effect_runner_v5 tests.test_native_cleanup_effect_protocol_v5"
+    },
+    {
+      "id": "AC-2",
+      "condition": "A failed hidden or implementation result after agent exit may advance the per-task score chain, while incomplete, forged, replay-divergent, or protocol-invalid collections remain ineligible.",
+      "verification": "python3 -m unittest tests.test_native_cleanup_effect_v5 tests.test_native_cleanup_effect_runner_v5 tests.test_native_cleanup_effect_protocol_v5"
+    },
+    {
+      "id": "AC-3",
+      "condition": "V5 replays an empty candidate diff as the public seed and normalizes only volatile unittest duration and controlled scorer worktree paths.",
+      "verification": "python3 -m unittest tests.test_native_cleanup_effect_protocol_v5"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The package regression suite, pytest suite, type check, compilation, Skill validation, snapshot parity, and diff hygiene pass before collection.",
+      "verification": "python3 -m unittest discover -s tests -p 'test_*.py'"
+    }
+  ],
+  "invariants": [
+    "Each task has exactly three preregistered conditions in a fixed per-task order; later conditions require every predecessor to have an agent-exit record and a scored_after_agent_exit credential.",
+    "A failed hidden or implementation-integrity result is retained as a completed sample for sequencing; it cannot be silently dropped and still makes final collection eligibility fail.",
+    "The repair agent receives only its task workspace and the applicable frozen Skill snapshot; hidden tests, reference fixes, scoring rubric, prior outputs, and condition outcomes remain unavailable.",
+    "The analyzer rematerializes the frozen corpus, replays candidate diffs, and rejects mismatched provenance, pre-score artifact hashes, results, sequence credentials, extra task files, and retry directories.",
+    "The parent Harness remains trusted for native identity and transcript recording; this is shared-filesystem protocol isolation, not container isolation or cryptographic attestation.",
+    "This frozen protocol is not evidence that the Skill improves repair success, model-wide causal reasoning, or production reliability before complete eligible collection and the preregistered analysis."
+  ],
+  "replaced_paths": [
+    "V4's coupling of predecessor readiness to hidden/implementation success",
+    "V4's replay handling that attempted to apply an empty candidate diff",
+    "V4's overly broad comparison of volatile temporary scorer paths",
+    "The V4 claim-ready README description"
+  ],
+  "retained_compatibility": [],
+  "retirement_sweep": {
+    "remove": [
+      "The stale V4 description that represented V4 as an unstarted protocol"
+    ],
+    "retain": [
+      {
+        "path": "examples/effect-experiment-native-v4/raw/",
+        "consumer": "Historical protocol-failure audit",
+        "removal_condition": "Retain while V4 remains cited as an ineligible collection; remove only under a separate archival policy.",
+        "observability": "examples/effect-experiment-native-v4/collection-invalid.json",
+        "test": "tests/test_native_cleanup_effect_protocol_v5.py"
+      }
+    ],
+    "unknown": [],
+    "evidence": [
+      "README V4/V5 status review",
+      "V5 snapshot parity check",
+      "focused protocol regression tests"
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "README.md",
+      "SKILL.md",
+      "examples/effect-experiment-native-v5/skills/new/SKILL.md"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "examples/effect-experiment-native-v5/preregistration.json",
+      ".gitattributes",
+      "scripts/materialize_native_cleanup_effect_v5.py",
+      "scripts/native_cleanup_effect_runner_v5.py",
+      "scripts/analyze_native_cleanup_effect_v5.py",
+      "scripts/create_native_cleanup_effect_preregistration_v5.py"
+    ],
+    "evidence": "The frozen new snapshot has byte-for-byte parity with SKILL.md, and README states that V5 has not yet run any trial or established an effect claim."
+  },
+  "instrumentation": {
+    "status": "applied",
+    "events": [
+      {
+        "event": "scored_after_agent_exit",
+        "component": "scripts.native_cleanup_effect_runner_v5.score_condition",
+        "outcome": "executed",
+        "labels": ["task_id", "condition"],
+        "redaction_review": "Only fixed task and condition identifiers are recorded; no credentials, payloads, or user-controlled labels are emitted.",
+        "evidence_refs": ["focused-tests"]
+      }
+    ],
+    "cardinality_review": "The task IDs and three condition labels are preregistered and bounded; the event does not contain source content or secrets.",
+    "owner": "V5 parent Harness",
+    "threshold_and_action": "A missing post-exit score credential blocks the next condition; any completeness or integrity failure produces an ineligible analysis result.",
+    "evidence": "Focused protocol tests assert the post-exit scoring and failed-predecessor chain behavior."
+  },
+  "safeguards": [
+    {
+      "name": "frozen preregistration",
+      "status": "applied",
+      "rationale": "The V5 preregistration binds the corpus, generators, runner, base scorer, analyzer, prompt, old/new Skill snapshots, task order, model/Harness scope, and stopping rule before trial collection."
+    },
+    {
+      "name": "failure-preserving sequence chain",
+      "status": "applied",
+      "rationale": "A real failed sample remains in the chain rather than blocking later conditions or disappearing from analysis; final completeness still rejects failed integrity or hidden contracts."
+    },
+    {
+      "name": "blind replayed scoring",
+      "status": "applied",
+      "rationale": "The analyzer rebuilds the public workspace and reruns the hidden scorer from each recorded diff, including pristine replay for an empty diff."
+    },
+    {
+      "name": "snapshot parity",
+      "status": "applied",
+      "rationale": "The treatment snapshot and the normative SKILL.md are byte-identical after the literal-old-contract-marker correction."
+    },
+    {
+      "name": "independent review",
+      "status": "applied",
+      "rationale": "A separate read-only native reviewer checked V4 failure closure, provenance, replay, anti-tamper coverage, and claim boundaries."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "Corpus materialization, condition preparation/scoring, preregistration, analysis, and evidence validation remain separate deterministic owners."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The V5 update uses only the Python standard library, existing Git, existing package tests, basedpyright, and the existing Skill validator."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "The protocol has no production extension point or new public runtime abstraction."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "The change creates deterministic local test fixtures and evidence, not mutable business or personal data."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Missing, forged, out-of-order, replay-divergent, incomplete, or extra artifacts make collection ineligible; a completed behavioral failure remains an explicit failed sample."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "V5 uses fresh task IDs not sampled by V4 and does not reinterpret or retry V4's ineligible data."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "Focused V5 checks completed in 27.253 seconds; the full unittest and pytest suites completed in about 112 seconds; preregistration caps agents at 300 seconds and scorer checks at 20 seconds."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The protocol detects malformed or inconsistent local artifacts but explicitly excludes a malicious trusted parent, filesystem escape, and cryptographic identity attestation."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The V5 freeze has hash-linked checks, independent review, a clean diff check, and an atomic Lore commit before any trial collection."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployable service, rollout, feature flag, or production release changed."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No production persistence, schema, backfill, or migration changed."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "V5 records no credential, runtime configuration, or secret; it uses the native subagent Harness supplied by this session."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No dependency manifest, lockfile, package version, or third-party runtime dependency changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README, the preregistration, archived V4 invalidation record, and evidence ledger state how to run and interpret V5 without overstating its assurance."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "Inputs are hash-bound; analysis rematerializes public task workspaces and replays each candidate; task order and stopping rules prevent selective retries."
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -m unittest tests.test_native_cleanup_effect_v5 tests.test_native_cleanup_effect_runner_v5 tests.test_native_cleanup_effect_protocol_v5",
+      "status": "passed",
+      "result": "17 focused V5 protocol tests passed.",
+      "evidence_refs": ["focused-tests"]
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_*.py'",
+      "status": "passed",
+      "result": "321 complete package unittest tests passed in 112.270 seconds.",
+      "evidence_refs": ["unittest"]
+    },
+    {
+      "command": "python3 -m pytest -q",
+      "status": "passed",
+      "result": "321 complete package pytest tests passed in 112.55 seconds.",
+      "evidence_refs": ["pytest"]
+    },
+    {
+      "command": "basedpyright scripts/materialize_native_cleanup_effect_v5.py scripts/native_cleanup_effect_runner_v5.py scripts/create_native_cleanup_effect_preregistration_v5.py scripts/analyze_native_cleanup_effect_v5.py tests/test_native_cleanup_effect_v5.py tests/test_native_cleanup_effect_runner_v5.py tests/test_native_cleanup_effect_protocol_v5.py",
+      "status": "passed",
+      "result": "basedpyright reported 0 errors; 171 warnings remain outside the error gate.",
+      "evidence_refs": ["typecheck"]
+    },
+    {
+      "command": "python3 -m compileall -q scripts tests",
+      "status": "passed",
+      "result": "All package scripts and tests compiled without output.",
+      "evidence_refs": ["compileall"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "The Skill validator reported that the package is valid.",
+      "evidence_refs": ["skill-validator"]
+    },
+    {
+      "command": "git diff --no-index -- SKILL.md examples/effect-experiment-native-v5/skills/new/SKILL.md",
+      "status": "passed",
+      "result": "The frozen treatment snapshot has byte-for-byte parity with the current SKILL.md.",
+      "evidence_refs": ["snapshot-parity"]
+    },
+    {
+      "command": "git diff --cached --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported.",
+      "evidence_refs": ["diff-check"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "preregistration",
+      "kind": "evaluation_transcript",
+      "path": "examples/effect-experiment-native-v5/preregistration.json",
+      "sha256": "f3250d993a1a20ac0865e1e55457066ca5c86571280109925da8aa7bff19b93a",
+      "summary": "Hash-bound V5 preregistration generated before any native trial."
+    },
+    {
+      "id": "focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v5-focused.txt",
+      "sha256": "065fc0b6d9e4b84800364310f3cfd6b73904b284eabb7d23ffd9177f974b3252",
+      "command": "python3 -m unittest tests.test_native_cleanup_effect_v5 tests.test_native_cleanup_effect_runner_v5 tests.test_native_cleanup_effect_protocol_v5",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T02:21:45Z",
+      "repository_revision": "99ec1ccd43f3f67a8492f9ddb4180743f587df12+worktree",
+      "summary": "The focused V5 protocol suite passed 17 tests."
+    },
+    {
+      "id": "unittest",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v5-unittest.txt",
+      "sha256": "fa6e5c49fa4712949bd3cb1158fae02cf827483dad2a82ccd335b3ed5987ca32",
+      "command": "python3 -m unittest discover -s tests -p 'test_*.py'",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T02:23:10Z",
+      "repository_revision": "99ec1ccd43f3f67a8492f9ddb4180743f587df12+worktree",
+      "summary": "The full package unittest suite passed 321 tests."
+    },
+    {
+      "id": "pytest",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-v5-pytest.txt",
+      "sha256": "c538a5cb9b00e9b0e12e23217d35e225c8146ce43d3fc61ca4834ff75d4aa2bb",
+      "command": "python3 -m pytest -q",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T02:23:10Z",
+      "repository_revision": "99ec1ccd43f3f67a8492f9ddb4180743f587df12+worktree",
+      "summary": "The full package pytest suite passed 321 tests."
+    },
+    {
+      "id": "typecheck",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v5-typecheck.txt",
+      "sha256": "9f71fefa8cc4d67f4c5cad142d86aa697b63b8e5768c75f0d935cf15d3933cfe",
+      "command": "basedpyright scripts/materialize_native_cleanup_effect_v5.py scripts/native_cleanup_effect_runner_v5.py scripts/create_native_cleanup_effect_preregistration_v5.py scripts/analyze_native_cleanup_effect_v5.py tests/test_native_cleanup_effect_v5.py tests/test_native_cleanup_effect_runner_v5.py tests/test_native_cleanup_effect_protocol_v5.py",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T02:21:21Z",
+      "repository_revision": "99ec1ccd43f3f67a8492f9ddb4180743f587df12+worktree",
+      "summary": "basedpyright completed with zero errors and 171 non-error warnings."
+    },
+    {
+      "id": "compileall",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v5-compileall.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "python3 -m compileall -q scripts tests",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T02:21:22Z",
+      "repository_revision": "99ec1ccd43f3f67a8492f9ddb4180743f587df12+worktree",
+      "summary": "Package sources compiled without errors."
+    },
+    {
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v5-skill-validator.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T02:21:22Z",
+      "repository_revision": "99ec1ccd43f3f67a8492f9ddb4180743f587df12+worktree",
+      "summary": "The Skill validator reported that the package is valid."
+    },
+    {
+      "id": "snapshot-parity",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v5-snapshot-parity.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "git diff --no-index -- SKILL.md examples/effect-experiment-native-v5/skills/new/SKILL.md",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T02:25:01Z",
+      "repository_revision": "99ec1ccd43f3f67a8492f9ddb4180743f587df12+worktree",
+      "summary": "No diff proves byte-for-byte treatment snapshot parity."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-v5-diff-check.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "git diff --cached --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-01T02:25:01Z",
+      "repository_revision": "99ec1ccd43f3f67a8492f9ddb4180743f587df12+worktree",
+      "summary": "Git whitespace validation completed without output."
+    },
+    {
+      "id": "review-report",
+      "kind": "review_report",
+      "path": ".adam/evidence/native-cleanup-v5-independent-review.txt",
+      "sha256": "a7a6bdc3f5cb87e6a02b9c158e193e0e533a9873ec61fa8dc5e84646ad53ca37",
+      "summary": "Independent read-only review approved the V5 freeze and records its trusted-parent limitation."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the V5 scripts, corpus manifest, frozen snapshots, preregistration, tests, README statement, and this evidence record together if a separately verified protocol supersedes V5. Retain V4 raw artifacts and its invalidation record; never convert an incomplete or invalid V4/V5 collection into an effect claim.",
+  "independent_review": {
+    "reviewer": "Codex native fast_review read-only reviewer",
+    "outcome": "approved",
+    "notes": "The reviewer confirmed V4 failure closure, targeted anti-tamper and replay coverage, frozen-provenance requirements, and accurately limited README claims. It did not repeat the full suite, which is separately recorded.",
+    "evidence_ref": "review-report"
+  },
+  "remaining_risks": [
+    "No V5 trial has run yet, so the current evidence proves protocol readiness rather than a Skill-effect result.",
+    "A party controlling every local raw artifact and the trusted parent could rewrite a collection and recompute its hash chain; append-only remote attestation or container isolation would be required for stronger assurance.",
+    "Even a complete eligible 30-trial V5 collection only compares the preregistered fixed model, native Harness, snapshots, corpus, and scorer; it cannot prove model-wide causal ability or production repair success.",
+    "Any failed, interrupted, incomplete, or protocol-invalid V5 collection remains ineligible, with no selective retry."
+  ]
+}

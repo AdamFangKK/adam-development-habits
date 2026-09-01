@@ -1,0 +1,183 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "claim_rule": "eligible collection, primary effect at least minimum_effect, primary p-value at most alpha, no new-skill regression against old_skill in decision-retention, and non-negative secondary effect",
+    "critical_safety_cohort": "decision-retention",
+    "minimum_effect": 0.2,
+    "primary_contrast": "new_skill-old_skill",
+    "secondary_anchor": "new_skill-no_skill",
+    "test": "exact one-sided paired sign-flip test over non-tied task-level hidden-contract outcomes"
+  },
+  "experiment_id": "adam-native-cleanup-effect-v5",
+  "preregistration": {
+    "envelope_sha256": "2e3cf0ec3dfdcbf5d65942130859241845f1a49a6633a4aee295e6bb6e78b209",
+    "protocol_sha256": "87c0630c98f49dabcc783d14804be94a192c9792d73d1daec9248416d4668a24",
+    "raw_artifacts_append_only": true,
+    "recorded_before_first_trial": true,
+    "references_unavailable_to_agents": true
+  },
+  "protocol": {
+    "agent_must_not_receive": [
+      "hidden tests",
+      "reference tree",
+      "scoring rubric",
+      "prior trial outputs",
+      "condition outcome"
+    ],
+    "agent_provenance": "each completed condition records the native agent identity, fixed model identifier, ordered UTC timestamps, frozen prompt hash, condition-input and workspace-handoff fingerprints, and a transcript hash; the analyzer requires all fields and replays the candidate diff independently",
+    "agent_timeout_seconds": 300,
+    "allowed_agent_input": [
+      "task workspace",
+      "condition-specific frozen Skill snapshot when supplied"
+    ],
+    "analyzer_path": "scripts/analyze_native_cleanup_effect_v5.py",
+    "analyzer_sha256": "03886f5edd9269020e6a1941794eabb6b8e8baf1527354d8d9919a11f73aca62",
+    "base_runner_path": "scripts/native_cleanup_effect_runner_v1.py",
+    "base_runner_sha256": "97709e37df0a656014169e6e365c9506de96cdb764ebef99e430de1c28dbdd8f",
+    "conditions": [
+      "no_skill",
+      "old_skill",
+      "new_skill"
+    ],
+    "corpus_manifest_path": "examples/effect-experiment-native-v5/manifest.json",
+    "corpus_manifest_sha256": "2ec11e2bd1674bdf25b048b2ae3f6725744fcceedcd4545ad6ed3335786451d6",
+    "generator_path": "scripts/materialize_native_cleanup_effect_v5.py",
+    "generator_sha256": "7689bffdc8bf6f60065520e1884c73fda4101ccbdad371ed792e884f33241b9c",
+    "hidden_scorer": "the hash-bound native_cleanup_effect_runner_v1 base scorer copies only tests/test_hidden.py from the private V5 corpus into a disposable scoring candidate after the native subagent returns",
+    "hidden_scorer_blind_to_condition": true,
+    "new_skill_path": "examples/effect-experiment-native-v5/skills/new/SKILL.md",
+    "new_skill_sha256": "f3cd50334221cbbee7376f8b54c86ff0956ad217d9d8ef4046dc149d31d0ed1c",
+    "old_skill_path": "examples/effect-experiment-native-v5/skills/old/SKILL.md",
+    "old_skill_sha256": "95551ad23ec77efda31d10b2bca1b27fe1dbe926eaa4aef38cce0a15979360da",
+    "pairing": "same task, preregistered three-condition order with predecessor blind-score SHA-256 chain",
+    "preregistration_generator_path": "scripts/create_native_cleanup_effect_preregistration_v5.py",
+    "preregistration_generator_sha256": "41a467e3d0ce20e6a18ec469411b34a24102a7641e0831f320118e7dd6729254",
+    "runner_path": "scripts/native_cleanup_effect_runner_v5.py",
+    "runner_sha256": "90598f9e97c7f1f7cf5f163bdd955497b43121a893de30e5c47f18238cfd55e9",
+    "sequence_enforcement": "native_cleanup_effect_runner_v5 permits a later condition only after a predecessor has an agent-exit record and a scored_after_agent_exit credential; a failed hidden or implementation-integrity check remains a retained failed sample rather than a sequence blocker, and the V5 analyzer verifies the chain",
+    "task_prompt_path": "examples/effect-experiment-native-v5/agent-task-template.txt",
+    "task_prompt_sha256": "4e4e03dadef191cebb293399ce5e86af0ca6cbbe4ad41c1db974b83e9cc02837",
+    "test_timeout_seconds": 20
+  },
+  "schema_version": 2,
+  "scope": {
+    "claim": "For the fixed native Codex subagent model, shared-filesystem Harness, frozen old/new Skill snapshots, selected unused V10-derived V5 corpus, and blind hidden scorer declared here, enabling the new Skill improves automatic retirement and documentation-synchronization success over the old Skill.",
+    "harness_id": "codex-app-native-subagent;shared-filesystem;protocol-isolated;task-workspace-only;predecessor-score-chain;manual-hidden-scorer-v5",
+    "isolation_limit": "Native subagents share a filesystem and are instructed to read only the supplied workspace and condition policy. The parent Harness is trusted to record the actual native-agent identity and transcript; this is protocol isolation and audit provenance, not container isolation or cryptographic agent attestation.",
+    "model_id": "gpt-5.5",
+    "new_skill_revision_sha256": "f3cd50334221cbbee7376f8b54c86ff0956ad217d9d8ef4046dc149d31d0ed1c",
+    "old_skill_revision_sha256": "95551ad23ec77efda31d10b2bca1b27fe1dbe926eaa4aef38cce0a15979360da"
+  },
+  "status": "planned",
+  "stopping_rule": {
+    "blocks_per_task": 1,
+    "early_stop": "not allowed",
+    "interrupted_or_excluded_trials": "retain and mark collection ineligible; no selective retry",
+    "kind": "fixed_complete_blocks"
+  },
+  "task_plan": {
+    "tasks": [
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_release_drift_04"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_split_owner_05"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_decision_retention_dynamic_retain_06"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_decision_retention_semantic_duplicate_07"
+      },
+      {
+        "cohort": "decision-retention",
+        "execution_order": [
+          "new_skill",
+          "old_skill",
+          "no_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_decision_retention_dynamic_retain_18"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "new_skill",
+          "old_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_repair_semantic_duplicate_23"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "new_skill",
+          "no_skill"
+        ],
+        "stratum": "single-module",
+        "task_id": "cleanup_v10_repair_release_drift_24"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "no_skill",
+          "old_skill",
+          "new_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_split_owner_29"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "new_skill",
+          "no_skill",
+          "old_skill"
+        ],
+        "stratum": "cross-module",
+        "task_id": "cleanup_v10_repair_dynamic_retain_30"
+      },
+      {
+        "cohort": "repair",
+        "execution_order": [
+          "old_skill",
+          "no_skill",
+          "new_skill"
+        ],
+        "stratum": "integration",
+        "task_id": "cleanup_v10_repair_semantic_duplicate_35"
+      }
+    ]
+  },
+  "trials": []
+}

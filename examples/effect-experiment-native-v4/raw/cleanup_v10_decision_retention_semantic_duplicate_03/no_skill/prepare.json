@@ -1,0 +1,21 @@
+{
+  "allowed_edit_paths": [
+    "README.md",
+    "compat/legacy_wrapper.py",
+    "docs/cleanup_v10_decision_retention_semantic_duplicate_03.md",
+    "helpers/cleanup_v10_decision_retention_semantic_duplicate_03_alias.py",
+    "policy.py",
+    "release-notes.md"
+  ],
+  "condition": "no_skill",
+  "condition_input_sha256": "0c0ac288514ecb0ca56b14279e9f2613b125a8acc8ff6ed06f5e507971455055",
+  "predecessor_score_sha256": [
+    {
+      "condition": "new_skill",
+      "sha256": "2bcd2ddad0e2d6a9e7cf671f248bf95ee2a8b90b6f011642760fdb77b6bcdabf"
+    }
+  ],
+  "seed_commit": "5007bcb8f74037d32fc0997641486389e765d366",
+  "task_id": "cleanup_v10_decision_retention_semantic_duplicate_03",
+  "workspace_handoff_sha256": "250139a1d35a834903a8bc6e1781172ca6450e4466d0dcc06ac5a89b4b2dcbd5"
+}
