@@ -1,6 +1,6 @@
 ---
 name: adam-development-habits
-description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, retirement of obsolete or duplicate paths, synchronized documentation, stale-comment and metadata cleanup, evidence-oriented instrumentation, tests, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、清理废弃路径与过时说明、合理埋点与证据门禁。"
+description: "Use for AI-assisted code changes that need risk-scaled planning, causal diagnosis, failure semantics, retirement of obsolete or duplicate paths, synchronized documentation, stale-comment and metadata cleanup, evidence-oriented instrumentation, tests, secure handling of untrusted input and sensitive sinks, security/performance safeguards, delivery controls, or machine-verifiable evidence. Trigger for features, bug fixes, refactors, integrations, reviews, migrations, configuration/secret/dependency changes, and maintenance of this Skill. 适用于开发、修复、重构、审查、迁移、清理废弃路径与过时说明、合理埋点与证据门禁。"
 ---
 
 # Adam's Development Habits
@@ -24,6 +24,14 @@ Apply the lightest level that preserves confidence:
 | 2 | Public API, schema migration, authentication, money, privacy, concurrency, cross-service flow, architectural change, or broad refactor. | Level 1 plus a concise plan, rollback/compatibility strategy, failure-path tests, an independent review pass, and Causal Full for ambiguous failures or regressions. |
 
 Do not downgrade a change to avoid evidence. If uncertain, use the higher level.
+
+## Secure Code Path Gate
+
+Apply this gate only when the changed code accepts untrusted input, crosses an authentication or authorization boundary, or reaches a sensitive sink. Typical triggers are database queries, process execution, HTML or template rendering, file or archive handling, URL fetching, parsing or deserialization, uploads, tenant or resource access decisions, secrets, and caller-controlled resource use.
+
+For every triggered path, identify `source -> validation/normalization -> authorization or policy -> sink`, then use the framework or platform's safe mechanism rather than hand-rolled escaping, filtering, or security wrappers. Preserve server-side enforcement at the operation boundary; validation at an earlier layer never proves a later sink is safe. Test one allowed path and the relevant rejected or contained path. Minimal synthetic malicious inputs are permitted in local tests and fixtures when needed; never echo those inputs, real secrets, personal data, or production payloads into logs, reports, snapshots, or externally shared artifacts.
+
+Read [references/secure-code-paths.md](references/secure-code-paths.md) for the matching category and the finding-verification protocol. Use the repository's existing security scans when available, but do not install a scanner merely to satisfy this Skill. A scan alert is a lead: confirm reachability, applicable controls, and impact before claiming a vulnerability or suppressing it. Record the applicable data-flow evidence under `Safeguards` and `Quality decisions`; when no trigger applies, record `Secure code path: not applicable`.
 
 ## Truthful Execution and Context Control
 
@@ -163,7 +171,7 @@ Retained compatibility: <consumer + removal condition + test, or none>
 Retirement sweep: <remove/retain/unknown decisions for touched or replaced paths + evidence>
 Documentation synchronization: <updated/deleted/confirmed-current README, API docs, ADR, runbook, examples, comments, version/metadata descriptions>
 Instrumentation: <not applicable with reason, or event boundaries/schema, redaction/cardinality review, tests and runtime/development evidence>
-Safeguards: <applicable items from the matrix>
+Safeguards: <applicable items from the matrix; for a secure code path, source -> control -> sink evidence, or not applicable>
 Verification: <commands run and actual results>
 Causal diagnosis: <not activated, or symptom + hypotheses + causal owner + counterfactual intervention + discriminating evidence + conclusion>
 Design boundary: <owner, contract, error outcome, side effects/state transition, or not applicable>
@@ -319,6 +327,7 @@ Apply the relevant parts to deployable services, exposed workflows, expensive op
 - Emit redacted structured logs and low-cardinality metrics that distinguish outcome classes. Propagate traces across boundaries; make alerts actionable with an owner, threshold, and a response or runbook rather than alerting on every exception.
 - Bound untrusted work with payload limits, pagination, deadlines, concurrency limits, rate limits, backpressure, and cancellation. Confirm that cache, retry, and fallback behavior preserve authorization and data freshness requirements.
 - Perform a proportional threat check for exposed or privileged behavior: trust boundary, authentication, authorization, tenant/resource ownership, input validation, secret handling, sensitive-data exposure, abuse path, and auditability. Do not rely on client-side controls for server authorization.
+- When the Secure Code Path Gate applies, trace the actual source-to-sink flow and use the matching safe construction and verification guidance in [references/secure-code-paths.md](references/secure-code-paths.md). Do not substitute a generic sanitizer or an unverified scan result for the control required by the sink.
 - For a Level 2 security, privacy, public-contract, money, or operational change, require an independent review that explicitly covers these boundaries.
 
 ## Delivery Lifecycle and Repository Hygiene
@@ -404,6 +413,7 @@ Apply the relevant row; explain a deliberate omission in the evidence ledger.
 | Cross-service or asynchronous flow | Propagate `traceId`; use `spanId` for a dependency call and `correlationId` across request boundaries. |
 | Mutable business or personal data | Identify the authoritative owner, valid state transitions, retention/deletion boundary, authorization boundary, and redaction requirements. Do not create an unmanaged duplicate source of truth. |
 | API, event, shared-library, or configuration boundary | Validate input shape, size, range, authorization, and ownership. Return a stable error code and safe message; document consumers, compatibility/default behavior, migration, and rollback before a breaking change. |
+| Code path from untrusted input to a database, command, template, file, URL fetch, parser, deserializer, or security decision | Trace `source -> validation/normalization -> authorization or policy -> sink`; use the sink's parameterized, context-aware, allowlisted, schema-bound, or framework-native control. Test allowed and rejected/contained behavior, and record whether a scanner finding is confirmed or excluded with evidence. Read [references/secure-code-paths.md](references/secure-code-paths.md). |
 | External network, database, cache, or SDK call | Set an explicit timeout and cancellation behavior; propagate a deadline where supported; classify safe retry, terminal failure, and unknown outcome; log dependency and latency without secrets. |
 | Retryable remote operation | Retry only transient, idempotent work; bound attempts; use exponential backoff with jitter. |
 | Ambiguous remote write or expired idempotency window | Persist pending state before the call; reconcile by canonical operation identity as confirmed, absent, or unknown; resend only after definitive absence or retryable pre-acceptance rejection. Persist terminal rejection and safe reason as failed, then acknowledge or dead-letter; no later path may revive or alter it. Re-verify canonical identity before provider confirmation, acknowledgement, dead-letter, and recovery handoff. Test provider acceptance before timeout or crash, unavailable reconciliation, identity mismatch at every finalization boundary, acknowledgement failure after durable confirmation, retryable versus terminal rejection, concurrent recovery-job deduplication and handoff, and structured retry-decision audit output. |
@@ -489,6 +499,7 @@ Acceptance criteria: ...
 Changed: ...
 Removed or retained compatibility: ...
 Safeguards: ...
+Secure code path: <source -> control -> sink evidence, scanner-finding disposition, or not applicable>
 Quality decisions: <design/dependency/extension; ownership/lifecycle; error/retry; contract; operational budget; threat boundary, or not applicable>
 Delivery decisions: <Git/PR; release/recovery; migration; configuration/secrets; supply chain; operational knowledge; reproducibility, or not applicable>
 Explainability: <comments added/updated or not applicable; review result>

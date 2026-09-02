@@ -41,6 +41,7 @@
 | 失败语义与数据所有权 | 明确权威状态、生命周期、稳定错误结果、重试和未知结果的处理方式。 |
 | 契约演进与测试质量 | 用消费者、兼容策略、迁移/回滚与契约/不变量测试保护长期演进。 |
 | 运行就绪、性能与安全 | 用预算、可操作告警、资源限制和威胁边界控制线上风险。 |
+| 安全代码路径 | 仅在外部输入、敏感 sink、鉴权或资源边界变化时触发；对不可信输入到数据库、命令、模板、文件、URL、解析器和鉴权决策的路径建立 `source -> validation/normalization -> authorization or policy -> sink` 证据，而非依赖关键词扫描。 |
 | 交付生命周期与仓库卫生 | 用原子 Git 提交、PR、发布回滚、迁移、配置/Secret、依赖、运行手册与可复现环境约束交付质量。 |
 | 机器可读证据模式 | 仓库显式启用后，用 JSON 工件记录改动事实，并由本地脚本和 CI 校验。 |
 | 企业级横切保障 | 按场景检查 `traceId`、结构化日志、超时、重试、幂等、限流、鉴权、审计和健康检查。 |
@@ -104,6 +105,7 @@ Retirement sweep: <remove/retain/unknown 分类、范围与证据>
 Documentation synchronization: <README/API/ADR/runbook/示例/注释/版本描述/metadata 的同步结果>
 Instrumentation: <not applicable 或事件边界、稳定事件名、脱敏/基数检查、测试和运行/开发证据>
 Safeguards: <适用的稳定性与可观测性措施>
+Secure code path: <source -> control -> sink 证据、扫描告警处置，或 not applicable>
 Verification: <已执行命令及实际结果>
 Causal diagnosis: <启用时记录症状、假设、区分性证据与结论>
 Design boundary: <owner、契约、错误结果和状态转换，或 not applicable>
@@ -207,6 +209,8 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py \
 ### 运行、性能与安全
 
 对可部署、暴露或昂贵的流程，先定义可观察的结果和预算，例如 p95 延迟、错误率、队列年龄、外部调用数、内存或成本；优化前后都要测量。日志和指标必须脱敏且控制标签基数；告警需要明确 owner、阈值和处置方式，而不是对每个异常报警。
+
+当代码接收不可信输入，或数据会进入数据库、命令、模板、文件、URL 请求、解析器、反序列化或鉴权决策时，Skill 启用安全代码路径门：先沿 `source -> validation/normalization -> authorization or policy -> sink` 追踪真实流向，再选择该 sink 的框架原生控制，例如参数化、上下文编码、允许列表、Schema 约束或服务端策略。不能用一个通用 sanitizer、仅客户端校验或扫描器命中代替 sink 处的控制；需测试一个允许路径和相关拒绝/隔离路径。扫描告警先验证可达性、已有控制和影响，再确认或带理由/到期条件地排除。
 
 安全审查按风险比例覆盖信任边界、服务端认证和授权、租户/资源所有权、输入验证、Secret、敏感数据、滥用路径和审计。AI 在证据不足时要保留 `unknown`，通过监控、最小复现或可回滚保护继续推进，而不是把猜测写成事实。对标记为根因修复的复杂故障，还要写明第一个偏离不变量的责任决策点，并以只改变该候选、保持相邻输入和依赖不变的反事实实验记录预期与实际结果；只隐藏 UI、日志或告警症状的修改只能称为缓解，不能称为根因修复。
 

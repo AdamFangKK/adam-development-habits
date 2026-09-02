@@ -8,17 +8,20 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "SKILL.md"
 README = ROOT / "README.md"
 AGENT_METADATA = ROOT / "agents" / "openai.yaml"
+SECURE_CODE_PATHS = ROOT / "references" / "secure-code-paths.md"
 
 
 class SkillContractTests(unittest.TestCase):
     skill: str = ""
     readme: str = ""
     metadata: str = ""
+    secure_code_paths: str = ""
 
     def setUp(self) -> None:  # pyright: ignore[reportImplicitOverride]
         self.skill = SKILL.read_text(encoding="utf-8")
         self.readme = README.read_text(encoding="utf-8")
         self.metadata = AGENT_METADATA.read_text(encoding="utf-8")
+        self.secure_code_paths = SECURE_CODE_PATHS.read_text(encoding="utf-8")
 
     def test_quality_disciplines_are_normative_sections(self) -> None:
         for heading in (
@@ -28,6 +31,7 @@ class SkillContractTests(unittest.TestCase):
             "## Failure Semantics and Data Ownership",
             "## Contract Evolution and Test Quality",
             "## Operational Readiness, Performance, and Security",
+            "## Secure Code Path Gate",
             "## Delivery Lifecycle and Repository Hygiene",
             "## Compound Level 2 Gate",
             "## Evidence-Based AI Collaboration",
@@ -132,6 +136,7 @@ class SkillContractTests(unittest.TestCase):
         for situation in (
             "| Mutable business or personal data |",
             "| API, event, shared-library, or configuration boundary |",
+            "| Code path from untrusted input to a database, command, template, file, URL fetch, parser, deserializer, or security decision |",
             "| Critical rule, public contract, or broad input domain |",
             "| Expensive or exposed operation |",
             "| Sensitive or privileged operation |",
@@ -144,6 +149,35 @@ class SkillContractTests(unittest.TestCase):
         ):
             with self.subTest(situation=situation):
                 self.assertIn(situation, self.skill)
+
+    def test_secure_code_path_gate_requires_sink_specific_evidence(self) -> None:
+        for requirement in (
+            "source -> validation/normalization -> authorization or policy -> sink",
+            "framework or platform's safe mechanism",
+            "validation at an earlier layer never proves a later sink is safe",
+            "Minimal synthetic malicious inputs are permitted in local tests and fixtures when needed",
+            "never echo those inputs, real secrets, personal data, or production payloads",
+            "A scan alert is a lead",
+            "confirm reachability, applicable controls, and impact",
+            "Secure code path: not applicable",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, self.skill)
+
+        for heading in (
+            "## Injection and Output Contexts",
+            "## Authorization and Resource Ownership",
+            "## Files, URLs, Parsing, and Resource Abuse",
+            "## Security Finding Verification",
+        ):
+            with self.subTest(heading=heading):
+                self.assertIn(heading, self.secure_code_paths)
+
+        self.assertIn("source -> control -> sink", self.readme)
+        self.assertEqual(self.readme.count("| 安全代码路径 |"), 1)
+        self.assertIn("source -> control -> sink", self.metadata)
+        self.assertIn("Minimal synthetic malicious inputs are permitted in local tests and fixtures when needed", self.secure_code_paths)
+        self.assertIn("Do not echo test inputs into logs, reports, snapshots, or externally shared artifacts.", self.secure_code_paths)
 
     def test_explicit_budgets_require_visible_scale_and_boundary_probe(self) -> None:
         self.assertIn("treat a passing public example as necessary but insufficient", self.skill)

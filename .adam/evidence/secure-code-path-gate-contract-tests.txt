@@ -1,0 +1,23 @@
+test_budget_aware_repair_gate_blocks_semantic_only_repairs (tests.test_skill_contract.SkillContractTests) ... ok
+test_causal_full_requires_a_counterfactual_owner_and_rejects_downstream_claims (tests.test_skill_contract.SkillContractTests) ... ok
+test_completion_gate_and_ledger_capture_quality_decisions (tests.test_skill_contract.SkillContractTests) ... ok
+test_complex_package_changes_require_an_isolated_composite_forward_test (tests.test_skill_contract.SkillContractTests) ... ok
+test_compound_level_two_gate_preserves_independent_delivery_decisions (tests.test_skill_contract.SkillContractTests) ... ok
+test_compound_level_two_minimum_checklist_survives_concise_responses (tests.test_skill_contract.SkillContractTests) ... ok
+test_delivery_matrix_covers_every_requested_practice (tests.test_skill_contract.SkillContractTests) ... ok
+test_effect_claims_require_preregistration_and_scoped_evidence (tests.test_skill_contract.SkillContractTests) ... ok
+test_explainable_implementation_requires_maintainer_focused_chinese_notes (tests.test_skill_contract.SkillContractTests) ... ok
+test_explicit_budgets_require_visible_scale_and_boundary_probe (tests.test_skill_contract.SkillContractTests) ... ok
+test_final_report_shape_includes_explainability (tests.test_skill_contract.SkillContractTests) ... ok
+test_front_loaded_causal_repair_card_preserves_the_owner_first_sequence (tests.test_skill_contract.SkillContractTests) ... ok
+test_machine_evidence_v2_binds_decisions_verification_and_review (tests.test_skill_contract.SkillContractTests) ... ok
+test_quality_disciplines_are_normative_sections (tests.test_skill_contract.SkillContractTests) ... ok
+test_readme_and_metadata_expose_the_quality_contract (tests.test_skill_contract.SkillContractTests) ... ok
+test_safeguard_matrix_covers_quality_and_operational_boundaries (tests.test_skill_contract.SkillContractTests) ... ok
+test_secure_code_path_gate_requires_sink_specific_evidence (tests.test_skill_contract.SkillContractTests) ... ok
+test_truthful_execution_protocol_blocks_silent_completion_and_context_drift (tests.test_skill_contract.SkillContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.016s
+
+OK

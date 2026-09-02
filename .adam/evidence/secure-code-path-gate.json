@@ -1,0 +1,221 @@
+{
+  "schema_version": 2,
+  "change_id": "secure-code-path-gate",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md: Secure Code Path Gate",
+    "references/secure-code-paths.md"
+  ],
+  "affected_callers": [
+    "README.md",
+    "agents/openai.yaml",
+    "tests/test_skill_contract.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Triggered untrusted-input and sensitive-sink paths require source-to-control-to-sink evidence and a sink-specific control.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The detailed security-path reference, README summary, and default prompt remain synchronized with the normative Skill.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The updated skill package has valid frontmatter and no unfinished scaffolding.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    }
+  ],
+  "invariants": [
+    "Untrusted-input paths use controls specific to the eventual sink and keep authorization or policy enforcement at the server-side operation boundary.",
+    "Scanner findings remain leads until reachability, existing controls, and impact have been reviewed.",
+    "Minimal synthetic malicious inputs may appear only in local tests or fixtures and are not echoed into logs, reports, snapshots, or externally shared artifacts."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "source-to-sink tracing",
+      "status": "applied",
+      "rationale": "The gate requires source -> validation/normalization -> authorization or policy -> sink evidence only on relevant code paths."
+    },
+    {
+      "name": "sink-specific framework controls",
+      "status": "applied",
+      "rationale": "The normative guidance rejects generic sanitizers and directs agents to parameterized, context-aware, allowlisted, schema-bound, or framework-native controls."
+    },
+    {
+      "name": "safe adversarial test boundary",
+      "status": "applied",
+      "rationale": "The guidance permits minimal local synthetic inputs for rejection-path tests while prohibiting their disclosure in persistent output artifacts."
+    },
+    {
+      "name": "finding verification",
+      "status": "applied",
+      "rationale": "Scanner alerts require reachability, control, and impact review before confirmation or documented exclusion."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "SKILL.md owns the short trigger and required evidence; the linked reference owns category-specific controls, preserving progressive disclosure."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "The change adds no package, scanner, external service, or runtime dependency."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "The focused reference is a conditional guidance extension, selected only when the secure code-path trigger applies."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "This Skill-package update does not create or transfer runtime business-data ownership."
+    },
+    "error_model": {
+      "status": "not_applicable",
+      "rationale": "The change has no application runtime error path; it specifies review and verification behavior."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The public Skill contract, README, metadata prompt, reference, and contract tests were updated together."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "The security review is route-triggered and moves detailed material to a reference, avoiding universal scans or new tooling."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The gate covers inputs flowing to queries, commands, templates, files, URL fetches, parsers, deserializers, and authorization decisions."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The policy, documentation, metadata, reference, tests, review, and evidence are retained as one bounded package change."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "This package update has no production rollout; a single revert can remove the policy, reference, summaries, test, and evidence together."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No persisted schema, data, or public data migration is changed."
+    },
+    "configuration_secrets": {
+      "status": "applied",
+      "rationale": "The new policy explicitly prohibits real secrets and production payloads in test fixtures, logs, reports, snapshots, and external artifacts."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No dependency, lockfile, marketplace skill, or CI action changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The README, detailed reference, and metadata prompt explain when the gate applies and how a finding is dispositioned."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "Focused test, package validation, compilation, and whitespace checks were captured with commands, timestamps, Git revision, and content hashes."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract -v",
+      "status": "passed",
+      "result": "18 Skill contract tests, including the secure code-path contract, passed.",
+      "evidence_refs": [
+        "contract-tests"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "The skill package validator reported: Skill is valid!",
+      "evidence_refs": [
+        "skill-validation"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q scripts tests",
+      "status": "passed",
+      "result": "All package scripts and tests compiled successfully.",
+      "evidence_refs": [
+        "compileall"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported for the tracked patch.",
+      "evidence_refs": [
+        "diff-check"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "contract-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/secure-code-path-gate-contract-tests.txt",
+      "sha256": "61da8bb93a7f88e9f4dec3d3b79358857955c169e8c11531f78d5f0b40eb6eec",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:03:02Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Focused contract-test output showing all 18 tests passed."
+    },
+    {
+      "id": "skill-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/secure-code-path-gate-skill-validation.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:03:02Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Skill-creator package validation output."
+    },
+    {
+      "id": "compileall",
+      "kind": "command_output",
+      "path": ".adam/evidence/secure-code-path-gate-compileall.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q scripts tests",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:03:01Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Silent successful Python compilation output."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/secure-code-path-gate-diff-check.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:03:01Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Silent successful whitespace check output."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/secure-code-path-gate-independent-review.txt",
+      "sha256": "2947a7d7d23c3151771458da79d9683554d8a9952280672d0f00b0de4a7c47c2",
+      "summary": "Independent final-diff review approving the scoped guidance change and recording its limits."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the Secure Code Path Gate, reference, README and metadata summaries, contract test, and evidence artifact together; no runtime compatibility path is introduced.",
+  "independent_review": {
+    "reviewer": "Kepler, Codex independent code reviewer",
+    "outcome": "approved",
+    "notes": "No medium- or high-severity finding remained after the fixture boundary and duplicate README-row corrections. The reviewer confirmed the change remains policy guidance, not a universal protection claim.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "The gate guides code generation and review but cannot enforce controls in a target repository unless that repository adopts and executes it.",
+    "No effectiveness experiment or application-level attack replay was run; this change makes no general claim that it prevents all attacks.",
+    "The final full suite had four failures and eight errors in pre-existing native-cleanup frozen-protocol hash checks outside this change's scope."
+  ]
+}
