@@ -182,7 +182,7 @@ def prepare_condition(
     source = corpus / str(task["workspace_path"])
     copy_public_tree(source, workspace)
     if condition in {"old_skill", "new_skill"}:
-        snapshot = source_root / f"examples/effect-experiment-native-v5/skills/{'old' if condition == 'old_skill' else 'new'}/SKILL.md"
+        snapshot = source_root / f"examples/effect-experiment-native-v5/skills/{'old' if condition == 'old_skill' else 'new'}/frozen-policy.md"
         if not snapshot.is_file():
             raise FileNotFoundError(f"frozen policy snapshot is missing: {snapshot}")
         _ = shutil.copy2(snapshot, workspace / "frozen-policy.md")

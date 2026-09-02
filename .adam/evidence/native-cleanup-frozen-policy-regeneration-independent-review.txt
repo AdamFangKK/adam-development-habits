@@ -1,0 +1,14 @@
+Independent review: approved
+Reviewer: protocol_repair_review, Codex independent code reviewer
+Scope: native cleanup v2-v6 frozen-policy snapshot renames, preregistration generators and derived preregistration records, v2-v5 invalid-collection archive bindings, and the added archive-binding regression test.
+
+Review method:
+- Compared the v2-v6 committed preregistration records with output from each current canonical generator.
+- Verified that changed protocol fields bind the renamed frozen-policy.md snapshots and the current generator, runner, analyzer, and executor bytes where applicable.
+- Verified that v2-v5 collection-invalid.json binds preregistration_sha256 to the canonical hash of the complete current preregistration record.
+- Reviewed the new regression test and final scoped diff for data-integrity and unintended behavior changes.
+
+Result:
+- No critical, high, medium, or low severity issue found.
+- The repair is limited to the snapshot-path rename and its deterministic derived hashes, plus an archive-binding regression test.
+- Full regression, compilation, whitespace, and skill-package checks passed. The repair preserves the experiments' existing collection status and makes no effectiveness claim.

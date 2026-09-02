@@ -37,7 +37,7 @@
     "This is protocol isolation on a shared filesystem, not OS or container isolation.",
     "The result cannot establish a model-wide causal-reasoning capability or production reliability claim."
   ],
-  "preregistration_sha256": "5e82b8e82285d823b1c0096c73e36e784290d6f3a33d2b66a3fb83ed5e2f2ac3",
+  "preregistration_sha256": "cf8c209cc507fba314459b1e64275c7405e9a99dffac2fb76d4e875c77c4a56c",
   "schema_version": 1,
   "statistics": {
     "decision_retention_regressions": [],

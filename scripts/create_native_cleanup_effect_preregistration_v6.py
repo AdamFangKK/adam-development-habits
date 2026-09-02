@@ -81,8 +81,8 @@ def create(root: Path = ROOT) -> dict[str, object]:
         "executor": Path("scripts/run_native_cleanup_effect_v6_api.py"),
         "preregistration_generator": Path("scripts/create_native_cleanup_effect_preregistration_v6.py"),
         "task_prompt": EXPERIMENT / "agent-task-template.txt",
-        "old_skill": EXPERIMENT / "skills/old/SKILL.md",
-        "new_skill": EXPERIMENT / "skills/new/SKILL.md",
+        "old_skill": EXPERIMENT / "skills/old/frozen-policy.md",
+        "new_skill": EXPERIMENT / "skills/new/frozen-policy.md",
     }
     hashes = {name: relative_file_hash(root, path) for name, path in paths.items()}
     task_plan = [

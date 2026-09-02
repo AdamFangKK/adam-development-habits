@@ -153,7 +153,7 @@ def replay_score(corpus: Path, *, task_id: str, condition: str, candidate_diff: 
         workspace = Path(directory) / "candidate"
         copy_public_tree(source, workspace)
         if condition in {"old_skill", "new_skill"}:
-            snapshot = root / f"examples/effect-experiment-native-v6/skills/{'old' if condition == 'old_skill' else 'new'}/SKILL.md"
+            snapshot = root / f"examples/effect-experiment-native-v6/skills/{'old' if condition == 'old_skill' else 'new'}/frozen-policy.md"
             if not snapshot.is_file():
                 raise FileNotFoundError(f"frozen policy snapshot is missing: {snapshot}")
             _ = shutil.copy2(snapshot, workspace / "frozen-policy.md")
@@ -225,7 +225,7 @@ def expected_handoff_sha256(corpus: Path, *, task_id: str, condition: str, root:
         workspace = Path(directory) / "workspace"
         copy_public_tree(source, workspace)
         if condition != "no_skill":
-            snapshot = root / f"examples/effect-experiment-native-v6/skills/{'old' if condition == 'old_skill' else 'new'}/SKILL.md"
+            snapshot = root / f"examples/effect-experiment-native-v6/skills/{'old' if condition == 'old_skill' else 'new'}/frozen-policy.md"
             _ = shutil.copy2(snapshot, workspace / "frozen-policy.md")
         digest = hashlib.sha256()
         for path in sorted(workspace.rglob("*")):

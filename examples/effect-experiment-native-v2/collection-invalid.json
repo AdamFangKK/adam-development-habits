@@ -5,7 +5,7 @@
   "analysis_eligibility": "ineligible",
   "frozen_preparation_commit": "e0a9666e971777639e4a6eac48699cbb179281b0",
   "preregistration_path": "examples/effect-experiment-native-v2/preregistration.json",
-  "preregistration_sha256": "aa33dd4964c08c4c6df72d0e2b4e710b261ba871e29670397df326762df8e006",
+  "preregistration_sha256": "7c5df6e35a0a88f75aa6af878e0324c17b708ad7f11d5185eccf64708daf30ab",
   "collection": {
     "planned_trials": 30,
     "completed_trials": 3,

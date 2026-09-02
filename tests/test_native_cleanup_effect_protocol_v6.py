@@ -206,7 +206,7 @@ class NativeCleanupEffectProtocolV6Tests(unittest.TestCase):
         protocol = cast(dict[str, object], created["protocol"])
         self.assertEqual(
             protocol["old_skill_sha256"],
-            hashlib.sha256((ROOT / "examples/effect-experiment-native-v5/skills/new/SKILL.md").read_bytes()).hexdigest(),
+            hashlib.sha256((ROOT / "examples/effect-experiment-native-v5/skills/new/frozen-policy.md").read_bytes()).hexdigest(),
         )
         self.assertEqual(protocol["executor_kind"], "codex-cli-api-key")
         self.assertTrue(protocol["skill_search_disabled_for_all_conditions"])

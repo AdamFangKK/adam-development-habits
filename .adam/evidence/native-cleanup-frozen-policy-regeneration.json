@@ -1,0 +1,251 @@
+{
+  "schema_version": 2,
+  "change_id": "native-cleanup-frozen-policy-regeneration",
+  "level": 2,
+  "canonical_owner": [
+    "scripts/create_native_cleanup_effect_preregistration_v2.py:create",
+    "scripts/create_native_cleanup_effect_preregistration_v3.py:create",
+    "scripts/create_native_cleanup_effect_preregistration_v4.py:create",
+    "scripts/create_native_cleanup_effect_preregistration_v5.py:create",
+    "scripts/create_native_cleanup_effect_preregistration_v6.py:create",
+    "tests/test_native_cleanup_effect_v2_invalidation.py:canonical_sha256"
+  ],
+  "affected_callers": [
+    "examples/effect-experiment-native-v2/preregistration.json",
+    "examples/effect-experiment-native-v3/preregistration.json",
+    "examples/effect-experiment-native-v4/preregistration.json",
+    "examples/effect-experiment-native-v5/preregistration.json",
+    "examples/effect-experiment-native-v6/preregistration.json",
+    "examples/effect-experiment-native-v2/collection-invalid.json",
+    "examples/effect-experiment-native-v3/collection-invalid.json",
+    "examples/effect-experiment-native-v4/collection-invalid.json",
+    "examples/effect-experiment-native-v5/collection-invalid.json"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Each v2-v6 committed preregistration record exactly matches its canonical generator after the frozen-policy snapshot rename.",
+      "verification": "for version in v2 v3 v4 v5 v6; do generate temporary preregistration with scripts/create_native_cleanup_effect_preregistration_${version}.py and cmp it with examples/effect-experiment-native-${version}/preregistration.json; done"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Each v2-v5 invalid-collection archive binds preregistration_sha256 to the canonical hash of the complete current preregistration record.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The package's full regression suite passes without the prior frozen-protocol hash failures.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "Every preregistration binds its declared snapshot path and current frozen inputs through deterministic SHA-256 values.",
+    "A stored invalid-collection archive identifies the complete preregistration record used to produce it, not only its protocol subsection.",
+    "The committed-record and invalid-archive tests reject future source, path, or derived-hash drift."
+  ],
+  "replaced_paths": [
+    "examples/effect-experiment-native-v2..v6/skills/{old,new}/SKILL.md"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "canonical preregistration generation",
+      "status": "applied",
+      "rationale": "All five committed preregistration records are regenerated from their versioned canonical generators and compared byte-for-byte."
+    },
+    {
+      "name": "full archive binding",
+      "status": "applied",
+      "rationale": "The invalid-collection archives bind the canonical hash of the complete preregistration record, preserving provenance beyond the protocol subsection."
+    },
+    {
+      "name": "drift regression coverage",
+      "status": "applied",
+      "rationale": "The new v2-v5 archive-binding assertion complements existing generator-to-committed-record checks."
+    },
+    {
+      "name": "non-overwriting generators",
+      "status": "applied",
+      "rationale": "The existing generators continue to refuse direct overwrites; regeneration was first written to verified temporary outputs."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "Versioned generators remain the canonical owners of preregistration bytes; JSON records remain derived artifacts."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "No dependency, executable, scanner, or external service was added or changed."
+    },
+    "extension_decision": {
+      "status": "not_applicable",
+      "rationale": "The repair restores existing versioned experiment contracts without creating an extension point."
+    },
+    "data_ownership": {
+      "status": "applied",
+      "rationale": "Each experiment's versioned generator is authoritative for its preregistration, while each archive records the resulting immutable record identity."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Existing tests continue to fail closed when a frozen input, derived hash, or archive binding drifts."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The frozen policy snapshot filename changed from SKILL.md to frozen-policy.md, and every path- and hash-derived record was synchronized."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The repair is deterministic JSON regeneration and test coverage with no application runtime budget change."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "Hash-bound inputs and full archive bindings prevent a path rename or partial record substitution from silently changing experiment provenance."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "Generators, path consumers, derived records, archival metadata, tests, independent review, and evidence were updated as one coherent repair."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "No deployed runtime or rollout configuration is changed; reverting the scoped repair restores the prior package state."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No application schema or persisted user data is migrated."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No configuration, credential, or secret boundary changed."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No dependency manifest, lockfile, package source, or supply-chain control changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The archive-binding test and hash-bound evidence record document the required regeneration behavior for future frozen-policy changes."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The evidence captures deterministic generation, full-suite output, compilation, package validation, patch formatting, Git revision, timestamps, and content hashes."
+    }
+  },
+  "verification": [
+    {
+      "command": "for version in v2 v3 v4 v5 v6; do generate temporary preregistration with scripts/create_native_cleanup_effect_preregistration_${version}.py and cmp it with examples/effect-experiment-native-${version}/preregistration.json; done",
+      "status": "passed",
+      "result": "v2, v3, v4, v5, and v6 each matched their canonical generator output.",
+      "evidence_refs": [
+        "generator-consistency"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "347 tests passed, including committed preregistration, protocol tampering, and v2-v5 archive-binding checks.",
+      "evidence_refs": [
+        "full-tests"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q scripts tests",
+      "status": "passed",
+      "result": "All package scripts and tests compiled successfully.",
+      "evidence_refs": [
+        "compileall"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "The skill package validator reported: Skill is valid!",
+      "evidence_refs": [
+        "skill-validation"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported.",
+      "evidence_refs": [
+        "diff-check"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "full-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/native-cleanup-frozen-policy-regeneration-full-tests.txt",
+      "sha256": "65d4fd100ff2d14413cce8a3040174f7f9946308fa6c2663ec326aebd61e67fe",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:57:35Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Full package suite output showing 347 tests passed."
+    },
+    {
+      "id": "generator-consistency",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-frozen-policy-regeneration-consistency.txt",
+      "sha256": "1b4be75172a0f7c1883a4f7d4d762a9c916578a2cb4c975a554694aa5abe4a13",
+      "command": "for version in v2 v3 v4 v5 v6; do generate temporary preregistration with scripts/create_native_cleanup_effect_preregistration_${version}.py and cmp it with examples/effect-experiment-native-${version}/preregistration.json; done",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:58:56Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Each versioned preregistration matched a fresh canonical generator output."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-frozen-policy-regeneration-diff-check.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:58:56Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Silent successful whitespace check output."
+    },
+    {
+      "id": "skill-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-frozen-policy-regeneration-skill-validation.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:58:56Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Skill-creator package validation output."
+    },
+    {
+      "id": "compileall",
+      "kind": "command_output",
+      "path": ".adam/evidence/native-cleanup-frozen-policy-regeneration-compileall.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q scripts tests",
+      "exit_code": 0,
+      "executed_at": "2026-09-02T07:58:56Z",
+      "repository_revision": "bfeac2a28846f9f74c61edfd15527b495ccac893+worktree",
+      "summary": "Silent successful Python compilation output."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/native-cleanup-frozen-policy-regeneration-independent-review.txt",
+      "sha256": "4463d0dca31939e8e35be225b356d9fc09490fc74c9f6d948e85f053b257b813",
+      "summary": "Independent review approving the regenerated records and full archive binding."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the frozen-policy snapshot rename, every versioned generator/runner/analyzer path update, derived preregistration and archive hashes, and the archive-binding test together; no production compatibility path exists.",
+  "independent_review": {
+    "reviewer": "protocol_repair_review, Codex independent code reviewer",
+    "outcome": "approved",
+    "notes": "The reviewer found no issue and confirmed that preregistration and invalid-archive hashes bind the intended current bytes without changing experiment outcomes.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "The affected experiment records remain planned or ineligible; this repair does not turn an incomplete collection into an effectiveness result.",
+    "Any future deliberate frozen-input change requires regeneration and the existing consistency and archive-binding tests to pass before publication."
+  ]
+}

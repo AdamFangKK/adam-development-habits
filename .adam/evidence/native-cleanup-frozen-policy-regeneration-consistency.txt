@@ -1,0 +1,5 @@
+v2: matches canonical generator
+v3: matches canonical generator
+v4: matches canonical generator
+v5: matches canonical generator
+v6: matches canonical generator

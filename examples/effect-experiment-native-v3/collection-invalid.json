@@ -2,7 +2,7 @@
   "experiment_id": "adam-native-cleanup-effect-v3",
   "status": "ineligible",
   "reason": "The partial native collection was stopped after the first sequential blocks exposed a repeated hidden-contract outcome that distinguishes implementation behavior from the preregistered cleanup target; the fixed 30-trial block was not completed.",
-  "preregistration_sha256": "6b738b98107c4a806c290ce5f5736e82a98cc44d42b46daafcfd84b86bc1f80f",
+  "preregistration_sha256": "ac10c982f23240c6b806cc2f37d03303e81fac15ab52dbf14cfbff0159f406b0",
   "raw_artifacts_path": "raw-partial/",
   "planned_trials": 30,
   "completed_trials": 8,
