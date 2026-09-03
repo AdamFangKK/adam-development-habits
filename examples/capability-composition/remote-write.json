@@ -1,0 +1,23 @@
+{
+  "facts": [
+    "level_2",
+    "behavior_change",
+    "ambiguous_failure",
+    "symptom",
+    "invariant",
+    "remote_write",
+    "external_dependency",
+    "external_boundary",
+    "replacement",
+    "cross_boundary"
+  ],
+  "required_facts": [
+    "causal_owner_candidate",
+    "node_evidence",
+    "failure_modelled",
+    "regression_evidence",
+    "retirement_classified",
+    "delivery_plan_recorded",
+    "evidence_recorded"
+  ]
+}

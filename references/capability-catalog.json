@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "description": "Small, composable capability cards for adaptive development planning. Facts are observations or task constraints; produced facts are not proof of behavior.",
+  "capabilities": [
+    {
+      "id": "risk_triage",
+      "purpose": "Classify scope and choose the lightest applicable level.",
+      "trigger_any": ["level_1", "level_2", "behavior_change"],
+      "requires_all": [],
+      "requires_any": [],
+      "produces": ["risk_classified"],
+      "mandatory_if": ["level_1", "level_2", "behavior_change"],
+      "cost": 1,
+      "risk_reduction": 2
+    },
+    {
+      "id": "owner_mapping",
+      "purpose": "Locate the canonical decision or state owner and affected callers.",
+      "trigger_any": ["behavior_change", "cross_boundary", "replacement", "ambiguous_failure"],
+      "requires_all": ["risk_classified"],
+      "requires_any": [],
+      "produces": ["owner_located", "dependency_path"],
+      "mandatory_if": ["behavior_change", "cross_boundary", "replacement", "ambiguous_failure"],
+      "cost": 1,
+      "risk_reduction": 3
+    },
+    {
+      "id": "causal_diagnosis",
+      "purpose": "Separate symptom and invariant, compare hypotheses, and select a discriminating probe.",
+      "trigger_any": ["ambiguous_failure", "regression", "performance_degradation", "intermittent_failure"],
+      "requires_all": ["owner_located", "symptom", "invariant"],
+      "requires_any": [],
+      "produces": ["hypotheses_recorded", "discriminating_probe", "causal_owner_candidate"],
+      "mandatory_if": ["ambiguous_failure", "regression", "performance_degradation", "intermittent_failure"],
+      "cost": 2,
+      "risk_reduction": 3
+    },
+    {
+      "id": "observability",
+      "purpose": "Expose blind decision, dependency, and failure nodes with bounded evidence.",
+      "trigger_any": ["external_boundary", "blind_spot", "hypotheses_recorded", "performance_budget"],
+      "requires_all": ["owner_located"],
+      "requires_any": [],
+      "produces": ["node_evidence", "blind_spots_classified"],
+      "mandatory_if": ["external_boundary", "blind_spot", "performance_budget"],
+      "cost": 2,
+      "risk_reduction": 3
+    },
+    {
+      "id": "failure_semantics",
+      "purpose": "Define terminal, retryable, and unknown outcomes for dependencies and state transitions.",
+      "trigger_any": ["external_dependency", "remote_write", "retry", "mutable_state", "concurrency"],
+      "requires_all": ["owner_located"],
+      "requires_any": [],
+      "produces": ["failure_modelled", "unknown_outcome_policy"],
+      "mandatory_if": ["external_dependency", "remote_write", "retry", "mutable_state", "concurrency"],
+      "cost": 2,
+      "risk_reduction": 3
+    },
+    {
+      "id": "maintainable_boundaries",
+      "purpose": "Keep ownership, dependency direction, contracts, mutation, and extension decisions explicit.",
+      "trigger_any": ["refactor", "architecture_change", "coupling_risk", "readability_risk", "cross_boundary"],
+      "requires_all": ["owner_located"],
+      "requires_any": [],
+      "produces": ["design_boundary_recorded", "dependency_direction_checked"],
+      "mandatory_if": ["refactor", "architecture_change", "coupling_risk", "readability_risk"],
+      "cost": 1,
+      "risk_reduction": 2
+    },
+    {
+      "id": "contract_tests",
+      "purpose": "Verify success, failure, compatibility, and boundary behavior at the public or module boundary.",
+      "trigger_any": ["behavior_change", "public_contract", "broad_input", "cross_boundary", "regression"],
+      "requires_all": ["owner_located"],
+      "requires_any": [],
+      "produces": ["regression_evidence", "contract_evidence"],
+      "mandatory_if": ["behavior_change", "public_contract", "broad_input", "cross_boundary", "regression"],
+      "cost": 1,
+      "risk_reduction": 3
+    },
+    {
+      "id": "retirement_cleanup",
+      "purpose": "Remove or classify superseded implementations, configuration, tests, telemetry, and explanations.",
+      "trigger_any": ["replacement", "refactor", "rename", "optimization", "behavior_change"],
+      "requires_all": ["owner_located"],
+      "requires_any": [],
+      "produces": ["retirement_classified", "documentation_synchronized", "orphan_scan_completed"],
+      "mandatory_if": ["behavior_change", "replacement", "refactor", "rename", "optimization"],
+      "cost": 1,
+      "risk_reduction": 2
+    },
+    {
+      "id": "security_gate",
+      "purpose": "Trace untrusted input to the sink and verify authorization, validation, and redaction controls.",
+      "trigger_any": ["untrusted_input", "sensitive_operation", "privileged_operation", "security_finding"],
+      "requires_all": ["owner_located"],
+      "requires_any": [],
+      "produces": ["threat_boundary_checked", "secure_path_evidence"],
+      "mandatory_if": ["untrusted_input", "sensitive_operation", "privileged_operation", "security_finding"],
+      "cost": 2,
+      "risk_reduction": 3
+    },
+    {
+      "id": "delivery_lifecycle",
+      "purpose": "Define commit, CI, release, migration, configuration, recovery, and operational knowledge gates.",
+      "trigger_any": ["level_2", "release", "migration", "secret_change", "dependency_change", "operational_change"],
+      "requires_all": ["risk_classified"],
+      "requires_any": [],
+      "produces": ["delivery_plan_recorded", "recovery_path_recorded"],
+      "mandatory_if": ["level_2", "release", "migration", "secret_change", "dependency_change", "operational_change"],
+      "cost": 2,
+      "risk_reduction": 3
+    },
+    {
+      "id": "evidence_ledger",
+      "purpose": "Bind decisions, actions, outputs, and residual risk to an auditable completion record.",
+      "trigger_any": ["level_1", "level_2", "behavior_change"],
+      "requires_all": ["risk_classified"],
+      "requires_any": [],
+      "produces": ["evidence_recorded"],
+      "mandatory_if": ["level_1", "level_2", "behavior_change"],
+      "cost": 1,
+      "risk_reduction": 2
+    }
+  ]
+}

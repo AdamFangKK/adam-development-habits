@@ -1,0 +1,20 @@
+test_active_limit_reports_deferred_mandatory_capabilities (test_capability_composition.CapabilityCompositionTests) ... ok
+test_ambiguous_remote_write_selects_cross_boundary_capabilities (test_capability_composition.CapabilityCompositionTests) ... ok
+test_candidate_plans_are_bounded_and_machine_readable (test_capability_composition.CapabilityCompositionTests) ... ok
+test_catalog_cards_have_composable_contracts (test_capability_composition.CapabilityCompositionTests) ... ok
+test_causal_output_unlocks_observability_when_node_evidence_is_required (test_capability_composition.CapabilityCompositionTests) ... ok
+test_cli_emits_machine_readable_plan_for_a_checked_in_fixture (test_capability_composition.CapabilityCompositionTests) ... ok
+test_default_preview_is_non_empty_and_respects_mandatory_budget (test_capability_composition.CapabilityCompositionTests) ... ok
+test_missing_invariant_defers_causal_capability_instead_of_guessing (test_capability_composition.CapabilityCompositionTests) ... ok
+test_narrow_acceptance_cannot_bypass_triggered_mandatory_capabilities (test_capability_composition.CapabilityCompositionTests) ... ok
+test_new_evidence_replans_without_replaying_the_original_plan (test_capability_composition.CapabilityCompositionTests) ... ok
+test_partial_causal_context_does_not_satisfy_the_owner_gate (test_capability_composition.CapabilityCompositionTests) ... ok
+test_replacement_plan_composes_owner_cleanup_contract_and_ledger (test_capability_composition.CapabilityCompositionTests) ... ok
+test_replan_budget_rejects_a_third_evidence_driven_replan (test_capability_composition.CapabilityCompositionTests) ... ok
+test_required_fact_coverage_is_a_hard_acceptance_gate (test_capability_composition.CapabilityCompositionTests) ... ok
+test_unresolved_mandatory_capability_blocks_completion (test_capability_composition.CapabilityCompositionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.033s
+
+OK

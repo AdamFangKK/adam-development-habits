@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import unittest
 from pathlib import Path
 
@@ -9,6 +10,7 @@ SKILL = ROOT / "SKILL.md"
 README = ROOT / "README.md"
 AGENT_METADATA = ROOT / "agents" / "openai.yaml"
 SECURE_CODE_PATHS = ROOT / "references" / "secure-code-paths.md"
+CAPABILITY_CATALOG = ROOT / "references" / "capability-catalog.json"
 
 
 class SkillContractTests(unittest.TestCase):
@@ -39,6 +41,50 @@ class SkillContractTests(unittest.TestCase):
         ):
             with self.subTest(heading=heading):
                 self.assertIn(heading, self.skill)
+
+    def test_adaptive_composition_is_bounded_optional_and_evidence_linked(self) -> None:
+        start = self.skill.index("## Adaptive Capability Composition")
+        end = self.skill.index("## Secure Code Path Gate", start)
+        composition = self.skill[start:end]
+        for requirement in (
+            "minimum sufficient composition",
+            "trigger facts",
+            "required inputs",
+            "produced facts",
+            "mandatory conditions",
+            "deferred` and `blocked",
+            "at most 6 active capabilities for Level 1",
+            "at most 10 for Level 2",
+            "retain no more than 3 candidate plans",
+            "re-plan at most twice",
+            "Do not auto-edit this Skill",
+            "plan_capability_composition.py",
+            "selected`, `transitions`, `candidate_plans",
+            "capability_status",
+            "replan_events",
+            "search_rounds",
+            "required_facts",
+            "missing_required_facts",
+            "selected`, `not_applicable`, `unknown`, `deferred`, or `blocked`",
+            "non-empty facts input without explicit `required_facts`",
+            "narrow `required_facts` list cannot bypass a mandatory gate",
+            "internal bounded-search expansions belong in `search_rounds`",
+            "Candidate capabilities",
+            "Unused capabilities and reasons",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, composition)
+
+        catalog = json.loads(CAPABILITY_CATALOG.read_text(encoding="utf-8"))
+        self.assertEqual(catalog["schema_version"], 1)
+        self.assertGreaterEqual(len(catalog["capabilities"]), 10)
+        self.assertTrue(all(card.get("produces") for card in catalog["capabilities"]))
+        self.assertIn("自适应能力编排", self.readme)
+        self.assertIn("最小充分组合", self.readme)
+        self.assertIn("candidate_plans", self.readme)
+        self.assertIn("missing_required_facts", self.readme)
+        self.assertIn("search_rounds", self.readme)
+        self.assertIn("adaptive composition", self.metadata)
 
     def test_causal_full_requires_a_counterfactual_owner_and_rejects_downstream_claims(self) -> None:
         self.assertIn("trigger -> decision or state owner -> side effect -> symptom", self.skill)

@@ -44,6 +44,37 @@
 独立复查、原子提交并留下可追溯结果
 ```
 
+## 自适应能力编排
+
+完整能力可以登记在目录中，但不会在每个任务里全部执行。Skill 采用“全量登记、按需激活、证据驱动重排”：先根据风险和已观察事实选择最小充分组合，执行一步并取得证据，再根据新状态决定下一步。这样因果分析的 owner、埋点的盲点、测试的失败结果和清理的旧路径能够互相传递，而不是变成互相独立的检查清单。
+
+| 编排原则 | 实际行为 | 防止的问题 |
+|---|---|---|
+| 能力有输入和输出 | `owner_mapping` 产出 owner 后，才允许因果、清理和边界设计消费它 | 只看报错位置就开始改代码 |
+| 最小充分组合 | 普通替换通常只启用 owner、测试、清理和证据；远程写入才增加因果、埋点、失败语义和交付 | 所有任务都执行完整流程 |
+| 证据触发重排 | 假设被否定、出现 blind spot、发现动态消费者或测试失败时重新选择能力 | 按旧计划重复错误动作 |
+| 必需能力不可静默省略 | 验收事实齐全仍须完成每个已触发的必需能力；达到预算或缺少前置证据时输出 `blocked` 和 `deferred_mandatory` | 用“流程太重”或过窄验收掩盖安全、清理或验证缺口 |
+
+Level 0 不运行编排；Level 1 默认最多 6 个主动能力；Level 2 默认最多 10 个。可选 planner 是标准库脚本，不是后台服务，也不改变 Codex 的调用方式。它只生成可审查的计划，不把计划当作行为证明。
+
+能力目录和示例输入位于 [`references/capability-catalog.json`](./references/capability-catalog.json) 与 [`examples/capability-composition`](./examples/capability-composition)。需要确定性预览时运行：
+
+```bash
+python3 scripts/plan_capability_composition.py \
+  examples/capability-composition/remote-write.json \
+  --max-active 10
+```
+
+输出中的 `selected` 是当前组合，`transitions` 表示能力输出如何成为后续输入；`candidate_plans` 最多保留 3 个可比较方案；`capability_status` 区分 `not_applicable`、`unknown`、`deferred` 和 `blocked`，并给出触发事实及缺失前置条件；`replan_events` 只记录外部新证据导致的重排，`search_rounds` 记录内部候选搜索；`rejected` 是这些结构化状态的汇总。`required_facts`、`covered_required_facts`、`missing_required_facts` 绑定验收门槛，仍有缺失、或任何已触发的必需能力未完成时，`blocked` 必须为真。`deferred_mandatory` 和 `blocked` 表示预算或验收不足，不能继续假装完成。没有 planner 时，直接把相同字段写入 Evidence Ledger 即可。
+
+用户仍然只需调用：
+
+```text
+Use $adam-development-habits to fix duplicate payment requests.
+```
+
+不需要手动枚举内部能力。Skill 不会自动调用所有其他 Codex Skill，也不会自动改写自身；跨 Skill 协作必须由用户、项目规则或 Harness 明确授权。
+
 ### 日志和埋点为什么重要
 
 日志不是为了让系统“看起来专业”，也不是越多越好。它是 AI 和人工共享的外部事实通道：源代码只能说明可能的路径，结构化事件才能说明请求实际经过了哪个决策、哪个依赖超时、状态是否改变以及最终结果是什么。

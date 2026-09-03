@@ -1,0 +1,44 @@
+Code Review Summary
+
+Files reviewed: SKILL.md, README.md, agents/openai.yaml, references/capability-catalog.json, scripts/plan_capability_composition.py, examples/capability-composition/*.json, tests/test_capability_composition.py, tests/test_skill_contract.py, and code/protocol behavior around adaptive composition.
+Verdict: APPROVED
+
+Scope note
+
+This approval covers the code, Skill protocol, README/agent metadata synchronization, planner behavior, fixtures, and tests. Per final review instruction, the self-referential hash binding between this review report and `.adam/evidence/adaptive-composition-v17.json` is excluded from this disposition and is left for the parent evidence validation step. I did not run `validate_evidence.py` or `check_change_evidence.py` in this final pass.
+
+Resolved prior findings
+
+- Evidence record requirement resolved for code/protocol review: `.adam/evidence/adaptive-composition-v17.json` has been added by the parent workflow and was reported validated before this final disposition. Final hash synchronization for this mutable review report is intentionally outside this review scope.
+- Observability trigger issue resolved: `observability.trigger_any` now uses `hypotheses_recorded`, a real fact produced by `causal_diagnosis`. The new regression test verifies causal output unlocks observability when `node_evidence` is required.
+
+Spec compliance
+
+- Level 0 does not run adaptive composition.
+- Level 1 defaults to a small active-capability budget; Level 2 allows the larger bounded plan.
+- `candidate_plans` remains bounded to no more than 3.
+- `required_facts` cannot bypass triggered mandatory capabilities.
+- Missing mandatory prerequisites remain `unknown` or `blocked` rather than guessed.
+- Budget-deferred mandatory capabilities are surfaced through `deferred_mandatory` and `blocked`.
+- `replan_events` records external observed fact changes; internal beam-search exploration is recorded in `search_rounds`.
+- Non-empty facts without explicit `required_facts` still produce a bounded non-empty preview when capabilities are triggered.
+- The planner remains a deterministic preview/evidence index, not proof of runtime behavior.
+- README and agents/openai.yaml describe the same adaptive-composition behavior without requiring Codex to invoke every Skill or install new dependencies.
+
+Verification run
+
+- `python3 -m unittest tests.test_capability_composition tests.test_skill_contract`: 36 tests passed.
+- `git diff --check -- SKILL.md README.md agents/openai.yaml references/capability-catalog.json scripts/plan_capability_composition.py examples/capability-composition/rename.json examples/capability-composition/remote-write.json tests/test_capability_composition.py tests/test_skill_contract.py`: passed.
+- Manual planner probe `causal_unlocks_observability`: passed; selected `observability`, `triggered_by` was `['hypotheses_recorded']`, `missing_required_facts` was empty, `candidate_plans` was 3, and `blocked` was false.
+- Manual planner probe `narrow_required_mandatory`: passed; selected mandatory behavior-change capabilities despite narrow `required_facts`.
+- Manual planner probe `budget_blocks`: passed; returned `blocked: true`, reported deferred mandatory capabilities, and kept missing required facts visible.
+- Manual planner probe `replan_split`: passed; produced one external `replan_events` entry and separate internal `search_rounds`.
+
+Remaining risks
+
+- LSP/pyright was unavailable in this review environment; focused unit tests, diff check, and manual deterministic planner probes were used for final verification.
+- This approval does not claim that the Skill proves aggregate model causal capability improvement. It approves the adaptive-composition protocol implementation and tests as a lightweight Codex Skill surface.
+
+Recommendation
+
+APPROVE. No code, Skill, README/metadata, planner, fixture, or test issue remains in the reviewed adaptive-composition work.

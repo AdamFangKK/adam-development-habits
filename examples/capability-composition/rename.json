@@ -1,0 +1,13 @@
+{
+  "facts": [
+    "level_1",
+    "behavior_change",
+    "replacement"
+  ],
+  "required_facts": [
+    "owner_located",
+    "regression_evidence",
+    "retirement_classified",
+    "evidence_recorded"
+  ]
+}

@@ -1,0 +1,253 @@
+{
+  "schema_version": 2,
+  "change_id": "adaptive-composition-v17",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md:Adaptive Capability Composition",
+    "references/capability-catalog.json:capabilities",
+    "scripts/plan_capability_composition.py:plan"
+  ],
+  "affected_callers": [
+    "README.md:自适应能力编排",
+    "agents/openai.yaml:interface.default_prompt",
+    "examples/capability-composition/rename.json",
+    "examples/capability-composition/remote-write.json",
+    "tests/test_capability_composition.py",
+    "tests/test_skill_contract.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "A Level 1 replacement selects the owner, retirement, contract-test, and evidence capabilities, covers its required facts, and leaves no mandatory gate deferred.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_capability_composition.py' -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The planner retains at most three candidate plans, cannot let narrow acceptance facts bypass triggered mandatory capabilities, marks unresolved mandatory prerequisites blocked, and rejects a third evidence-driven replan.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_capability_composition.py' -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "A causal diagnosis output can unlock observability through an actual produced fact when node evidence is required.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_capability_composition.py' -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The full package regression suite, Python compilation, package validation, and diff formatting checks pass.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "Level 0 does not activate composition planning.",
+    "A plan can complete only when required facts are covered and every triggered mandatory capability is selected or explicitly blocked by unavailable evidence.",
+    "Capability outputs, not capability names, are the only facts that can unlock a downstream capability.",
+    "Internal bounded beam expansion is reported as search_rounds; replan_events records only externally observed fact changes.",
+    "A planner result is a plan and evidence index, never proof that runtime behavior is correct."
+  ],
+  "replaced_paths": [
+    "The prior implicit fixed-checklist-only composition behavior"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "bounded composition search",
+      "status": "applied",
+      "rationale": "The standard-library planner limits candidates to three and active capabilities to the caller-selected budget; it does not install dependencies or run a service."
+    },
+    {
+      "name": "mandatory-gate completion rule",
+      "status": "applied",
+      "rationale": "Required-fact coverage cannot silently defer a triggered mandatory capability; missing mandatory prerequisites are structured unknown and block completion."
+    },
+    {
+      "name": "evidence-driven replan accounting",
+      "status": "applied",
+      "rationale": "External fact deltas consume the two-replan budget while internal beam rounds are separately reported, preventing internal search from masquerading as task evidence."
+    },
+    {
+      "name": "catalog-to-planner fact contract",
+      "status": "applied",
+      "rationale": "Observability now consumes the causal card's produced hypotheses_recorded fact, and a regression test proves that edge."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "SKILL.md remains the policy owner; the catalog declares capability contracts and the optional planner provides a deterministic preview without becoming a runtime authority."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "The planner uses only the Python standard library; no package, lockfile, service, or plugin dependency changed."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "Capability cards are data-defined so future policy additions declare triggers, prerequisites, outputs, mandatory conditions, cost, and risk reduction instead of changing the orchestrator for each case."
+    },
+    "data_ownership": {
+      "status": "applied",
+      "rationale": "Observed task facts are the planner input and produced facts are derived planning state; neither is treated as production data or behavioral proof."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Malformed catalogs and invalid budgets raise explicit errors; unresolved mandatory prerequisites and exhausted mandatory budgets return blocked outcomes rather than guessing."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "The documented planner output now includes candidate plans, structured statuses, explicit acceptance coverage, external replan events, and internal search rounds."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "Level 1 defaults to six active capabilities, Level 2 to ten, candidate plans to three, and external replans to two unless a new evidence budget is recorded."
+    },
+    "threat_boundary": {
+      "status": "not_applicable",
+      "rationale": "This change does not add an untrusted-input sink, authentication boundary, secret, network call, or production action; existing Skill security gates remain policy requirements when triggered."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "The self-application evidence gate is satisfied by a hash-bound schema v2 record, and the result is intended for one atomic Git commit."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "The package is a local Skill and optional planner with no deployed service or runtime rollout; reverting the atomic commit removes the behavior."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No application schema, persistence format, backfill, or user data changes."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No configuration value, environment variable, credential, or secret handling changed."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No external dependency, lockfile, package source, or build-tool version changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README documents the rationale, bounded controls, CLI preview, output fields, and the boundary between a plan and behavior evidence."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "Fixtures, standard-library planner, targeted/full tests, package validation, format check, independent review, and hash-bound outputs are retained in the repository."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_capability_composition.py' -v",
+      "status": "passed",
+      "result": "15 adaptive composition tests passed, covering minimal sufficient plans, mandatory gates, structured status, external replanning, and causal-to-observability handoff.",
+      "evidence_refs": [
+        "focused-tests"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "369 package tests passed.",
+      "evidence_refs": [
+        "full-tests"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q scripts tests",
+      "status": "passed",
+      "result": "All scripts and tests compiled successfully.",
+      "evidence_refs": [
+        "compileall"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "The Skill package validator reported Skill is valid!",
+      "evidence_refs": [
+        "skill-validation"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors were reported.",
+      "evidence_refs": [
+        "diff-check"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/adaptive-composition-v17-focused.txt",
+      "sha256": "6a67bf723f6de8fcb1dca6252bc89e50709fdf1f798a0d045ed1da4ed201ee3e",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_capability_composition.py' -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T06:40:29Z",
+      "repository_revision": "9f13aef65d1b555369f806b2ff226dcb04534c28+worktree",
+      "summary": "Focused adaptive-composition tests: 15 passed."
+    },
+    {
+      "id": "full-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/adaptive-composition-v17-full.txt",
+      "sha256": "eb2ab64a517acdad4ec3f021c252788638e0f0da3bc91dab8800c4467c9f2f23",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T06:42:10Z",
+      "repository_revision": "9f13aef65d1b555369f806b2ff226dcb04534c28+worktree",
+      "summary": "Full Skill package test output: 369 passed."
+    },
+    {
+      "id": "compileall",
+      "kind": "command_output",
+      "path": ".adam/evidence/adaptive-composition-v17-compileall.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q scripts tests",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T06:43:33Z",
+      "repository_revision": "9f13aef65d1b555369f806b2ff226dcb04534c28+worktree",
+      "summary": "Silent successful Python compilation output."
+    },
+    {
+      "id": "skill-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/adaptive-composition-v17-skill-validation.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T06:44:24Z",
+      "repository_revision": "9f13aef65d1b555369f806b2ff226dcb04534c28+worktree",
+      "summary": "Skill-creator package validation output."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/adaptive-composition-v17-diff-check.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T06:44:43Z",
+      "repository_revision": "9f13aef65d1b555369f806b2ff226dcb04534c28+worktree",
+      "summary": "Silent successful whitespace check output."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/adaptive-composition-v17-independent-review.txt",
+      "sha256": "750dd36b765d62050931053c3bbb7f4d3f1d13ada0325e6beefb446f780e438d",
+      "summary": "Independent review approved the resolved mandatory-gate, causal-to-observability, evidence-gate, and bounded-composition contracts."
+    }
+  ],
+  "rollback_or_compatibility": "Revert the Skill policy, README, metadata, catalog, optional planner, fixtures, tests, and this evidence record together. No production state, external service, or compatibility wrapper is introduced.",
+  "independent_review": {
+    "reviewer": "adaptive_composition_final_review, Codex independent code reviewer",
+    "outcome": "approved",
+    "notes": "The review found and the implementation resolved mandatory-gate bypass and causal-to-observability trigger reachability. The remaining procedural requirement is validated by the changed-evidence gate after this artifact is added.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "The planner can organize observed task facts but cannot establish runtime causality or hidden external state without project probes, tests, and human authority.",
+    "A catalog card with an inaccurate trigger, prerequisite, or produced fact can still misroute a preview; catalog-contract tests cover current edges but project-specific facts require maintenance.",
+    "The optional planner is intentionally bounded and may return blocked when a needed capability exceeds the configured budget; raising a budget requires a recorded reason."
+  ]
+}

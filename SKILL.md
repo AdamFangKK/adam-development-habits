@@ -25,6 +25,39 @@ Apply the lightest level that preserves confidence:
 
 Do not downgrade a change to avoid evidence. If uncertain, use the higher level.
 
+## Adaptive Capability Composition
+
+Treat this Skill as a composable policy, not a fixed checklist. The full capability catalog is [references/capability-catalog.json](references/capability-catalog.json); read it when the task crosses more than one boundary or when the next action is unclear. Each capability card declares its trigger facts, required inputs, produced facts, mandatory conditions, cost, and risk reduction. Do not invent a capability combination from memory when the catalog or project tooling already describes the boundary.
+
+At the start of a Level 1 or Level 2 task, build a small shared task blackboard from observed facts and constraints: `level`, `behavior_change`, `scope`, `invariant`, `symptom`, boundaries, unknowns, authority, and available tools. Select the **minimum sufficient composition** whose outputs can satisfy the acceptance criteria. A capability is eligible only when its trigger is evidenced and its prerequisites are present; a missing prerequisite is `unknown`, not permission to guess. Level 0 does not run this planner.
+
+Use the following bounded loop rather than pre-writing every possible combination:
+
+```text
+classify facts and risk
+-> select eligible mandatory capabilities
+-> select the smallest high-value optional set
+-> execute one capability and record its evidence/output
+-> consume produced facts and re-plan when the task state changes
+-> verify acceptance criteria, cleanup, and delivery gates
+```
+
+The planner is allowed to choose among capabilities, not to lower their requirements. Completion requires both the acceptance facts and every triggered mandatory capability; a narrow `required_facts` list cannot bypass a mandatory gate. If the active-capability budget would defer a mandatory capability, record `deferred` and `blocked`; never silently omit it. A capability with no trigger is `not applicable`; one with an unresolved prerequisite is `unknown` and keeps the task blocked until evidence resolves it. Every selected capability must name the next consumer of its output or state why it terminates the task.
+
+Keep the search deliberately small: default to at most 6 active capabilities for Level 1 and at most 10 for Level 2, retain no more than 3 candidate plans, execute one minimal action per round, and re-plan at most twice unless new evidence materially changes the state. The limits are safety and context budgets, not excuses to skip a required gate. Lower them for a narrow task; raise them only with a recorded reason and corresponding time/evidence budget.
+
+Re-plan when an owner is found, a hypothesis is rejected, a blind node appears, a dynamic consumer is discovered, a test or runtime check fails, a compatibility boundary changes, or the next capability's prerequisite becomes available. `replan_events` records only these external evidence changes; internal bounded-search expansions belong in `search_rounds` and do not consume the replan budget. Do not replay a rejected plan without new evidence. Do not auto-edit this Skill, install dependencies, invoke every available Skill, or perform production actions as a consequence of composition.
+
+Use the standard-library planner only when a deterministic plan preview helps or a Harness supplies a facts file:
+
+```bash
+python3 scripts/plan_capability_composition.py <facts.json> --max-active <n>
+```
+
+Without the script, write the same state in the Evidence Ledger. The planner is an optional deterministic aid, not a required daemon or replacement for Codex's normal Skill invocation. It must emit `selected`, `transitions`, `candidate_plans` (no more than three), `capability_status` (with `selected`, `not_applicable`, `unknown`, `deferred`, or `blocked` plus trigger/missing-requirement fields), `replan_events`, `search_rounds`, `rejected`, `deferred_mandatory`, `blocked`, `required_facts`, `covered_required_facts`, `missing_required_facts`, and `final_facts`; the output is a plan and evidence index, never proof that behavior is correct. A non-empty facts input without explicit `required_facts` must still produce a bounded preview of applicable capabilities; an empty plan is valid only when no capability is triggered or every triggered path is blocked by missing prerequisites.
+
+Record composition decisions in the ledger: `Candidate capabilities`, `Selected composition`, `Capability transitions`, `Evidence reused by`, `Replanning events`, `Unused capabilities and reasons`, and `Composition budget`. The final report must include a concise `Composition trace`. If a capability was not selected, state `not applicable`, `unknown`, or `deferred/blocked` with the exact reason; do not collapse these states into a free-text rejection list. When acceptance facts are supplied, completion remains blocked until `missing_required_facts` is empty and no triggered mandatory capability remains unselected. This keeps the combination adaptive and reviewable without turning every task into a heavyweight workflow.
+
 ## Secure Code Path Gate
 
 Apply this gate only when the changed code accepts untrusted input, crosses an authentication or authorization boundary, or reaches a sensitive sink. Typical triggers are database queries, process execution, HTML or template rendering, file or archive handling, URL fetching, parsing or deserialization, uploads, tenant or resource access decisions, secrets, and caller-controlled resource use.
@@ -229,6 +262,12 @@ Repair observability: <node | observed/partially observed/blind | evidence or pr
 Failed-attempt ledger: <attempt | hypothesis/action | actual result | failure category | next constraint, or none found after scoped search>
 Verification: <commands run and actual results>
 Causal diagnosis: <not activated, or symptom + hypotheses + causal owner + counterfactual intervention + discriminating evidence + conclusion>
+Candidate capabilities: <triggered capabilities considered>
+Selected composition: <ordered capability IDs>
+Capability transitions: <output -> consuming capability, or terminal reason>
+Replanning events: <state change and new selection, or none>
+Unused capabilities and reasons: <not applicable/unknown/deferred with evidence>
+Composition budget: <active count, candidate count, replans, and any override reason>
 Design boundary: <owner, contract, error outcome, side effects/state transition, or not applicable>
 Dependency audit: <new or changed dependencies, allowed direction, or not applicable>
 Extension decision: <real consumer/contract and test, or deliberately direct implementation>
@@ -566,6 +605,7 @@ Independent review: <result or not required>
 Evidence artifact: <path or enforcement mode not enabled>
 Remaining risks: ...
 Causal conclusion: <not activated | root-cause fix | mitigation | instrumentation-only | unknown>
+Composition trace: <ordered capability IDs and evidence handoffs, or not applicable>
 ```
 
 Keep the report concise, factual, and based on executed work.
