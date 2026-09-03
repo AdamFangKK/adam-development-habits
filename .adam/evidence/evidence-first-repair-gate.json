@@ -1,0 +1,201 @@
+{
+  "schema_version": 2,
+  "change_id": "evidence-first-repair-gate",
+  "level": 1,
+  "canonical_owner": [
+    "SKILL.md: Evidence-First Repair Gate",
+    "scripts/score_evidence_first_repair.py: has_complete_failed_attempt_ledger"
+  ],
+  "affected_callers": [
+    "README.md",
+    "agents/openai.yaml",
+    "tests/test_skill_contract.py",
+    "tests/test_evidence_first_repair_forward.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Level 1 and Level 2 repairs require observation, invariant separation, full-path mapping, hypothesis discrimination, earliest-owner intervention, regression, runtime verification, and residual-risk recording before completion.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "The forward scorer accepts a complete prose repair record and rejects missing invariant, observability, alternative, ledger, counterfactual, or runtime evidence.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_evidence_first_repair_forward -v"
+    },
+    {
+      "id": "AC-3",
+      "condition": "Existing Skill behavior and metadata contract remain intact while the evidence-first gate is added.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    },
+    {
+      "id": "AC-4",
+      "condition": "The Skill package remains valid and the changed Python sources are syntactically valid with no patch whitespace errors.",
+      "verification": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py ."
+    }
+  ],
+  "invariants": [
+    "SKILL.md remains the single normative policy source for the new repair gate.",
+    "Level 0 documentation work remains outside the mandatory behavioral repair gate.",
+    "Unknown, unrun, read-only, and in-memory evidence cannot be promoted to a root-cause completion claim.",
+    "The scorer accepts the prose format allowed by the Skill without weakening required ledger fields."
+  ],
+  "replaced_paths": [],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "owner-first causal repair gate",
+      "status": "applied",
+      "rationale": "The normative sequence requires a discriminating probe and earliest responsible owner before intervention, preventing repeated symptom patches."
+    },
+    {
+      "name": "unknown and authority calibration",
+      "status": "applied",
+      "rationale": "The policy distinguishes executed, verified, unrun, read-only, and unavailable evidence and forbids production action authorization by the gate."
+    },
+    {
+      "name": "redacted bounded observability",
+      "status": "applied",
+      "rationale": "Blind nodes require the smallest redacted low-cardinality probe or an explicit unknown conclusion."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "SKILL.md owns the normative workflow, README and UI metadata summarize it, and the scorer owns only deterministic forward-test checks."
+    },
+    "dependency_audit": {
+      "status": "not_applicable",
+      "rationale": "No package, runtime, external service, or tool dependency was added."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "The evidence-first gate extends the existing causal and evidence disciplines without replacing them."
+    },
+    "data_ownership": {
+      "status": "not_applicable",
+      "rationale": "This Skill-package change creates no business-data or runtime persistence path."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Failed checks and unresolved causal ownership remain explicit failures or unknowns rather than silent completion."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "Normative instructions, README summary, UI prompt, contract tests, and forward tests were updated together."
+    },
+    "operational_budget": {
+      "status": "not_applicable",
+      "rationale": "The change adds no runtime algorithm, service call, or resource-sensitive production path."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "The gate retains the existing secure-code-path rules and explicitly prevents unauthorized production actions."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "Focused checks, full regression, package validation, compilation, and diff checks were executed before completion."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "The package change has no independent production rollout; reverting the scoped files removes the policy extension."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No persisted schema or stored data changes."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No credentials, environment configuration, or secret-handling code changed."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No dependency, lockfile, CI action, or downloaded tool changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "The gate documents the evidence record, failed-attempt ledger, observability boundary, counterfactual status, and stopping conditions for future repairs."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "The scorer and forward tests are standard-library based, and all verification artifacts bind commands, timestamps, revision, and hashes."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_evidence_first_repair_forward -v",
+      "status": "passed",
+      "result": "2 forward tests passed: the complete prose record passed all 10 gates and each shallow mutation was rejected.",
+      "evidence_refs": ["forward-tests"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "353 tests passed in 83.468 seconds.",
+      "evidence_refs": ["full-suite"]
+    },
+    {
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid!",
+      "evidence_refs": ["skill-validation"]
+    },
+    {
+      "command": "python3 -m compileall -q scripts tests && git diff --check",
+      "status": "passed",
+      "result": "Python compilation and Git whitespace checks completed successfully.",
+      "evidence_refs": ["static-checks"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "forward-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/evidence-first-repair-gate-forward-tests.txt",
+      "sha256": "38a92b6d54e2d96a75f263a669b71691395748961aed65f844a7eebc9c572b5a",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_evidence_first_repair_forward -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T04:01:18Z",
+      "repository_revision": "e9befd0bb5de3e7640bc5ff687c3ddc6df82e4ae+worktree",
+      "summary": "Forward gate output with complete and adversarial response cases."
+    },
+    {
+      "id": "full-suite",
+      "kind": "test_output",
+      "path": ".adam/evidence/evidence-first-repair-gate-full-suite.txt",
+      "sha256": "5da29ffe38edb36be765fdc217f3d137f88585bda13e0a5df2cd0461388e49e0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T04:01:18Z",
+      "repository_revision": "e9befd0bb5de3e7640bc5ff687c3ddc6df82e4ae+worktree",
+      "summary": "Complete package regression output showing 353 tests passed."
+    },
+    {
+      "id": "skill-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/evidence-first-repair-gate-skill-validation.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T04:01:18Z",
+      "repository_revision": "e9befd0bb5de3e7640bc5ff687c3ddc6df82e4ae+worktree",
+      "summary": "Skill-creator package validation output."
+    },
+    {
+      "id": "static-checks",
+      "kind": "command_output",
+      "path": ".adam/evidence/evidence-first-repair-gate-static-checks.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "python3 -m compileall -q scripts tests && git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T04:01:18Z",
+      "repository_revision": "e9befd0bb5de3e7640bc5ff687c3ddc6df82e4ae+worktree",
+      "summary": "Silent successful compilation and whitespace-check output."
+    }
+  ],
+  "remaining_risks": [
+    "The forward test validates the gate scorer and representative response behavior; it does not prove a general improvement in model repair success.",
+    "No preregistered no_skill/old_skill/new_skill statistical experiment was run in this turn, so no model-wide effectiveness claim is made.",
+    "The runtime impact depends on future agents actually reading and following the Skill; the package cannot enforce behavior in an unrelated repository by itself."
+  ]
+}

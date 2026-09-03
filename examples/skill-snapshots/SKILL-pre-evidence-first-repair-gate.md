@@ -20,7 +20,7 @@ Apply the lightest level that preserves confidence:
 | Level | Scope | Required evidence |
 |---|---|---|
 | 0 | Documentation, comments, formatting, or an obvious one-line correction with no behavior change. | Inspect the diff and run the relevant narrow check. |
-| 1 | Normal feature, bug fix, refactor, integration, or configuration behavior change. | Acceptance criteria, evidence ledger, relevant tests/checks, cleanup audit, and the Evidence-First Repair Gate; use Causal Lite when the reported cause is unclear. |
+| 1 | Normal feature, bug fix, refactor, integration, or configuration behavior change. | Acceptance criteria, evidence ledger, relevant tests/checks, cleanup audit, and Causal Lite when the reported cause is unclear. |
 | 2 | Public API, schema migration, authentication, money, privacy, concurrency, cross-service flow, architectural change, or broad refactor. | Level 1 plus a concise plan, rollback/compatibility strategy, failure-path tests, an independent review pass, and Causal Full for ambiguous failures or regressions. |
 
 Do not downgrade a change to avoid evidence. If uncertain, use the higher level.
@@ -49,59 +49,6 @@ Never claim a file was changed, a test passed, a review happened, or a deploymen
 When a check fails, use a bounded repair loop: read the actual failure, classify the earliest responsible owner, make the smallest owner-level change, rerun the narrow check, then rerun the required full checks. Keep the same change evidence while the logical change continues. Stop only after all required checks pass, or after three consecutive attempts show the same external blocker; in the latter case report `blocked` with the exact evidence and do not claim completion. Do not hide a failing check by weakening a test, suppressing output, or changing the acceptance criterion.
 
 Treat model capability and tool authority as boundaries. If the task depends on an unavailable API, visual inspection, production permission, hidden contract, or domain fact that was not verified, state the limitation and use `unknown` or `blocked`; do not fill the gap with a confident guess. Delegate or ask for an independent check when the missing capability materially affects safety or correctness.
-
-## Evidence-First Repair Gate
-
-For every Level 1 or Level 2 bug fix, regression, incident, flaky failure, or cross-boundary diagnosis, complete this gate before the first behavioral edit. It is mandatory even when an earlier attempt appears plausible. Level 0 documentation work and an obvious one-line correction whose owner, invariant, and cause are established by a narrow check remain outside this gate; any ambiguity, prior failed attempt, runtime/configuration dependency, or repeated repair activates it.
-
-Use this order as the default repair sequence:
-
-```text
-observe
--> separate symptom and invariant
--> map the full request/state path
--> identify observable nodes and blind spots
--> record primary and alternative hypotheses
--> run a discriminating probe
--> locate the earliest responsible owner
--> perform a minimal counterfactual intervention
--> regression test
--> deployment/runtime verification
--> record residual risk
-```
-
-Before choosing a repair, emit this minimum repair record for the activated gate. Field labels may be concise aliases, but every field must have an observed value, an explicit unavailable/unknown value, or a planned check; do not omit a field because its answer is inconvenient:
-
-```text
-Symptom: <observed failure, exact output, and source>
-Invariant: <behavior that must remain true>
-Path: <trigger -> decisions/state transitions -> dependencies/side effects -> symptom>
-Observability: <node | observed/partially observed/blind | evidence or probe>
-Primary hypothesis: <claim and prediction>
-Alternative hypothesis: <claim and prediction>
-Discriminating probe: <check, expected result, and rejection rule>
-Earliest candidate owner: <first invariant-diverging decision/state transition, or unknown>
-Failed-attempt ledger: <attempt | hypothesis/action | actual result | failure category | next constraint>
-Counterfactual: <authority | status | changed owner | held-fixed factors | expected result | actual before/after output>
-Regression verification: <command/test and observed result>
-Deployment/runtime verification: <path, command/metric, observed result, or unavailable>
-Residual risk: <remaining unknown or not applicable>
-Stop condition: <missing evidence, unresolved owner, or explicit not-applicable reason>
-```
-
-If there are no earlier attempts, write `none found after <scoped evidence search>`; if the environment is read-only, use `Counterfactual status: unrun` and `Causal conclusion: unknown`. The record is a minimum evidence shape, not a demand for one exact prose style. A plan-only field is not an observed result, and an event saying that instrumentation ran does not substitute for the node evidence it was meant to collect. A `Stop condition` is required when any gate cannot be verified; it must name the missing evidence or the reason the field is not applicable.
-
-Before editing, record the observed input, exact failure output, violated invariant, path from trigger to symptom, candidate owner, acceptance criteria, and authority boundary. Keep observation separate from interpretation: a log line, test failure, deployment response, or source match is evidence only for what it actually shows. Do not promote a prior agent explanation, issue title, or temporal correlation into a cause.
-
-Make observability a prerequisite for a behavioral claim. For each decision, state transition, dependency, configuration lookup, and deployment boundary on the mapped path, classify the evidence as `observed`, `partially observed`, or `blind`. When a key node is blind, first reuse or add the smallest redacted, low-cardinality probe at that boundary, or explicitly leave the behavioral conclusion `unknown`; do not patch behavior by guessing. Instrumentation can be the first edit, but an emitted event proves only that the probe ran, not that the repair is correct. Preserve the existing event schema, redaction, trace propagation, and Level 1/2 instrumentation requirements.
-
-When there has been any earlier attempt, maintain a failed-attempt ledger before trying another repair. For every attempt record: `attempt`, prior hypothesis, action or changed owner, actual result, failure category, and the new constraint or evidence required next. Use a bounded category such as `wrong-owner-or-symptom-patch`, `missing-invariant`, `untested-alternative`, `observability-gap`, `stale-runtime-or-configuration`, `contract-mismatch`, `error-retry-or-unknown-semantics`, `test-gap`, `scope-drift`, or `tool-authority`. If prior attempts are unavailable, record that limitation instead of reconstructing them. Do not repeat a failed category without a new discriminating observation; the ledger is a memory against cycling through the same plausible fix.
-
-State one primary hypothesis and at least one plausible alternative. For each, state what the next probe should observe if it is true and what result would reject it. Prefer the lowest-risk check that distinguishes the two. The earliest responsible owner is the first decision or state transition that violates the invariant, not the nearest visible error, display, retry wrapper, alert, or test expectation. If ownership remains unresolved after the probe, stop the behavioral repair and report `unknown` or add instrumentation.
-
-The minimal counterfactual must change only the candidate owner while holding adjacent inputs, configuration, dependency versions, and timing assumptions fixed as far as the environment allows. Record `Execution authority`, `Counterfactual status`, the expected result, and the actual before/after command or test output. `proposed`, `unrun`, `in-memory-only`, read-only, or unavailable evidence cannot support a root-cause claim. After the intervention, run the regression test and verify the relevant deployment/runtime path; if either is unavailable, state the exact gap and retain the residual risk. No production action is authorized by this gate.
-
-Stop and do not claim completion when the failure cannot be reproduced and no runtime evidence is available, a key owner is blind and no probe can be added, the primary and alternative hypotheses are not discriminated, the changed path is not the earliest responsible owner, a previous failed category is being repeated without new evidence, or a required verification is unrun. Continue with instrumentation, a smaller local reproducer, a reversible guard, or an explicit handoff. This gate strengthens Causal Lite/Full; it does not replace their terminal conclusion rules or the separate remote-write, security, migration, budget, cleanup, and delivery gates.
 
 ## Causal Repair Card
 
@@ -225,8 +172,6 @@ Retirement sweep: <remove/retain/unknown decisions for touched or replaced paths
 Documentation synchronization: <updated/deleted/confirmed-current README, API docs, ADR, runbook, examples, comments, version/metadata descriptions>
 Instrumentation: <not applicable with reason, or event boundaries/schema, redaction/cardinality review, tests and runtime/development evidence>
 Safeguards: <applicable items from the matrix; for a secure code path, source -> control -> sink evidence, or not applicable>
-Repair observability: <node | observed/partially observed/blind | evidence or probe, or not applicable>
-Failed-attempt ledger: <attempt | hypothesis/action | actual result | failure category | next constraint, or none found after scoped search>
 Verification: <commands run and actual results>
 Causal diagnosis: <not activated, or symptom + hypotheses + causal owner + counterfactual intervention + discriminating evidence + conclusion>
 Design boundary: <owner, contract, error outcome, side effects/state transition, or not applicable>

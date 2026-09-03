@@ -1,0 +1,7 @@
+test_each_shallow_or_unsupported_mutation_is_rejected (tests.test_evidence_first_repair_forward.EvidenceFirstRepairForwardTests) ... ok
+test_guided_response_passes_every_gate (tests.test_evidence_first_repair_forward.EvidenceFirstRepairForwardTests) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK

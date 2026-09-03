@@ -83,6 +83,48 @@ class SkillContractTests(unittest.TestCase):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.skill)
 
+    def test_evidence_first_repair_gate_is_mandatory_and_owner_first(self) -> None:
+        gate = self.skill[self.skill.index("## Evidence-First Repair Gate") : self.skill.index("## Causal Repair Card")]
+        for requirement in (
+            "For every Level 1 or Level 2 bug fix",
+            "before the first behavioral edit",
+            "observe",
+            "separate symptom and invariant",
+            "map the full request/state path",
+            "identify observable nodes and blind spots",
+            "record primary and alternative hypotheses",
+            "run a discriminating probe",
+            "locate the earliest responsible owner",
+            "perform a minimal counterfactual intervention",
+            "regression test",
+            "deployment/runtime verification",
+            "record residual risk",
+            "Level 0 documentation work",
+            "any ambiguity, prior failed attempt",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, gate)
+
+    def test_evidence_first_gate_blocks_blind_repair_and_attempt_cycling(self) -> None:
+        gate = self.skill[self.skill.index("## Evidence-First Repair Gate") : self.skill.index("## Causal Repair Card")]
+        for requirement in (
+            "observed`, `partially observed`, or `blind",
+            "first reuse or add the smallest redacted, low-cardinality probe",
+            "or explicitly leave the behavioral conclusion `unknown`",
+            "failed-attempt ledger",
+            "actual result, failure category",
+            "wrong-owner-or-symptom-patch",
+            "stale-runtime-or-configuration",
+            "Do not repeat a failed category without a new discriminating observation",
+            "holding adjacent inputs, configuration, dependency versions, and timing assumptions fixed",
+            "proposed`, `unrun`, `in-memory-only`",
+            "Stop and do not claim completion",
+            "Stop condition",
+            "No production action is authorized by this gate",
+        ):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, gate)
+
     def test_final_report_shape_includes_explainability(self) -> None:
         report = self.skill[self.skill.index("## Final Report Format") :]
         self.assertIn("Explainability: <comments added/updated or not applicable; review result>", report)
@@ -231,6 +273,9 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("stale paths, comments, docs, and metadata", self.metadata)
         self.assertIn("废弃说明残留", self.readme)
         self.assertIn("stale explanatory surfaces", self.skill)
+        self.assertIn("证据优先修复门禁", self.readme)
+        self.assertIn("failed-attempt ledger", self.metadata)
+        self.assertIn("deployment/runtime verification", self.metadata)
 
     def test_complex_package_changes_require_an_isolated_composite_forward_test(self) -> None:
         self.assertIn("changes three or more of causal diagnosis, design boundaries, data/contracts", self.skill)

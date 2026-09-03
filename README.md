@@ -156,6 +156,24 @@ Skill 不是自动修改代码的脚本，而是一份会在 AI 执行开发任�
 输出可追溯的完成报告
 ```
 
+### 证据优先修复门禁
+
+对 Level 1/2 的 Bug、回归、事故、间歇性失败和跨服务排查，修复前必须先完成一条可复核链路：
+
+```text
+observe → 区分 symptom 与 invariant → 映射完整 request/state path
+→ 标记 observable nodes 与 blind spots → 记录主假设和替代假设
+→ 执行 discriminating probe → 定位 earliest responsible owner
+→ 做 minimal counterfactual intervention → 回归测试
+→ deployment/runtime verification → 记录 residual risk
+```
+
+这里的重点不是多写一份报告，而是把思考过程变成约束：先记录实际现象和不变量，再检查每个决策、状态、依赖、配置和部署节点是否可观测。关键节点没有日志、指标、追踪、测试或命令输出时，先补最小脱敏埋点，或者保留 `unknown`，不能靠猜测修改行为。已有失败尝试要进入台账，记录假设、动作、实际结果、失败类别和下一条约束；同一失败类别没有新证据时不得重复尝试。
+
+只有在授权的变更工作树中，对最早责任 owner 做最小反事实干预，并取得修改前后的实际命令/测试结果，才可以把结论升级为 `root-cause fix`。只读检查、方案、内存模拟和未执行的命令仍然是 `unknown`；回归测试或运行时验证缺失时，必须明确写出剩余风险。
+
+每次触发门禁至少留下 `Symptom`、`Invariant`、`Path`、`Observability`、`Primary hypothesis`、`Alternative hypothesis`、`Discriminating probe`、`Earliest candidate owner`、`Failed-attempt ledger`、`Counterfactual`、`Regression verification`、`Deployment/runtime verification`、`Residual risk` 和 `Stop condition`。没有历史失败时也要记录 `none found after <scoped evidence search>`，这样后续 AI 不会把“没有看到记录”误当成“没有失败”。
+
 设计吸收了 [Spec Kit](https://github.com/github/spec-kit) 的原则与规格思路、[Superpowers](https://github.com/obra/superpowers) 的测试和复查节奏、[AGENTS.md](https://github.com/agentsmd/agents.md) 的仓库级规则分发方式，以及 `Knip`、`pre-commit`、`Semgrep` 等工具的自动化质量门理念。
 
 对于非简单改动，Skill 会要求维护一份证据台账：
