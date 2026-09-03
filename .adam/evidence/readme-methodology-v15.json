@@ -1,0 +1,233 @@
+{
+  "schema_version": 2,
+  "change_id": "readme-methodology-v15",
+  "level": 1,
+  "canonical_owner": [
+    "README.md:先理解它解决什么 and 对应的使用示例",
+    "tests/test_skill_entrypoint_layout.py:SkillEntrypointLayoutTests"
+  ],
+  "affected_callers": [
+    "Codex users reading the Skill package README",
+    "Codex Skill discovery scanning the package tree",
+    "package regression suite"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "README first explains the human/AI division of labor and evidence-driven method, then provides risk-scaled tables, commands, and concrete usage examples.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_skill_entrypoint_layout tests.test_retirement_cleanup_contract -v"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Only the package root SKILL.md is discoverable; historical experiment snapshots remain available under frozen-policy.md.",
+      "verification": "find . -type f -name SKILL.md -not -path './.git/*' -print"
+    },
+    {
+      "id": "AC-3",
+      "condition": "The Skill package remains valid and all package regressions pass after the documentation and layout guard change.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q"
+    }
+  ],
+  "invariants": [
+    "SKILL.md remains the single normative policy source.",
+    "README explains the policy without claiming model-wide causal capability improvement.",
+    "Historical snapshots remain verifiable but are not named as discoverable Skill entrypoints.",
+    "No new runtime dependency or production behavior is introduced."
+  ],
+  "replaced_paths": [
+    "README's previously reference-first presentation, replaced by an argument-first explanation followed by executable detail.",
+    "Unprotected possibility that an experiment snapshot could be renamed back to SKILL.md."
+  ],
+  "retained_compatibility": [],
+  "retirement_sweep": {
+    "remove": [
+      "No obsolete implementation or explanatory contract was found in the changed README/test boundary."
+    ],
+    "retain": [
+      "Historical experiment content under frozen-policy.md because it is referenced by experiment runners and protocol tests."
+    ],
+    "unknown": [],
+    "evidence": [
+      "The entrypoint layout test and recursive scan report exactly one SKILL.md at the package root.",
+      "Existing retirement contract tests cover stale code, comments, docs, metadata, dynamic consumers, and unknown paths."
+    ]
+  },
+  "documentation_synchronization": {
+    "updated": [
+      "README.md: human-vs-AI rationale, evidence-driven method, logging explanation, limits, commands, and usage examples"
+    ],
+    "deleted": [],
+    "confirmed_current": [
+      "SKILL.md normative policy",
+      "historical experiment references to frozen-policy.md"
+    ],
+    "evidence": "Focused README contract tests and full package regression passed."
+  },
+  "instrumentation": {
+    "status": "not_applicable",
+    "reason": "This is a local documentation and package-layout change with no deployable runtime boundary or business state transition."
+  },
+  "safeguards": [
+    {
+      "name": "argument-first README contract test",
+      "status": "applied",
+      "rationale": "The existing contract suite asserts the README exposes the intended automatic cleanup, evidence, and risk-level semantics."
+    },
+    {
+      "name": "single Skill entrypoint regression",
+      "status": "applied",
+      "rationale": "A recursive test fails if any historical or new nested file is named SKILL.md."
+    },
+    {
+      "name": "package validation and full regression",
+      "status": "applied",
+      "rationale": "The standard Skill validator, syntax check, diff check, focused tests, and full suite were executed."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {"status": "applied", "rationale": "README owns user-facing explanation; SKILL.md remains normative; the test owns entrypoint discovery behavior."},
+    "dependency_audit": {"status": "applied", "rationale": "No dependency, import, package manifest, or lockfile changed."},
+    "extension_decision": {"status": "not_applicable", "rationale": "No production extension point or plugin contract was added."},
+    "data_ownership": {"status": "not_applicable", "rationale": "Only documentation, tests, and deterministic evidence artifacts changed."},
+    "error_model": {"status": "applied", "rationale": "A stale nested SKILL.md causes a deterministic test failure instead of silently reappearing in discovery."},
+    "contract_evolution": {"status": "applied", "rationale": "The README presentation expands while preserving SKILL.md as the source of truth and preserves snapshot file compatibility for runners."},
+    "operational_budget": {"status": "applied", "rationale": "The focused suite completed in 0.185 seconds and the full suite completed 349 tests in 89.216 seconds."},
+    "threat_boundary": {"status": "not_applicable", "rationale": "No untrusted input, privileged operation, or security sink changed."},
+    "delivery_lifecycle": {"status": "applied", "rationale": "The README, guard test, and evidence artifact form one focused atomic change with executed checks."},
+    "release_recovery": {"status": "not_applicable", "rationale": "No deployed service or rollout changed."},
+    "data_migration": {"status": "not_applicable", "rationale": "No persistent schema or migration contract changed."},
+    "configuration_secrets": {"status": "not_applicable", "rationale": "No configuration or secret handling changed."},
+    "dependency_supply_chain": {"status": "not_applicable", "rationale": "No third-party dependency changed."},
+    "operational_knowledge": {"status": "applied", "rationale": "README now explains why evidence, logging, cleanup, and explicit verification matter, with runnable examples."},
+    "reproducibility": {"status": "applied", "rationale": "Commands, fixed test names, layout scan, and validator output are captured as hash-bound artifacts."}
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_skill_entrypoint_layout tests.test_retirement_cleanup_contract -v",
+      "status": "passed",
+      "result": "12 focused README, retirement-contract, and entrypoint-layout tests passed.",
+      "evidence_refs": ["focused-tests"]
+    },
+    {
+      "command": "find . -type f -name SKILL.md -not -path './.git/*' -print",
+      "status": "passed",
+      "result": "The scan returned exactly ./SKILL.md.",
+      "evidence_refs": ["layout-scan"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q",
+      "status": "passed",
+      "result": "349 package regression tests passed.",
+      "evidence_refs": ["full-suite"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Skill is valid!",
+      "evidence_refs": ["skill-validator"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m py_compile tests/test_skill_entrypoint_layout.py",
+      "status": "passed",
+      "result": "The new regression test compiled successfully.",
+      "evidence_refs": ["pycompile"]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "No whitespace errors found.",
+      "evidence_refs": ["diff-check"]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "status": "passed",
+      "result": "All evidence JSON artifacts passed validation, including the four historical bindings repaired in this change.",
+      "evidence_refs": ["evidence-validation"]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "focused-tests",
+      "kind": "test_output",
+      "path": ".adam/evidence/readme-methodology-v15-focused.txt",
+      "sha256": "381b5f135f29461a2db62fcd2294cd5fe8f11b5980a4f84de91f8c4dee400b78",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest tests.test_skill_entrypoint_layout tests.test_retirement_cleanup_contract -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T02:48:00Z",
+      "repository_revision": "51b04510a4e1611013e807dd83aa6c4d444ec5c0+worktree",
+      "summary": "12 focused README, retirement-contract, and entrypoint-layout tests passed."
+    },
+    {
+      "id": "layout-scan",
+      "kind": "command_output",
+      "path": ".adam/evidence/readme-methodology-v15-layout.txt",
+      "sha256": "24d9b96f79bd9a22fa08ce472b6fba23a2ceb5bd9a00f29799ae73b712c05f85",
+      "command": "find . -type f -name SKILL.md -not -path './.git/*' -print",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T02:48:00Z",
+      "repository_revision": "51b04510a4e1611013e807dd83aa6c4d444ec5c0+worktree",
+      "summary": "Exactly ./SKILL.md was found."
+    },
+    {
+      "id": "full-suite",
+      "kind": "test_output",
+      "path": ".adam/evidence/readme-methodology-v15-full.txt",
+      "sha256": "28627d1ff4dac734a71ca207f398576bbce832d6cfb2d646c18442de6f4cf682",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m unittest discover -s tests -q",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T02:49:00Z",
+      "repository_revision": "51b04510a4e1611013e807dd83aa6c4d444ec5c0+worktree",
+      "summary": "349 package regression tests passed in 89.216 seconds."
+    },
+    {
+      "id": "skill-validator",
+      "kind": "command_output",
+      "path": ".adam/evidence/readme-methodology-v15-skill-validator.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T02:48:00Z",
+      "repository_revision": "51b04510a4e1611013e807dd83aa6c4d444ec5c0+worktree",
+      "summary": "Skill is valid."
+    },
+    {
+      "id": "pycompile",
+      "kind": "command_output",
+      "path": ".adam/evidence/readme-methodology-v15-pycompile.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 python3 -m py_compile tests/test_skill_entrypoint_layout.py",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T02:48:00Z",
+      "repository_revision": "51b04510a4e1611013e807dd83aa6c4d444ec5c0+worktree",
+      "summary": "The new regression test compiled successfully."
+    },
+    {
+      "id": "diff-check",
+      "kind": "command_output",
+      "path": ".adam/evidence/readme-methodology-v15-diff-check.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T02:48:00Z",
+      "repository_revision": "51b04510a4e1611013e807dd83aa6c4d444ec5c0+worktree",
+      "summary": "No whitespace errors found."
+    },
+    {
+      "id": "evidence-validation",
+      "kind": "command_output",
+      "path": ".adam/evidence/readme-methodology-v15-evidence-validation.txt",
+      "sha256": "eea155cf83abab353247fa0f3fd59d158568ca6e6e78acf7b8ab1eb3d849fd99",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_evidence.py .adam/evidence/*.json",
+      "exit_code": 0,
+      "executed_at": "2026-09-03T02:52:00Z",
+      "repository_revision": "51b04510a4e1611013e807dd83aa6c4d444ec5c0+worktree",
+      "summary": "All evidence JSON artifacts passed validation."
+    }
+  ],
+  "rollback_or_compatibility": "Revert README.md, tests/test_skill_entrypoint_layout.py, and this evidence artifact together if the package intentionally adopts multiple discoverable Skill entrypoints. Keep frozen-policy.md for historical experiment snapshots unless their runners and hashes are migrated in the same verified change.",
+  "remaining_risks": [
+    "The README improves understanding and execution clarity but cannot prove model-wide causal reasoning or repair-success improvement.",
+    "The recursive guard covers files named SKILL.md inside this package; external copies or global installation directories require a separate installation check.",
+    "GitHub-hosted CI was not run in this local verification; the repository's workflow remains the final remote gate."
+  ]
+}

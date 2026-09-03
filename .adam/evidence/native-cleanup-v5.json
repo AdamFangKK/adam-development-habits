@@ -251,6 +251,7 @@
       "kind": "evaluation_transcript",
       "path": "examples/effect-experiment-native-v5/preregistration.json",
       "sha256": "f3250d993a1a20ac0865e1e55457066ca5c86571280109925da8aa7bff19b93a",
+      "git_commit": "650f4e915f283e7ccb32699aba557c393cfcb6e3",
       "summary": "Hash-bound V5 preregistration generated before any native trial."
     },
     {

@@ -6,6 +6,71 @@
 
 `SKILL.md` 是唯一的规范来源；本文是中文使用说明和概览。规则、模板或脚本发生变化时，以 `SKILL.md` 和实际校验结果为准。
 
+## 先理解它解决什么
+
+人工开发和 AI 开发各有长处。人更擅长理解业务意图、识别隐含约束、做架构取舍并承担上线责任，但会受到时间、注意力、记忆和重复劳动的限制。AI 擅长快速搜索代码、整理依赖、生成实现、补齐测试并重复执行检查，但它不会自动知道真实业务背景，也可能把症状当根因、迎合公开测试、遗漏旧路径，或者在没有证据时给出过度自信的结论。
+
+因此，这个 Skill 的目标不是把 AI 描述成一个不会犯错的专家，而是建立一套人机分工：人负责目标、约束、取舍和授权；AI 负责搜索、分析、实现和整理；代码库、运行数据、测试和 CI 负责提供外部事实。
+
+| 开发环节 | 人工开发的优势 | AI 开发的风险 | Skill 的补位 |
+|---|---|---|---|
+| 需求理解 | 能结合业务背景理解“为什么” | 可能把模糊愿望直接翻译成代码 | 先写验收条件、不变量、范围和风险等级 |
+| 问题定位 | 有经验、直觉和全局判断 | 容易停在报错点，修复下游表象 | 区分症状、假设、上游路径和责任 owner |
+| 实现与重构 | 能做长期取舍 | 可能产生重复实现和过度抽象 | 先找 canonical owner，替换即清理 |
+| 验证与交付 | 能判断风险和是否应上线 | 可能用“应该可以”代替实际验证 | 要求命令、测试、CI、回滚和证据台账 |
+| 运行维护 | 能结合上下文解释异常 | 没有运行数据时只能猜 | 用结构化日志、指标和追踪暴露状态 |
+
+## 你的 AI 辅助开发方法论
+
+这套 Skill 可以概括为“证据驱动的 AI 辅助软件工程”：把 AI 从自由生成器变成受边界、证据、实验和交付门槛约束的工程执行者。
+
+```text
+明确目标与约束
+        ↓
+按风险选择 Level 0 / 1 / 2
+        ↓
+定位 canonical owner 与受影响调用方
+        ↓
+根因不明时提出主假设、替代假设和区分性检查
+        ↓
+用代码搜索、日志、指标、测试或隔离实验取得证据
+        ↓
+只修改负责决策或状态转换的边界
+        ↓
+验证行为、失败语义、性能预算和安全边界
+        ↓
+清理旧实现、旧配置、旧测试和过时说明
+        ↓
+独立复查、原子提交并留下可追溯结果
+```
+
+### 日志和埋点为什么重要
+
+日志不是为了让系统“看起来专业”，也不是越多越好。它是 AI 和人工共享的外部事实通道：源代码只能说明可能的路径，结构化事件才能说明请求实际经过了哪个决策、哪个依赖超时、状态是否改变以及最终结果是什么。
+
+例如出现“重复扣款”时，不能直接修改按钮或重试次数。应先区分：
+
+- 是否是客户端重复提交；
+- 远程支付是否已经成功但本地超时；
+- 本地状态回写是否失败并造成误判。
+
+在责任边界记录脱敏的 `operation_id`、`traceId`、依赖结果、耗时和结果类别后，AI 可以用实际数据排除假设，人也可以复核 AI 的判断。随后再用稳定幂等身份和对账状态做隔离干预，验证修改的是上游状态决策，而不是把下游症状隐藏起来。
+
+这里有一个重要边界：Skill 不会自动赋予 AI 生产监控权限。只有当 Harness 把日志、指标、追踪或命令输出提供给 AI 时，它们才是 AI 可用的证据。Level 0 不强行新增遥测；Level 1 使用责任点和失败路径的轻量事件；Level 2 才覆盖完整生命周期。事件必须低基数、脱敏，并且始终和测试、CI 或运行指标配对，不能单独证明行为正确。
+
+### 这套方法真正防止什么
+
+- 把报错附近的代码当成根因，导致问题在上游反复出现；
+- 新实现完成后留下旧代码、旧 Flag、旧接口、旧注释和旧 README；
+- 用空值、吞异常或无限重试掩盖未知失败；
+- 用一组公开测试通过，冒充完整契约和边界已经验证；
+- 把未经执行的计划、补丁或模型置信度描述成“已修复”；
+- 为了“可扩展”提前堆叠抽象，反而增加模块耦合和理解成本。
+
+### 它不替代什么
+
+它不能替代真实的业务决策、项目架构、正确的测试、生产观测、人工授权或上线责任。没有可访问的运行证据、隐藏契约或外部依赖结果时，正确结论可能就是 `unknown`。它也不声称证明模型整体因果能力提升；它只把固定范围内的开发过程变得更可检查、更可复现、更难用幻觉冒充事实。
+
 ## 你会得到什么
 
 | 常见失控点 | Skill 如何介入 | 交付时能看见什么 |
@@ -345,6 +410,58 @@ Use $adam-development-habits to add order cancellation.
 也可以直接用自然语言提出开发、修复、重构、集成或代码审查任务；Skill 的描述覆盖这些场景，Codex 会在匹配时加载它。
 
 显式调用适合重要功能、跨模块改动、重构和上线前修复。它能避免任务描述过短时没有命中 Skill。
+
+### 对应的使用示例
+
+普通功能可以直接说明目标、边界和验收条件：
+
+```text
+Use $adam-development-habits to add order cancellation.
+Keep the current API compatible, make repeated requests idempotent,
+update the affected tests and docs, and run the repository checks before committing.
+```
+
+根因不明确时，把现象和可用证据一起交给 AI，让它先排查再修改：
+
+```text
+Use $adam-development-habits to investigate duplicate notifications.
+The symptom is two provider requests for one business event.
+Inspect the existing trace/log output and tests first. Separate the symptom
+from the invariant, state one alternative hypothesis, and do not call it a
+root-cause fix until an authorized worktree intervention passes the regression test.
+```
+
+替换或重构时，直接把“旧路径也要处理”写进验收条件；Skill 还会在 Level 1/2 自动做退役扫描：
+
+```text
+Use $adam-development-habits to replace the legacy profile normalizer with the
+canonical owner. Move all real callers, remove unconsumed wrappers and stale
+flags, synchronize comments/README/API descriptions, and report any dynamic
+reference that remains unknown.
+```
+
+涉及迁移、发布或 Secret 的高风险改动，应明确要求完整门槛：
+
+```text
+Use $adam-development-habits at Level 2 to migrate the payment status field.
+Use Expand-Migrate-Contract, name the consumers and rollback path, keep the
+feature flag disabled until verification, and provide the exact migration,
+backup/restore, compatibility, CI and monitoring evidence. Do not perform
+production actions without authorization.
+```
+
+一次任务的预期交付不是一段代码，而是“实现 + 证据 + 清理结果 + 剩余风险”：
+
+```text
+Canonical owner: <file and symbol>
+Invariant: <must remain true>
+Retirement sweep: <remove / retain / unknown with evidence>
+Verification: <commands actually run and observed results>
+Remaining risks: <what is still unverified>
+Causal conclusion: <not activated / root-cause fix / mitigation / unknown>
+```
+
+实验目录中的历史策略快照使用 `frozen-policy.md` 文件名，不使用 `SKILL.md`，这样它们仍可供离线对照实验读取，但不会被 Codex 误识别为新的可安装 Skill。当前可发现的规范入口只有仓库根目录的 `SKILL.md`。
 
 ## 内置工程保障
 

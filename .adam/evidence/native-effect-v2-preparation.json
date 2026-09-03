@@ -273,6 +273,7 @@
       "kind": "evaluation_transcript",
       "path": "examples/effect-experiment-native-v2/preregistration.json",
       "sha256": "aa33dd4964c08c4c6df72d0e2b4e710b261ba871e29670397df326762df8e006",
+      "git_commit": "650f4e915f283e7ccb32699aba557c393cfcb6e3",
       "summary": "Frozen planned V2 three-condition envelope, with no trial data and input hashes for later collection."
     },
     {

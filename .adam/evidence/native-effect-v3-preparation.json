@@ -281,6 +281,7 @@
       "kind": "evaluation_transcript",
       "path": "examples/effect-experiment-native-v3/preregistration.json",
       "sha256": "6b738b98107c4a806c290ce5f5736e82a98cc44d42b46daafcfd84b86bc1f80f",
+      "git_commit": "650f4e915f283e7ccb32699aba557c393cfcb6e3",
       "summary": "Frozen planned V3 envelope with no trial outcomes and hashes for the materializer, V3 runner, actual base scorer, analyzer, prompt, and Skill snapshots."
     }
   ],
