@@ -4,6 +4,8 @@ import json
 import subprocess
 import sys
 import unittest
+import tempfile
+import hashlib
 
 from pathlib import Path
 
@@ -15,6 +17,98 @@ from plan_capability_composition import load_catalog, plan  # noqa: E402
 
 
 class CapabilityCompositionTests(unittest.TestCase):
+    def test_noncanonical_whitespace_cannot_bypass_fact_gates(self):
+        for kwargs in ({"facts": ["level_1 "]}, {"facts": [" level_1"]},
+                       {"facts": ["level_1"], "required_facts": ["owner_located "]},
+                       {"facts": ["level_1"], "previous_facts": ["level_1 "]}):
+            with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
+                plan(**kwargs)
+
+    def test_prerequisite_status_remains_applicable_after_search_budget(self):
+        result = plan(["level_1", "refactor"], max_rounds=1)
+        owner = next(item for item in result["capability_status"] if item["capability"] == "owner_mapping")
+        self.assertIn(owner["status"], {"deferred", "unknown"})
+        self.assertNotEqual(owner["status"], "not_applicable")
+
+    def test_catalog_rejects_surrounding_whitespace(self):
+        for field in ("id", "purpose", "trigger_any", "requires_all", "produces"):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as directory:
+                cards = load_catalog()
+                cards[0][field] = " invalid " if field in {"id", "purpose"} else [" invalid "]
+                catalog = Path(directory) / "catalog.json"
+                catalog.write_text(json.dumps({"schema_version": 1, "capabilities": cards}), encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    load_catalog(catalog)
+
+    def test_hash_bound_evidence_reuses_completion_and_invalidates_changes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            artifact = Path(directory) / "result.txt"
+            artifact.write_text("reviewed result", encoding="utf-8")
+            records = [{"capability": capability, "path": str(artifact),
+                        "sha256": hashlib.sha256(artifact.read_bytes()).hexdigest(),
+                        "revision": "revision-a", "context_facts": ["level_1"]}
+                       for capability in ("risk_triage", "evidence_ledger")]
+            result = plan(["level_1"], evidence_records=records, context_revision="revision-a")
+            self.assertFalse(result["blocked"])
+            self.assertEqual(result["selected"], [])
+            self.assertEqual(set(result["satisfied"]), {"risk_triage", "evidence_ledger"})
+            self.assertTrue(set(result["satisfied"]).isdisjoint(
+                item["capability"] for item in result["rejected"]
+            ))
+            self.assertIn("risk_classified", result["verified_facts"])
+            for revision, facts in (("revision-b", ["level_1"]), ("revision-a", ["level_1", "rename"])):
+                result = plan(facts, evidence_records=records, context_revision=revision)
+                self.assertEqual(result["satisfied"], [])
+                self.assertEqual(len(result["invalidated_evidence"]), 2)
+                self.assertIn("risk_triage", result["selected"])
+            artifact.write_text("changed result", encoding="utf-8")
+            result = plan(["level_1"], evidence_records=records, context_revision="revision-a")
+            self.assertEqual(result["verified_facts"], [])
+            self.assertEqual(len(result["invalidated_evidence"]), 2)
+
+    def test_acceptance_does_not_invent_unrelated_optional_triggers(self):
+        result = plan(["level_1"], required_facts=["secure_path_evidence"])
+        self.assertTrue(result["blocked"])
+        self.assertNotIn("security_gate", result["selected"])
+
+    def test_raw_output_label_cannot_satisfy_acceptance(self):
+        result = plan(["level_1", "secure_path_evidence"], required_facts=["secure_path_evidence"])
+        self.assertTrue(result["blocked"])
+        self.assertEqual(result["verified_facts"], [])
+
+    def test_level_zero_rejects_every_catalog_risk_trigger(self):
+        outputs = {fact for card in load_catalog() for fact in card["produces"]}
+        triggers = {fact for card in load_catalog() for fact in card["trigger_any"]} - outputs - {"rename"}
+        for trigger in triggers:
+            with self.subTest(trigger=trigger), self.assertRaises(ValueError):
+                plan(["level_0", trigger])
+
+    def test_refactor_resolves_untriggered_owner_prerequisite(self):
+        result = plan(["level_1", "refactor"])
+        self.assertFalse(result["blocked"])
+        self.assertIn("owner_mapping", result["selected"])
+
+    def test_existing_output_labels_are_rechecked_not_false_blocked(self):
+        result = plan(["level_1", "risk_classified", "evidence_recorded"])
+        self.assertFalse(result["blocked"])
+        self.assertIn("risk_triage", result["selected"])
+        self.assertEqual(result["verified_facts"], [])
+
+    def test_level_zero_is_noop(self):
+        result = plan(["level_0", "rename", "owner_located"])
+        self.assertEqual(result["selected"], [])
+        self.assertFalse(result["blocked"])
+
+    def test_malformed_inputs_are_rejected(self):
+        for kwargs in ({"required_facts": [None, 123]}, {"required_facts": "abc"},
+                       {"max_active": True}, {"max_rounds": 1.5}, {"beam_width": "2"},
+                       {"previous_facts": [None]}, {"prior_replans": False}):
+            with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
+                plan(["level_1"], **kwargs)
+        for facts in ("level_1", ["level_0", "level_1"], ["level_0", "behavior_change"]):
+            with self.subTest(facts=facts), self.assertRaises(ValueError):
+                plan(facts)
+
     def test_catalog_cards_have_composable_contracts(self) -> None:
         cards = load_catalog()
         identifiers = {card["id"] for card in cards}

@@ -38,7 +38,7 @@ class RetirementCleanupContractTests(unittest.TestCase):
     def test_policy_is_implicit_but_risk_scaled(self) -> None:
         self.assertIn("implicit even when the user does not request it explicitly", self.skill)
         self.assertIn("must not wait for the user to ask for cleanup explicitly", self.policy)
-        self.assertIn("stale explanatory surfaces", self.policy)
+        self.assertIn("stale current explanatory surfaces", self.policy)
         self.assertIn("Level 0 never triggers a full sweep", self.policy)
         self.assertIn("Level 1", self.policy)
         self.assertIn("Level 2", self.policy)
@@ -50,16 +50,13 @@ class RetirementCleanupContractTests(unittest.TestCase):
         detailed_policy = self.skill.index("## Automatic Retirement and Drift Cleanup")
         self.assertLess(quick_gate, detailed_policy)
         for requirement in (
-            "inspect every existing non-test file in the changed boundary before editing",
-            "retired code identifiers, imports, exports, registry keys, flags, and paths",
-            "old contract markers taken from source docstrings/comments and README/API/docs/changelog/release/version/metadata text",
-            "search every existing non-test file in the changed boundary, plus every changed explanatory surface, for every recorded value",
-            "Do not finish while an old marker remains merely because a public test passes",
-            "A document is a lead, not a consumer",
-            "named live runtime/API consumer or a verifiable external compatibility obligation",
-            "classify it `unknown` and stop completion",
-            "owner: <module>.<symbol>",
-            "invariant: <current contract>",
+            "inspect the changed boundary before editing",
+            "retired code identifiers, imports, exports, registry keys, flags, paths",
+            "current explanatory surfaces",
+            "preserving accurate immutable history",
+            "Do not treat a literal match in historical material as an orphan",
+            "named live consumer or authoritative external obligation",
+            "classify it `unknown` rather than guessing",
             "allowed_edit_paths` list is a hard change boundary",
         ):
             with self.subTest(requirement=requirement):
@@ -73,10 +70,10 @@ class RetirementCleanupContractTests(unittest.TestCase):
             "duplicate-code or static-analysis tool",
             "normalized control flow",
             "Synchronize descriptions in the same change",
-            "old behavior phrases",
+            "old symbols and contract phrases in current guidance",
             "Write a retirement inventory before deleting anything",
             "post-retirement orphan scan",
-            "current source/contract as the authority",
+            "Classify matches by purpose before editing",
             "A file deletion is valid only when the deleted path is listed in the change scope",
             "Stop the completion gate when evidence is unresolved",
             "Do not silently retain an unknown path",
@@ -120,8 +117,8 @@ class RetirementCleanupContractTests(unittest.TestCase):
             "green public test alone",
             "Do not delete it or call the change complete",
             "real consumer, removal condition, observability, and coverage",
-            "canonical owner proof must be implementation-local",
-            "A README or external document alone cannot establish ownership",
+            "establish the canonical owner from implementation responsibility",
+            "A comment or README can explain ownership",
             "A thin wrapper with no named consumer is `remove`",
             "consumer owner, removal condition, observable signal, and coverage",
         ):
@@ -139,8 +136,8 @@ class RetirementCleanupContractTests(unittest.TestCase):
         ):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.policy)
-        self.assertIn("本身不是消费者", self.readme)
-        self.assertIn("不能单独成为保留旧实现的理由", self.readme)
+        self.assertIn("文档本身不是运行时消费者", self.readme)
+        self.assertIn("不能单独作为保留旧实现的理由", self.readme)
 
     def test_owner_and_wrapper_rules_close_the_v3_hidden_failure_modes(self) -> None:
         scenarios = cast(list[dict[str, object]], self.corpus["scenarios"])
@@ -163,15 +160,15 @@ class RetirementCleanupContractTests(unittest.TestCase):
             },
         )
         for requirement in (
-            "canonical owner proof must be implementation-local",
-            "A README or external document alone cannot establish ownership",
+            "Establish ownership from implementation responsibility",
+            "comments are optional explanations, not correctness credentials",
             "A thin wrapper with no named consumer is `remove`",
             "consumer owner, removal condition, observable signal, and coverage",
         ):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.skill)
-        self.assertIn("相邻、稳定的两行：`owner: <module>.<symbol>` 与 `invariant: <current contract>`", self.readme)
-        self.assertIn("无命名消费者的薄 wrapper 必须删除", self.readme)
+        self.assertIn("所有权根据实现职责、调用方、契约、注册关系和测试建立", self.readme)
+        self.assertIn("没有真实消费者或兼容义务", self.readme)
 
     def test_all_implementation_surfaces_and_explanatory_drift_are_named(self) -> None:
         for surface in (
@@ -196,10 +193,10 @@ class RetirementCleanupContractTests(unittest.TestCase):
         ):
             with self.subTest(surface=surface):
                 self.assertIn(surface, self.policy)
-        self.assertIn("A comment or version note that describes the old decision is stale code in another form", self.policy)
+        self.assertIn("preserve accurate history and intentional regression fixtures", self.policy)
         self.assertIn("generated files and convention-based loaders", self.policy)
-        self.assertIn("same logical change", self.policy)
-        self.assertIn("退休清单", self.readme)
+        self.assertIn("current logical change", self.policy)
+        self.assertIn("清理前记录候选与证据", self.readme)
         self.assertIn("跨文件孤儿扫描", self.readme)
         self.assertIn("Retirement sweep:", self.skill)
         self.assertIn("Documentation synchronization:", self.skill)
@@ -313,9 +310,9 @@ class RetirementCleanupContractTests(unittest.TestCase):
         self.assertIn("Level 1（轻量）", self.readme)
         self.assertIn("Level 2（完整）", self.readme)
         self.assertIn("零直接引用", self.readme)
-        self.assertIn("动态、生成或外部引用时不得猜删", self.readme)
+        self.assertIn("动态使用不明时保持 `unknown`，先排查再删除", self.readme)
         self.assertIn("先复用已有 owner", self.readme)
-        self.assertIn("清理检查点必须在最终验证和提交前完成", self.readme)
+        self.assertIn("实现后、最终验证和提交前扫描重复/废弃路径", self.readme)
         self.assertIn("Documentation synchronization:", self.readme)
         self.assertIn("分层埋点与开发过程数据", self.readme)
         self.assertIn("Level 0：不新增遥测", self.readme)

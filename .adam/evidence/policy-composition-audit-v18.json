@@ -1,0 +1,284 @@
+{
+  "schema_version": 2,
+  "change_id": "policy-composition-audit-v18",
+  "level": 2,
+  "canonical_owner": [
+    "SKILL.md",
+    "scripts/plan_capability_composition.py:plan"
+  ],
+  "affected_callers": [
+    "README.md",
+    "references/composition-evidence.md",
+    "tests/test_capability_composition.py",
+    "tests/test_skill_contract.py",
+    "tests/test_retirement_cleanup_contract.py"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "condition": "Triggered prerequisites are reachable, raw output labels cannot bypass evidence, hash/context-bound reuse is separate from planned execution, and stale evidence is invalidated.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract tests.test_retirement_cleanup_contract tests.test_capability_composition -q"
+    },
+    {
+      "id": "AC-2",
+      "condition": "Level 0 selects no capabilities; contradictory levels, malformed facts/budgets, and whitespace trigger bypasses fail explicitly; deferred dependencies remain applicable.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract tests.test_retirement_cleanup_contract tests.test_capability_composition -q"
+    },
+    {
+      "id": "AC-3",
+      "condition": "Active policy and README preserve accurate history, remove magic-comment ownership proof, separate diagnosis from applied repair, and use conditional fields.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract tests.test_retirement_cleanup_contract tests.test_capability_composition -q"
+    },
+    {
+      "id": "AC-4",
+      "condition": "Package tests and relevant CI checks pass; independent review resolves findings; two protocol-isolated forward tasks show scoped intended behavior.",
+      "verification": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v"
+    }
+  ],
+  "invariants": [
+    "Existing Codex Skill invocation remains normal and no dependency or daemon is added.",
+    "Mandatory safety gates cannot be bypassed by acceptance labels or malformed input.",
+    "Planning state is not execution or semantic proof.",
+    "Accurate historical records and unrelated files remain intact.",
+    "Only triggered fields are required in conversation; opted-in machine schema remains unchanged."
+  ],
+  "replaced_paths": [
+    "Magic owner/invariant comment credentials",
+    "Indiscriminate historical text zero-match policy",
+    "Read-only diagnosis conflated with applied repair",
+    "Universal conversational forms",
+    "Planner filtering malformed facts and ignoring prerequisite demand"
+  ],
+  "retained_compatibility": [],
+  "safeguards": [
+    {
+      "name": "risk and prerequisite validation",
+      "status": "applied",
+      "rationale": "Malformed inputs raise ValueError; stale evidence invalidates reuse; bounded previews expose truthful blocked/deferred status."
+    },
+    {
+      "name": "evidence integrity boundaries",
+      "status": "applied",
+      "rationale": "Observed context is caller-owned; integrity-bound labels and future planned outputs are explicitly separate."
+    },
+    {
+      "name": "history and execution truth",
+      "status": "applied",
+      "rationale": "Preserve valid history, require actual ownership evidence, and separate supported diagnosis from unapplied repair."
+    }
+  ],
+  "quality_decisions": {
+    "design_boundary": {
+      "status": "applied",
+      "rationale": "Policy stays in SKILL.md; the optional pure planner organizes dependencies and evidence references, without executing tasks."
+    },
+    "dependency_audit": {
+      "status": "applied",
+      "rationale": "Only Python standard library; no new dependencies or runtime service."
+    },
+    "extension_decision": {
+      "status": "applied",
+      "rationale": "Optional evidence_records API serves real reuse/replan use cases; exact fields and limits documented, no framework."
+    },
+    "data_ownership": {
+      "status": "applied",
+      "rationale": "Observed context is caller-owned; integrity-bound labels and future planned outputs are explicitly separate."
+    },
+    "error_model": {
+      "status": "applied",
+      "rationale": "Malformed inputs raise ValueError; stale evidence invalidates reuse; bounded previews expose truthful blocked/deferred status."
+    },
+    "contract_evolution": {
+      "status": "applied",
+      "rationale": "Existing preview output preserved with additive evidence fields; malformed formerly ignored input now fails intentionally."
+    },
+    "operational_budget": {
+      "status": "applied",
+      "rationale": "Active/candidate/round budgets remain bounded; custom catalog global optimality is not claimed."
+    },
+    "threat_boundary": {
+      "status": "applied",
+      "rationale": "Facts and catalog strings are strictly validated to prevent trigger bypass; artifact content is never executed by the planner."
+    },
+    "delivery_lifecycle": {
+      "status": "applied",
+      "rationale": "One reviewed local logical change, verified before atomic commit; no external push in this request."
+    },
+    "release_recovery": {
+      "status": "not_applicable",
+      "rationale": "The package is a local Skill and optional planner with no deployed service or runtime rollout; reverting the atomic commit removes the behavior."
+    },
+    "data_migration": {
+      "status": "not_applicable",
+      "rationale": "No application schema, persistence format, backfill, or user data changes."
+    },
+    "configuration_secrets": {
+      "status": "not_applicable",
+      "rationale": "No configuration value, environment variable, credential, or secret handling changed."
+    },
+    "dependency_supply_chain": {
+      "status": "not_applicable",
+      "rationale": "No external dependency, lockfile, package source, or build-tool version changed."
+    },
+    "operational_knowledge": {
+      "status": "applied",
+      "rationale": "README and focused optional evidence API reference explain current behavior, integrity limits, history and diagnosis boundaries."
+    },
+    "reproducibility": {
+      "status": "applied",
+      "rationale": "Regression tests, captured outputs, baseline counterexamples and independent forward/review reports retained; temporary fixtures remain local."
+    }
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "result": "Final stable-tree package run: 381 tests passed.",
+      "evidence_refs": [
+        "full"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract tests.test_retirement_cleanup_contract tests.test_capability_composition -q",
+      "status": "passed",
+      "result": "Final focused run: 58 tests passed.",
+      "evidence_refs": [
+        "focused"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q scripts tests",
+      "status": "passed",
+      "result": "Executed check passed; see captured output.",
+      "evidence_refs": [
+        "compile"
+      ]
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "status": "passed",
+      "result": "Executed check passed; see captured output.",
+      "evidence_refs": [
+        "skill"
+      ]
+    },
+    {
+      "command": "python3 - <<'PY'\nimport json,subprocess\nfor name in ['causal-execution-experiment','causal-notification-experiment']:\n actual=json.loads(subprocess.check_output(['python3',f'examples/{name}.py','--report'],text=True))\n with open(f'examples/{name}.report.json') as f: expected=json.load(f)\n assert actual==expected,name\n print(name+': report matches')\nPY",
+      "status": "passed",
+      "result": "Executed check passed; see captured output.",
+      "evidence_refs": [
+        "causal"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "Executed check passed; see captured output.",
+      "evidence_refs": [
+        "format"
+      ]
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "id": "full",
+      "kind": "test_output",
+      "path": ".adam/evidence/policy-composition-audit-v18-full.txt",
+      "sha256": "793191911feab9e04bef708a0dcfe98b8003116cc0d98e1ec6b270c331ae89cb",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "executed_at": "2026-09-11T06:44:01Z",
+      "repository_revision": "4647fee3d46e843d825e5d452df8aad94de38a6e+worktree",
+      "summary": "Final stable-tree package run: 381 tests passed."
+    },
+    {
+      "id": "focused",
+      "kind": "test_output",
+      "path": ".adam/evidence/policy-composition-audit-v18-focused.txt",
+      "sha256": "e041367629130450cecc89ff3d059e3139aa78bf155340b504d1de15b747cd41",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_skill_contract tests.test_retirement_cleanup_contract tests.test_capability_composition -q",
+      "exit_code": 0,
+      "executed_at": "2026-09-11T06:43:42Z",
+      "repository_revision": "4647fee3d46e843d825e5d452df8aad94de38a6e+worktree",
+      "summary": "Final focused run: 58 tests passed."
+    },
+    {
+      "id": "compile",
+      "kind": "command_output",
+      "path": ".adam/evidence/policy-composition-audit-v18-compile.txt",
+      "sha256": "50540815de301c11ecef978b753b0555b7e3a68ce2b27725a699f82b6889a1c9",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q scripts tests",
+      "exit_code": 0,
+      "executed_at": "2026-09-11T06:38:13Z",
+      "repository_revision": "4647fee3d46e843d825e5d452df8aad94de38a6e+worktree",
+      "summary": "Executed check passed; see captured output."
+    },
+    {
+      "id": "skill",
+      "kind": "command_output",
+      "path": ".adam/evidence/policy-composition-audit-v18-skill.txt",
+      "sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/adamfang/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
+      "exit_code": 0,
+      "executed_at": "2026-09-11T06:38:13Z",
+      "repository_revision": "4647fee3d46e843d825e5d452df8aad94de38a6e+worktree",
+      "summary": "Executed check passed; see captured output."
+    },
+    {
+      "id": "causal",
+      "kind": "command_output",
+      "path": ".adam/evidence/policy-composition-audit-v18-causal.txt",
+      "sha256": "b333d1f8566c13c2b864480ae233ef4ff5fed44e43134ab902efef6f0097f90f",
+      "command": "python3 - <<'PY'\nimport json,subprocess\nfor name in ['causal-execution-experiment','causal-notification-experiment']:\n actual=json.loads(subprocess.check_output(['python3',f'examples/{name}.py','--report'],text=True))\n with open(f'examples/{name}.report.json') as f: expected=json.load(f)\n assert actual==expected,name\n print(name+': report matches')\nPY",
+      "exit_code": 0,
+      "executed_at": "2026-09-11T06:38:14Z",
+      "repository_revision": "4647fee3d46e843d825e5d452df8aad94de38a6e+worktree",
+      "summary": "Executed check passed; see captured output."
+    },
+    {
+      "id": "format",
+      "kind": "command_output",
+      "path": ".adam/evidence/policy-composition-audit-v18-format.txt",
+      "sha256": "50540815de301c11ecef978b753b0555b7e3a68ce2b27725a699f82b6889a1c9",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "executed_at": "2026-09-11T06:38:15Z",
+      "repository_revision": "4647fee3d46e843d825e5d452df8aad94de38a6e+worktree",
+      "summary": "Executed check passed; see captured output."
+    },
+    {
+      "id": "independent-review",
+      "kind": "review_report",
+      "path": ".adam/evidence/policy-composition-audit-v18-review.md",
+      "sha256": "b5dc652d81a46da5d8366c4fbfe1584cd7aa032ba7b9b49154282ceafa5c27b7",
+      "summary": "Independent final review approved scoped change after resolving findings."
+    },
+    {
+      "id": "forward-report",
+      "kind": "evaluation_transcript",
+      "path": ".adam/evidence/policy-composition-audit-v18-forward.md",
+      "sha256": "6f28a0e81f6bcafe556e5b7c64f5167c411d66f2813cccdbd0b51aba78e1d855",
+      "summary": "Two protocol-isolated forward task reports with limitations."
+    },
+    {
+      "id": "baseline",
+      "kind": "evaluation_transcript",
+      "path": ".adam/evidence/policy-composition-audit-v18-baseline.txt",
+      "sha256": "733ba490702575e854e4eb7ac6b9a4c87982282b702c2e182ff24835a881e9b1",
+      "summary": "Five old-revision counterexamples reproduced; exact inputs in plan/report."
+    }
+  ],
+  "rollback_or_compatibility": "Revert this atomic change together; no data migration or deployment. Existing preview callers continue but malformed formerly ignored facts now raise errors; new evidence reuse is optional.",
+  "independent_review": {
+    "reviewer": "planner_review_v18, native Codex independent reviewer",
+    "outcome": "approved",
+    "notes": "Reported whitespace trigger bypass, prerequisite status and document conflicts fixed; independently reran 58 focused tests and diff check.",
+    "evidence_ref": "independent-review"
+  },
+  "remaining_risks": [
+    "Bounded planner not guaranteed globally optimal for arbitrary custom catalogs.",
+    "Evidence hashing verifies integrity and caller-declared context, not semantic sufficiency or truthful revision identity.",
+    "Two illustrative protocol-isolated forward tests have no no-Skill control and cannot establish aggregate model uplift, latency reduction, or success-rate delta.",
+    "Full suite contains structural wording checks and historical experiment tests, not 381 independent real-world repairs."
+  ]
+}

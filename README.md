@@ -1,5 +1,9 @@
 # Adam's Development Habits
 
+日常使用仍是一个普通 Codex Skill，不需要额外服务。Level 0 只检查直接改动；Level 1 以范围、owner/不变量、验收、验证和风险作为简短核心记录；Level 2 再按真实触发补足独立审查和对应风险控制。表格是可选字段词典，不要求每次填写几十行 `not applicable`。已有项目工具和证据优先复用，缺少证据才增加对应动作。
+
+例如重构 normalizer 时，先确认现有实现与调用方，再迁移调用并删除没有消费者的旧路径；更新 README 的当前调用示例，但保留发布记录中“当时使用旧接口”的真实描述。只读排查若用受控实验定位了原因，可以报告诊断证据，同时明确还未应用修复。
+
 > 让 Codex 的改动不止“能跑”，还留下清晰的责任边界、同步清理和可复核的交付记录。
 
 `Adam's Development Habits` 是面向 Codex 的工程质量 Skill。它把 AI 容易遗漏的工作变成明确的交付门槛：找到唯一实现 owner、迁移并清除被替代路径、同步旧说明、按风险补齐保护，并以实际运行的命令和结果结束任务。
@@ -65,7 +69,11 @@ python3 scripts/plan_capability_composition.py \
   --max-active 10
 ```
 
-输出中的 `selected` 是当前组合，`transitions` 表示能力输出如何成为后续输入；`candidate_plans` 最多保留 3 个可比较方案；`capability_status` 区分 `not_applicable`、`unknown`、`deferred` 和 `blocked`，并给出触发事实及缺失前置条件；`replan_events` 只记录外部新证据导致的重排，`search_rounds` 记录内部候选搜索；`rejected` 是这些结构化状态的汇总。`required_facts`、`covered_required_facts`、`missing_required_facts` 绑定验收门槛，仍有缺失、或任何已触发的必需能力未完成时，`blocked` 必须为真。`deferred_mandatory` 和 `blocked` 表示预算或验收不足，不能继续假装完成。没有 planner 时，直接把相同字段写入 Evidence Ledger 即可。
+输出中的 `selected` 是计划执行的能力，`transitions` 表示前置条件如何连接后续步骤；`candidate_plans` 最多保留 3 个方案。计划事实不等于执行证据。`required_facts`、`covered_required_facts`、`missing_required_facts` 用于检查验收覆盖，`replan_events` 记录新证据，`search_rounds` 记录内部搜索。不运行 planner 时，只记录本次选择、证据交接和未解决事项，不必抄写 JSON 的全部字段。
+
+编排会沿前置关系反向补齐能力。例如只声明 `level_1 + refactor`，也能先定位 owner，再做边界设计和退役检查。已有证据可通过可选的 `evidence_records` 与 `context_revision` 复用：文件哈希、当前输入版本和任务事实匹配后标记 `satisfied`；任一项变化则失效并安排重验。直接传入 `risk_classified` 等字符串不算证明。具体字段见[证据复用接口](./references/composition-evidence.md)。
+
+`verified_facts` 只表示证据引用通过完整性与上下文校验，内容是否充分仍须审核；`planned_facts` 是预期产出，脚本不会执行这些能力。CLI 返回 0 也可能是一个 `blocked` 的预览，调用方必须读取 JSON 中的阻断状态。
 
 用户仍然只需调用：
 
@@ -201,13 +209,13 @@ observe → 区分 symptom 与 invariant → 映射完整 request/state path
 
 这里的重点不是多写一份报告，而是把思考过程变成约束：先记录实际现象和不变量，再检查每个决策、状态、依赖、配置和部署节点是否可观测。关键节点没有日志、指标、追踪、测试或命令输出时，先补最小脱敏埋点，或者保留 `unknown`，不能靠猜测修改行为。已有失败尝试要进入台账，记录假设、动作、实际结果、失败类别和下一条约束；同一失败类别没有新证据时不得重复尝试。
 
-只有在授权的变更工作树中，对最早责任 owner 做最小反事实干预，并取得修改前后的实际命令/测试结果，才可以把结论升级为 `root-cause fix`。只读检查、方案、内存模拟和未执行的命令仍然是 `unknown`；回归测试或运行时验证缺失时，必须明确写出剩余风险。
+因果诊断与修复完成分开判断：真实的受控运行时或内存实验可以支持诊断，前提是记录操纵变量、控制条件和实际输出；伪代码与预期结果不算实验。只有已应用到责任 owner 的改动通过前后及回归检查，才能称为 `root-cause fix`。只读诊断可报告有证据支持的原因，但须明确 `Repair status: not applied`；本地实验不能替代部署验证。
 
-每次触发门禁至少留下 `Symptom`、`Invariant`、`Path`、`Observability`、`Primary hypothesis`、`Alternative hypothesis`、`Discriminating probe`、`Earliest candidate owner`、`Failed-attempt ledger`、`Counterfactual`、`Regression verification`、`Deployment/runtime verification`、`Residual risk` 和 `Stop condition`。没有历史失败时也要记录 `none found after <scoped evidence search>`，这样后续 AI 不会把“没有看到记录”误当成“没有失败”。
+触发修复门禁时，保留现象与不变量、竞争假设、区分性证据、责任 owner 和验证缺口。只有涉及先前失败、可观测盲点或运行环境时才补充相应记录；没有先前失败就不写失败表。适用但未解决的要求写 `unknown`，无关字段直接省略。`Stop condition` 用来说明真实阻断，不是必填口号。
 
 设计吸收了 [Spec Kit](https://github.com/github/spec-kit) 的原则与规格思路、[Superpowers](https://github.com/obra/superpowers) 的测试和复查节奏、[AGENTS.md](https://github.com/agentsmd/agents.md) 的仓库级规则分发方式，以及 `Knip`、`pre-commit`、`Semgrep` 等工具的自动化质量门理念。
 
-对于非简单改动，Skill 会要求维护一份证据台账：
+普通改动只维护范围、owner/不变量、验收、验证和风险五项核心记录。下面是按真实触发使用的字段词典，不要求逐项复制；已启用 `.adam/` 机器证据模式的项目仍遵守对应 Schema：
 
 ```text
 Canonical owner: <实际入口文件与符号 / 路由>
@@ -236,15 +244,15 @@ Delivery lifecycle: <atomic commit/PR、发布恢复、迁移、配置/Secret、
 
 这是正常开发的默认动作，不需要用户额外说“清理垃圾代码”。范围只限于本次逻辑改动触及、替换或使其失去唯一负责人的路径，不是全仓库无关大扫除。
 
-这里的“废弃”不只指代码文件，还包括仍在讲旧契约的注释、README/API 段落、版本说明、示例和 metadata。只要它们不再描述当前唯一真实契约，就应在同一逻辑改动中更新或删除。
+这里的“废弃”不只指代码文件，还包括将旧契约误述为当前行为的注释、README/API 段落、版本说明、示例和 metadata。这些当前说明应在同一逻辑改动中更新或删除；准确记录过去行为的历史文本不属于废弃代码。
 
-反过来，注释、README/API 文本、changelog、release note、版本说明、示例和 metadata **本身不是消费者**。它们只能提供待核验线索，不能单独成为保留旧实现的理由。只有已命名的运行时/API 消费者，或具备权威契约、owner、到期条件和覆盖证据的外部兼容义务，才能使旧路径标记为 `retain`；否则应同步删除或更新旧说明，并将被替换路径标记为 `remove`。动态注册、生成或外部路径仍必须通过针对性的运行时/注册检查后才能删除。
+文档本身不是运行时消费者，不能单独作为保留旧实现的理由。当前说明若仍教人调用已退役路径，应更新；准确历史 changelog、release note、旧 ADR 和归档证据应保留，无需证明它们有运行时消费者。按段落用途判断，而非对旧词执行全库零匹配删除。动态注册、生成或外部路径须通过针对性的使用检查后才能删除。
 
 | 触发条件 | Level 0 | Level 1（轻量） | Level 2（完整） | 证据 |
 |---|---|---|---|---|
 | 功能替换、Bug 修复、重构、优化、重命名，或契约/配置/Flag/依赖变更导致旧路径不再是 canonical owner | 不触发全面清理；只修正本次直接编辑且不改变行为的文字 | 检查实现、调用方、测试、类型/导出、依赖、路由/注册、配置/Flag、遥测、文档/示例、注释和版本/metadata；每项标记 `remove`、`retain` 或 `unknown` | 额外检查动态加载/注册、任务/队列、生成入口、兼容 shim、迁移状态、API/ADR/runbook，并由独立复查确认；保留项必须有真实消费者、删除条件、可观测信号和覆盖测试 | `rg`/导入或调用图、注册/配置查找、静态分析或依赖扫描、最终 diff、测试/CI、迁移/回滚演练、文档审查、证据台账和完成报告 |
 
-`reuse_existing_owner` 表示已有 owner 的契约能够承接需求，不能另起第三套规则；canonical owner 的证据必须是实现模块 docstring 或邻近契约注释内相邻、稳定的两行：`owner: <module>.<symbol>` 与 `invariant: <current contract>`。README/API 文档单独写了 owner 不算证明。显式 `allowed_edit_paths` 是硬编辑边界：只同步边界内的说明；发现边界外相关路径时报告限制，不能擅自新建或改动。`remove` 只表示新 owner 已接管且没有真实消费者或兼容义务；`retain` 必须写明消费者、消费者 owner、删除条件/到期时间、可观测信号和兼容/集成测试。只有 `legacy`、`deprecated` 或“可能还有使用者”的标签不能支撑保留；无命名消费者的薄 wrapper 必须删除，无法解析的动态引用必须标记 `unknown`。动态、生成或外部引用时不得猜删，先完成针对性的注册表、运行时或配置检查。零直接引用、搜索到 `deprecated` 或绿色公开测试都不能单独证明废弃。实现被删除或重命名时，要在同一逻辑改动中同步删除/更新测试、fixtures、类型、导出、依赖、路由、任务、队列、Flag、环境变量、遥测标签、README/API 文档、ADR、runbook、示例、注释、版本描述和 Skill metadata；否则视为未完成。先建立 `path | role | owner | consumers | lookup kind | evidence | classification | removal condition` 退休清单，再允许删除；删除后必须做孤儿引用扫描，并确认删除路径属于本次范围。清理检查点必须在最终验证和提交前完成，未解析的 `unknown` 不得被静默带过。
+`reuse_existing_owner` 表示已有 owner 能承接需求，不应另起第三套规则。所有权根据实现职责、调用方、契约、注册关系和测试建立；不要求固定 `owner:` / `invariant:` 注释，注释只解释非显然决策。显式 `allowed_edit_paths` 是硬编辑边界，边界外路径报告为限制。`remove` 需要新 owner 接管且没有真实消费者或兼容义务；`retain` 要有消费者及负责人、移除条件、可观测信号和覆盖；动态使用不明时保持 `unknown`，先排查再删除。清理前记录候选与证据，清理后检查活跃导入、导出、注册和配置。同步当前文档，保留准确历史。零直接引用或绿色公开测试不能单独证明废弃。
 
 检查顺序固定为：实现前先找并复用已有 owner；实现后、最终验证和提交前扫描重复/废弃路径；随后同步旧符号、旧行为描述、注释、版本说明和 metadata；删除后再做一次跨文件孤儿扫描，覆盖导入/导出、注册表、配置、遥测和文档；动态或外部引用没有证据时停止完成门禁并报告 `unknown`/`blocked`。版本、状态和发布说明以当前 Git/CI 证据为准，不能留下无法验证的手工描述。
 
@@ -281,7 +289,7 @@ JSONL 事件可用包内标准库校验器复核：`python3 scripts/validate_dev
 
 在 Causal Full 模式中，还要记录从症状回溯到调用方、数据、配置或依赖的上游路径，以及相关的变更、发布或运行时间线。
 
-提交结论前先做权限前置检查：明确写出 `Execution authority`（只读或已授权的代码变更 worktree）和 `Counterfactual status`（未运行、仅内存、提议、阻塞或已执行）。仅在授权 worktree 中实际产生候选 diff，并有该 worktree 的前后命令/测试输出时，才能使用 `Causal conclusion: root-cause fix`；只读观察、内存探针、伪代码和预期结果一律保持 `unknown`。
+提交结论前分别说明诊断证据、干预状态和修复验证范围。受控内存实验是实验，未运行的推演不是；只读权限限制修改权限，不会抹去已取得的诊断证据。未应用修复须写明 `Repair status: not applied`，未验证部署须保留对应风险。
 
 Git 历史和时间接近性只能提供候选线索。只有复现或隔离干预支持时，才可以把改动称为根因修复。证据不足时，优先增加可观测性、构建最小复现或采取可回滚的保护措施。在机器可读证据模式中，因果假设只能引用已声明的本地证据工件；校验器会检查其仓库相对路径和 SHA-256，防止悬空或被静默修改的引用。根因修复还必须引用测试、命令或 trace 的执行工件，不能只引用测试源码；CI 会重新生成并比对报告。
 

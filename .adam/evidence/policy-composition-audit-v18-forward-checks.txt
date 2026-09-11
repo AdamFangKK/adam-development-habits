@@ -1,0 +1,15 @@
+{
+  "passed": 9,
+  "failed": 0,
+  "checks": [
+    "canonical source preserved",
+    "supplied tests preserved",
+    "historical release preserved",
+    "registry preserved",
+    "15 held-out unicode and whitespace outputs",
+    "callable exports reuse one owner",
+    "current guidance synchronized",
+    "no magic owner comments",
+    "retired rule removed"
+  ]
+}

@@ -19,6 +19,17 @@ class SkillContractTests(unittest.TestCase):
     metadata: str = ""
     secure_code_paths: str = ""
 
+    def test_policy_avoids_false_cleanup_and_diagnosis_gates(self) -> None:
+        # Structural policy regression checks, not evidence of model success.
+        self.assertIn("A historical description needs no live consumer", self.skill)
+        self.assertIn("comments are optional explanations", self.skill)
+        self.assertNotIn("Require adjacent implementation-local", self.skill)
+        self.assertNotIn("A read-only diagnosis remains unknown", self.skill)
+        self.assertIn("diagnosis (`supported`, `candidate`, or `unknown`", self.skill)
+        self.assertIn("Repair status: not applied", self.skill)
+        self.assertIn("Omit unrelated fields entirely", self.skill)
+        self.assertNotIn("Use this exact shape for Level 1", self.skill)
+
     def setUp(self) -> None:  # pyright: ignore[reportImplicitOverride]
         self.skill = SKILL.read_text(encoding="utf-8")
         self.readme = README.read_text(encoding="utf-8")
@@ -90,11 +101,11 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("trigger -> decision or state owner -> side effect -> symptom", self.skill)
         self.assertIn("minimal counterfactual intervention", self.skill)
         self.assertIn("Do not call a downstream display", self.skill)
-        self.assertIn("If a counterfactual is only proposed or its result is unrun, the causal conclusion is `unknown`", self.skill)
+        self.assertIn("A root-cause fix requires an applied change at the supported owner plus passing before/after and regression checks", self.skill)
         self.assertIn("End every Causal Full response with one exact line", self.skill)
         self.assertIn("Causal conclusion: unknown", self.skill)
-        self.assertIn("A read-only diagnosis remains unknown even if it runs an in-memory probe", self.skill)
-        self.assertIn("call the owner only a candidate", self.skill)
+        self.assertIn("it never proves that an unexecuted source repair was applied", self.skill)
+        self.assertIn("Keep diagnosis confidence separate from repair status", self.skill)
         self.assertIn("a retryable **pre-acceptance** rejection restores the state", self.skill)
 
     def test_front_loaded_causal_repair_card_preserves_the_owner_first_sequence(self) -> None:
@@ -107,7 +118,7 @@ class SkillContractTests(unittest.TestCase):
             "one primary hypothesis and one plausible alternative",
             "lowest-risk discriminating probe",
             "responsible decision or state owner, not the nearest downstream consumer",
-            "Causal conclusion: unknown",
+            "diagnosis and repair separately",
         ):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, self.skill[card:detailed_policy])
@@ -163,7 +174,7 @@ class SkillContractTests(unittest.TestCase):
             "stale-runtime-or-configuration",
             "Do not repeat a failed category without a new discriminating observation",
             "holding adjacent inputs, configuration, dependency versions, and timing assumptions fixed",
-            "proposed`, `unrun`, `in-memory-only`",
+            "controlled runtime or in-memory intervention can support diagnosis",
             "Stop and do not claim completion",
             "Stop condition",
             "No production action is authorized by this gate",
@@ -318,7 +329,7 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("boundaries", self.metadata)
         self.assertIn("stale paths, comments, docs, and metadata", self.metadata)
         self.assertIn("废弃说明残留", self.readme)
-        self.assertIn("stale explanatory surfaces", self.skill)
+        self.assertIn("stale current explanatory surfaces", self.skill)
         self.assertIn("证据优先修复门禁", self.readme)
         self.assertIn("failed-attempt ledger", self.metadata)
         self.assertIn("deployment/runtime verification", self.metadata)

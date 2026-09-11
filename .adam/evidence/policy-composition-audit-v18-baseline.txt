@@ -1,0 +1,5 @@
+{"case": "refactor", "selected": ["risk_triage", "evidence_ledger"], "blocked": true, "required": []}
+{"case": "reuse_labels", "selected": [], "blocked": true, "required": []}
+{"case": "level0", "selected": ["retirement_cleanup"], "blocked": false, "required": []}
+{"case": "invalid_acceptance", "selected": ["risk_triage", "evidence_ledger"], "blocked": false, "required": []}
+{"case": "whitespace_level", "selected": [], "blocked": false, "required": []}
